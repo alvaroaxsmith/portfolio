@@ -1,1 +1,130 @@
-<p>about-me works!</p>
+<app-navbar></app-navbar>
+<h1>About me</h1>
+<mat-accordion class="example-headers-align">
+  <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Profile
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <p>
+        I'm a 5th year industrial engineering
+        student, passionate about technology and
+        software development. I started studying
+        software development a year ago during an
+        internship I did to help with a mobile app
+        project, since then my interest and passion
+        for the area has grown and I haven't stopped
+        studying.
+      </p>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Skills
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-action-row>
+      <p>
+        HTML |
+        CSS |
+        Javascript |
+        Typescript |
+        Nodejs |
+        Express |
+        SQL |
+        noSQL |
+        Angular
+      </p>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Highlights
+      </mat-panel-title>
+
+    </mat-expansion-panel-header>
+
+    <mat-action-row>
+      <div class="timeline">
+
+        <h2 class="timeline__item timeline__item--year"><span>April 2019 to</span><br> <span>April 2021</span></h2>
+
+        <div class="timeline__item">
+          <h3 class="timeline__title">Internship at Metro de São Paulo</h3>
+        </div>
+
+        <h2 class="timeline__item timeline__item--year"><span>July 2021 to</span><br> <span>October 2021</span></h2>
+
+        <div class="timeline__item">
+          <h3 class="timeline__title">Bootcamp at Gama Academy</h3>
+        </div>
+
+        <h2 class="timeline__item timeline__item--year"><span>January 2022 to</span><br> <span>June 2022</span></h2>
+
+        <div class="timeline__item">
+          <h3 class="timeline__title">Bootcamp at SoulCodem</h3>
+        </div>
+
+      </div>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Hobbies
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <mat-action-row>
+
+        <div>
+          <p>
+          I have a certain facility for developing hobbies,
+          I will only mention the main ones because I have many. 😅</p>
+          <h4>Amateur Chess ♟️</h4>
+          <p>
+            I learned to play chess at the age of 7, I practiced constantly
+            again in the pandemic and today I have more than a thousand
+            matches on <a href="https://www.chess.com/member/ferreiraalvaro">chess.com.</a>
+          </p>
+
+          <h4>Guitar Composer 🎶</h4>
+          <p>
+            I play guitar since I was 12 years old, I like to listen to all
+            kinds of music and I like to create musical arrangements, soon
+            I will post it on soundcloud.
+          </p>
+          <h4>Podcast Listener 🎙️</h4>
+          <p>I can't deny that I spend hours listening to podcasts, my favorite podcasts are:</p>
+
+          <ul>
+            <li><a href="https://open.spotify.com/show/5qFSRB3x4SP9xZgr4my7fO">Like A Boss(Alura)</a></li>
+            <li><a href="https://open.spotify.com/show/07Ze7DxJjgyS5fsV8lNPSw">Ciencia Sem Fim</a></li>
+            <li><a href="https://open.spotify.com/show/5BqnrP8ztYwYnHNtWRXrUs">Amplifica</a></li>
+          </ul>
+
+        </div>
+
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+
+        <a class="resume" href="/src/assets/docs/Alvaro_Resume.pdf" download="Alvaro_Resume.pdf" type="application/pdf">
+          <div alt="Resume" >CV Download (PDF) 📄</div>
+        </a>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+  </mat-expansion-panel>
+
+</mat-accordion>

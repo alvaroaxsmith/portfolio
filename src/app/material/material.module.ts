@@ -1,10 +1,12 @@
+import { NgModule } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
-import { NgModule } from '@angular/core'
+import { MatExpansionModule } from '@angular/material/expansion';
 
 
 @NgModule({
   exports: [
-    MatDialogModule
+    MatDialogModule,
+    MatExpansionModule
   ]
 })
 export class MaterialModule {

@@ -1,15 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-about-me',
   templateUrl: './about-me.component.html',
   styleUrls: ['./about-me.component.scss']
 })
-export class AboutMeComponent implements OnInit {
+export class AboutMeComponent {
 
-  constructor() { }
+  step = 0;
 
-  ngOnInit(): void {
+  setStep(index: number) {
+    this.step = index;
+  }
+
+  nextStep() {
+    this.step++;
+  }
+
+  prevStep() {
+    this.step--;
   }
 
 }
