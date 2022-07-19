@@ -57,3 +57,12 @@ section {
   height: 100%;
 
 }
+
+@media (min-width:320px) {
+  section {
+    height: 80%;
+  }
+  h3 {
+    margin-bottom: 0;
+  }
+}
