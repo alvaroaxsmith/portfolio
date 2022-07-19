@@ -9,6 +9,11 @@ import { Dialog } from './components/dialog/dialog.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { AboutMeComponent } from './pages/about-me/about-me.component';
+import { PortfolioComponent } from './pages/portfolio/portfolio.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { BlogComponent } from './pages/blog/blog.component';
+import { ContactComponent } from './pages/contact/contact.component';
+
 
 @NgModule({
   declarations: [
@@ -16,7 +21,11 @@ import { AboutMeComponent } from './pages/about-me/about-me.component';
     Dialog,
     HomeComponent,
     NavbarComponent,
-    AboutMeComponent
+    AboutMeComponent,
+    PortfolioComponent,
+    FooterComponent,
+    BlogComponent,
+    ContactComponent
   ],
   imports: [
     BrowserModule,
