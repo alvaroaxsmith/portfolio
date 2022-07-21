@@ -2,8 +2,53 @@ section {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
+  height: 60%;
+  flex-direction: column;
 }
-p {
+h1 {
+  font-family: 'Lexend Tera', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 15px;
   text-align: center;
+  margin-top: 7rem;
+}
+
+.contact {
+  display: flex;
+  align-items: center;
+  height: 35%;
+
+}
+
+.contact a, .contact span{
+  text-decoration: none;
+  color: rgb(0, 0, 0);
+  padding-left: 1rem;
+}
+
+fa-icon {
+  font-size: 1.5rem;
+  color: rgb(0, 0, 0);
+}
+
+@media (min-width:2000px) {
+  h1 {
+    font-size: 150%;
+    margin-top: 10rem;
+  }
+  .contact a, .contact span{
+    font-size: 2rem;
+    padding-left: 1rem;
+  }
+
+  fa-icon {
+    font-size: 2rem;
+    color: rgb(0, 0, 0);
+  }
+
+  section {
+    height: 40%;
+  }
 }

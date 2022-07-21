@@ -58,6 +58,67 @@ section {
 
 }
 
+
+
+@media (min-width:1024px) {
+  h1 {
+    font-size: 90%;
+  }
+
+  img {
+
+    width: 110%;
+    height: 110%;
+
+  }
+
+  h2 {
+
+    font-size: 90%;
+
+
+  }
+
+  h3 {
+
+    font-size: 85%;
+
+  }
+
+
+}
+
+@media (min-width:2000px) {
+  h1 {
+    font-size: 150%;
+  }
+
+  img {
+
+    width: 150%;
+    height: 150%;
+
+  }
+
+  h2 {
+
+    font-size: 150%;
+
+
+  }
+
+  h3 {
+
+    font-size: 145%;
+
+  }
+
+  figure {
+    margin-top: 10rem;
+  }
+
+}
+
 @media (min-width:320px) {
   section {
     height: 80%;
@@ -65,4 +126,5 @@ section {
   h3 {
     margin-bottom: 0;
   }
+
 }

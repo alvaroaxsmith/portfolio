@@ -3,7 +3,7 @@ $lineColor: rgb(0, 0, 0);
 $fontColor: #bbb;
 $bgColor1: #222;
 $bgColor2: #444;
-$yearBgColor: rgb(55, 53, 204);
+$yearBgColor: rgb(231, 231, 231);
 
 $breakpoint: 700px;
 
@@ -11,11 +11,15 @@ $breakpoint: 700px;
   box-sizing: border-box;
 }
 
-body {
-  background-image: linear-gradient(to bottom, $bgColor1, $bgColor2);
-  color: $fontColor;
-  padding: 1rem;
-  font-family: 'Playfair Display', serif;
+@media (min-width:800px){
+  .main {
+    padding: 0 5.5rem 0;
+  }
+
+}
+
+mat-panel-title, mat-action-row {
+  font-family: 'Lexend Tera', sans-serif;
 }
 
 // h1 {
@@ -153,4 +157,35 @@ h1 {
 .resume {
   color: #333;
   text-decoration: none;
+}
+
+mat-expansion-panel mat-action-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+@media (min-width:2000px) {
+  h1 {
+    font-family: 'Lexend Tera', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 150%;
+    line-height: 15px;
+    margin-top: 10rem;
+    text-align: center;
+    margin-bottom: 3.2rem;
+  }
+  mat-accordion {
+    max-width: 1300px;
+    margin: 0 auto;
+  }
+
+  mat-panel-title, mat-action-row {
+    font-family: 'Lexend Tera', sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 15px;
+  }
 }
