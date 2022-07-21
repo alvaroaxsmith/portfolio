@@ -5,12 +5,10 @@ import { AboutMeComponent } from './pages/about-me/about-me.component';
 import { PortfolioComponent } from './pages/portfolio/portfolio.component';
 import { BlogComponent } from './pages/blog/blog.component';
 import { ContactComponent } from './pages/contact/contact.component';
-import { CertificationsComponent } from './pages/certifications/certifications.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'about-me', component: AboutMeComponent },
-  { path: 'certifications', component: CertificationsComponent },
   { path: 'portfolio', component: PortfolioComponent },
   { path: 'blog', component: BlogComponent },
   { path: 'contact', component: ContactComponent }
