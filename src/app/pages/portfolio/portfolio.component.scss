@@ -1,9 +1,80 @@
-section {
+h1 {
+  font-family: 'Lexend Tera', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  line-height: 15px;
+  margin-top: 4rem;
+  text-align: center;
+  margin-bottom: 3.2rem;
+}
+
+.portfolio-container, mat-card-title-group, mat-card-content {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  font-family: 'Lexend Tera';
+  font-style: normal;
+  font-weight: 600;
+  font-size: 12px;
+  text-align: center;
+
+}
+a {
+  border: 1px solid #000;
+  text-decoration: none;
+  color: #000;
+}
+.project-card {
+  display: flex;
+  flex-direction: column;
   align-items: center;
-  height: 80%;
+  justify-content: center;
+  border: 1px solid #000;
+  margin: 1rem;
 }
 p {
-  text-align: center;
+  padding-top: 1rem;
+  width: 15rem;
+}
+@media (min-width:320px) {
+  a {
+    border: 1px solid #000;
+    text-decoration: none;
+    color: #000;
+  }
+  .project-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #000;
+    margin: 1rem;
+  }
+  p {
+    padding-top: 1rem;
+    width: 15rem;
+  }
+}
+
+@media (min-width:600px) {
+  .portfolio-container {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+
+  }
+  .project-card {
+    margin: 1rem auto;
+    width: 50%;
+  }
+  p {
+    width: fit-content;
+    margin: auto;
+  }
+  a {
+    width: min-content;
+    margin: auto;
+  }
 }
