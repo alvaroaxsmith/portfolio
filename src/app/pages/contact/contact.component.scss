@@ -2,8 +2,8 @@ section {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 60%;
   flex-direction: column;
+
 }
 h1 {
   font-family: 'Lexend Tera', sans-serif;
@@ -16,21 +16,22 @@ h1 {
 }
 
 .contact {
-  display: flex;
-  align-items: center;
-  height: 35%;
-
+  padding-top: 1rem;
 }
 
 .contact a, .contact span{
   text-decoration: none;
   color: rgb(0, 0, 0);
-  padding-left: 1rem;
+  padding-left: 2rem;
 }
 
 fa-icon {
   font-size: 1.5rem;
   color: rgb(0, 0, 0);
+}
+
+.contact:first-child {
+  margin-top: 5rem;
 }
 
 @media (min-width:2000px) {
@@ -50,5 +51,9 @@ fa-icon {
 
   section {
     height: 40%;
+  }
+
+  .contact {
+    padding-top: 3rem;
   }
 }
