@@ -9,10 +9,10 @@ h1 {
   font-family: 'Lexend Tera', sans-serif;
   font-style: normal;
   font-weight: 600;
-  font-size: 12px;
+  font-size: clamp(12px, 2rem, 100%);
   line-height: 15px;
   text-align: center;
-  margin-top: 7rem;
+  margin-top: clamp(4rem, 2.5vh, 5rem);
 }
 
 .contact {

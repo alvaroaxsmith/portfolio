@@ -20,16 +20,12 @@
     margin: 0;
     flex-direction: column;
   }
-  hr {
-    width: 4.2rem;
-    border: 1px solid black;
-    margin: 0;
-  }
   a{
     text-decoration: none;
     color: #000;
-    margin-top: 1.5rem;
+    margin-top: 2rem;
   }
+
  }
 
 
@@ -40,6 +36,7 @@
   li:last-child {
     display: flex;
   }
+
  }
 
 @media (min-width:600px) {
@@ -51,6 +48,9 @@
   }
   hr {
     display: none;
+  }
+  a:hover {
+    text-decoration: underline;
   }
  }
 
