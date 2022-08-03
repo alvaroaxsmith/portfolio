@@ -16,10 +16,6 @@ $breakpoint: 700px;
     padding: 0 5.5rem 0;
   }
 
-  h1 {
-    margin-top: 4rem;
-  }
-
 }
 
 mat-panel-title, mat-action-row {
@@ -35,9 +31,9 @@ h1 {
   font-family: 'Lexend Tera', sans-serif;
   font-style: normal;
   font-weight: 600;
-  font-size: 12px;
+  font-size: clamp(12px, 2rem, 100%);
   line-height: 15px;
-  margin-top: 4rem;
+  margin-top: clamp(4rem, 2.5vh, 5rem);
   text-align: center;
   margin-bottom: 3.2rem;
 }
@@ -174,22 +170,17 @@ mat-expansion-panel mat-action-row {
     font-family: 'Lexend Tera', sans-serif;
     font-style: normal;
     font-weight: 600;
-    font-size: 150%;
+    font-size: 160%;
     line-height: 15px;
     margin-top: 10rem;
     text-align: center;
     margin-bottom: 3.2rem;
   }
-  mat-accordion {
-    max-width: 1300px;
-    margin: 0 auto;
-  }
 
-  mat-panel-title, mat-action-row {
-    font-family: 'Lexend Tera', sans-serif;
-    font-style: normal;
-    font-weight: 600;
-    font-size: 16px;
-    line-height: 15px;
-  }
+
+}
+
+mat-panel-title, mat-action-row {
+  font-size: clamp(0.5rem, 2.5vh, 4rem);
+  line-height: normal;
 }
