@@ -184,3 +184,19 @@ mat-panel-title, mat-action-row {
   font-size: clamp(0.5rem, 2.5vh, 4rem);
   line-height: normal;
 }
+
+mat-panel-title {
+  font-family: 'Lexend Tera', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: clamp(0.5rem, 2.5vh, 4rem);
+  line-height: normal;
+  color: #444;
+}
+
+mat-action-row {
+  font-family: 'Lexend Tera', sans-serif;
+  font-style: normal;
+  font-size: clamp(0.5rem, 2.5vh, 4rem);
+  font-weight: 400;
+}
