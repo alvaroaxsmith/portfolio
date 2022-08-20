@@ -3,15 +3,15 @@
 <div class="portfolio-container" *ngFor="let project of projects">
   <mat-card class="project-card">
     <mat-card-title-group>
-      <mat-card-title>{{ project.name }}</mat-card-title>
-      <mat-card-subtitle>{{ project.tech }}</mat-card-subtitle>
+      <mat-card-title i18n>{{ project.name }}</mat-card-title>
+      <mat-card-subtitle i18n>{{ project.tech }}</mat-card-subtitle>
 
          <button mat-button></button>
          <a mat-raised-button href="{{ project.repo }}" target="_blank" rel="noopener noreferrer">Repository</a>
 
     </mat-card-title-group>
     <mat-card-content>
-      <p>
+      <p i18n>
         {{ project.description }}
       </p>
     </mat-card-content>
