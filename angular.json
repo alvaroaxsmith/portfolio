@@ -20,6 +20,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "localize": [
+              "pt-BR"
+            ],
             "outputPath": "dist/portfolio_resume",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -82,6 +85,12 @@
           "defaultConfiguration": "development"
         },
         "extract-i18n": {
+          "i18n":{
+            "sourceLocale": "en-US",
+            "locales": {
+              "pt-BR": "src/locale/messages.es.xlf"
+          }
+          },
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
             "browserTarget": "portfolio_resume:build"
