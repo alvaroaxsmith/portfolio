@@ -14,8 +14,4 @@ export class PortfolioComponent {
 
   ]
 
-  constructor() {
-    $localize`${this.projects}`
-  }
-
 }
