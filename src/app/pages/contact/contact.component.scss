@@ -15,6 +15,11 @@ h1 {
   margin-top: clamp(4rem, 2.5vh, 5rem);
 }
 
+small {
+  display: flex;
+  justify-content: center;
+}
+
 .contact {
   padding-top: 1rem;
 }
