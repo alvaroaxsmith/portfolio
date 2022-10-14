@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { faAngular, faNodeJs } from '@fortawesome/free-brands-svg-icons';
+import { TranslateService } from '@ngx-translate/core';
 
 
 @Component({
@@ -12,7 +13,16 @@ export class FooterComponent implements OnInit {
   faAngular = faAngular;
   faNodeJs = faNodeJs;
 
-  constructor() { }
+  constructor(
+    public translate: TranslateService
+    ) {
+      translate.addLangs(['EN', 'PT-BR']);
+      translate.setDefaultLang('EN');
+     }
+
+  switchLang(lang: string) {
+    this.translate.use(lang);
+  }
 
   ngOnInit(): void {
   }

@@ -1,18 +1,18 @@
 <app-navbar></app-navbar>
-<h1>Projects</h1>
+<h1>{{'Projects' | translate }}</h1>
 <div class="portfolio-container" *ngFor="let project of projects">
   <mat-card class="project-card">
     <mat-card-title-group>
-      <mat-card-title>{{ project.name }}</mat-card-title>
-      <mat-card-subtitle>{{ project.tech }}</mat-card-subtitle>
+      <mat-card-title>{{ project.name | translate }}</mat-card-title>
+      <mat-card-subtitle>{{ project.tech | translate }}</mat-card-subtitle>
 
          <button mat-button></button>
-         <a mat-raised-button href="{{ project.repo }}" target="_blank" rel="noopener noreferrer">Repository</a>
+         <a mat-raised-button href="{{ project.repo }}" target="_blank" rel="noopener noreferrer">{{'Repository' | translate }}</a>
 
     </mat-card-title-group>
     <mat-card-content>
       <p>
-        {{ project.description }}
+        {{ project.description | translate }}
       </p>
     </mat-card-content>
   </mat-card>
