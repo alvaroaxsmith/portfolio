@@ -116,9 +116,9 @@ h1 {
     text-align: left;
   max-width: 150px;
   margin: 0 48px 0 auto;
-  font-size: 0.8rem;
+  font-size: 0.7rem;
   background-color: $yearBgColor;
-  line-height: 1;
+  line-height: 1rem;
   border-image: none;
   padding: .5rem 1rem 1rem;
 
@@ -146,6 +146,7 @@ h1 {
   margin: 0;
   font-family: 'Raleway', sans-serif;
   font-size: 0.8em;
+  line-height: 1.2rem;
 }
 
 .timeline__blurb {
