@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-about-me',
@@ -6,6 +7,17 @@ import { Component } from '@angular/core';
   styleUrls: ['./about-me.component.scss']
 })
 export class AboutMeComponent {
+
+  constructor(
+    public translate: TranslateService
+    ) {
+      translate.addLangs(['EN', 'PT-BR']);
+      translate.setDefaultLang('EN');
+     }
+
+  switchLang(lang: string) {
+    this.translate.use(lang);
+  }
 
   step = 0;
 
