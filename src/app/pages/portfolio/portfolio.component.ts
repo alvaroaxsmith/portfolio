@@ -1,33 +1,27 @@
+import { Project } from './Project';
 import { Component, OnInit } from '@angular/core';
+import { ProjectsService } from './projects.service';
 
 @Component({
   selector: 'app-portfolio',
   templateUrl: './portfolio.component.html',
   styleUrls: ['./portfolio.component.scss']
 })
-export class PortfolioComponent {
+export class PortfolioComponent implements OnInit {
+  projectList: Project[] | null = null;
 
-  projects = [
-    {
-      id: 1,
-      name: 'Soul GYM',
-      tech: 'HTML | CSS | JS',
-      description: 'Responsive website of a fictional gym.',
-      repo: 'https://github.com/alvaroaxsmith/academia-soulcode'
-    },
-    {
-      id: 2, name: 'Mammography Data System',
-      tech: 'Angular | Java',
-      description: 'System for providing data on mammography exams performed by Brazilian women in the national territory.',
-      repo: 'https://github.com/alvaroaxsmith/dados-mamografia'
-    },
-    {
-      id: 3,
-      name: 'Github User Finder',
-      tech: 'Angular | Angular Material',
-      description: 'This application does Github user searches using an official Github api.',
-      repo: 'https://github.com/alvaroaxsmith/buscador-github'
-    },
-  ]
+  constructor(
+    private projectsService: ProjectsService) {
+
+  }
+
+  ngOnInit(): void {
+    this.projectsService.getProjects().subscribe((projects) => {
+      this.projectList = projects;
+    });
+  }
+
+
+
 
 }
