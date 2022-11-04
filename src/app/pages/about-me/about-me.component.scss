@@ -11,6 +11,8 @@ $breakpoint: 700px;
   box-sizing: border-box;
 }
 
+
+
 @media (min-width:800px){
   .main {
     padding: 0 5.5rem 0;
@@ -35,7 +37,7 @@ h1 {
   line-height: 15px;
   margin-top: clamp(4rem, 2.5vh, 5rem);
   text-align: center;
-  margin-bottom: 3.2rem;
+  margin-bottom: clamp(6%, 5%, 10%);
 }
 
 .timeline {
@@ -175,7 +177,6 @@ mat-expansion-panel mat-action-row {
     line-height: 15px;
     margin-top: 10rem;
     text-align: center;
-    margin-bottom: 3.2rem;
   }
 
 
@@ -200,4 +201,14 @@ mat-action-row {
   font-style: normal;
   font-size: clamp(0.5rem, 2.5vh, 4rem);
   font-weight: 400;
+}
+
+
+mat-divider {
+  margin-bottom: 1rem;
+}
+
+.bio, .hobbies {
+  line-height: 2em;
+  font-size: clamp(0.4rem, 2.5vh, 4rem);
 }
