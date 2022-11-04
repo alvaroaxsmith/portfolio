@@ -16,6 +16,7 @@ import { ContactComponent } from './pages/contact/contact.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { ProjectsService } from './pages/portfolio/projects.service';
 
 
 
@@ -47,7 +48,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
       }
     })
   ],
-  providers: [],
+  providers: [ProjectsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
