@@ -1,7 +1,7 @@
-export interface Portfolio {
+export interface Project {
   id: number;
   name: string;
   tech: string;
   description: string;
-  image: string;
+  repo: string;
 }
