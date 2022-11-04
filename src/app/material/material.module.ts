@@ -7,6 +7,10 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableModule } from '@angular/material/table';
 import { MatButtonModule } from '@angular/material/button';
+import { CdkAccordionModule } from '@angular/cdk/accordion';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner'
+
+
 @NgModule({
   exports: [
     MatDialogModule,
@@ -16,7 +20,10 @@ import { MatButtonModule } from '@angular/material/button';
     MatFormFieldModule,
     MatInputModule,
     MatTableModule,
-    MatButtonModule
+    MatButtonModule,
+    CdkAccordionModule,
+    MatProgressSpinnerModule,
+
   ]
 })
 export class MaterialModule {
