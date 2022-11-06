@@ -54,8 +54,8 @@
   li:not(.active):hover {
     border-top:   hsl(0, 0%, 37%) 6px solid;
   }
-  .language:hover {
-      border-top: none;
+  .language:hover:not(.active) {
+    border-top: none;
   }
 
 
