@@ -1,15 +1,16 @@
 <ul>
   <li routerLinkActive="active"
-  [routerLinkActiveOptions]="{exact:true}"><a routerLink="/" >Home</a></li>
-  <li routerLinkActive="active"><a routerLink="/about-me">{{'About me' | translate}}</a></li>
-  <li routerLinkActive="active"><a href="https://scythe-torta-833.notion.site/84419d1749e74d78a0848098429cbe5f?v=89a670745709494c9548611883abc04e" target="_blank">{{'Certifications' | translate }}</a></li>
-  <li routerLinkActive="active"><a routerLink="/portfolio">Portfolio</a></li>
+  [routerLinkActiveOptions]="{exact:true}" routerLink="/" style="cursor: pointer"><a routerLink="/" >HOME</a></li>
+  <li routerLinkActive="active" routerLink="/about-me" style="cursor: pointer"><a routerLink="/about-me">{{'ABOUT ME' | translate}}</a></li>
+  <!-- <li routerLinkActive="active"><a href="https://scythe-torta-833.notion.site/84419d1749e74d78a0848098429cbe5f?v=89a670745709494c9548611883abc04e" target="_blank">{{'Certifications' | translate }}</a></li> -->
+  <li routerLinkActive="active" routerLink="/portfolio" style="cursor: pointer"><a routerLink="/portfolio">PORTFOLIO</a></li>
   <!-- <li><a routerLink="/blog">Blog</a></li> -->
-  <li routerLinkActive="active"><a routerLink="/contact">{{'Contact' | translate }}</a></li>
+  <li routerLinkActive="active" routerLink="/contact" style="cursor: pointer"><a routerLink="/contact">{{'CONTACT' | translate }}</a></li>
   <li class="language">
       <a class="language-form">
         <select
             class="form-control"
+            style="cursor: pointer"
             #selectedLang
             (change)="switchLang(selectedLang.value)">
             <option *ngFor="let language of translate.getLangs()"
@@ -20,7 +21,7 @@
         </select>
       </a>
   </li>
-  <li><a class="menu" (click)="openDialog()">Menu</a></li>
+  <li><a class="menu" (click)="openDialog()">MENU</a></li>
 
 </ul>
 
