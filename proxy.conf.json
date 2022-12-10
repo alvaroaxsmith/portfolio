@@ -1,6 +1,8 @@
 {
   "/api/*": {
-    "target": "https://backend-portfolio-4cl89bojd-alvaroaxsmith.vercel.app/",
+    "target": "https://backend-portfolio-wheat.vercel.app/",
+    "changeOrigin": true,
+    "secure": false,
     "pathRewrite": {
       "^/api": ""
     }
