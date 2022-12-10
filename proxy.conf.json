@@ -1,0 +1,8 @@
+{
+  "/api/*": {
+    "target": "https://backend-portfolio-4cl89bojd-alvaroaxsmith.vercel.app/",
+    "pathRewrite": {
+      "^/api": ""
+    }
+  }
+}
