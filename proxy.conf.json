@@ -1,6 +1,6 @@
 {
   "/api/*": {
-    "target": "https://backend-portfolio-wheat.vercel.app/",
+    "target": "https://backend-portfolio-wheat.vercel.app/projects",
     "changeOrigin": true,
     "secure": false,
     "pathRewrite": {
