@@ -1,20 +1,20 @@
-import { Res } from './Response';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import { Project } from './Project';
+import { Res } from './Response';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProjectsService {
+  private apiUrl = 'https://json-server-vercel-beta-six.vercel.app/projects';
 
-  projectsObject = this.http.get<Res>('/api/projects').pipe(map((response) => response.projects));
-
-  constructor(public http: HttpClient) { }
+  constructor(private http: HttpClient) { }
 
   getProjects(): Observable<Project[]> {
-    return this.projectsObject;
+    return this.http.get<Res>(this.apiUrl).pipe(
+      map(res => res.projects)
+    );
   }
-
 }
