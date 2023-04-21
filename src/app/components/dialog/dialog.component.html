@@ -19,21 +19,17 @@
   <li>
     <a routerLink="/contact" mat-dialog-close>{{ "CONTACT" | translate }}</a>
   </li>
-  <li>
-    <a>
-      <select
-        class="form-control"
-        #selectedLang
-        (change)="switchLang(selectedLang.value)"
-      >
-        <option
-          *ngFor="let language of translate.getLangs()"
-          [value]="language"
-          [selected]="language === translate.currentLang"
-        >
-          {{ language }}
-        </option>
-      </select>
+  <li class="language">
+    <a class="language-form">
+      <mat-menu #menu="matMenu">
+        <button mat-menu-item *ngFor="let lang of translate.getLangs()" (click)="translate.use(lang); menu.closed">
+          {{ lang }}
+        </button>
+      </mat-menu>
+
+      <button mat-icon-button [matMenuTriggerFor]="menu">
+        <mat-icon>translate</mat-icon>
+      </button>
     </a>
-  </li>
+</li>
 </ul>
