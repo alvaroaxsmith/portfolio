@@ -3,22 +3,20 @@
   [routerLinkActiveOptions]="{exact:true}" routerLink="/" style="cursor: pointer"><a routerLink="/" >HOME</a></li>
   <li routerLinkActive="active" routerLink="/about-me" style="cursor: pointer"><a routerLink="/about-me">{{'ABOUT ME' | translate}}</a></li>
   <!-- <li routerLinkActive="active"><a href="https://scythe-torta-833.notion.site/84419d1749e74d78a0848098429cbe5f?v=89a670745709494c9548611883abc04e" target="_blank">{{'Certifications' | translate }}</a></li> -->
-  <li routerLinkActive="active" routerLink="portfolio" style="cursor: pointer"><a routerLink="portfolio">PORTFOLIO</a></li>
+  <li routerLinkActive="active" routerLink="/portfolio" style="cursor: pointer"><a routerLink="/portfolio">PORTFOLIO</a></li>
   <!-- <li><a routerLink="/blog">Blog</a></li> -->
   <li routerLinkActive="active" routerLink="/contact" style="cursor: pointer"><a routerLink="/contact">{{'CONTACT' | translate }}</a></li>
-  <li class="language">
+  <li class="language no-hover">
       <a class="language-form">
-        <select
-            class="form-control"
-            style="cursor: pointer"
-            #selectedLang
-            (change)="switchLang(selectedLang.value)">
-            <option *ngFor="let language of translate.getLangs()"
-            [value]="language"
-            [selected]="language === translate.currentLang">
-            {{ language }}
-            </option>
-        </select>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item *ngFor="let lang of translate.getLangs()" (click)="translate.use(lang); menu.closed">
+            {{ lang }}
+          </button>
+        </mat-menu>
+
+        <button mat-icon-button [matMenuTriggerFor]="menu">
+          <mat-icon>translate</mat-icon>
+        </button>
       </a>
   </li>
   <li><a class="menu" (click)="openDialog()">MENU</a></li>

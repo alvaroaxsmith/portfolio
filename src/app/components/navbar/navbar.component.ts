@@ -8,21 +8,18 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-
 export class NavbarComponent implements OnInit {
-
   constructor(
     public dialog: MatDialog,
     public translate: TranslateService
     ) {
       translate.addLangs(['EN', 'PT-BR']);
       translate.setDefaultLang('EN');
-     }
+  }
 
   switchLang(lang: string) {
     this.translate.use(lang);
   }
-
 
   ngOnInit(): void {
   }
@@ -34,6 +31,4 @@ export class NavbarComponent implements OnInit {
       console.log(`Dialog result: ${result}`);
     });
   }
-
-
 }
