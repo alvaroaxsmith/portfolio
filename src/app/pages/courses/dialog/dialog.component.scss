@@ -36,3 +36,35 @@ mat-dialog-actions {
   margin: 0;
 }
 
+.mat-dialog-container {
+  min-width: 600px;
+}
+
+
+mat-card {
+  position: relative;
+  padding-bottom: 75%; /* proporção 4:3 */
+  width: 90%; /* largura do contêiner pai do iframe */
+  max-width: 1200px; /* tamanho máximo do dialog */
+}
+
+iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+
+mat-card::before {
+  content: '';
+  display: block;
+  padding-top: 56.25%; /* proporção 16:9 */
+}
+
+@media screen and (max-width: 767px) {
+  mat-card {
+    padding-bottom: 75%; /* proporção 4:3 para telas menores */
+  }
+}
