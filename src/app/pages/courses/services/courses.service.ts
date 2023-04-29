@@ -7,7 +7,7 @@ import { Course, CourseList } from '../interfaces/courses.interface';
   providedIn: 'root'
 })
 export class CourseService {
-  private apiUrl = 'http://localhost:3000/courses';
+  private apiUrl = 'https://json-server-vercel-beta-six.vercel.app/courses';
 
   constructor(private http: HttpClient) { }
 

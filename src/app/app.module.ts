@@ -18,6 +18,7 @@ import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ProjectsService } from './pages/portfolio/services/projects.service';
+import { ImageService } from './pages/home/services/image.service';
 import { DialogComponent } from './pages/courses/dialog/dialog.component';
 
 
