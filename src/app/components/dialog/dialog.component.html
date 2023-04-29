@@ -6,14 +6,9 @@
   <li>
     <a routerLink="/about-me" mat-dialog-close>{{ "ABOUT ME" | translate }}</a>
   </li>
-  <!-- <li>
-    <a
-      href="https://scythe-torta-833.notion.site/84419d1749e74d78a0848098429cbe5f?v=89a670745709494c9548611883abc04e"
-      target="_blank"
-      mat-dialog-close
-      >{{ "Certifications" | translate }}</a
-    >
-  </li> -->
+  <li>
+    <a routerLink="/courses" mat-dialog-close>{{ "COURSES" | translate }}</a>
+  </li>
   <li><a routerLink="/portfolio" mat-dialog-close>PORTFOLIO</a></li>
   <!-- <li><a routerLink="/blog" mat-dialog-close>Blog</a></li> -->
   <li>
@@ -22,7 +17,11 @@
   <li class="language">
     <a class="language-form">
       <mat-menu #menu="matMenu">
-        <button mat-menu-item *ngFor="let lang of translate.getLangs()" (click)="translate.use(lang); menu.closed">
+        <button
+          mat-menu-item
+          *ngFor="let lang of translate.getLangs()"
+          (click)="translate.use(lang); (menu.closed)"
+        >
           {{ lang }}
         </button>
       </mat-menu>
@@ -31,5 +30,5 @@
         <mat-icon>translate</mat-icon>
       </button>
     </a>
-</li>
+  </li>
 </ul>

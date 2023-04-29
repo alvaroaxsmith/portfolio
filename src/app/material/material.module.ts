@@ -14,6 +14,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 
 @NgModule({
@@ -32,7 +33,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatButtonToggleModule,
     FormsModule,
     MatMenuModule,
-    MatIconModule
+    MatIconModule,
+    MatPaginatorModule,
 
   ]
 })

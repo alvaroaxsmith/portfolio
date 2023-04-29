@@ -13,10 +13,12 @@ import { PortfolioComponent } from './pages/portfolio/portfolio.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { BlogComponent } from './pages/blog/blog.component';
 import { ContactComponent } from './pages/contact/contact.component';
+import { CoursesComponent } from './pages/courses/courses.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { ProjectsService } from './pages/portfolio/projects.service';
+import { ProjectsService } from './pages/portfolio/services/projects.service';
+import { DialogComponent } from './pages/courses/dialog/dialog.component';
 
 
 
@@ -31,7 +33,9 @@ import { ProjectsService } from './pages/portfolio/projects.service';
     PortfolioComponent,
     FooterComponent,
     BlogComponent,
-    ContactComponent
+    ContactComponent,
+    CoursesComponent,
+    DialogComponent
 
   ],
   imports: [

@@ -1,0 +1,12 @@
+<mat-dialog-actions align="start">
+  <span class="close" mat-dialog-close>X</span>
+</mat-dialog-actions>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>{{ rowData.name }}</mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <iframe [src]="getSafeUrl(rowData.link)" width="640" height="480" allow="autoplay"></iframe>
+  </mat-card-content>
+</mat-card>

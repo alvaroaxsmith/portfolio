@@ -1,0 +1,86 @@
+h1 {
+  font-family: 'Lexend Tera', sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: clamp(12px, 2rem, 100%);
+  line-height: 15px;
+  text-align: center;
+  margin-top: 6rem;
+}
+
+.table-container {
+  overflow-x: auto;
+}
+
+.mat-table {
+  width: 100%;
+}
+
+.mat-header-cell,
+.mat-cell {
+  padding: 10px;
+  text-align: left;
+  overflow-wrap: break-word;
+  word-wrap: break-word;
+  hyphens: auto;
+  max-width: 200px;
+}
+
+.hidden {
+  display: none;
+}
+
+
+
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  color: #949494;
+}
+
+.ng-tns-c76-0 {
+  color: #949494;
+}
+
+.table-container,
+.mat-form-field {
+  margin-left: 4rem;
+  margin-right: 4rem;
+}
+
+mat-icon {
+  cursor: pointer;
+}
+
+mat-progress-spinner {
+  margin: 0 auto;
+}
+
+mat-label {
+  font-size: 16px;
+}
+
+.mat-mdc-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.dialog {
+  font-weight: 500;
+  color: #444;
+  cursor: pointer;
+}
+
+.dialog:hover {
+  font-weight: 600;
+}
+
+@media (min-width:2000px) {
+  h1 {
+    font-size: 150%;
+    margin-top: 10rem;
+  }
+}
