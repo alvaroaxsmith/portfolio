@@ -7,12 +7,12 @@ import { TranslateService } from '@ngx-translate/core';
   templateUrl: './text.component.html',
   animations: [
     trigger('trocar-palavras', [
-      state('inicial', style({ opacity: 0, transform: 'translateX(100px)' })),
+      state('inicial', style({ opacity: 0, transform: 'translateX(-100px)' })),
       transition('inicial => mostrar', [
         animate('1500ms', style({ opacity: 1, transform: 'translateX(0px)' })),
       ]),
       transition('mostrar => inicial', [
-        style({ opacity: 0, transform: 'translateX(100px)' }),
+        style({ opacity: 0, transform: 'translateX(-100px)' }),
         animate('1500ms', style({ opacity: 1, transform: 'translateX(0px)' })),
       ]),
     ]),
