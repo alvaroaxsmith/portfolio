@@ -2,16 +2,15 @@
   "SOBRE EU": "ABOUT ME",
   "Cursos": "Certifications",
   "CONTATO": "CONTACT",
-
+  "TRADUÇÃO": "TRANSLATE",
   "Desenvolvido por": "Made by",
   "Tecnologias utilizadas": "Technologies Used",
-
   "Seja bem vindo": "Welcome to my website",
   "Olá, eu me chamo Alvaro Ferreira": "Hi, I’m Alvaro Ferreira",
-  "DESENVOLVEDOR DE SOFTWARE": "SOFTWARE ENGINEER",
-
+  "Engenheiro de software": "Software Engineer",
+  "Desenvolvedor Front-end": "Front-end Developer",
+  "Desenvolvedor Full-stack": "Full-stack Developer",
   "Sobre mim": "About me",
-
   "Quem sou eu?": "Who am I?",
   "Eu sou desenvolvedor de software na V.tal e atualmente estudante do último ano de engenharia de produção.": "I'm a software developer at V.tal and currently a production engineering final year student.",
   "Meu contato com computadores vem desde a minha infancia, meu primeiro computador foi um Windows 98, nessa época eu tinha 7 anos e adorava passar o tempo desenhando no Paint ou jogando joguinhos.": "My contact with computers dates back to my childhood, my first computer was Windows 98, at that time I was 7 years old and I loved to spend time drawing in Paint or playing games.",
@@ -19,34 +18,24 @@
   "Meu interesse em seguir carreira na área de tecnologia surgiu durante a faculdade, as diciplinas de computação no curso de engenharia sempre despertaram minha curiosidade e vontade de aprender mais, mas foi durante um estágio que eu fiz que eu me apaixonei de verdade pela área.": "My interest in pursuing a career in the field of technology emerged during college, the computing subjects in the engineering course always aroused my curiosity and desire to learn more, but it was during an internship that I did that I really fell in love with the area.",
   "Na época eu fazia estágio na área de engenharia de manutenção em uma empresa de grande porte de transporte urbano e havia muita demanda de digitalização dos processos de manutenção, desde modelagem de banco de dados, implementos no SAP, até desenvolvimento de software.": "At the time, I was doing an internship in the maintenance engineering area at a large urban transport company and there was a lot of demand for digitization of maintenance processes, from database modeling, implementations in SAP, to software development.",
   "Desde então eu sigo estudando, altamente motivado em aprender mais e em desenvolver soluções e produtos que possam impactar positivamente a vida das pessoas.": "Since then I've been studying, highly motivated to learn more and to develop solutions and products that can positively impact people's lives.",
-
   "Habilidades": "Skills",
   "Destaques": "Highlights",
-
-  "Agosto de 2018" : "August 2018",
+  "Agosto de 2018": "August 2018",
   "Ingresso na UNIVESP": "Admission to UNIVESP",
-
   "Abril de 2019 até": "April 2019 to",
   "Abril de 2021": "April 2021",
-
   "Estágio no Metro de São Paulo": "Internship at Metro de São Paulo",
   "Julho 2021 até": "July 2021 to",
   "Outubro 2021": "October 2021",
-
   "Bootcamp na Gama Academy": "Bootcamp at Gama Academy",
   "Janeiro de 2022 até": "January 2022 to",
   "Junho 2022": "June 2022",
-
   "Bootcamp na SoulCode Academy": "Bootcamp at SoulCode Academy",
-
   "Agosto de 2022 até": "August 2022 to",
   "Setembro 2022": "September 2022",
-
   "1º lugar no Gama-lab Tech Experience": "1st place in the Gama-lab Tech Experience",
-
   "Outubro de 2022 até": "October 2022",
   "Desenvolvedor de Software na V.tal": "Software Developer at V.tal",
-
   "Eu tenho uma certa facilidade para desenvolver hobbies, vou apenas mencionar os principais porque eu tenho muitos. 😅": "I have a certain facility for developing hobbies, I will only mention the main ones because I have many. 😅",
   "Xadrez Amador ♟️": "Amateur Chess ♟️",
   "Eu aprendi a jogar xadrez aos 7 anos, mas comecei a praticar constantemente na pandemia e hoje tenho mais de mil partidas no ": "I learned to play chess at the age of 7, but I started to practice constantly in the pandemic and today I have more than a thousand games on ",
@@ -54,19 +43,14 @@
   "Eu toco violão desde os 12 anos, gosto de ouvir todo tipo de música e gosto de criar arranjos musicais, em breve pretendo postar no soundcloud.": "I play guitar since I was 12 years old, I like to listen to all kinds of music and I like to create musical arrangements, soon I will post it on soundcloud.",
   "Ouvinte de Podcasts 🎙️": "Podcasts Listener 🎙️",
   "Eu não posso negar que eu gasto horas ouvindo podcasts, meus podcasts favoritos são:": "I can't deny that I spend hours listening to podcasts, my favorite podcasts are:",
-
   "Entre em contato!": "Reach out to me!",
   "Envie-me uma mensagem": "Send me a message",
-
   "Ribeirão Pires - SP, Brasil": "Ribeirão Pires - SP, Brazil",
-
   "Projetos": "Projects",
   "Repositório": "Repository",
-
   "Site responsivo de uma academia fictícia.": "Responsive website of a fictional gym.",
   "Dados de Exames de Mamografia": "Mammography Data System",
   "Sistema para fornecimento de dados sobre exames de mamografia realizados por mulheres brasileiras no território nacional.": "System for providing data on mammography exams performed by Brazilian women in the national territory.",
   "Buscador de Usuários do Github": "Github User Finder",
   "Esta aplicação faz buscas de usuários do Github utilizando uma api oficial do Github.": "This application does Github user searches using an official Github api."
-
 }

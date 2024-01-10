@@ -10,15 +10,18 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class FooterComponent implements OnInit {
 
+  dataAtual = new Date();
+  anoAtual = this.dataAtual.getFullYear();
+
   faAngular = faAngular;
   faNodeJs = faNodeJs;
 
   constructor(
     public translate: TranslateService
-    ) {
-      translate.addLangs(['EN', 'PT-BR']);
-      translate.setDefaultLang('EN');
-     }
+  ) {
+    translate.addLangs(['EN', 'PT-BR']);
+    translate.setDefaultLang('EN');
+  }
 
   switchLang(lang: string) {
     this.translate.use(lang);

@@ -1,6 +1,6 @@
-import { Dialog } from './../dialog/dialog.component';
+import { Dialog } from './dialog/dialog.component';
 import { Component, OnInit } from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -12,9 +12,9 @@ export class NavbarComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     public translate: TranslateService
-    ) {
-      translate.addLangs(['EN', 'PT-BR']);
-      translate.setDefaultLang('EN');
+  ) {
+    translate.addLangs(['EN', 'PT-BR']);
+    translate.setDefaultLang('EN');
   }
 
   switchLang(lang: string) {
