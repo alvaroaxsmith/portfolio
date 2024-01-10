@@ -5,7 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { Dialog } from './components/dialog/dialog.component';
+import { Dialog } from './components/navbar/dialog/dialog.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
 import { AboutMeComponent } from './pages/about-me/about-me.component';
@@ -20,6 +20,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ProjectsService } from './pages/portfolio/services/projects.service';
 import { ImageService } from './pages/home/services/image.service';
 import { DialogComponent } from './pages/courses/dialog/dialog.component';
+import { TextComponent } from './pages/home/text/text.component'
 
 
 
@@ -36,7 +37,8 @@ import { DialogComponent } from './pages/courses/dialog/dialog.component';
     BlogComponent,
     ContactComponent,
     CoursesComponent,
-    DialogComponent
+    DialogComponent,
+    TextComponent
 
   ],
   imports: [

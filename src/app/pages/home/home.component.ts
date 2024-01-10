@@ -1,35 +1,44 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ImageService } from '../home/services/image.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
-  isLoadingImage = true;
+export class HomeComponent implements OnInit, OnDestroy {
+  private imageSubscription: Subscription | undefined;
+  isLoadingImage: boolean = true;
   imageUrl: string | undefined;
 
   constructor(
-    public translate: TranslateService,
+    private translate: TranslateService,
     private imageService: ImageService
   ) {
     translate.addLangs(['EN', 'PT-BR']);
     translate.setDefaultLang('EN');
+    translate.use('EN');
   }
 
   switchLang(lang: string) {
     this.translate.use(lang);
   }
-
   ngOnInit(): void {
     this.imageService.getImage(0)
       .then(url => {
-        console.log('Image loaded successfully');
         this.isLoadingImage = false;
         this.imageUrl = url;
       })
-      .catch(error => console.error(error));
+      .catch(error => {
+        console.error('Error loading image:', error);
+        // Adicione lógica para informar ao usuário sobre o erro, se necessário.
+      });
+  }
+  ngOnDestroy(): void {
+    if (this.imageSubscription) {
+      this.imageSubscription.unsubscribe();
+    }
   }
 }

@@ -6,12 +6,13 @@
 </mat-progress-spinner>
 
 <ng-template #content>
-  <div class="portfolio-container" *ngFor="let project of projectList">
-    <mat-card class="project-card">
+  <div class="portfolio-container" *ngFor="let project of projectList; let i = index">
+    <mat-card class="project-card fadeInLeft" [@fadeInLeft]="{ value: 'in', params: { delay: getAnimationDelay(i) } }">
+
       <mat-card-title-group>
         <mat-card-title>{{ project.name | translate }}</mat-card-title>
         <mat-card-subtitle>{{ project.tech | translate }}</mat-card-subtitle>
-           <a mat-raised-button href="{{ project.repo }}" target="_blank" rel="noopener noreferrer">{{'Repository' | translate }}</a>
+        <a mat-raised-button href="{{ project.repo }}" target="_blank" rel="noopener noreferrer">{{'Repository' | translate }}</a>
       </mat-card-title-group>
       <mat-card-content>
         <p>
@@ -21,4 +22,5 @@
     </mat-card>
   </div>
 </ng-template>
+
 
