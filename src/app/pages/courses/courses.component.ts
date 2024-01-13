@@ -1,10 +1,10 @@
-import { Component, AfterViewInit, ViewChild, ChangeDetectorRef } from '@angular/core';
-import { MatLegacyPaginator as MatPaginator, MatLegacyPaginatorIntl as MatPaginatorIntl } from '@angular/material/legacy-paginator';
+import { Component, AfterViewInit, ViewChild } from '@angular/core';
+import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { MatLegacyTableDataSource as MatTableDataSource } from '@angular/material/legacy-table';
+import { MatTableDataSource } from '@angular/material/table';
 import { CourseService } from '../courses/services/courses.service';
 import { Course } from '../courses/interfaces/courses.interface';
-import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
+import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from './dialog/dialog.component';
 
 @Component({
@@ -38,11 +38,11 @@ export class CoursesComponent implements AfterViewInit {
   dataSource: MatTableDataSource<Course> = new MatTableDataSource();
   isLoading: boolean = true;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator = new MatPaginator(new MatPaginatorIntl(), ChangeDetectorRef.prototype);
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort = new MatSort();
 
-  constructor(private courseService: CourseService, private dialog: MatDialog) {}
+  constructor(private courseService: CourseService, private dialog: MatDialog) { }
 
   openDialog(rowData: any): void {
     const dialogRef = this.dialog.open(DialogComponent, {
@@ -57,9 +57,13 @@ export class CoursesComponent implements AfterViewInit {
   loadData() {
     this.isLoading = true;
     this.courseService.getCourses().subscribe(courses => {
-      this.dataSource = new MatTableDataSource(courses);
+      this.dataSource.data = courses;
+      // Assign paginator after data is loaded
       this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
+
+      // Integrate sorting
+      this.sort.sortChange.subscribe(() => this.dataSource.sort = this.sort);
+
       this.isLoading = false;
     });
   }
@@ -67,10 +71,7 @@ export class CoursesComponent implements AfterViewInit {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
+    this.dataSource.paginator?.firstPage();
   }
 
 }
