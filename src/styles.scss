@@ -52,11 +52,40 @@ body {
 }
 
 .mat-progress-spinner {
-  circle {
-    stroke: black;
-  }
+  background-color: black;
 }
 
 .mat-form-field.mat-focused .mat-form-field-ripple {
   background-color: black;
+}
+
+.mdc-text-field--filled .mdc-line-ripple::after {
+  border-bottom-color: black;
+}
+
+.mdc-text-field .mdc-text-field__input {
+  caret-color: black;
+}
+
+.mdc-text-field--focused:not(.mdc-text-field--disabled) .mdc-floating-label {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.mdc-list-item--selected .mdc-list-item__primary-text,
+.mdc-list-item--activated .mdc-list-item__primary-text {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing {
+  border-color: rgba(0, 0, 0, 0.6);
+}
+
+.mat-mdc-form-field.mat-focused.mat-primary .mat-mdc-select-arrow {
+  color: rgba(0, 0, 0, 0.6);
+}
+
+.mat-mdc-progress-spinner {
+  --mdc-circular-progress-active-indicator-color: black;
 }
