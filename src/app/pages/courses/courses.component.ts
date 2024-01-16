@@ -59,7 +59,7 @@ export class CoursesComponent implements AfterViewInit {
 
   showSnackbar() {
     const snackbarShownBefore = localStorage.getItem('snackbarShown');
-    if (snackbarShownBefore) {
+    if (!snackbarShownBefore) {
       this.snackBar.openFromComponent(SnackBarComponent, {
         duration: 25000,
       });
