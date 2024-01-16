@@ -34,6 +34,7 @@ span {
 mat-dialog-actions {
   padding: 0;
   margin: 0;
+  background-color: rgba(0, 0, 0, 0.01);
 }
 
 .mat-dialog-container {
@@ -42,10 +43,9 @@ mat-dialog-actions {
 
 
 mat-card {
-  position: relative;
-  padding-bottom: 75%; /* proporção 4:3 */
-  width: 90%; /* largura do contêiner pai do iframe */
-  max-width: 1200px; /* tamanho máximo do dialog */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  overflow: hidden;
 }
 
 iframe {
@@ -60,11 +60,27 @@ iframe {
 mat-card::before {
   content: '';
   display: block;
-  padding-top: 56.25%; /* proporção 16:9 */
+  padding-top: 56.25%;
+  /* proporção 16:9 */
 }
 
 @media screen and (max-width: 767px) {
   mat-card {
-    padding-bottom: 75%; /* proporção 4:3 para telas menores */
+    padding-bottom: 75%;
+    /* proporção 4:3 para telas menores */
   }
+}
+
+mat-card-title,
+a,
+span {
+  font-family: 'Your-Preferred-Font', sans-serif;
+}
+
+a {
+  font-weight: 500;
+}
+
+span {
+  font-weight: 600;
 }

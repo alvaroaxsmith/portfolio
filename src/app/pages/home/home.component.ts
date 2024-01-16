@@ -19,7 +19,6 @@ export class HomeComponent implements OnInit, OnDestroy {
   ) {
     translate.addLangs(['EN', 'PT-BR']);
     translate.setDefaultLang('EN');
-    translate.use('EN');
   }
 
   switchLang(lang: string) {

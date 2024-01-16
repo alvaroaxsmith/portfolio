@@ -6,6 +6,8 @@ import { CourseService } from '../courses/services/courses.service';
 import { Course } from '../courses/interfaces/courses.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from './dialog/dialog.component';
+import { SnackBar } from './snack-bar/snackbar.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-courses',
@@ -29,6 +31,7 @@ export class CoursesComponent implements AfterViewInit {
     this.expandedRow = this.expandedRow === row ? null : row;
   }
 
+  snackbarShown: boolean = false; // Flag to track whether the snackbar has been shown
 
   toggleRow(row: Course): void {
     this.expandedRow = this.isRowExpanded(row) ? null : row;
@@ -42,7 +45,7 @@ export class CoursesComponent implements AfterViewInit {
   @ViewChild(MatSort)
   sort: MatSort = new MatSort();
 
-  constructor(private courseService: CourseService, private dialog: MatDialog) { }
+  constructor(private courseService: CourseService, private dialog: MatDialog, private snackBar: MatSnackBar) { }
 
   openDialog(rowData: any): void {
     const dialogRef = this.dialog.open(DialogComponent, {
@@ -52,8 +55,18 @@ export class CoursesComponent implements AfterViewInit {
 
   ngAfterViewInit() {
     this.loadData();
+    this.showSnackbar();
   }
 
+  showSnackbar() {
+    const snackbarShownBefore = localStorage.getItem('snackbarShown');
+    if (!snackbarShownBefore) {
+      this.snackBar.openFromComponent(SnackBar, {
+        duration: 5000, // 5 seconds
+      });
+      localStorage.setItem('snackbarShown', 'true');
+    }
+  }
   loadData() {
     this.isLoading = true;
     this.courseService.getCourses().subscribe(courses => {
