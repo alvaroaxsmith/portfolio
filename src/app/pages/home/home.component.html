@@ -1,14 +1,16 @@
 <app-navbar></app-navbar>
 <section>
   <h1>{{'Welcome to my website' | translate}}</h1>
-  <ng-container *ngIf="isLoadingImage; else imageLoaded" >
+  <ng-container *ngIf="isLoadingImage; else imageLoaded">
     <figure class="spinner">
       <mat-spinner diameter="80"></mat-spinner>
     </figure>
   </ng-container>
   <ng-template #imageLoaded>
     <figure>
-      <img [src]="imageUrl" alt="" loading="lazy">
+      <div class="sleeve">
+        <img [src]="imageUrl" alt="" loading="lazy">
+      </div>
     </figure>
   </ng-template>
   <h2>{{'Hi, I’m Alvaro Ferreira' | translate}}</h2>

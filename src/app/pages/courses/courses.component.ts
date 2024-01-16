@@ -6,9 +6,8 @@ import { CourseService } from '../courses/services/courses.service';
 import { Course } from '../courses/interfaces/courses.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from './dialog/dialog.component';
-import { SnackBar } from './snack-bar/snackbar.component';
+import { SnackBarComponent } from './snack-bar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-
 @Component({
   selector: 'app-courses',
   templateUrl: './courses.component.html',
@@ -60,9 +59,9 @@ export class CoursesComponent implements AfterViewInit {
 
   showSnackbar() {
     const snackbarShownBefore = localStorage.getItem('snackbarShown');
-    if (!snackbarShownBefore) {
-      this.snackBar.openFromComponent(SnackBar, {
-        duration: 5000, // 5 seconds
+    if (snackbarShownBefore) {
+      this.snackBar.openFromComponent(SnackBarComponent, {
+        duration: 25000,
       });
       localStorage.setItem('snackbarShown', 'true');
     }

@@ -1,23 +1,41 @@
 import { Component } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { MatButtonModule } from '@angular/material/button';
-import { MatInputModule } from '@angular/material/input';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { TranslateService } from '@ngx-translate/core';
+import { MatIcon } from '@angular/material/icon';
 
-/**
- * @title Basic snack-bar
- */
 @Component({
   selector: 'snack-bar',
-  templateUrl: 'snack-bar.html',
-  styleUrls: ['snack-bar.css'],
-  standalone: true,
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule],
+  template: `
+    <div>
+      <p>{{ getCourseCertificateMessage() }}</p>
+      <button mat-button class="custom-button" (click)="dismissSnackBar()">X</button>
+    </div>
+  `,
+  styleUrls: ['./snack-bar.css'],
 })
-export class SnackBar {
-  constructor(private _snackBar: MatSnackBar) { }
+export class SnackBarComponent {
+  constructor(private _snackBar: MatSnackBar, private translate: TranslateService) { }
 
-  openSnackBar(message: string, action: string) {
-    this._snackBar.open(message, action);
+  getCourseCertificateMessage(): string {
+    return this.translate.instant('courseCertificateMessage');
+  }
+
+  openSnackBar() {
+    const snackBarRef = this._snackBar.openFromComponent(SnackBarComponent, {
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: ['custom-snackbar'],
+    });
+
+    // Adicione um ouvinte de evento para fechar o Snackbar quando o botão for clicado
+    snackBarRef.onAction().subscribe(() => {
+      this.dismissSnackBar();
+    });
+  }
+
+  dismissSnackBar() {
+    // Feche o Snackbar manualmente
+    this._snackBar.dismiss();
   }
 }
