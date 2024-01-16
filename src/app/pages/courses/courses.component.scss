@@ -30,8 +30,6 @@ h1 {
   display: none;
 }
 
-
-
 table {
   width: 100%;
 }
@@ -83,4 +81,17 @@ mat-label {
     font-size: 150%;
     margin-top: 10rem;
   }
+}
+
+@media (max-width: 900px) {
+
+  .table-container,
+  .mat-form-field {
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+}
+
+tr {
+  cursor: pointer;
 }

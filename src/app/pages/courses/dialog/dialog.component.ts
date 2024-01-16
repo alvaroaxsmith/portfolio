@@ -15,14 +15,14 @@ export class DialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public rowData: Course,
     private courseService: CourseService,
     private domSanitizer: DomSanitizer
-  ) { }
-
-  ngOnInit(): void {
+  ) {
     this.loadCourseData();
   }
 
+  ngOnInit(): void { }
+
   loadCourseData(): void {
-    if (this.rowData) {
+    if (this.rowData && !this.rowData.name) {
       this.courseService.getCourses().subscribe(courses => {
         this.rowData = courses.find(course => course.name === this.rowData.link) || this.rowData;
       });

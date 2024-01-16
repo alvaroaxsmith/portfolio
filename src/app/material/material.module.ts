@@ -15,6 +15,8 @@ import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 
 @NgModule({
@@ -35,7 +37,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatMenuModule,
     MatIconModule,
     MatPaginatorModule,
-
+    MatSortModule,
+    MatSnackBarModule,
   ]
 })
 export class MaterialModule {
