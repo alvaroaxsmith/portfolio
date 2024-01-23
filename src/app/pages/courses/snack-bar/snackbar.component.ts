@@ -6,12 +6,12 @@ import { MatIcon } from '@angular/material/icon';
 @Component({
   selector: 'snack-bar',
   template: `
-    <div>
+    <div class="snackbar-container">
       <p>{{ getCourseCertificateMessage() }}</p>
       <button mat-button class="custom-button" (click)="dismissSnackBar()">X</button>
     </div>
   `,
-  styleUrls: ['./snack-bar.css'],
+  styleUrls: ['./snack-bar.scss'],
 })
 export class SnackBarComponent {
   constructor(private _snackBar: MatSnackBar, private translate: TranslateService) { }

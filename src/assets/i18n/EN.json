@@ -13,7 +13,7 @@
   "Desenvolvedor Full-stack": "Full-stack Developer",
   "Sobre mim": "About me",
   "Quem sou eu?": "Who am I?",
-  "Eu sou desenvolvedor de software na V.tal e atualmente estudante do último ano de engenharia de produção.": "I'm a software developer at V.tal and currently a production engineering final year student.",
+  "Sou engenheiro de software formado em engenharia de produção pela UNIVESP e atualmente trabalho como desenvolvedor front end/full stack.": "I am a software developer with a degree in production engineering from UNIVESP and currently working as a front end/full stack developer.",
   "Meu contato com computadores vem desde a minha infancia, meu primeiro computador foi um Windows 98, nessa época eu tinha 7 anos e adorava passar o tempo desenhando no Paint ou jogando joguinhos.": "My contact with computers dates back to my childhood, my first computer was Windows 98, at that time I was 7 years old and I loved to spend time drawing in Paint or playing games.",
   "Meu primeiro contato com programação foi durante a adolescencia no software RPG Maker, eu me divertia criando jogos e narrativas de RPG, eu não criava nada muito complexo, que exigisse mais de uma linha código mas me divertia bastante": "My first contact with programming was during adolescence in the RPG Maker software, I had fun creating RPG games and narratives, I didn't create anything very complex, that required more than one line of code but I had a lot of fun.",
   "Meu interesse em seguir carreira na área de tecnologia surgiu durante a faculdade, as diciplinas de computação no curso de engenharia sempre despertaram minha curiosidade e vontade de aprender mais, mas foi durante um estágio que eu fiz que eu me apaixonei de verdade pela área.": "My interest in pursuing a career in the field of technology emerged during college, the computing subjects in the engineering course always aroused my curiosity and desire to learn more, but it was during an internship that I did that I really fell in love with the area.",
@@ -53,5 +53,8 @@
   "Dados de Exames de Mamografia": "Mammography Data System",
   "Sistema para fornecimento de dados sobre exames de mamografia realizados por mulheres brasileiras no território nacional.": "System for providing data on mammography exams performed by Brazilian women in the national territory.",
   "Buscador de Usuários do Github": "Github User Finder",
-  "Esta aplicação faz buscas de usuários do Github utilizando uma api oficial do Github.": "This application does Github user searches using an official Github api."
+  "Esta aplicação faz buscas de usuários do Github utilizando uma api oficial do Github.": "This application does Github user searches using an official Github api.",
+  "Site pessoal onde eu apresento minha biografia, CV, cursos e projetos. A parte do frontend consome uma API fake que usa dados mockados, implementada com JSON Server.": "Personal website where I present my biography, CV, courses and projects. The frontend part consumes a fake API that uses mocked data, being implemented with JSON Server.",
+  "Esta é uma página inicial para uma empresa de manutenção fictível, construída usando React, TypeScript, Next.js e Tailwind CSS.": "This is a landing page for a fictional car maintenance company, built using React, TypeScript, Next.js and Tailwind CSS.",
+  "Esta API é projetada para facilitar o processo de geração de código de refereência exclusivo para os clientes ao fazer uma compra.": "This API is designed to facilitate a unique referral code generation process for customers upon making a purchase."
 }

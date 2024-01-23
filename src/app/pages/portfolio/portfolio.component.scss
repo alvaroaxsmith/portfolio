@@ -99,7 +99,8 @@ p {
   }
 }
 
-mat-progress-spinner {
-  margin: 0 auto;
+.spinner {
+  display: flex;
+  justify-content: center;
 
 }

@@ -16,3 +16,7 @@
 .custom-button:hover {
   background-color: #6b6b6b;
 }
+
+.mdc-snackbar__surface {
+  filter: opacity(0.1);
+}

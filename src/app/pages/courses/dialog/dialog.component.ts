@@ -2,7 +2,7 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CourseService } from '../services/courses.service';
 import { Course } from '../interfaces/courses.interface';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-dialog',
@@ -15,11 +15,11 @@ export class DialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public rowData: Course,
     private courseService: CourseService,
     private domSanitizer: DomSanitizer
-  ) {
+  ) { }
+
+  ngOnInit(): void {
     this.loadCourseData();
   }
-
-  ngOnInit(): void { }
 
   loadCourseData(): void {
     if (this.rowData && !this.rowData.name) {
@@ -29,8 +29,8 @@ export class DialogComponent implements OnInit {
     }
   }
 
-  getSafeUrl(url: string) {
-    return this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+  getSafeUrl(url: string): SafeResourceUrl {
+    return this.domSanitizer.bypassSecurityTrustResourceUrl(url) as SafeResourceUrl;
   }
 
 }
