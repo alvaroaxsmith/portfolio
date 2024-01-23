@@ -18,8 +18,9 @@
         </button>
       </mat-menu>
 
-      <button mat-icon-button style="background-color: transparent;" [matMenuTriggerFor]="menu">
-        <mat-icon title="{{'TRANSLATE' | translate}}">translate</mat-icon>
+      <button mat-icon-button matTooltip="{{'TRANSLATE' | translate}}" style="background-color: transparent;"
+        [matMenuTriggerFor]="menu">
+        <mat-icon>translate</mat-icon>
       </button>
     </a>
   </li>

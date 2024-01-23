@@ -24,7 +24,6 @@
   <figure class="spinner" *ngIf="isLoading">
     <mat-spinner diameter="120"></mat-spinner>
   </figure>
-  <div infinite-scroll [infiniteScrollDistance]="scrollDistance" [infiniteScrollUpDistance]="scrollUpDistance"
-    (scrolled)="loadProjects()">
+  <div (scrolled)="loadProjects()">
   </div>
 </ng-template>

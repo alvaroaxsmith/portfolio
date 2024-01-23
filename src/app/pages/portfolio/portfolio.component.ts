@@ -42,34 +42,26 @@ export class PortfolioComponent implements OnInit {
   }
 
   loadProjects() {
-    if (!this.isLoading && this.projectList.length < this.maxProjects) {
-      this.isLoading = true;
-      this.projectsService.getProjects(this.page, this.pageSize).subscribe((projects) => {
-        const remainingProjects = Math.min(projects.length, this.maxProjects - this.projectList.length);
-
-        if (this.projectList.length < 3) {
-          // Adiciona apenas dois itens inicialmente
-          const initialProjects = projects.slice(0, 3);
-          this.projectList = this.projectList.concat(initialProjects);
-        } else {
-          // Adiciona os projetos restantes conforme o scroll, começando do quarto índice
-          const newProjects = projects.slice(3, 3 + remainingProjects);
-          this.projectList = this.projectList.concat(newProjects);
-        }
-
-        this.isLoading = false;
-
-        if (this.projectList.length >= this.maxProjects) {
-          // Se atingir ou ultrapassar o limite, pare de carregar mais projetos
-          return;
-        }
-
-        this.page++;
-      });
+    if (this.isLoading || this.projectList.length >= this.maxProjects) {
+      return;
     }
+
+    this.isLoading = true;
+
+    this.projectsService.getProjects().subscribe((projects) => {
+      const remainingProjects = Math.min(projects.length, this.maxProjects - this.projectList.length);
+      const startIndex = this.projectList.length < 3 ? 0 : 3;
+      const newProjects = projects.slice(startIndex, startIndex + remainingProjects);
+      this.projectList = this.projectList.concat(newProjects);
+      this.isLoading = false;
+
+      if (this.projectList.length >= this.maxProjects) {
+        return;
+      }
+
+      this.page++;
+    });
   }
-
-
 
   getAnimationDelay(index: number): string {
     return `${index * 1200}`;

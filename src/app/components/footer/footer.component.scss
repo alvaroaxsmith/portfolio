@@ -10,25 +10,30 @@
   height: 60px;
   color: hsl(0, 0%, 37%);
 }
+
 a {
   text-decoration: none;
   color: hsl(0, 0%, 37%);
 
 }
-.flex-icons, .name {
+
+.flex-icons,
+.name {
   display: flex;
   justify-content: space-evenly;
   align-items: baseline;
 }
+
 .first {
   text-align: center;
 }
+
 @media (min-width:2000px) {
   .container {
     font-size: 28px;
     height: 100px;
   }
- }
+}
 
 @media (max-width:400px) {
   .container {

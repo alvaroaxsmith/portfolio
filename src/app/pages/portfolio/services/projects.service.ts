@@ -12,8 +12,10 @@ export class ProjectsService {
 
   constructor(private http: HttpClient) { }
 
-  getProjects(page: number, pageSize: number): Observable<Project[]> {
-    const url = `${this.apiUrl}?_page=${page}&_limit=${pageSize}`;
-    return this.http.get<Res>(url).pipe(map((res) => res.projects));
+  getProjects(): Observable<Project[]> {
+    return this.http.get<Res>(this.apiUrl).pipe(
+      map(res => res.projects)
+    );
+
   }
 }

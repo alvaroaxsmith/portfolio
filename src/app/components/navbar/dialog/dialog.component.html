@@ -1,6 +1,6 @@
-<mat-dialog-actions align="start">
-  <span class="close" mat-dialog-close>X</span>
-</mat-dialog-actions>
+<button mat-icon-button mat-dialog-close>
+  <mat-icon>close</mat-icon>
+</button>
 
 <ul>
   <li>
@@ -17,11 +17,8 @@
   <li class="language">
     <a class="language-form">
       <mat-menu #menu="matMenu">
-        <button
-          mat-menu-item
-          *ngFor="let lang of translate.getLangs()"
-          (click)="translate.use(lang); (menu.closed)"
-        >
+        <button mat-menu-item *ngFor="let lang of translate.getLangs(); trackBy: trackByLang"
+          (click)="switchLang(lang); menu.close">
           {{ lang }}
         </button>
       </mat-menu>
@@ -31,4 +28,5 @@
       </button>
     </a>
   </li>
+
 </ul>

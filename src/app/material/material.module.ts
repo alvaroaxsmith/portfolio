@@ -17,7 +17,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 
 @NgModule({
@@ -40,7 +40,7 @@ import { InfiniteScrollModule } from 'ngx-infinite-scroll';
     MatPaginatorModule,
     MatSortModule,
     MatSnackBarModule,
-    InfiniteScrollModule,
+    MatTooltipModule,
   ]
 })
 export class MaterialModule {
