@@ -3,9 +3,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lexend+Tera:wght@300;600;800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Jura&display=swap');
 
-
-
-
 html,
 body {
   height: 100%;
@@ -88,4 +85,9 @@ body {
 
 .mat-mdc-progress-spinner {
   --mdc-circular-progress-active-indicator-color: black;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label,
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label--float-above {
+  color: #444;
 }

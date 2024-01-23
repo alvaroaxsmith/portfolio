@@ -25,10 +25,6 @@ export class NavbarComponent implements OnInit {
   }
 
   openDialog() {
-    const dialogRef = this.dialog.open(Dialog);
-
-    dialogRef.afterClosed().subscribe(result => {
-      console.log(`Dialog result: ${result}`);
-    });
+    this.dialog.open(Dialog).afterClosed().subscribe(() => { });
   }
 }

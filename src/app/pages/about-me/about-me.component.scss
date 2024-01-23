@@ -8,26 +8,37 @@ $yearBgColor: rgb(231, 231, 231);
 $breakpoint: 700px;
 
 * {
+  user-select: none;
+}
+
+li a {
+  text-decoration: none;
+  color: $bgColor2;
+  font-weight: 600;
+}
+
+li a:hover {
+  text-decoration: underline;
+}
+
+ul {
+  list-style-type: circle;
+}
+
+* {
   box-sizing: border-box;
 }
 
-
-
-@media (min-width:800px){
+@media (min-width: 800px) {
   .main {
-    padding: 0 5.5rem 0;
+    padding: 0 5.5rem;
   }
-
 }
 
-mat-panel-title, mat-action-row {
+mat-panel-title,
+mat-action-row {
   font-family: 'Lexend Tera', sans-serif;
 }
-
-// h1 {
-//   text-align: center;
-//   font-family: 'Raleway', sans-serif;
-// }
 
 h1 {
   font-family: 'Lexend Tera', sans-serif;
@@ -38,123 +49,6 @@ h1 {
   margin-top: 6rem;
   text-align: center;
   margin-bottom: clamp(6%, 5%, 10%);
-}
-
-.timeline {
-  position: relative;
-  padding: 1rem;
-  margin: 0 auto;
-  max-width: 1300px;
-
-  &:before {
-    content: '';
-    position: absolute;
-    height: 100%;
-    border: 1px solid $lineColor;
-    right: 40px;
-    top: 0;
-  }
-
-  &:after {
-    content: "";
-    display: table;
-    clear: both;
-  }
-
-  @media screen and (min-width: $breakpoint) {
-    padding: 2rem;
-    &:before {
-      left: calc(50% - 1px);
-      right: auto;
-    }
-  }
-}
-
-.timeline__item {
-
-  padding: 1rem;
-  border: 2px solid $lineColor;
-  border-image: linear-gradient(to right, $color 0%, $lineColor 100%);
-  border-image-slice: 1;
-  position: relative;
-  margin: 1rem 3rem 1rem 1rem;
-  clear: both;
-
-  &:after,
-  &:before {
-    content: '';
-    position: absolute;
-  }
-
-  &:before {
-    right: -10px;
-    top: calc(50% - 5px);
-    border-style: solid;
-    border-color: $lineColor $lineColor transparent transparent;
-    border-width: 10px;
-    transform: rotate(45deg);
-  }
-
-  @media screen and (min-width: $breakpoint) {
-    width: 44%;
-    margin: 1rem;
-
-    &:nth-of-type(2n) {
-      float: right;
-      margin: 1rem;
-      border-image: linear-gradient(to right, $lineColor 0%, $color 100%);
-      border-image-slice: 1;
-
-      &:before {
-        right: auto;
-        left: -10px;
-      border-color:transparent transparent $lineColor $lineColor;
-      }
-    }
-  }
-}
-
-.timeline__item--year {
-    text-align: left;
-  max-width: 150px;
-  margin: 0 48px 0 auto;
-  font-size: 0.7rem;
-  background-color: $yearBgColor;
-  line-height: 1rem;
-  border-image: none;
-  padding: .5rem 1rem 1rem;
-
-  &:before {
-    display: none;
-  }
-
-  @media screen and (min-width: $breakpoint) {
-    text-align: center;
-      margin: 0 auto;
-
-    &:nth-of-type(2n) {
-      float: none;
-      margin: 0 auto;
-      border-image: none;
-
-      &:before {
-        display: none;
-      }
-    }
-  }
-}
-
-.timeline__title {
-  margin: 0;
-  font-family: 'Raleway', sans-serif;
-  font-size: 0.8em;
-  line-height: 1.2rem;
-}
-
-.timeline__blurb {
-  line-height: 1.5;
-  font-size: 0.8rem;
-  margin: .5rem 0 0;
 }
 
 .resume {
@@ -168,48 +62,36 @@ mat-expansion-panel mat-action-row {
   align-items: center;
 }
 
-@media (min-width:2000px) {
+@media (min-width: 2000px) {
   h1 {
-    font-family: 'Lexend Tera', sans-serif;
-    font-style: normal;
-    font-weight: 600;
     font-size: 160%;
     line-height: 15px;
     margin-top: 10rem;
     text-align: center;
   }
-
-
 }
 
-mat-panel-title, mat-action-row {
+mat-panel-title,
+mat-action-row {
   font-size: clamp(0.5rem, 2.5vh, 4rem);
   line-height: normal;
 }
 
 mat-panel-title {
-  font-family: 'Lexend Tera', sans-serif;
-  font-style: normal;
-  font-weight: 600;
-  font-size: clamp(0.5rem, 2.5vh, 4rem);
-  line-height: normal;
   color: #444;
 }
 
 mat-action-row {
-  font-family: 'Lexend Tera', sans-serif;
-  font-style: normal;
-  font-size: clamp(0.5rem, 2.5vh, 4rem);
   font-weight: 400;
   color: #444;
 }
-
 
 mat-divider {
   margin-bottom: 1rem;
 }
 
-.bio, .hobbies {
+.bio,
+.hobbies {
   line-height: 2em;
   font-size: clamp(0.4rem, 2.5vh, 4rem);
 }

@@ -1,9 +1,7 @@
-<app-navbar></app-navbar>
-
 <h1>{{ "Courses" | translate }}</h1>
 <section>
   <div class="table-container">
-    <mat-form-field>
+    <mat-form-field [color]="'primary'">
       <mat-label>{{ "Filter" | translate }}</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Tecnologia" #input />
       <mat-icon matSuffix>search</mat-icon>

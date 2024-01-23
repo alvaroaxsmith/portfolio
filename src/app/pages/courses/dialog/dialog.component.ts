@@ -2,7 +2,8 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CourseService } from '../services/courses.service';
 import { Course } from '../interfaces/courses.interface';
-import { DomSanitizer } from '@angular/platform-browser';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-dialog',
@@ -10,27 +11,33 @@ import { DomSanitizer } from '@angular/platform-browser';
   styleUrls: ['./dialog.component.scss']
 })
 export class DialogComponent implements OnInit {
-
   constructor(
     @Inject(MAT_DIALOG_DATA) public rowData: Course,
     private courseService: CourseService,
     private domSanitizer: DomSanitizer
-  ) {
+  ) { }
+
+  ngOnInit(): void {
     this.loadCourseData();
   }
 
-  ngOnInit(): void { }
-
   loadCourseData(): void {
     if (this.rowData && !this.rowData.name) {
-      this.courseService.getCourses().subscribe(courses => {
-        this.rowData = courses.find(course => course.name === this.rowData.link) || this.rowData;
-      });
+      this.courseService.getCourses()
+        .pipe(
+          tap(courses => {
+            const matchingCourse = courses.find(course => course.name === this.rowData.link);
+            if (matchingCourse) {
+              this.rowData = matchingCourse;
+            }
+          })
+        )
+        .subscribe();
     }
   }
 
-  getSafeUrl(url: string) {
-    return this.domSanitizer.bypassSecurityTrustResourceUrl(url);
+  getSafeUrl(url: string): SafeResourceUrl {
+    return this.domSanitizer.bypassSecurityTrustResourceUrl(url) as SafeResourceUrl;
   }
 
 }

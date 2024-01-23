@@ -46,8 +46,8 @@ export class CoursesComponent implements AfterViewInit {
 
   constructor(private courseService: CourseService, private dialog: MatDialog, private snackBar: MatSnackBar) { }
 
-  openDialog(rowData: any): void {
-    const dialogRef = this.dialog.open(DialogComponent, {
+  openDialog = (rowData: any): void => {
+    this.dialog.open(DialogComponent, {
       data: rowData
     });
   }
@@ -59,7 +59,7 @@ export class CoursesComponent implements AfterViewInit {
 
   showSnackbar() {
     const snackbarShownBefore = localStorage.getItem('snackbarShown');
-    if (snackbarShownBefore) {
+    if (!snackbarShownBefore) {
       this.snackBar.openFromComponent(SnackBarComponent, {
         duration: 25000,
       });

@@ -10,10 +10,10 @@ export class AboutMeComponent {
 
   constructor(
     public translate: TranslateService
-    ) {
-      translate.addLangs(['EN', 'PT-BR']);
-      translate.setDefaultLang('EN');
-     }
+  ) {
+    translate.addLangs(['EN', 'PT-BR']);
+    translate.setDefaultLang('EN');
+  }
 
   switchLang(lang: string) {
     this.translate.use(lang);

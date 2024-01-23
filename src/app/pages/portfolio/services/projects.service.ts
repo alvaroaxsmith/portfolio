@@ -5,7 +5,7 @@ import { Project } from '../Project';
 import { Res } from '../Response';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ProjectsService {
   private apiUrl = 'https://json-server-vercel-beta-six.vercel.app/projects';
@@ -16,5 +16,6 @@ export class ProjectsService {
     return this.http.get<Res>(this.apiUrl).pipe(
       map(res => res.projects)
     );
+
   }
 }
