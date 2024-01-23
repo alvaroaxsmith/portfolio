@@ -21,8 +21,8 @@ import { Project } from './Project';
   ],
 })
 export class PortfolioComponent implements OnInit {
-  projectList: Project[] = [];
-  isLoading: boolean = false;
+  projects: Project[] = [];
+  loading: boolean = false;
   page: number = 1;
   pageSize: number = 1;
   maxProjects: number = 6;
@@ -42,26 +42,37 @@ export class PortfolioComponent implements OnInit {
   }
 
   loadProjects() {
-    if (this.isLoading || this.projectList.length >= this.maxProjects) {
+    if (this.loading || this.projects.length >= this.maxProjects) {
       return;
     }
 
-    this.isLoading = true;
+    this.loading = true;
 
     this.projectsService.getProjects().subscribe((projects) => {
-      const remainingProjects = Math.min(projects.length, this.maxProjects - this.projectList.length);
-      const startIndex = this.projectList.length < 3 ? 0 : 3;
+      const remainingProjects = Math.min(projects.length, this.maxProjects - this.projects.length);
+      const startIndex = this.projects.length < 3 ? 0 : 3;
       const newProjects = projects.slice(startIndex, startIndex + remainingProjects);
-      this.projectList = this.projectList.concat(newProjects);
-      this.isLoading = false;
 
-      if (this.projectList.length >= this.maxProjects) {
-        return;
-      }
+      // Adicione cada novo projeto de forma assíncrona
+      newProjects.forEach((project, index) => {
+        setTimeout(() => {
+          this.projects.push(project);
 
-      this.page++;
+          // Verifique se todos os projetos foram carregados antes de definir loading como false
+          if (index === newProjects.length - 1) {
+            this.loading = false;
+
+            if (this.projects.length >= this.maxProjects) {
+              return;
+            }
+
+            this.page++;
+          }
+        }, index * 1200);
+      });
     });
   }
+
 
   getAnimationDelay(index: number): string {
     return `${index * 1200}`;

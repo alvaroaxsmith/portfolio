@@ -1,11 +1,10 @@
 <h1>{{'Projects' | translate }}</h1>
 
-<mat-progress-spinner class=".mat-progress-spinner-circle" mode="indeterminate"
-  *ngIf="projectList == null; else content">
+<mat-progress-spinner class=".mat-progress-spinner-circle" mode="indeterminate" *ngIf="projects == null; else content">
 </mat-progress-spinner>
 
 <ng-template #content>
-  <div class="portfolio-container" *ngFor="let project of projectList; let i = index">
+  <div class="portfolio-container" *ngFor="let project of projects; let i = index">
     <mat-card class="project-card fadeInLeft" [@fadeInLeft]="{ value: 'in', params: { delay: getAnimationDelay(i) } }">
 
       <mat-card-title-group>
@@ -21,7 +20,7 @@
       </mat-card-content>
     </mat-card>
   </div>
-  <figure class="spinner" *ngIf="isLoading">
+  <figure class="spinner" *ngIf="loading">
     <mat-spinner diameter="120"></mat-spinner>
   </figure>
   <div (scrolled)="loadProjects()">
