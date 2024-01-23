@@ -8,6 +8,24 @@ $yearBgColor: rgb(231, 231, 231);
 $breakpoint: 700px;
 
 * {
+  user-select: none;
+}
+
+li a {
+  text-decoration: none;
+  color: $bgColor2;
+  font-weight: 600;
+}
+
+li a:hover {
+  text-decoration: underline;
+}
+
+ul {
+  list-style-type: circle;
+}
+
+* {
   box-sizing: border-box;
 }
 
