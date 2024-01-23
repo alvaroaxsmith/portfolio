@@ -11,23 +11,16 @@ $breakpoint: 700px;
   box-sizing: border-box;
 }
 
-
-
-@media (min-width:800px){
+@media (min-width: 800px) {
   .main {
-    padding: 0 5.5rem 0;
+    padding: 0 5.5rem;
   }
-
 }
 
-mat-panel-title, mat-action-row {
+mat-panel-title,
+mat-action-row {
   font-family: 'Lexend Tera', sans-serif;
 }
-
-// h1 {
-//   text-align: center;
-//   font-family: 'Raleway', sans-serif;
-// }
 
 h1 {
   font-family: 'Lexend Tera', sans-serif;
@@ -63,6 +56,7 @@ h1 {
 
   @media screen and (min-width: $breakpoint) {
     padding: 2rem;
+
     &:before {
       left: calc(50% - 1px);
       right: auto;
@@ -71,7 +65,6 @@ h1 {
 }
 
 .timeline__item {
-
   padding: 1rem;
   border: 2px solid $lineColor;
   border-image: linear-gradient(to right, $color 0%, $lineColor 100%);
@@ -108,14 +101,14 @@ h1 {
       &:before {
         right: auto;
         left: -10px;
-      border-color:transparent transparent $lineColor $lineColor;
+        border-color: transparent transparent $lineColor $lineColor;
       }
     }
   }
 }
 
 .timeline__item--year {
-    text-align: left;
+  text-align: left;
   max-width: 150px;
   margin: 0 48px 0 auto;
   font-size: 0.7rem;
@@ -130,7 +123,7 @@ h1 {
 
   @media screen and (min-width: $breakpoint) {
     text-align: center;
-      margin: 0 auto;
+    margin: 0 auto;
 
     &:nth-of-type(2n) {
       float: none;
@@ -168,48 +161,36 @@ mat-expansion-panel mat-action-row {
   align-items: center;
 }
 
-@media (min-width:2000px) {
+@media (min-width: 2000px) {
   h1 {
-    font-family: 'Lexend Tera', sans-serif;
-    font-style: normal;
-    font-weight: 600;
     font-size: 160%;
     line-height: 15px;
     margin-top: 10rem;
     text-align: center;
   }
-
-
 }
 
-mat-panel-title, mat-action-row {
+mat-panel-title,
+mat-action-row {
   font-size: clamp(0.5rem, 2.5vh, 4rem);
   line-height: normal;
 }
 
 mat-panel-title {
-  font-family: 'Lexend Tera', sans-serif;
-  font-style: normal;
-  font-weight: 600;
-  font-size: clamp(0.5rem, 2.5vh, 4rem);
-  line-height: normal;
   color: #444;
 }
 
 mat-action-row {
-  font-family: 'Lexend Tera', sans-serif;
-  font-style: normal;
-  font-size: clamp(0.5rem, 2.5vh, 4rem);
   font-weight: 400;
   color: #444;
 }
-
 
 mat-divider {
   margin-bottom: 1rem;
 }
 
-.bio, .hobbies {
+.bio,
+.hobbies {
   line-height: 2em;
   font-size: clamp(0.4rem, 2.5vh, 4rem);
 }
