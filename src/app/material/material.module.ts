@@ -1,4 +1,3 @@
-import { CdkAccordionModule } from '@angular/cdk/accordion';
 import { NgModule } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -30,7 +29,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatInputModule,
     MatTableModule,
     MatButtonModule,
-    CdkAccordionModule,
     MatProgressSpinnerModule,
     MatDividerModule,
     MatButtonToggleModule,
