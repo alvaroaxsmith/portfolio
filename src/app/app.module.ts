@@ -9,7 +9,6 @@ import { AppComponent } from './app.component';
 import { Dialog } from './components/navbar/dialog/dialog.component';
 import { HomeComponent } from './pages/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
-import { AboutMeComponent } from './pages/about-me/about-me.component';
 import { PortfolioComponent } from './pages/portfolio/portfolio.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ContactComponent } from './pages/contact/contact.component';
@@ -20,9 +19,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ProjectsService } from './pages/portfolio/services/projects.service';
 import { DialogComponent } from './pages/courses/dialog/dialog.component';
 import { TextComponent } from './pages/home/text/text.component'
-
-
-
+import { AboutMeModule } from './pages/about-me/about-me.module';
 
 @NgModule({
   declarations: [
@@ -30,7 +27,6 @@ import { TextComponent } from './pages/home/text/text.component'
     Dialog,
     HomeComponent,
     NavbarComponent,
-    AboutMeComponent,
     PortfolioComponent,
     FooterComponent,
     ContactComponent,
@@ -46,6 +42,7 @@ import { TextComponent } from './pages/home/text/text.component'
     MaterialModule,
     HttpClientModule,
     MatDialogModule,
+    AboutMeModule,
     TranslateModule.forRoot({
       loader: {
         provide: TranslateLoader,
