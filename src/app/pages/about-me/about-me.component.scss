@@ -1,11 +1,11 @@
-// $color: rgb(0, 0, 0);
-// $lineColor: rgb(0, 0, 0);
-// $fontColor: #bbb;
-// $bgColor1: #222;
-// $bgColor2: #444;
-// $yearBgColor: rgb(231, 231, 231);
+$color: rgb(0, 0, 0);
+$lineColor: rgb(0, 0, 0);
+$fontColor: #bbb;
+$bgColor1: #222;
+$bgColor2: #444;
+$yearBgColor: rgb(231, 231, 231);
 
-// $breakpoint: 700px;
+$breakpoint: 700px;
 
 * {
   box-sizing: border-box;
@@ -32,123 +32,6 @@ h1 {
   text-align: center;
   margin-bottom: clamp(6%, 5%, 10%);
 }
-
-// .timeline {
-//   position: relative;
-//   padding: 1rem;
-//   margin: 0 auto;
-//   max-width: 1300px;
-
-//   &:before {
-//     content: '';
-//     position: absolute;
-//     height: 100%;
-//     border: 1px solid $lineColor;
-//     right: 40px;
-//     top: 0;
-//   }
-
-//   &:after {
-//     content: "";
-//     display: table;
-//     clear: both;
-//   }
-
-//   @media screen and (min-width: $breakpoint) {
-//     padding: 2rem;
-
-//     &:before {
-//       left: calc(50% - 1px);
-//       right: auto;
-//     }
-//   }
-// }
-
-// .timeline__item {
-//   padding: 1rem;
-//   border: 2px solid $lineColor;
-//   border-image: linear-gradient(to right, $color 0%, $lineColor 100%);
-//   border-image-slice: 1;
-//   position: relative;
-//   margin: 1rem 3rem 1rem 1rem;
-//   clear: both;
-
-//   &:after,
-//   &:before {
-//     content: '';
-//     position: absolute;
-//   }
-
-//   &:before {
-//     right: -10px;
-//     top: calc(50% - 5px);
-//     border-style: solid;
-//     border-color: $lineColor $lineColor transparent transparent;
-//     border-width: 10px;
-//     transform: rotate(45deg);
-//   }
-
-//   @media screen and (min-width: $breakpoint) {
-//     width: 44%;
-//     margin: 1rem;
-
-//     &:nth-of-type(2n) {
-//       float: right;
-//       margin: 1rem;
-//       border-image: linear-gradient(to right, $lineColor 0%, $color 100%);
-//       border-image-slice: 1;
-
-//       &:before {
-//         right: auto;
-//         left: -10px;
-//         border-color: transparent transparent $lineColor $lineColor;
-//       }
-//     }
-//   }
-// }
-
-// .timeline__item--year {
-//   text-align: left;
-//   max-width: 150px;
-//   margin: 0 48px 0 auto;
-//   font-size: 0.7rem;
-//   background-color: $yearBgColor;
-//   line-height: 1rem;
-//   border-image: none;
-//   padding: .5rem 1rem 1rem;
-
-//   &:before {
-//     display: none;
-//   }
-
-//   @media screen and (min-width: $breakpoint) {
-//     text-align: center;
-//     margin: 0 auto;
-
-//     &:nth-of-type(2n) {
-//       float: none;
-//       margin: 0 auto;
-//       border-image: none;
-
-//       &:before {
-//         display: none;
-//       }
-//     }
-//   }
-// }
-
-// .timeline__title {
-//   margin: 0;
-//   font-family: 'Raleway', sans-serif;
-//   font-size: 0.8em;
-//   line-height: 1.2rem;
-// }
-
-// .timeline__blurb {
-//   line-height: 1.5;
-//   font-size: 0.8rem;
-//   margin: .5rem 0 0;
-// }
 
 .resume {
   color: #333;
