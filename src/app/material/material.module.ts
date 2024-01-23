@@ -10,7 +10,6 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { FormsModule } from '@angular/forms';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatPaginatorModule } from '@angular/material/paginator';
@@ -32,7 +31,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatProgressSpinnerModule,
     MatDividerModule,
     MatButtonToggleModule,
-    FormsModule,
     MatMenuModule,
     MatIconModule,
     MatPaginatorModule,
