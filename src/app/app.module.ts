@@ -12,7 +12,6 @@ import { NavbarComponent } from './components/navbar/navbar.component';
 import { AboutMeComponent } from './pages/about-me/about-me.component';
 import { PortfolioComponent } from './pages/portfolio/portfolio.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { BlogComponent } from './pages/blog/blog.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { CoursesComponent } from './pages/courses/courses.component';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
@@ -34,7 +33,6 @@ import { TextComponent } from './pages/home/text/text.component'
     AboutMeComponent,
     PortfolioComponent,
     FooterComponent,
-    BlogComponent,
     ContactComponent,
     CoursesComponent,
     DialogComponent,
