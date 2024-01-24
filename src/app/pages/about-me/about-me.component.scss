@@ -73,7 +73,7 @@ mat-expansion-panel mat-action-row {
 
 mat-panel-title,
 mat-action-row {
-  font-size: clamp(0.5rem, 2.5vh, 4rem);
+  font-size: clamp(0.5rem, 2.5w, 0.2rem);
   line-height: normal;
 }
 
@@ -92,6 +92,21 @@ mat-divider {
 
 .bio,
 .hobbies {
-  line-height: 2em;
-  font-size: clamp(0.4rem, 2.5vh, 4rem);
+  font-size: medium;
+}
+
+.bio {
+  line-height: 2.5em;
+}
+
+@media (max-width:600px) {
+
+  .bio {
+    line-height: 3em;
+  }
+
+  .bio,
+  .hobbies {
+    font-size: smaller;
+  }
 }
