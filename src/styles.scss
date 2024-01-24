@@ -6,6 +6,8 @@
 html,
 body {
   height: 100%;
+  --mat-option-selected-state-label-text-color: #444;
+  --mdc-outlined-text-field-focus-outline-color: #444;
 
   ::-webkit-scrollbar {
     width: 8px;
@@ -90,4 +92,14 @@ body {
 .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label,
 .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label--float-above {
   color: #444;
+}
+
+::selection {
+  background-color: #444;
+  color: #f5f5f5;
+}
+
+::-moz-selection {
+  background-color: #444;
+  color: #f5f5f5;
 }

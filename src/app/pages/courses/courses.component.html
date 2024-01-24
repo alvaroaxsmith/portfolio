@@ -1,12 +1,13 @@
 <h1>{{ "Courses" | translate }}</h1>
 <section>
-  <div class="table-container">
-    <mat-form-field [color]="'primary'">
-      <mat-label>{{ "Filter" | translate }}</mat-label>
-      <input matInput (keyup)="applyFilter($event)" placeholder="Ex. Tecnologia" #input />
+  <div class="mat-field-container">
+    <mat-form-field class="form-field">
+      <mat-label class="label">{{ "Filter" | translate }}</mat-label>
+      <input class="form-field" matInput (keyup)="applyFilter($event)" placeholder="Ex. Tecnologia" #input />
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
-
+  </div>
+  <div class="table-container">
     <table mat-table [dataSource]="dataSource" matSort>
       <!-- Field Column -->
       <ng-container matColumnDef="field">
@@ -62,6 +63,8 @@
       </tr>
     </table>
     <mat-progress-spinner *ngIf="dataSource.data.length === 0" mode="indeterminate"></mat-progress-spinner>
+  </div>
+  <div class="paginator">
     <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" [length]="dataSource.data.length"
       aria-label="Select page of courses"></mat-paginator>
   </div>

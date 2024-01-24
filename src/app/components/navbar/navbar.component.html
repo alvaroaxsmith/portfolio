@@ -1,14 +1,18 @@
 <ul>
   <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" routerLink="/" style="cursor: pointer"><a
-      routerLink="/">HOME</a></li>
-  <li routerLinkActive="active" routerLink="/about-me" style="cursor: pointer"><a routerLink="/about-me">{{'ABOUT ME' |
+      routerLink="/" mat-button>HOME</a></li>
+  <li routerLinkActive="active" routerLink="/about-me" style="cursor: pointer"><a mat-button
+      routerLink="/about-me">{{'ABOUT ME' |
       translate}}</a></li>
-  <li routerLinkActive="active" routerLink="/courses" style="cursor: pointer"><a routerLink="/courses">{{'COURSES' |
+  <li routerLinkActive="active" routerLink="/courses" style="cursor: pointer"><a mat-button
+      routerLink="/courses">{{'COURSES' |
       translate }}</a></li>
-  <li routerLinkActive="active" routerLink="/portfolio" style="cursor: pointer"><a routerLink="/portfolio">PORTFOLIO</a>
+  <li routerLinkActive="active" routerLink="/portfolio" style="cursor: pointer"><a mat-button
+      routerLink="/portfolio">{{'PROJECTS' | translate}}</a>
   </li>
-  <!-- <li><a routerLink="/blog">Blog</a></li> -->
-  <li routerLinkActive="active" routerLink="/contact" style="cursor: pointer"><a routerLink="/contact">{{'CONTACT' |
+  <!-- <li><a mat-button routerLink="/blog">Blog</a></li> -->
+  <li routerLinkActive="active" routerLink="/contact" style="cursor: pointer"><a mat-button
+      routerLink="/contact">{{'CONTACT' |
       translate }}</a></li>
   <li class="language no-hover">
     <a class="language-form">
@@ -24,6 +28,6 @@
       </button>
     </a>
   </li>
-  <li><a class="menu" (click)="openDialog()">MENU</a></li>
+  <li><a class="menu" mat-button (click)="openDialog()">MENU</a></li>
 
 </ul>

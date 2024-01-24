@@ -8,6 +8,33 @@ h1 {
   margin-top: 6rem;
 }
 
+.paginator {
+  display: flex;
+  justify-content: center;
+}
+
+.mat-primary {
+  --mdc-filled-text-field-focus-active-indicator-color: black;
+  --mat-option-selected-state-label-text-color: #444;
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+  color: black;
+}
+
+.mdc-text-field {
+  color: black;
+  background-color: #f5f5f5;
+}
+
+.label {
+  color: #444;
+}
+
+.form-field {
+  color: #444;
+}
+
 .table-container {
   overflow-x: auto;
 }
@@ -44,7 +71,8 @@ table {
 }
 
 .table-container,
-.mat-form-field {
+.mat-form-field,
+.mat-field-container {
   margin-left: 4rem;
   margin-right: 4rem;
 }
@@ -86,7 +114,8 @@ mat-label {
 @media (max-width: 900px) {
 
   .table-container,
-  .mat-form-field {
+  .mat-form-field,
+  .mat-field-container {
     margin-left: 2rem;
     margin-right: 2rem;
   }
