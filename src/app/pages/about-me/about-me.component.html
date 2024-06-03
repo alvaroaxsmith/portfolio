@@ -1,163 +1,74 @@
-<h1>{{'About me' | translate}}</h1>
-<div class="main">
-  <mat-accordion class="headers-align">
-    <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{'Who am I?' | translate}}
-        </mat-panel-title>
-      </mat-expansion-panel-header>
+<div class="container">
+  <header>
+    <h1>{{ 'About me' | translate }}</h1>
+  </header>
 
-      <mat-action-row class="bio">
-        <div class="bio-margin">
-          {{"I have a degree in Production Engineering from UNIVESP and currently work as a front-end/full-stack
-          developer. I consistently adhere to implementing solid programming practices, including the SOLID principles,
-          and integrate automated testing into all the projects I engage in. This approach not only enhances the quality
-          of the code but also contributes to the reliability and robustness of the systems I develop. I am continually
-          seeking ways to refine my skills and deliver efficient, innovative solutions." |
-          translate}}
-        </div>
-      </mat-action-row>
-    </mat-expansion-panel>
+  <section class="content">
+    <mat-accordion class="headers-align">
 
-    <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{'Skills' | translate}}
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <mat-action-row>
-        <p>
-          HTML |
-          CSS |
-          Javascript |
-          Java |
-          Typescript |
-          Nodejs |
-          Express |
-          SQL |
-          noSQL |
-          Angular |
-          React |
-          Next |
-          Vue |
-          Tailwind |
-          Docker
-        </p>
-      </mat-action-row>
-    </mat-expansion-panel>
-
-    <!-- <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          {{'Highlights' | translate}}
-        </mat-panel-title>
-
-      </mat-expansion-panel-header>
-
-      <mat-action-row>
-        <div class="timeline">
-
-          <h2 class="timeline__item timeline__item--year"><span>{{'August 2018' | translate }}</span></h2>
-
-          <div class="timeline__item">
-            <h3 class="timeline__title">{{'Admission to UNIVESP' | translate }}</h3>
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'Bio' | translate }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row class="bio">
+          <div class="bio-margin">
+            <div class="bio-margin" [innerHTML]="'bio.description' | translate"></div>
           </div>
+        </mat-action-row>
+      </mat-expansion-panel>
 
-          <h2 class="timeline__item timeline__item--year"><span>{{'April 2019 to' | translate }}</span><br>
-            <span>{{'April 2021' | translate }}</span>
-          </h2>
-
-          <div class="timeline__item" style="padding-right: 0;">
-            <h3 class="timeline__title">{{'Internship at Metro de São Paulo' | translate }}</h3>
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'Skills' | translate }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row class="skills">
+          <div>
+            <app-skill-chip *ngFor="let skill of skills" [skill]="skill"></app-skill-chip>
           </div>
+        </mat-action-row>
+      </mat-expansion-panel>
 
-          <h2 class="timeline__item timeline__item--year"><span>{{'July 2021 to' | translate}}</span><br>
-            <span>{{'October 2021' | translate}}</span>
-          </h2>
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            {{ 'Hobbies' | translate }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row class="hobbies">
+          <div class="hobbies">
+            <p>{{ 'I have a certain facility for developing hobbies, I will only mention the main ones because I have many. 😅' | translate }}</p>
+            <h4>{{ 'Amateur Chess ♟️' | translate }}</h4>
+            <p>{{ 'I learned to play chess at the age of 7, but I started to practice constantly in the pandemic and today I have more than a thousand games on ' | translate }} <a href="https://www.chess.com/member/ferreiraalvaro" target="_blank">chess.com</a>.</p>
 
-          <div class="timeline__item">
-            <h3 class="timeline__title">{{'Bootcamp at Gama Academy' | translate}}</h3>
+            <h4>{{ 'Guitar Player 🎶' | translate }}</h4>
+            <p>{{ 'I play guitar since I was 12 years old, I like to listen to all kinds of music and I like to create musical arrangements, soon I will post it on soundcloud.' | translate }}</p>
+
+            <h4>{{ 'Podcast Listener 🎙️' | translate }}</h4>
+            <p>{{ "I can't deny that I spend hours listening to podcasts, my favorite podcasts are:" | translate }}</p>
+            <ul>
+              <li><a href="https://open.spotify.com/show/5qFSRB3x4SP9xZgr4my7fO" target="_blank"><strong>Like A Boss (Alura)</strong></a></li>
+              <li><a href="https://open.spotify.com/show/07Ze7DxJjgyS5fsV8lNPSw" target="_blank"><strong>Ciencia Sem Fim</strong></a></li>
+              <li><a href="https://open.spotify.com/show/5BqnrP8ztYwYnHNtWRXrUs" target="_blank"><strong>Amplifica</strong></a></li>
+            </ul>
           </div>
+        </mat-action-row>
+      </mat-expansion-panel>
 
-          <h2 class="timeline__item timeline__item--year"><span>{{'January 2022 to' | translate }}</span><br>
-            <span>{{'June 2022' | translate }}</span>
-          </h2>
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <a class="resume-link" href="https://drive.google.com/file/d/1HmIfm-YP1SLxTN72bgNrKiYFrs7oO9ij/view?usp=sharing" target="_blank">
+              CV (PDF) 📄
+            </a>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+      </mat-expansion-panel>
 
-          <div class="timeline__item" style="padding-right: 0;">
-            <h3 class="timeline__title">{{'Bootcamp at SoulCode Academy' | translate }}</h3>
-          </div>
+    </mat-accordion>
+  </section>
 
-          <h2 class="timeline__item timeline__item--year"><span>{{'August 2022 to' | translate }}</span><br>
-            <span>{{'September 2022' | translate }}</span>
-          </h2>
-
-          <div class="timeline__item">
-            <h3 class="timeline__title">{{'1st place in the Gama-lab Tech Experience' | translate }}</h3>
-          </div>
-
-          <h2 class="timeline__item timeline__item--year"><span>{{'October 2022' | translate }}</span></h2>
-
-          <div class="timeline__item">
-            <h3 class="timeline__title">{{'Software Developer at V.tal' | translate }}</h3>
-          </div>
-
-        </div>
-      </mat-action-row>
-    </mat-expansion-panel> -->
-
-    <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Hobbies
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-      <mat-action-row>
-
-        <div class="hobbies">
-          <p>
-            {{'I have a certain facility for developing hobbies,
-            I will only mention the main ones because I have many. 😅' | translate }}</p>
-          <h4>{{'Amateur Chess ♟️' | translate }}</h4>
-          <p>
-            {{'I learned to play chess at the age of 7,
-            but I started to practice constantly in the pandemic and today
-            I have more than a thousand games on ' | translate }} <a href="https://www.chess.com/member/ferreiraalvaro"
-              target="_blank">chess.com.</a>
-          </p>
-
-          <h4>{{'Guitar Player 🎶' | translate }}</h4>
-          <p>
-            {{'I play guitar since I was 12 years old, I like to listen to all
-            kinds of music and I like to create musical arrangements, soon
-            I will post it on soundcloud.' | translate }}
-          </p>
-          <h4>{{'Podcast Listener 🎙️' | translate }}</h4>
-          <p>{{"I can't deny that I spend hours listening to podcasts, my favorite podcasts are:" | translate }}</p>
-
-          <ul>
-            <li><a href="https://open.spotify.com/show/5qFSRB3x4SP9xZgr4my7fO" target="_blank">Like A Boss(Alura)</a>
-            </li>
-            <li><a href="https://open.spotify.com/show/07Ze7DxJjgyS5fsV8lNPSw" target="_blank">Ciencia Sem Fim</a></li>
-            <li><a href="https://open.spotify.com/show/5BqnrP8ztYwYnHNtWRXrUs" target="_blank">Amplifica</a></li>
-          </ul>
-
-        </div>
-
-      </mat-action-row>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel hideToggle>
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-
-          <a style="text-decoration: none; color: #444;"
-            href="https://drive.google.com/file/d/1HmIfm-YP1SLxTN72bgNrKiYFrs7oO9ij/view?usp=sharing" target="_blank">
-            CV (PDF) 📄
-          </a>
-        </mat-panel-title>
-      </mat-expansion-panel-header>
-    </mat-expansion-panel>
-
-  </mat-accordion>
 </div>

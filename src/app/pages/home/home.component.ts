@@ -32,7 +32,6 @@ export class HomeComponent implements OnInit, OnDestroy {
       })
       .catch(error => {
         console.error('Error loading image:', error);
-        // Adicione lógica para informar ao usuário sobre o erro, se necessário.
       });
   }
   ngOnDestroy(): void {

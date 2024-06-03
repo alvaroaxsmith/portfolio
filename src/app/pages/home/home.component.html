@@ -1,5 +1,5 @@
 <section>
-  <h1>{{'Welcome to my website' | translate}}</h1>
+  <h1>{{ 'Welcome to my website' | translate }}</h1>
   <ng-container *ngIf="isLoadingImage; else imageLoaded">
     <figure class="spinner">
       <mat-spinner diameter="80"></mat-spinner>
@@ -8,11 +8,11 @@
   <ng-template #imageLoaded>
     <figure>
       <div class="sleeve">
-        <img [src]="imageUrl" alt="" loading="lazy">
+        <img [src]="imageUrl" alt="Alvaro Ferreira" loading="lazy">
       </div>
     </figure>
   </ng-template>
-  <h2>{{'Hi, I’m Alvaro Ferreira' | translate}}</h2>
+  <h2>{{ 'Hi, I’m' | translate }} <span class="highlight">{{ 'Alvaro Ferreira' }}</span></h2>
   <h3><app-text></app-text></h3>
 </section>
 <app-footer></app-footer>
