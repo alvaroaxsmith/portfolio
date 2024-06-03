@@ -33,4 +33,22 @@ export class AboutMeComponent {
     this.step--;
   }
 
+  skills: string[] = [
+    'Angular',
+    'Typescript',
+    'Javascript/ Typescript',
+    'React',
+    'NodeJS',
+    'Docker',
+    'Git',
+    'AWS',
+    'Java/ Spring Boot',
+    'MySQL',
+    'MongoDB',
+    'HTML/ CSS',
+    'Python FastAPI',
+    'CI/CD Jenkins',
+
+  ];
+
 }

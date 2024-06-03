@@ -1,112 +1,134 @@
-$color: rgb(0, 0, 0);
-$lineColor: rgb(0, 0, 0);
-$fontColor: #bbb;
-$bgColor1: #222;
-$bgColor2: #444;
-$yearBgColor: rgb(231, 231, 231);
-
-$breakpoint: 700px;
+/* about-me.component.scss */
+$primary-color: #333;
+$secondary-color: #666;
+$accent-color: #999;
+$background-color: #f5f5f5;
+$text-color: #202124;
+$light-text-color: #5f6368;
+$panel-background-color: #fff;
+$border-color: #ccc;
+$box-shadow-color: rgba(0, 0, 0, 0.1);
 
 * {
+  box-sizing: border-box;
   user-select: none;
+  font-family: 'Roboto', sans-serif;
+}
+
+body {
+  background-color: $background-color;
+  color: $text-color;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  margin-top: 2rem;
+}
+
+header h1 {
+  font-family: 'Roboto', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 500;
+  text-align: center;
+  margin: 2rem 0;
+  color: $primary-color;
+}
+
+.content {
+  width: 100%;
+}
+
+mat-accordion {
+  width: 100%;
+  margin-bottom: 2rem;
+}
+
+mat-panel-title {
+  font-size: 1.25rem;
+  color: $text-color;
+  font-weight: 500;
+}
+
+mat-expansion-panel {
+  background-color: $panel-background-color;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  box-shadow: 0 2px 4px $box-shadow-color;
+}
+
+mat-action-row {
+  padding: 1.5rem;
+  color: $light-text-color;
+  font-size: 1rem;
+  line-height: 1.75;
+}
+
+.bio, .hobbies, .skills {
+  padding: 1.5rem;
+}
+
+.hobbies {
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.bio-margin p {
+  margin: 0;
+}
+
+h4 {
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: $primary-color;
+}
+
+ul {
+  list-style-type: circle;
+  padding-left: 1.5rem;
+}
+
+ul li {
+  margin-bottom: 0.5rem;
 }
 
 li a {
   text-decoration: none;
-  color: $bgColor2;
-  font-weight: 600;
+  color: $primary-color;
+  font-weight: 500;
 }
 
 li a:hover {
   text-decoration: underline;
 }
 
-ul {
-  list-style-type: circle;
-}
-
-* {
-  box-sizing: border-box;
-}
-
-@media (min-width: 800px) {
-  .main {
-    padding: 0 5.5rem;
-  }
-}
-
-mat-panel-title,
-mat-action-row {
-  font-family: 'Lexend Tera', sans-serif;
-}
-
-h1 {
-  font-family: 'Lexend Tera', sans-serif;
-  font-style: normal;
-  font-weight: 600;
-  font-size: clamp(12px, 2rem, 100%);
-  line-height: 15px;
-  margin-top: 6rem;
-  text-align: center;
-  margin-bottom: clamp(6%, 5%, 10%);
-}
-
-.resume {
-  color: #333;
+.resume-link {
   text-decoration: none;
+  color: $primary-color;
+  font-weight: 500;
 }
 
-mat-expansion-panel mat-action-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.resume-link:hover {
+  text-decoration: underline;
 }
 
-@media (min-width: 2000px) {
-  h1 {
-    font-size: 160%;
-    line-height: 15px;
-    margin-top: 10rem;
-    text-align: center;
+@media (min-width: 600px) {
+  .container {
+    padding: 0 2rem;
   }
 }
 
-mat-panel-title,
-mat-action-row {
-  font-size: clamp(0.5rem, 2.5w, 0.2rem);
-  line-height: normal;
-}
-
-mat-panel-title {
-  color: #444;
-}
-
-mat-action-row {
-  font-weight: 400;
-  color: #444;
-}
-
-mat-divider {
-  margin-bottom: 1rem;
-}
-
-.bio,
-.hobbies {
-  font-size: medium;
-}
-
-.bio {
-  line-height: 2.5em;
-}
-
-@media (max-width:600px) {
-
-  .bio {
-    line-height: 3em;
-  }
-
-  .bio,
-  .hobbies {
-    font-size: smaller;
+@media (min-width: 1200px) {
+  .container {
+    padding: 0 5rem;
   }
 }
