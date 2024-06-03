@@ -9,6 +9,6 @@
     <mat-card-title>{{ rowData.name }}</mat-card-title>
   </mat-card-header>
   <mat-card-content class="mat-dialog-container">
-    <iframe [src]="getSafeUrl(rowData.link)" allow="autoplay"></iframe>
+    <iframe *ngIf="safeUrl" [src]="safeUrl" allow="autoplay"></iframe>
   </mat-card-content>
 </mat-card>

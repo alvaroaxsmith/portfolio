@@ -53,12 +53,10 @@ export class PortfolioComponent implements OnInit {
       const startIndex = this.projects.length < 3 ? 0 : 3;
       const newProjects = projects.slice(startIndex, startIndex + remainingProjects);
 
-      // Adicione cada novo projeto de forma assíncrona
       newProjects.forEach((project, index) => {
         setTimeout(() => {
           this.projects.push(project);
 
-          // Verifique se todos os projetos foram carregados antes de definir loading como false
           if (index === newProjects.length - 1) {
             this.loading = false;
 

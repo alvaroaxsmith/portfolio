@@ -11,6 +11,8 @@ import { tap } from 'rxjs/operators';
   styleUrls: ['./dialog.component.scss']
 })
 export class DialogComponent implements OnInit {
+  safeUrl: SafeResourceUrl | null = null;
+
   constructor(
     @Inject(MAT_DIALOG_DATA) public rowData: Course,
     private courseService: CourseService,
@@ -29,15 +31,17 @@ export class DialogComponent implements OnInit {
             const matchingCourse = courses.find(course => course.name === this.rowData.link);
             if (matchingCourse) {
               this.rowData = matchingCourse;
+              this.safeUrl = this.getSafeUrl(matchingCourse.link);
             }
           })
         )
         .subscribe();
+    } else {
+      this.safeUrl = this.getSafeUrl(this.rowData.link);
     }
   }
 
   getSafeUrl(url: string): SafeResourceUrl {
-    return this.domSanitizer.bypassSecurityTrustResourceUrl(url) as SafeResourceUrl;
+    return this.domSanitizer.bypassSecurityTrustResourceUrl(url);
   }
-
 }
