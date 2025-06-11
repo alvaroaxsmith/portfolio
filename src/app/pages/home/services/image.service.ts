@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 
-interface ImageResponse {
-  images: { url: string }[];
+interface GitHubUserResponse {
+  avatar_url: string;
 }
 
 @Injectable({
@@ -14,8 +14,9 @@ export class ImageService {
 
   async getImage(index: number): Promise<string> {
     try {
-      const response = await lastValueFrom(this.http.get<ImageResponse>('https://json-server-vercel-beta-six.vercel.app/images'));
-      const url = response.images[index]?.url;
+      const username = 'alvaroaxsmith';
+      const response = await lastValueFrom(this.http.get<GitHubUserResponse>(`https://api.github.com/users/${username}`));
+      const url = response.avatar_url;
 
       if (url) {
         return url;

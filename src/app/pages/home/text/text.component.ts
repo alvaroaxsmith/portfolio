@@ -19,7 +19,7 @@ import { TranslateService } from '@ngx-translate/core';
   ],
 })
 export class TextComponent implements OnInit {
-  palavras: any = ['Software Engineer', 'Front-end Developer', 'Full-stack Developer'];
+  palavras: any = ['Software Engineer', 'Front-end Developer', 'Back-end Developer', 'Full-stack Developer'];
   estadoAnimacao = 'inicial';
   indiceAtual = 0;
 

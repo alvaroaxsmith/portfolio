@@ -23,12 +23,8 @@ import { Project } from './Project';
 export class PortfolioComponent implements OnInit {
   projects: Project[] = [];
   loading: boolean = false;
-  page: number = 1;
-  pageSize: number = 1;
-  maxProjects: number = 6;
-  scrollDistance = 5;
-  scrollUpDistance = 5;
   viewportWidth: number = window.innerWidth;
+  currentView: 'list' | 'grid' = 'list';
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -42,37 +38,23 @@ export class PortfolioComponent implements OnInit {
   }
 
   loadProjects() {
-    if (this.loading || this.projects.length >= this.maxProjects) {
+    if (this.loading && this.projects.length > 0) {
       return;
     }
 
     this.loading = true;
 
-    this.projectsService.getProjects().subscribe((projects) => {
-      const remainingProjects = Math.min(projects.length, this.maxProjects - this.projects.length);
-      const startIndex = this.projects.length < 3 ? 0 : 3;
-      const newProjects = projects.slice(startIndex, startIndex + remainingProjects);
-
-      newProjects.forEach((project, index) => {
-        setTimeout(() => {
-          this.projects.push(project);
-
-          if (index === newProjects.length - 1) {
-            this.loading = false;
-
-            if (this.projects.length >= this.maxProjects) {
-              return;
-            }
-
-            this.page++;
-          }
-        }, index * 1200);
-      });
+    this.projectsService.getProjects().subscribe((allProjects) => {
+      this.projects = allProjects.filter(project => project.description !== 'No description');
+      this.loading = false;
     });
   }
 
-
   getAnimationDelay(index: number): string {
-    return `${index * 1200}`;
+    return `${index * 200}`;
+  }
+
+  toggleView(): void {
+    this.currentView = this.currentView === 'list' ? 'grid' : 'list';
   }
 }

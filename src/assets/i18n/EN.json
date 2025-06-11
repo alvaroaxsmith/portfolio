@@ -9,7 +9,8 @@
   "courseCertificateMessage": "Click on the course name to view the certificate.",
   "Seja bem vindo": "Welcome to my website",
   "Olá, eu me chamo": "Hi, I’m",
-  "Engenheiro de software": "Software Engineer",
+  "Engenheiro de Software": "Software Engineer",
+  "Desenvolvedor Back-end": "Back-end Developer",
   "Desenvolvedor Front-end": "Front-end Developer",
   "Desenvolvedor Full-stack": "Full-stack Developer",
   "Sobre mim": "About me",
@@ -52,5 +53,8 @@
   "Esta aplicação faz buscas de usuários do Github utilizando uma api oficial do Github.": "This application does Github user searches using an official Github api.",
   "Site pessoal onde eu apresento minha biografia, CV, cursos e projetos. A parte do frontend consome uma API fake que usa dados mockados, implementada com JSON Server.": "Personal website where I present my biography, CV, courses and projects. The frontend part consumes a fake API that uses mocked data, being implemented with JSON Server.",
   "Esta é uma página inicial para uma empresa de manutenção fictível, construída usando React, TypeScript, Next.js e Tailwind CSS.": "This is a landing page for a fictional car maintenance company, built using React, TypeScript, Next.js and Tailwind CSS.",
-  "Esta API é projetada para facilitar o processo de geração de código de refereência exclusivo para os clientes ao fazer uma compra.": "This API is designed to facilitate a unique referral code generation process for customers upon making a purchase."
+  "Esta API é projetada para facilitar o processo de geração de código de refereência exclusivo para os clientes ao fazer uma compra.": "This API is designed to facilitate a unique referral code generation process for customers upon making a purchase.",
+  "Switch to Grid View": "Switch to Grid View",
+  "Switch to List View": "Switch to List View",
+  "No projects found.": "No projects found."
 }
