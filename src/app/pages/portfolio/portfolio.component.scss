@@ -10,6 +10,22 @@ h1 {
   margin-top: 4rem;
 }
 
+.filters-toolbar {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 0 1rem;
+  flex-wrap: wrap;
+
+  .filter-group {
+    mat-form-field {
+      width: 200px;
+    }
+  }
+}
+
 .view-controls {
   display: flex;
   justify-content: center;
@@ -18,7 +34,7 @@ h1 {
   padding: 0 1rem;
 
   @media (max-width: 767px) {
-    display: none;
+    // display: none; // Comentado para manter visível ou ajuste conforme preferência
   }
 }
 

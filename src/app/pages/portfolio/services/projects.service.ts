@@ -19,7 +19,8 @@ export class ProjectsService {
           name: repo.name,
           tech: repo.language || 'N/A',
           description: repo.description || 'No description',
-          repo: repo.html_url
+          repo: repo.html_url,
+          pushed_at: repo.pushed_at
         } as Project;
       }))
     );

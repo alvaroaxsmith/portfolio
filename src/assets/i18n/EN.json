@@ -56,5 +56,10 @@
   "Esta API é projetada para facilitar o processo de geração de código de refereência exclusivo para os clientes ao fazer uma compra.": "This API is designed to facilitate a unique referral code generation process for customers upon making a purchase.",
   "Switch to Grid View": "Switch to Grid View",
   "Switch to List View": "Switch to List View",
+  "Filter by Technology": "Filter by Technology",
+  "All Technologies": "All Technologies",
+  "Sort by Date": "Sort by Date",
+  "Most Recent": "Most Recent",
+  "Oldest": "Oldest",
   "No projects found.": "No projects found."
 }

@@ -16,6 +16,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSelectModule } from '@angular/material/select'; // Importar MatSelectModule
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatSortModule,
     MatSnackBarModule,
     MatTooltipModule,
+    MatSelectModule, // Exportar MatSelectModule
   ]
 })
 export class MaterialModule {

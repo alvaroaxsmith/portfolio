@@ -1,21 +1,46 @@
 <h1>{{'Projects' | translate }}</h1>
 
-<div class="view-controls">
-  <button mat-icon-button (click)="toggleView()" 
-          [matTooltip]="(currentView === 'list' ? 'Switch to Grid View' : 'Switch to List View') | translate">
-    <mat-icon>{{ currentView === 'list' ? 'grid_on' : 'view_list' }}</mat-icon>
-  </button>
+<div class="filters-toolbar">
+  <div class="filter-group">
+    <mat-form-field appearance="fill">
+      <mat-label>{{ 'Filter by Technology' | translate }}</mat-label>
+      <mat-select (selectionChange)="filterByTech($event.value)" [(value)]="selectedTech">
+        <mat-option [value]="null">{{ 'All Technologies' | translate }}</mat-option>
+        <mat-option *ngFor="let tech of availableTechs" [value]="tech">
+          {{ tech }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="filter-group">
+    <mat-form-field appearance="fill">
+      <mat-label>{{ 'Sort by Date' | translate }}</mat-label>
+      <mat-select (selectionChange)="sortByDate($event.value)" [(value)]="currentSortOrder">
+        <mat-option value="recent">{{ 'Most Recent' | translate }}</mat-option>
+        <mat-option value="oldest">{{ 'Oldest' | translate }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="view-controls">
+    <button mat-icon-button (click)="toggleView()"
+            [matTooltip]="(currentView === 'list' ? 'Switch to Grid View' : 'Switch to List View') | translate">
+      <mat-icon>{{ currentView === 'list' ? 'grid_on' : 'view_list' }}</mat-icon>
+    </button>
+  </div>
 </div>
 
 <ng-container *ngIf="!loading; else stillLoading">
-  <div *ngIf="projects.length > 0; else noProjects" 
-       class="portfolio-cards-area" 
+  <div *ngIf="projects.length > 0; else noProjects"
+       class="portfolio-cards-area"
        [ngClass]="{
          'list-view': currentView === 'list',
          'grid-view': currentView === 'grid'
        }">
-    <div *ngFor="let project of projects; let i = index" 
+    <div *ngFor="let project of projects; let i = index"
          class="project-wrapper"
+         [@.disabled]="projectListAnimationState === 'filtering' || projectListAnimationState === 'sorting'"
          [@fadeInLeft]="{ value: 'in', params: { delay: getAnimationDelay(i) } }">
       <mat-card class="project-card">
         <mat-card-title-group>
@@ -35,4 +60,7 @@
 </ng-container>
 
 <ng-template #stillLoading>
+  <div class="initial-spinner" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
 </ng-template>

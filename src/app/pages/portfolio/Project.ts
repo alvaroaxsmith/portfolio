@@ -4,4 +4,5 @@ export interface Project {
   tech: string;
   description: string;
   repo: string;
+  pushed_at: string;
 }
