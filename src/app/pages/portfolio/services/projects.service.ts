@@ -20,7 +20,8 @@ export class ProjectsService {
           tech: repo.language || 'N/A',
           description: repo.description || 'No description',
           repo: repo.html_url,
-          pushed_at: repo.pushed_at
+          pushed_at: repo.pushed_at,
+          date: repo.pushed_at
         } as Project;
       }))
     );

@@ -38,7 +38,7 @@
          'list-view': currentView === 'list',
          'grid-view': currentView === 'grid'
        }">
-    <div *ngFor="let project of projects; let i = index"
+    <div *ngFor="let project of projects | filterNoDescription; let i = index"
          class="project-wrapper"
          [@fadeInLeft]="getAnimationParams(i)">
       <mat-card class="project-card">

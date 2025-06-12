@@ -42,7 +42,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   projectListAnimationState: 'initial' | 'viewToggle' | 'stable' = 'initial';
 
   @ViewChild('loadMoreTrigger', { static: false }) loadMoreTrigger!: ElementRef;
-  private observer!: IntersectionObserver;
+  private observer: IntersectionObserver | undefined;
 
   @HostListener('window:resize', ['$event'])
   onResize(event: any) {
@@ -60,7 +60,22 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.projectsService.getProjects().subscribe(
       (fetchedProjects) => {
         this.allProjects = fetchedProjects;
-        this.availableTechs = [...new Set(this.allProjects.map(p => p.tech))];
+
+        // Filtra os projetos de acordo com os critérios do pipe antes de definir as tecnologias disponíveis
+        const displayableProjects = this.allProjects.filter(project => {
+          const hasValidDescription = project.description !== 'No description';
+          const hasValidTech = project.tech && project.tech !== 'N/A' && project.tech.trim() !== '';
+          return hasValidDescription && hasValidTech;
+        });
+
+        // Popula availableTechs apenas com tecnologias de projetos "exibíveis"
+        this.availableTechs = [...new Set(displayableProjects.map(p => p.tech).filter(t => t))].sort(); // Adiciona .filter(t => t) para remover nulos/undefined e .sort() para ordenar
+
+        // Se a tecnologia selecionada anteriormente não estiver mais na lista de tecnologias disponíveis (após a filtragem),
+        // reseta o selectedTech para null para evitar um estado de filtro inconsistente.
+        if (this.selectedTech && !this.availableTechs.includes(this.selectedTech)) {
+          this.selectedTech = null;
+        }
 
         this.applyFiltersAndSorting(); // Processa e carrega a primeira página via loadNextPage
 
@@ -77,6 +92,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
         }
       },
       () => {
+        this.allProjects = [];
+        this.availableTechs = [];
         this.initialLoading = false;
         this.projects = [];
         this.processedProjects = [];
@@ -115,49 +132,61 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   }
 
   applyFiltersAndSorting(): void {
-    this.projectListAnimationState = 'initial'; // Reset para animação escalonada
+    this.projectListAnimationState = 'initial';
     let result = [...this.allProjects];
 
+    // A lógica de filtragem por selectedTech permanece,
+    // mas selectedTech agora é baseado em availableTechs que já considera projetos válidos.
     if (this.selectedTech) {
       result = result.filter(p => p.tech === this.selectedTech);
     }
 
+    // A ordenação permanece a mesma
     result.sort((a, b) => {
-      const dateA = new Date(a.date).getTime();
-      const dateB = new Date(b.date).getTime();
-      return this.currentSortOrder === 'recent' ? dateB - dateA : dateA - dateB;
+      const timeA = new Date(a.date).getTime();
+      const timeB = new Date(b.date).getTime();
+
+      const validA = !isNaN(timeA);
+      const validB = !isNaN(timeB);
+
+      if (validA && !validB) return -1;
+      if (!validA && validB) return 1;
+      if (!validA && !validB) return 0;
+
+      return this.currentSortOrder === 'recent' ? timeB - timeA : timeA - timeB;
     });
 
+    // Importante: processedProjects agora são os projetos que correspondem ao selectedTech (se houver)
+    // E que também atendem aos critérios de descrição/tech do pipe, pois availableTechs foi baseado nisso.
+    // O pipe no template fará a filtragem final na lista 'projects' que é derivada de 'processedProjects'.
     this.processedProjects = result;
     this.currentPage = 1;
-    this.projects = [];
-    this.allProjectsLoaded = false;
+    this.projects = []; // Limpa os projetos atualmente exibidos
+    this.allProjectsLoaded = false; // Reseta o status de carregamento
 
-    // Desconecta o observer temporariamente se ele existir e estiver observando
-    if (this.observer && this.loadMoreTrigger?.nativeElement) {
-      this.observer.unobserve(this.loadMoreTrigger.nativeElement);
-    } else if (this.observer) {
-      // Se o trigger não existe mais mas o observer sim, desconecte para evitar erros.
+    // Desconecta e limpa completamente o observer antigo antes de recarregar os dados
+    if (this.observer) {
       this.observer.disconnect();
-      this.observer = undefined!; // Força a recriação se necessário
+      this.observer = undefined; // Define como undefined para permitir a recriação
     }
 
-
     if (this.processedProjects.length > 0) {
-      this.loadNextPage(); // Carrega a primeira página dos projetos processados
+      this.loadNextPage(); // Carrega a primeira página dos projetos processados e ordenados
     } else {
       this.allProjectsLoaded = true; // Nenhum projeto para carregar
     }
 
-    this.cdr.detectChanges(); // Garante que o DOM reflita as mudanças (ex: #loadMoreTrigger)
+    this.cdr.detectChanges(); // Garante que o DOM (incluindo #loadMoreTrigger) seja atualizado
 
-    // Re-ativa o observer se necessário e se ele existir (ou recria se foi desconectado)
+    // Reconfigura o IntersectionObserver APÓS o DOM ser atualizado e a primeira página carregada,
+    // e somente se houver mais projetos para carregar.
     if (!this.allProjectsLoaded && this.processedProjects.length > 0) {
-      if (!this.observer) { // Se foi desconectado e limpo
-        setTimeout(() => this.setupIntersectionObserver(), 0); // Recria e observa
-      } else if (this.loadMoreTrigger?.nativeElement) { // Se existe e o trigger também
-        this.observer.observe(this.loadMoreTrigger.nativeElement);
-      }
+      // Usar setTimeout para garantir que #loadMoreTrigger esteja no DOM,
+      // especialmente se sua renderização for condicional.
+      setTimeout(() => {
+        // setupIntersectionObserver já verifica se loadMoreTrigger.nativeElement existe
+        this.setupIntersectionObserver();
+      }, 0);
     }
   }
 
