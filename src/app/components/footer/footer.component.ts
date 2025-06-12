@@ -17,10 +17,11 @@ export class FooterComponent implements OnInit {
   faNodeJs = faNodeJs;
 
   constructor(
-    public translate: TranslateService
+    public translate: TranslateService // Manter TranslateService injetado para uso
   ) {
-    translate.addLangs(['EN', 'PT-BR']);
-    translate.setDefaultLang('EN');
+    // Remova as seguintes linhas:
+    // translate.addLangs(['EN', 'PT-BR']);
+    // translate.setDefaultLang('EN');
   }
 
   switchLang(lang: string) {

@@ -11,10 +11,8 @@ import { TranslateService } from '@ngx-translate/core';
 export class NavbarComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
-    public translate: TranslateService
+    public translate: TranslateService // Manter TranslateService injetado para uso
   ) {
-    translate.addLangs(['EN', 'PT-BR']);
-    translate.setDefaultLang('EN');
   }
 
   switchLang(lang: string) {
