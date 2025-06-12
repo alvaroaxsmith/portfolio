@@ -22,17 +22,17 @@
       </mat-select>
     </mat-form-field>
   </div>
-
-  <div class="view-controls">
-    <button mat-icon-button (click)="toggleView()"
-            [matTooltip]="(currentView === 'list' ? 'Switch to Grid View' : 'Switch to List View') | translate">
-      <mat-icon>{{ currentView === 'list' ? 'grid_on' : 'view_list' }}</mat-icon>
-    </button>
-  </div>
 </div>
 
-<ng-container *ngIf="!loading; else stillLoading">
-  <div *ngIf="projects.length > 0; else noProjects"
+<div class="view-controls">
+  <button mat-icon-button (click)="toggleView()"
+          [matTooltip]="(currentView === 'list' ? 'Switch to Grid View' : 'Switch to List View') | translate">
+    <mat-icon>{{ currentView === 'list' ? 'grid_on' : 'view_list' }}</mat-icon>
+  </button>
+</div>
+
+<ng-container *ngIf="!initialLoading; else stillLoading">
+  <div *ngIf="projects.length > 0 || loadingMore; else noProjects"
        class="portfolio-cards-area"
        [ngClass]="{
          'list-view': currentView === 'list',
@@ -40,8 +40,7 @@
        }">
     <div *ngFor="let project of projects; let i = index"
          class="project-wrapper"
-         [@.disabled]="projectListAnimationState === 'filtering' || projectListAnimationState === 'sorting'"
-         [@fadeInLeft]="{ value: 'in', params: { delay: getAnimationDelay(i) } }">
+         [@fadeInLeft]="getAnimationParams(i)">
       <mat-card class="project-card">
         <mat-card-title-group>
           <mat-card-title>{{ project.name | translate }}</mat-card-title>
@@ -54,13 +53,22 @@
       </mat-card>
     </div>
   </div>
+
+  <!-- Elemento gatilho para o IntersectionObserver e spinner de "carregar mais" -->
+  <div #loadMoreTrigger 
+       *ngIf="!allProjectsLoaded && !initialLoading && processedProjects.length > 0" 
+       style="height: 1px;"></div>
+  <div *ngIf="loadingMore && !initialLoading" class="load-more-spinner">
+    <mat-spinner diameter="50"></mat-spinner>
+  </div>
+
   <ng-template #noProjects>
-    <p *ngIf="!loading && projects.length === 0" class="no-projects-message">{{ 'No projects found.' | translate }}</p>
+    <p *ngIf="!initialLoading && !loadingMore && projects.length === 0" class="no-projects-message">{{ 'No projects found.' | translate }}</p>
   </ng-template>
 </ng-container>
 
 <ng-template #stillLoading>
-  <div class="initial-spinner" *ngIf="loading">
+  <div class="initial-spinner" *ngIf="initialLoading">
     <mat-spinner></mat-spinner>
   </div>
 </ng-template>

@@ -6,8 +6,8 @@
 html,
 body {
   height: 100%;
-  --mat-option-selected-state-label-text-color: #444;
-  --mdc-outlined-text-field-focus-outline-color: #444;
+  --mat-option-selected-state-label-text-color: black; // Alterado para black
+  --mdc-outlined-text-field-focus-outline-color: black; // Alterado para black
   --mdc-filled-text-field-container-color: transparent;
 
   ::-webkit-scrollbar {
@@ -60,7 +60,7 @@ body {
 }
 
 .mdc-text-field--filled .mdc-line-ripple::after {
-  border-bottom-color: black;
+  border-bottom-color: black !important; // Garante que seja preto
 }
 
 .mdc-text-field .mdc-text-field__input {
@@ -83,7 +83,7 @@ body {
 }
 
 .mat-mdc-form-field.mat-focused.mat-primary .mat-mdc-select-arrow {
-  color: rgba(0, 0, 0, 0.6);
+  color: black !important; // Alterado de rgba(0,0,0,0.6) para black e adicionado !important se necessário
 }
 
 .mat-mdc-progress-spinner {
@@ -92,15 +92,32 @@ body {
 
 .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label,
 .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label--float-above {
-  color: #444;
+  color: black !important; // Alterado de #444 para black e adicionado !important se necessário
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+  color: black !important; // Garante que seja preto
+}
+
+/* Adicionar estas regras para a cor do "check" da opção selecionada */
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mat-pseudo-checkbox,
+.mat-mdc-option.mat-mdc-option-active.mdc-list-item--selected .mat-pseudo-checkbox {
+  // background-color: black;
+  border-color: black;
+  /* Para a borda do checkbox não selecionado, se visível */
+}
+
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mat-pseudo-checkbox::after {
+  color: black;
+  /* Cor do V dentro do checkbox - geralmente branco sobre fundo escuro */
 }
 
 ::selection {
-  background-color: #444;
+  background-color: black; // Alterado de #444 para black
   color: #f5f5f5;
 }
 
 ::-moz-selection {
-  background-color: #444;
+  background-color: black; // Alterado de #444 para black
   color: #f5f5f5;
 }

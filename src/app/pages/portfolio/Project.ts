@@ -5,4 +5,5 @@ export interface Project {
   description: string;
   repo: string;
   pushed_at: string;
+  date: string;
 }
