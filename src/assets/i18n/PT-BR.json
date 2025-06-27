@@ -15,7 +15,9 @@
   "Full-stack Developer": "Desenvolvedor Full-stack",
   "About me": "Sobre mim",
   "Who am I?": "Quem sou eu?",
-  "bio.description": "Sou graduado em Engenharia de Produção pela UNIVESP e atuo como desenvolvedor <strong>Full-stack</strong>. Comprometo-me constantemente com a implementação de boas práticas de programação, como os princípios <strong>SOLID</strong>, e incorporo <em>testes automatizados</em> em todos os projetos em que estou envolvido. Essa abordagem não apenas fortalece a qualidade do código, mas também contribui para a confiabilidade e robustez dos sistemas que desenvolvo. Estou sempre em busca de aprimorar minhas habilidades e oferecer soluções eficientes e inovadoras.",
+  "bio": {
+    "description": "Sou graduado em Engenharia de Produção pela UNIVESP e atuo como desenvolvedor <strong>Full-stack</strong>. Comprometo-me constantemente com a implementação de boas práticas de programação, como os princípios <strong>SOLID</strong>, e incorporo <em>testes automatizados</em> em todos os projetos em que estou envolvido. Essa abordagem não apenas fortalece a qualidade do código, mas também contribui para a confiabilidade e robustez dos sistemas que desenvolvo. Estou sempre em busca de aprimorar minhas habilidades e oferecer soluções eficientes e inovadoras."
+  },
   "Skills": "Habilidades",
   "Highlights": "Destaques",
   "August 2018": "Agosto de 2018",
@@ -34,6 +36,19 @@
   "1st place in the Gama-lab Tech Experience": "1º lugar no Gama-lab Tech Experience",
   "October 2022": "Outubro de 2022 até",
   "Software Developer at V.tal": "Desenvolvedor de Software na V.tal",
+  "August 2018 to": "Agosto de 2018 até",
+  "June 2023": "Junho de 2023",
+  "Univesp Oficial - Bachelor's degree, Production Engineering": "Univesp Oficial - Bacharelado, Engenharia de Produção",
+  "February 2023 to": "Fevereiro de 2023 até",
+  "December 2026": "Dezembro de 2026",
+  "Universidade São Judas Tadeu - Bachelor's degree, Computer Science": "Universidade São Judas Tadeu - Bacharelado, Ciência da Computação",
+  "March 2024 to": "Março de 2024 até",
+  "December 2024": "Dezembro de 2024",
+  "Instituto Federal do Sul de Minas Gerais - Postgraduate, Web Development": "Instituto Federal do Sul de Minas Gerais - Pós-graduação, Desenvolvimento Web",
+  "May 2025 to": "Maio de 2025 até",
+  "May 2027": "Maio de 2027",
+  "Universidade Federal do ABC (UFABC) - Postgraduate, Information Technologies and Systems": "Universidade Federal do ABC (UFABC) - Pós-graduação, Tecnologias e Sistemas de Informação",
+  "Professional": "Tragetória Profissional",
   "I have a certain facility for developing hobbies, I will only mention the main ones because I have many. 😅": "Eu tenho uma certa facilidade para desenvolver hobbies, vou apenas mencionar os principais porque eu tenho muitos. 😅",
   "Amateur Chess ♟️": "Xadrez Amador ♟️",
   "I learned to play chess at the age of 7, but I started to practice constantly in the pandemic and today I have more than a thousand games on ": "Eu aprendi a jogar xadrez aos 7 anos, mas comecei a praticar constantemente na pandemia e hoje tenho mais de mil partidas no ",
@@ -71,5 +86,45 @@
   "Sort by Date": "Ordenar por Data",
   "Most Recent": "Mais Recentes",
   "Oldest": "Mais Antigos",
-  "No projects found.": "Nenhum projeto encontrado."
+  "No projects found.": "Nenhum projeto encontrado.",
+  "Main Activities": "Principais Atividades",
+  "timeline": {
+    "technologies": "Tecnologias e Ferramentas",
+    "skills": "Competências",
+    "mermaid": {
+      "header": "Visualização da Jornada",
+      "placeholder": "Selecione uma experiência na linha do tempo para ver a jornada.",
+      "title": "Linha do Tempo",
+      "error": "Erro ao renderizar o diagrama Mermaid."
+    },
+    "mutant": {
+      "description": "Atuo como Desenvolvedor Full Stack na Mutant, alocado na Telefônica Vivo, contribuindo para o desenvolvimento e aprimoramento das jornadas do aplicativo Vivo.",
+      "activity1": "Desenvolvimento de diversas jornadas no aplicativo Vivo, como Suporte Técnico, Vivo Travel, Troca de Chip, e-SIM, Negociação de Fatura.",
+      "activity2": "Integro uma squad dedicada às jornadas de Acompanhamento de Pedidos e Casa Inteligente."
+    },
+    "marttech": {
+      "description": "Atuei no desenvolvimento da plataforma Curar Saúde, uma solução inovadora que oferece mini cursos, vídeos educacionais e desafios interativos.",
+      "activity1": "Criei interfaces modernas e responsivas com TypeScript, React e Material UI.",
+      "activity2": "Implementei uma gestão de estado eficiente utilizando React Hooks e Context API.",
+      "activity3": "Configurei pipelines de CI/CD e realizei deploy na plataforma Azure DevOps."
+    },
+    "xmart": {
+      "description": "Atuei como Desenvolvedor Full Stack no desenvolvimento do aplicativo de segurança (AppSec) xGuardian e da landing page institucional da empresa.",
+      "activity1": "Desenvolvi interfaces com React, utilizando bibliotecas como Shadcn/ui e Tailwind.",
+      "activity2": "Implementei APIs com Python e FastAPI, integrando bancos de dados MySQL e MariaDB.",
+      "activity3": "Contribui para a renovação de UI/UX da Landing Page Institucional."
+    },
+    "vtal": {
+      "description": "Atuei como Desenvolvedor Full Stack na V.tal, contribuindo para projetos estratégicos com foco em manutenção, desenvolvimento e inovação de sistemas.",
+      "activity1": "Mantive e corrigi bugs em sistema legado (Portal Operacional).",
+      "activity2": "Participei do planejamento e desenvolvimento da nova versão do módulo de Gestão de Acesso.",
+      "activity3": "Contribuí no planejamento e desenvolvimento de módulo de Suporte Técnico para operadoras.",
+      "activity4": "Desenvolvi site estático para documentação de APIs (Portal de Desenvolvedores)."
+    },
+    "gama": {
+      "description": "Fui selecionado para participar de um programa de imersão e aprendizado em uma squad ágil como desenvolvedor back-end durante 45 días. Ao final do programa, minha squad foi premiada com o 1º lugar.",
+      "activity1": "Construção da API para uma plataforma educacional LMS com questionários de múltipla escolha.",
+      "activity2": "Trabalho com metodologia ágil Scrum."
+    }
+  }
 }

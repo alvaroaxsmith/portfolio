@@ -1,0 +1,398 @@
+:host {
+  display: block;
+  font-family: 'Roboto', sans-serif;
+  margin-top: 2rem;
+  width: 100%;
+}
+
+mat-card-header {
+  mat-card-title {
+    color: #000000;
+  }
+
+  mat-card-subtitle {
+    font-weight: 600;
+  }
+}
+
+// Main container with column layout
+.professional-experience-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+// Shared timeline header
+.timeline-background {
+  position: relative;
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto 1rem auto;
+  height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem;
+  box-sizing: border-box;
+  z-index: 20; // Keep it on top
+}
+
+.timeline-line {
+  position: absolute;
+  width: calc(100% - 4rem);
+  height: 4px;
+  background-color: #bdbdbd; // Cinza mais escuro para maior contraste
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+
+.timeline-icons {
+  position: relative;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  z-index: 2;
+}
+
+.icon-wrapper {
+  .timeline-icon {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #f5f5f5; // Cinza mais claro para o ícone inativo
+    color: #757575; // Cor do ícone um pouco mais escura
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 4px solid #ffffff; // Borda branca pura para destacar
+    cursor: pointer;
+    transition: all 0.3s ease;
+    transform: scale(0.9);
+  }
+
+  // Active in carousel view
+  &.active .timeline-icon,
+  // Selected in journey view
+  &.selected-for-journey .timeline-icon {
+    background: #000000; // Preto para contraste máximo
+    color: white;
+    transform: scale(1.15);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3); // Sombra mais forte
+  }
+}
+
+// Container for swapping views
+.views-container {
+  position: relative;
+  width: 100%;
+  min-height: 600px;
+  overflow: hidden;
+
+  .timeline-carousel-section,
+  .mermaid-section {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
+    backface-visibility: hidden;
+  }
+
+  .timeline-carousel-section {
+    transform: translateX(0);
+    opacity: 1;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+  }
+
+  .mermaid-section {
+    transform: translateX(100%);
+    opacity: 0;
+    z-index: 5;
+    display: flex;
+    align-items: center;
+  }
+
+  // View transition
+  &.journey-view-active {
+    .timeline-carousel-section {
+      transform: translateX(-100%);
+      opacity: 0;
+    }
+
+    .mermaid-section {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+}
+
+// Experience Carousel
+.carousel-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.carousel-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.carousel-item {
+  flex: 0 0 100%;
+  box-sizing: border-box;
+  padding: 0 1rem;
+}
+
+.timeline-content {
+  background: #ffffff; // Fundo branco puro
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); // Sombra mais definida
+  transition: all 0.3s ease;
+  padding: 1.5rem;
+  cursor: pointer;
+  min-height: 480px;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); // Sombra mais forte no hover
+  }
+}
+
+// Mermaid Section as a Carousel
+.mermaid-journey-wrapper {
+  width: 100%;
+  max-width: 800px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.mermaid-journey-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+
+.mermaid-journey-item {
+  flex: 0 0 100%;
+  box-sizing: border-box;
+  padding: 0 1rem;
+}
+
+.mermaid-journey-card {
+  background-color: #ffffff; // Fundo branco puro
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.12); // Sombra mais definida
+  min-height: 480px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18); // Sombra mais forte no hover
+  }
+
+  .mermaid-journey-container {
+    width: 100%;
+    height: 100%;
+  }
+}
+
+// *** ESTILOS RESTAURADOS ***
+strong {
+  display: block;
+  margin-top: 1rem;
+  margin-bottom: 0.5rem;
+  color: #000000; // Texto preto puro
+  font-weight: 500;
+}
+
+ul {
+  list-style-type: disc;
+  padding-left: 20px;
+
+  li {
+    margin-bottom: 0.25rem;
+  }
+}
+
+.tech-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 0.5rem;
+}
+
+.tech-tag {
+  background-color: #e0e0e0; // Fundo da tag um pouco mais escuro
+  color: #000000; // Texto preto puro
+  padding: 0.3rem 0.8rem;
+  border-radius: 16px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.skill-tag {
+  background-color: #bdbdbd; // Fundo da tag de skill mais escuro para diferenciar
+  color: #000000; // Texto preto puro
+}
+
+// *** FIM DOS ESTILOS RESTAURADOS ***
+
+/* Estilos Responsivos */
+
+// Para Tablets (telas até 768px de largura)
+@media (max-width: 768px) {
+  .professional-experience-container {
+    padding: 1rem; // Reduz o preenchimento geral do container
+  }
+
+  .timeline-content {
+    padding: 1rem; // Reduz o preenchimento dentro dos cards
+
+    mat-card-title {
+      font-size: 1.1rem; // Ajusta o tamanho da fonte do título
+    }
+
+    mat-card-subtitle {
+      font-size: 0.9rem; // Ajusta o tamanho da fonte do subtítulo
+    }
+
+    p,
+    li {
+      font-size: 0.9rem; // Ajusta o tamanho da fonte do corpo do texto
+    }
+  }
+
+  .timeline-icons .icon-wrapper {
+    margin: 0 10px; // Reduz a margem entre os ícones da linha do tempo
+  }
+
+  .tech-tag {
+    font-size: 0.8rem; // Diminui a fonte das tags de tecnologia
+    padding: 4px 8px; // Ajusta o preenchimento das tags
+  }
+}
+
+// Para Celulares (telas até 480px de largura) - Layout Vertical
+@media (max-width: 480px) {
+
+  // Transforma o layout principal em linha para acomodar a timeline vertical
+  .professional-experience-container {
+    flex-direction: row;
+    align-items: flex-start;
+    padding: 1rem 0.5rem;
+  }
+
+  // Ajusta a barra da timeline para ser vertical na lateral
+  .timeline-background {
+    max-width: 60px; // Largura fixa para a timeline vertical
+    width: 60px;
+    height: 500px; // Altura fixa, ajuste conforme necessário
+    margin: 0;
+    padding: 2rem 0;
+    justify-content: flex-start;
+  }
+
+  // Transforma a linha em vertical
+  .timeline-line {
+    width: 4px;
+    height: calc(100% - 4rem);
+    left: 50%;
+    top: 2rem;
+    transform: translateX(-50%);
+  }
+
+  .timeline-icons {
+    flex-direction: column; // Empilha os ícones verticalmente
+    height: 100%;
+    width: 100%;
+
+    .icon-wrapper {
+      margin: 0 auto; // Centraliza os ícones na barra vertical
+
+      .timeline-icon mat-icon {
+        font-size: 22px; // Ícones um pouco menores
+      }
+    }
+  }
+
+  // Ajusta o container do conteúdo para o novo layout
+  .views-container {
+    padding-left: 10px; // Espaço entre a timeline e o conteúdo
+  }
+
+  .carousel-item {
+    padding: 0 0.2rem; // Reduz o padding lateral do item do carrossel
+  }
+
+  .timeline-content {
+    padding: 1rem 0.8rem;
+    min-height: auto; // Permite que o card encolha para caber no conteúdo
+
+    mat-card-content {
+      max-height: 380px; // Defina uma altura máxima para o conteúdo se tornar rolável
+      overflow-y: auto; // Habilita a rolagem vertical
+      cursor: grab; // Cursor para indicar que é arrastável
+      user-select: none; // Impede a seleção de texto ao arrastar
+      -ms-overflow-style: none;
+      /* IE e Edge */
+      scrollbar-width: none;
+      /* Firefox */
+
+      &::-webkit-scrollbar {
+        display: none; // Esconde a barra de rolagem para Webkit (Chrome, Safari)
+      }
+
+      &.grabbing {
+        cursor: grabbing; // Cursor enquanto está arrastando
+      }
+    }
+
+    mat-card-title {
+      font-size: 0.9rem; // Título menor para celulares
+    }
+
+    mat-card-subtitle {
+      font-size: 0.75rem; // Subtítulo menor
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 4px;
+    }
+
+    p,
+    li,
+    strong {
+      font-size: 0.8rem; // Tamanho de fonte menor para o conteúdo principal
+    }
+  }
+
+  .tech-list {
+    gap: 4px; // Reduz o espaçamento entre as tags
+  }
+
+  .tech-tag {
+    font-size: 0.7rem; // Letras menores nas tags
+    padding: 2px 5px;
+  }
+
+  // Ajustes para a visualização da jornada (Mermaid)
+  .mermaid-journey-card {
+    padding: 0.5rem;
+  }
+
+  .mermaid-journey-container {
+    // Adiciona rolagem horizontal se o diagrama for muito largo
+    overflow-x: auto;
+    min-height: 300px; // Garante uma altura mínima para visualização
+  }
+}

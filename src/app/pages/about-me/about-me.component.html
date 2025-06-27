@@ -35,6 +35,17 @@
       <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
+            {{ 'Highlights' | translate }}
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <mat-action-row class="highlights">
+          <app-highlights></app-highlights>
+        </mat-action-row>
+      </mat-expansion-panel>
+
+      <mat-expansion-panel hideToggle>
+        <mat-expansion-panel-header>
+          <mat-panel-title>
             {{ 'Hobbies' | translate }}
           </mat-panel-title>
         </mat-expansion-panel-header>
@@ -61,11 +72,12 @@
       <mat-expansion-panel hideToggle>
         <mat-expansion-panel-header>
           <mat-panel-title>
-            <a class="resume-link" href="https://drive.google.com/file/d/1HmIfm-YP1SLxTN72bgNrKiYFrs7oO9ij/view?usp=sharing" target="_blank">
-              CV (PDF) 📄
-            </a>
+            {{ 'Professional' | translate }}
           </mat-panel-title>
         </mat-expansion-panel-header>
+        <mat-action-row>
+          <app-professional-timeline></app-professional-timeline>
+        </mat-action-row>
       </mat-expansion-panel>
 
     </mat-accordion>
