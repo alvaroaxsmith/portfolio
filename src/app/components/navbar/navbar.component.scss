@@ -1,7 +1,6 @@
 /* Refactored code with standardized variable names, improved readability, and removed debugging statements */
 
 @media (min-width: 320px) {
-
   /* Standardized variable names */
   ul {
     display: flex;
@@ -55,7 +54,11 @@
     width: 100%;
     height: 6px;
     z-index: 1;
-    background-image: linear-gradient(to right, hsl(0, 0%, 37%), hsl(0, 0%, 37%));
+    background-image: linear-gradient(
+      to right,
+      hsl(0, 0%, 37%),
+      hsl(0, 0%, 37%)
+    );
   }
 
   li:hover::before {
@@ -94,4 +97,32 @@
       font-size: 2rem;
     }
   }
+}
+
+:host {
+  width: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  transform-origin: top;
+  transition: top 0.4s ease-in-out, transform 0.4s ease-in-out;
+}
+
+:host(.navbar-fixed) ul {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5rem;
+  background-color: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out,
+    top 0.3s ease-in-out;
+}
+
+:host(.navbar-hidden) {
+  top: -8rem;
+  transform: scaleY(0);
 }
