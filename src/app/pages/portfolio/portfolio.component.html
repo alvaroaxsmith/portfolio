@@ -1,11 +1,16 @@
-<h1>{{'Independent Projects and Studies' | translate }}</h1>
+<h1>{{ "Independent Projects and Studies" | translate }}</h1>
 
 <div class="filters-toolbar">
   <div class="filter-group">
     <mat-form-field appearance="fill">
-      <mat-label>{{ 'Filter by Technology' | translate }}</mat-label>
-      <mat-select (selectionChange)="filterByTech($event.value)" [(value)]="selectedTech">
-        <mat-option [value]="null">{{ 'All Technologies' | translate }}</mat-option>
+      <mat-label>{{ "Filter by Technology" | translate }}</mat-label>
+      <mat-select
+        (selectionChange)="filterByTech($event.value)"
+        [(value)]="selectedTech"
+      >
+        <mat-option [value]="null">{{
+          "All Technologies" | translate
+        }}</mat-option>
         <mat-option *ngFor="let tech of availableTechs" [value]="tech">
           {{ tech }}
         </mat-option>
@@ -15,37 +20,60 @@
 
   <div class="filter-group">
     <mat-form-field appearance="fill">
-      <mat-label>{{ 'Sort by Date' | translate }}</mat-label>
-      <mat-select (selectionChange)="sortByDate($event.value)" [(value)]="currentSortOrder">
-        <mat-option value="recent">{{ 'Most Recent' | translate }}</mat-option>
-        <mat-option value="oldest">{{ 'Oldest' | translate }}</mat-option>
+      <mat-label>{{ "Sort by Date" | translate }}</mat-label>
+      <mat-select
+        (selectionChange)="sortByDate($event.value)"
+        [(value)]="currentSortOrder"
+      >
+        <mat-option value="recent">{{ "Most Recent" | translate }}</mat-option>
+        <mat-option value="oldest">{{ "Oldest" | translate }}</mat-option>
       </mat-select>
     </mat-form-field>
   </div>
 </div>
 
 <div class="view-controls">
-  <button mat-icon-button (click)="toggleView()"
-          [matTooltip]="(currentView === 'list' ? 'Switch to Grid View' : 'Switch to List View') | translate">
-    <mat-icon>{{ currentView === 'list' ? 'grid_on' : 'view_list' }}</mat-icon>
+  <button
+    mat-icon-button
+    (click)="toggleView()"
+    [matTooltip]="
+      (currentView === 'list' ? 'Switch to Grid View' : 'Switch to List View')
+        | translate
+    "
+  >
+    <mat-icon>{{ currentView === "list" ? "grid_on" : "view_list" }}</mat-icon>
   </button>
 </div>
 
 <ng-container *ngIf="!initialLoading; else stillLoading">
-  <div *ngIf="projects.length > 0 || loadingMore; else noProjects"
-       class="portfolio-cards-area"
-       [ngClass]="{
-         'list-view': currentView === 'list',
-         'grid-view': currentView === 'grid'
-       }">
-    <div *ngFor="let project of projects | filterNoDescription; let i = index"
-         class="project-wrapper"
-         [@fadeInLeft]="getAnimationParams(i)">
+  <div
+    *ngIf="projects.length > 0 || loadingMore; else noProjects"
+    class="portfolio-cards-area"
+    [ngClass]="{
+      'list-view': currentView === 'list',
+      'grid-view': currentView === 'grid'
+    }"
+  >
+    <div
+      *ngFor="let project of projects | filterNoDescription; let i = index"
+      class="project-wrapper"
+      [@fadeInLeft]="getAnimationParams(i)"
+    >
       <mat-card class="project-card">
         <mat-card-title-group>
           <mat-card-title>{{ project.name | translate }}</mat-card-title>
           <mat-card-subtitle>{{ project.tech | translate }}</mat-card-subtitle>
-          <a mat-raised-button href="{{ project.repo }}" target="_blank" rel="noopener noreferrer">{{'Repository' | translate }}</a>
+          <mat-card-subtitle class="project-date"
+            >{{ "Last updated" | translate }}:
+            {{ project.date | date : "dd/MM/yyyy" }}</mat-card-subtitle
+          >
+          <a
+            mat-raised-button
+            href="{{ project.repo }}"
+            target="_blank"
+            rel="noopener noreferrer"
+            >{{ "Repository" | translate }}</a
+          >
         </mat-card-title-group>
         <mat-card-content>
           <p>{{ project.description | translate }}</p>
@@ -55,15 +83,24 @@
   </div>
 
   <!-- Elemento gatilho para o IntersectionObserver e spinner de "carregar mais" -->
-  <div #loadMoreTrigger 
-       *ngIf="!allProjectsLoaded && !initialLoading && processedProjects.length > 0" 
-       style="height: 1px;"></div>
+  <div
+    #loadMoreTrigger
+    *ngIf="
+      !allProjectsLoaded && !initialLoading && processedProjects.length > 0
+    "
+    style="height: 1px"
+  ></div>
   <div *ngIf="loadingMore && !initialLoading" class="load-more-spinner">
     <mat-spinner diameter="50"></mat-spinner>
   </div>
 
   <ng-template #noProjects>
-    <p *ngIf="!initialLoading && !loadingMore && projects.length === 0" class="no-projects-message">{{ 'No projects found.' | translate }}</p>
+    <p
+      *ngIf="!initialLoading && !loadingMore && projects.length === 0"
+      class="no-projects-message"
+    >
+      {{ "No projects found." | translate }}
+    </p>
   </ng-template>
 </ng-container>
 
