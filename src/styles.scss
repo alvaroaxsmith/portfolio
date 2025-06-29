@@ -1,7 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
-@import url('https://fonts.googleapis.com/css2?family=Merriweather&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Lexend+Tera:wght@300;600;800&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Jura&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Merriweather&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Lexend+Tera:wght@300;600;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Jura&display=swap");
+
+* {
+  -webkit-tap-highlight-color: transparent !important;
+  -moz-tap-highlight-color: transparent !important;
+  -ms-tap-highlight-color: transparent !important;
+  tap-highlight-color: transparent !important;
+  outline: none !important;
+}
 
 html,
 body {
@@ -14,7 +22,6 @@ body {
     width: 8px;
     background-color: transparent;
     transition: width 0.9s ease-in-out;
-
   }
 
   ::-webkit-scrollbar-thumb {
@@ -41,7 +48,7 @@ body {
 
 body {
   margin: 0;
-  padding: 0, ;
+  padding: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   overflow-y: scroll;
 }
@@ -76,9 +83,12 @@ body {
   color: rgba(0, 0, 0, 0.6);
 }
 
-.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__leading,
-.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__notch,
-.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-notched-outline__trailing {
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused
+  .mdc-notched-outline__leading,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused
+  .mdc-notched-outline__notch,
+.mdc-text-field--outlined:not(.mdc-text-field--disabled).mdc-text-field--focused
+  .mdc-notched-outline__trailing {
   border-color: rgba(0, 0, 0, 0.6);
 }
 
@@ -90,24 +100,34 @@ body {
   --mdc-circular-progress-active-indicator-color: black;
 }
 
-.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label,
-.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label--float-above {
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+  .mdc-floating-label,
+.mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused
+  .mdc-floating-label--float-above {
   color: black !important; // Alterado de #444 para black e adicionado !important se necessário
 }
 
-.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled)
+  .mdc-list-item__primary-text {
   color: black !important; // Garante que seja preto
 }
 
+h1 {
+  font-size: clamp(1.5rem, 5vw, 3rem);
+}
+
 /* Adicionar estas regras para a cor do "check" da opção selecionada */
-.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mat-pseudo-checkbox,
-.mat-mdc-option.mat-mdc-option-active.mdc-list-item--selected .mat-pseudo-checkbox {
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled)
+  .mat-pseudo-checkbox,
+.mat-mdc-option.mat-mdc-option-active.mdc-list-item--selected
+  .mat-pseudo-checkbox {
   // background-color: black;
   border-color: black;
   /* Para a borda do checkbox não selecionado, se visível */
 }
 
-.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mat-pseudo-checkbox::after {
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled)
+  .mat-pseudo-checkbox::after {
   color: black;
   /* Cor do V dentro do checkbox - geralmente branco sobre fundo escuro */
 }

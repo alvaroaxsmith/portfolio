@@ -1,7 +1,6 @@
 h1 {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   font-style: normal;
-  font-size: 2.5rem;
   font-weight: 500;
   text-align: center;
   margin: 2rem 0;
@@ -20,7 +19,8 @@ h1 {
   --mat-option-selected-state-label-text-color: #444;
 }
 
-.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
+.mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled)
+  .mdc-list-item__primary-text {
   color: black;
 }
 

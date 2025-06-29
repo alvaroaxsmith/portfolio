@@ -1,19 +1,22 @@
 <!-- Container principal que organiza o cabeçalho e as visualizações -->
 <div class="professional-experience-container">
-
   <!-- Cabeçalho da Linha do Tempo (compartilhado entre as visualizações) -->
   <div class="timeline-background">
     <div class="timeline-line"></div>
     <div class="timeline-icons">
       <!-- O clique no ícone muda de função dependendo da visualização atual -->
-      <div *ngFor="let exp of experiencias; let i = index"
-           class="icon-wrapper"
-           [class.active]="!isJourneyVisible && i === currentIndex"
-           [class.selected-for-journey]="isJourneyVisible && i === journeyCurrentIndex"
-           (click)="isJourneyVisible ? handleIconClickInJourneyView(exp) : goTo(i)"
-           [title]="exp.empresa">
+      <div
+        *ngFor="let exp of experiencias; let i = index"
+        class="icon-wrapper"
+        [class.active]="!isJourneyVisible && i === currentIndex"
+        [class.selected-for-journey]="
+          isJourneyVisible && i === journeyCurrentIndex
+        "
+        (click)="isJourneyVisible ? handleIconClickInJourneyView(exp) : goTo(i)"
+        [title]="exp.empresa"
+      >
         <div class="timeline-icon">
-          <mat-icon>{{ exp.remoto ? 'wifi' : 'business_center' }}</mat-icon>
+          {{ i + 1 }}
         </div>
       </div>
     </div>
@@ -21,31 +24,54 @@
 
   <!-- Container que gerencia a transição entre a visualização do carrossel e da jornada -->
   <div class="views-container" [class.journey-view-active]="isJourneyVisible">
-
     <!-- Seção do Carrossel de Experiências -->
     <div class="timeline-carousel-section">
       <div class="carousel-wrapper">
-        <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+        <div
+          class="carousel-track"
+          [style.transform]="'translateX(-' + currentIndex * 100 + '%)'"
+        >
           <div *ngFor="let experiencia of experiencias" class="carousel-item">
             <!-- Card de Experiência Individual -->
-            <mat-card class="timeline-content" (click)="selecionarExperiencia(experiencia)">
+            <mat-card
+              class="timeline-content"
+              (click)="selecionarExperiencia(experiencia)"
+            >
               <mat-card-header>
-                <mat-card-title>{{ experiencia.cargo | translate }}</mat-card-title>
-                <mat-card-subtitle>{{ experiencia.empresa | translate }} | {{ experiencia.periodo | translate }} <span *ngIf="experiencia.duracao">({{ experiencia.duracao | translate }})</span></mat-card-subtitle>
+                <mat-card-title>{{
+                  experiencia.cargo | translate
+                }}</mat-card-title>
+                <mat-card-subtitle
+                  >{{ experiencia.empresa | translate }} |
+                  {{ experiencia.periodo | translate }}
+                  <span *ngIf="experiencia.duracao"
+                    >({{ experiencia.duracao | translate }})</span
+                  ></mat-card-subtitle
+                >
               </mat-card-header>
               <mat-card-content #cardContent>
                 <p>{{ experiencia.descricao | translate }}</p>
-                <strong>{{ 'Main Activities' | translate }}:</strong>
+                <strong>{{ "Main Activities" | translate }}:</strong>
                 <ul>
-                  <li *ngFor="let atividade of experiencia.atividades">{{ atividade | translate }}</li>
+                  <li *ngFor="let atividade of experiencia.atividades">
+                    {{ atividade | translate }}
+                  </li>
                 </ul>
-                <strong>{{ 'timeline.technologies' | translate }}:</strong>
+                <strong>{{ "timeline.technologies" | translate }}:</strong>
                 <div class="tech-list">
-                  <span *ngFor="let tech of experiencia.tecnologias" class="tech-tag">{{ tech }}</span>
+                  <span
+                    *ngFor="let tech of experiencia.tecnologias"
+                    class="tech-tag"
+                    >{{ tech }}</span
+                  >
                 </div>
-                <strong>{{ 'timeline.skills' | translate }}:</strong>
+                <strong>{{ "timeline.skills" | translate }}:</strong>
                 <div class="tech-list">
-                  <span *ngFor="let comp of experiencia.competencias" class="tech-tag skill-tag">{{ comp }}</span>
+                  <span
+                    *ngFor="let comp of experiencia.competencias"
+                    class="tech-tag skill-tag"
+                    >{{ comp }}</span
+                  >
                 </div>
               </mat-card-content>
             </mat-card>
@@ -57,12 +83,25 @@
     <!-- Seção da Jornada (agora como um carrossel de linhas do tempo) -->
     <div class="mermaid-section">
       <div class="mermaid-journey-wrapper">
-        <div class="mermaid-journey-track" [style.transform]="'translateX(-' + journeyCurrentIndex * 100 + '%)'">
+        <div
+          class="mermaid-journey-track"
+          [style.transform]="'translateX(-' + journeyCurrentIndex * 100 + '%)'"
+        >
           <!-- Itera sobre as definições de timeline para criar um card para cada -->
-          <div *ngFor="let timeline of timelineDefinitions" class="mermaid-journey-item">
-            <mat-card class="mermaid-journey-card" (click)="voltarParaTimeline()">
+          <div
+            *ngFor="let timeline of timelineDefinitions"
+            class="mermaid-journey-item"
+          >
+            <mat-card
+              class="mermaid-journey-card"
+              (click)="voltarParaTimeline()"
+            >
               <!-- O container do diagrama. #mermaidJourneyContainer é usado para renderizar o SVG -->
-              <div #mermaidJourneyContainer class="mermaid-journey-container" [attr.data-experience-id]="timeline.id">
+              <div
+                #mermaidJourneyContainer
+                class="mermaid-journey-container"
+                [attr.data-experience-id]="timeline.id"
+              >
                 <!-- O Mermaid SVG será injetado aqui pelo componente TS -->
               </div>
             </mat-card>
@@ -70,6 +109,5 @@
         </div>
       </div>
     </div>
-
   </div>
 </div>
