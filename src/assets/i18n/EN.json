@@ -94,7 +94,7 @@
     "skills": "Skills",
     "mermaid": {
       "header": "Career Journey Visualization",
-      "placeholder": "Select an experience from the timeline to see the journey.",
+      "placeholder": "Timeline",
       "title": "Career Journey up to {empresa}",
       "error": "Error rendering Mermaid diagram."
     },
