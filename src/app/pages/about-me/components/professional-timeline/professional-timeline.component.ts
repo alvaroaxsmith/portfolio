@@ -1,8 +1,19 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild, ElementRef, ViewChildren, QueryList, AfterViewInit, Renderer2 } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ChangeDetectorRef,
+  ViewChild,
+  ElementRef,
+  ViewChildren,
+  QueryList,
+  AfterViewInit,
+  Renderer2,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import mermaid from 'mermaid';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -30,16 +41,25 @@ interface TimelineDefinition {
 @Component({
   selector: 'app-professional-timeline',
   standalone: true,
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatIconModule, TranslateModule],
+  imports: [
+    CommonModule,
+    MatCardModule,
+    MatButtonModule,
+    MatIconModule,
+    TranslateModule,
+    MatTooltipModule,
+  ],
   templateUrl: './professional-timeline.component.html',
   styleUrls: ['./professional-timeline.component.scss'],
-
 })
 export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
   // Using ViewChildren to get all mermaid containers in the journey view
-  @ViewChildren('mermaidJourneyContainer') mermaidJourneyContainers!: QueryList<ElementRef>;
+  @ViewChildren('mermaidJourneyContainer')
+  mermaidJourneyContainers!: QueryList<ElementRef>;
 
-  @ViewChildren('cardContent') cardContents!: QueryList<ElementRef<HTMLElement>>;
+  @ViewChildren('cardContent') cardContents!: QueryList<
+    ElementRef<HTMLElement>
+  >;
 
   experiencias: Experiencia[] = [
     {
@@ -52,8 +72,18 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
       remoto: true,
       descricao: 'timeline.gama.description',
       atividades: ['timeline.gama.activity1', 'timeline.gama.activity2'],
-      tecnologias: ['Nestjs', 'REST', 'Typescript', 'Postgresql', 'Docker-Compose', 'Swagger', 'Typeorm', 'Github', 'CI/CD'],
-      competencias: ['Conventional Commits', 'Eslint', 'Prettier', 'Gitflow']
+      tecnologias: [
+        'Nestjs',
+        'REST',
+        'Typescript',
+        'Postgresql',
+        'Docker-Compose',
+        'Swagger',
+        'Typeorm',
+        'Github',
+        'CI/CD',
+      ],
+      competencias: ['Conventional Commits', 'Eslint', 'Prettier', 'Gitflow'],
     },
     {
       id: 4,
@@ -64,9 +94,25 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
       local: 'São Paulo, São Paulo, Brasil',
       remoto: false,
       descricao: 'timeline.vtal.description',
-      atividades: ['timeline.vtal.activity1', 'timeline.vtal.activity2', 'timeline.vtal.activity3', 'timeline.vtal.activity4'],
-      tecnologias: ['Vue2', 'Vuex', 'React', 'TypeScript', 'NestJS', 'Java Spring Boot', 'OracleDB', 'Redis', 'MongoDB', 'Azure DevOps'],
-      competencias: ['CI/CD', 'TDD', 'Clean Architecture', 'SOLID', 'Jest']
+      atividades: [
+        'timeline.vtal.activity1',
+        'timeline.vtal.activity2',
+        'timeline.vtal.activity3',
+        'timeline.vtal.activity4',
+      ],
+      tecnologias: [
+        'Vue2',
+        'Vuex',
+        'React',
+        'TypeScript',
+        'NestJS',
+        'Java Spring Boot',
+        'OracleDB',
+        'Redis',
+        'MongoDB',
+        'Azure DevOps',
+      ],
+      competencias: ['CI/CD', 'TDD', 'Clean Architecture', 'SOLID', 'Jest'],
     },
     {
       id: 3,
@@ -77,9 +123,33 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
       local: 'São Paulo, Brasil',
       remoto: false,
       descricao: 'timeline.xmart.description',
-      atividades: ['timeline.xmart.activity1', 'timeline.xmart.activity2', 'timeline.xmart.activity3'],
-      tecnologias: ['React', 'Shadcn/ui', 'Tailwind', 'Context API', 'Python', 'FastAPI', 'MySQL', 'MariaDB', 'Jenkins', 'Docker', 'AWS Cloud', 'Lambda'],
-      competencias: ['Clean Architecture', 'TDD', 'BFF', 'Microserviços', 'DevSecOps', 'AppSec']
+      atividades: [
+        'timeline.xmart.activity1',
+        'timeline.xmart.activity2',
+        'timeline.xmart.activity3',
+      ],
+      tecnologias: [
+        'React',
+        'Shadcn/ui',
+        'Tailwind',
+        'Context API',
+        'Python',
+        'FastAPI',
+        'MySQL',
+        'MariaDB',
+        'Jenkins',
+        'Docker',
+        'AWS Cloud',
+        'Lambda',
+      ],
+      competencias: [
+        'Clean Architecture',
+        'TDD',
+        'BFF',
+        'Microserviços',
+        'DevSecOps',
+        'AppSec',
+      ],
     },
     {
       id: 2,
@@ -90,9 +160,20 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
       local: 'São Paulo, Brasil',
       remoto: true,
       descricao: 'timeline.marttech.description',
-      atividades: ['timeline.marttech.activity1', 'timeline.marttech.activity2', 'timeline.marttech.activity3'],
-      tecnologias: ['TypeScript', 'React', 'Material UI', 'React Hooks', 'Context API', 'Azure DevOps'],
-      competencias: ['TDD', 'Clean Architecture', 'Revisão de código']
+      atividades: [
+        'timeline.marttech.activity1',
+        'timeline.marttech.activity2',
+        'timeline.marttech.activity3',
+      ],
+      tecnologias: [
+        'TypeScript',
+        'React',
+        'Material UI',
+        'React Hooks',
+        'Context API',
+        'Azure DevOps',
+      ],
+      competencias: ['TDD', 'Clean Architecture', 'Revisão de código'],
     },
     {
       id: 1,
@@ -103,9 +184,23 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
       remoto: true,
       descricao: 'timeline.mutant.description',
       atividades: ['timeline.mutant.activity1', 'timeline.mutant.activity2'],
-      tecnologias: ['Java', 'Spring Boot', 'Node.js com TypeScript', 'NestJS', 'React', 'Vue2', 'Hooks', 'Redux', 'Context API', 'Azure DevOps', 'Docker', 'Redis', 'MongoDB'],
-      competencias: ['TDD', 'Stryker', 'Cypress', 'Jest', 'Clean Code']
-    }
+      tecnologias: [
+        'Java',
+        'Spring Boot',
+        'Node.js com TypeScript',
+        'NestJS',
+        'React',
+        'Vue2',
+        'Hooks',
+        'Redux',
+        'Context API',
+        'Azure DevOps',
+        'Docker',
+        'Redis',
+        'MongoDB',
+      ],
+      competencias: ['TDD', 'Stryker', 'Cypress', 'Jest', 'Clean Code'],
+    },
   ];
 
   // State properties
@@ -114,10 +209,18 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
   journeyCurrentIndex = 0; // For journey view carousel
   isJourneyVisible = false;
 
-  constructor(private cdr: ChangeDetectorRef, public translate: TranslateService, private renderer: Renderer2) { }
+  constructor(
+    private cdr: ChangeDetectorRef,
+    public translate: TranslateService,
+    private renderer: Renderer2
+  ) {}
 
   ngOnInit(): void {
-    mermaid.initialize({ startOnLoad: false, theme: 'neutral', securityLevel: 'loose' });
+    mermaid.initialize({
+      startOnLoad: false,
+      theme: 'neutral',
+      securityLevel: 'loose',
+    });
   }
 
   ngAfterViewInit(): void {
@@ -128,7 +231,7 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
 
     // A lógica de arrastar só deve funcionar em telas de celular
     if (window.innerWidth <= 480) {
-      this.cardContents.forEach(contentRef => {
+      this.cardContents.forEach((contentRef) => {
         this.setupDragScroll(contentRef.nativeElement);
       });
     }
@@ -144,7 +247,9 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
    * @param experiencia The starting experience.
    */
   selecionarExperiencia(experiencia: Experiencia): void {
-    const selectedIndex = this.experiencias.findIndex(exp => exp.id === experiencia.id);
+    const selectedIndex = this.experiencias.findIndex(
+      (exp) => exp.id === experiencia.id
+    );
     this.currentIndex = selectedIndex;
     this.journeyCurrentIndex = selectedIndex;
 
@@ -163,21 +268,27 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
    * @param clickedExperience The experience of the clicked icon.
    */
   handleIconClickInJourneyView(clickedExperience: Experiencia): void {
-    const newIndex = this.experiencias.findIndex(exp => exp.id === clickedExperience.id);
+    const newIndex = this.experiencias.findIndex(
+      (exp) => exp.id === clickedExperience.id
+    );
     this.journeyCurrentIndex = newIndex;
   }
 
   /** Generates all possible timeline definitions from the experiences array. */
   generateAllMermaidTimelines(): void {
-    this.timelineDefinitions = this.experiencias.map(startExp => {
-      const title = this.translate.instant('timeline.mermaid.title', { empresa: startExp.empresa });
+    this.timelineDefinitions = this.experiencias.map((startExp) => {
+      const title = this.translate.instant('timeline.mermaid.title', {
+        empresa: startExp.empresa,
+      });
       let mermaidText = `timeline\n  title ${title}\n`;
 
-      const startIndex = this.experiencias.findIndex(exp => exp.id === startExp.id);
+      const startIndex = this.experiencias.findIndex(
+        (exp) => exp.id === startExp.id
+      );
       // LÓGICA AJUSTADA: Com o array já invertido, removemos o .reverse() para manter a ordem cronológica correta
       const experienciasParaTimeline = this.experiencias.slice(startIndex);
 
-      experienciasParaTimeline.forEach(exp => {
+      experienciasParaTimeline.forEach((exp) => {
         const periodo = this.translate.instant(exp.periodo) || exp.periodo;
         const cargo = this.translate.instant(exp.cargo) || exp.cargo;
         mermaidText += `  ${periodo} : ${cargo} @ ${exp.empresa}\n`;
@@ -197,18 +308,25 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
     for (let i = 0; i < containers.length; i++) {
       const container = containers[i].nativeElement;
       const experienceId = container.dataset.experienceId;
-      const timelineDef = this.timelineDefinitions.find(def => def.id.toString() === experienceId);
+      const timelineDef = this.timelineDefinitions.find(
+        (def) => def.id.toString() === experienceId
+      );
 
       if (timelineDef && container) {
         try {
           // Ensure the container is empty before rendering
           container.innerHTML = '';
           const uniqueId = `mermaid-graph-${experienceId}-${new Date().getTime()}`;
-          const { svg } = await mermaid.render(uniqueId, timelineDef.definition);
+          const { svg } = await mermaid.render(
+            uniqueId,
+            timelineDef.definition
+          );
           container.innerHTML = svg;
         } catch (e) {
           console.error(`Error rendering Mermaid for ID ${experienceId}:`, e);
-          container.innerHTML = `<p>${this.translate.instant('timeline.mermaid.error')}</p>`;
+          container.innerHTML = `<p>${this.translate.instant(
+            'timeline.mermaid.error'
+          )}</p>`;
         }
       }
     }

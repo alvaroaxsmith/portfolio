@@ -13,7 +13,7 @@
           isJourneyVisible && i === journeyCurrentIndex
         "
         (click)="isJourneyVisible ? handleIconClickInJourneyView(exp) : goTo(i)"
-        [title]="exp.empresa"
+        [matTooltip]="exp.empresa"
       >
         <div class="timeline-icon">
           {{ i + 1 }}
