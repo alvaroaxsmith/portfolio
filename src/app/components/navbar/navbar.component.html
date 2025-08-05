@@ -1,33 +1,46 @@
 <ul>
-  <li routerLinkActive="active" [routerLinkActiveOptions]="{exact:true}" routerLink="/" style="cursor: pointer"><a
-      routerLink="/" mat-button>HOME</a></li>
-  <li routerLinkActive="active" routerLink="/about-me" style="cursor: pointer"><a mat-button
-      routerLink="/about-me">{{'ABOUT ME' |
-      translate}}</a></li>
-  <li routerLinkActive="active" routerLink="/courses" style="cursor: pointer"><a mat-button
-      routerLink="/courses">{{'COURSES' |
-      translate }}</a></li>
-  <li routerLinkActive="active" routerLink="/portfolio" style="cursor: pointer"><a mat-button
-      routerLink="/portfolio">{{'PROJECTS' | translate}}</a>
+  <li
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{ exact: true }"
+    routerLink="/"
+    style="cursor: pointer"
+  >
+    <a routerLink="/" mat-button>HOME</a>
+  </li>
+  <li routerLinkActive="active" routerLink="/about-me" style="cursor: pointer">
+    <a mat-button routerLink="/about-me">{{ "ABOUT ME" | translate }}</a>
+  </li>
+  <li routerLinkActive="active" routerLink="/courses" style="cursor: pointer">
+    <a mat-button routerLink="/courses">{{ "COURSES" | translate }}</a>
+  </li>
+  <li routerLinkActive="active" routerLink="/portfolio" style="cursor: pointer">
+    <a mat-button routerLink="/portfolio">{{ "PROJECTS" | translate }}</a>
   </li>
   <!-- <li><a mat-button routerLink="/blog">Blog</a></li> -->
-  <li routerLinkActive="active" routerLink="/contact" style="cursor: pointer"><a mat-button
-      routerLink="/contact">{{'CONTACT' |
-      translate }}</a></li>
+  <li routerLinkActive="active" routerLink="/contact" style="cursor: pointer">
+    <a mat-button routerLink="/contact">{{ "CONTACT" | translate }}</a>
+  </li>
   <li class="language no-hover">
     <a class="language-form">
       <mat-menu #menu="matMenu">
-        <button mat-menu-item *ngFor="let lang of translate.getLangs()" (click)="translate.use(lang); menu.closed">
+        <button
+          mat-menu-item
+          *ngFor="let lang of translate.getLangs()"
+          (click)="translate.use(lang); (menu.closed)"
+        >
           {{ lang }}
         </button>
       </mat-menu>
 
-      <button mat-icon-button matTooltip="{{'TRANSLATE' | translate}}" style="background-color: transparent;"
-        [matMenuTriggerFor]="menu">
+      <button
+        mat-icon-button
+        matTooltip="{{ 'TRANSLATE' | translate }}"
+        style="background-color: transparent"
+        [matMenuTriggerFor]="menu"
+      >
         <mat-icon>translate</mat-icon>
       </button>
     </a>
   </li>
   <li><a class="menu" mat-button (click)="openDialog()">MENU</a></li>
-
 </ul>

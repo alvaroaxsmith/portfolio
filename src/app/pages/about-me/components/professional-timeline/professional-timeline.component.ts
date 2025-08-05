@@ -277,10 +277,10 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
   /** Generates all possible timeline definitions from the experiences array. */
   generateAllMermaidTimelines(): void {
     this.timelineDefinitions = this.experiencias.map((startExp) => {
-      const title = this.translate.instant('timeline.mermaid.title', {
-        empresa: startExp.empresa,
-      });
-      let mermaidText = `timeline\n  title ${title}\n`;
+      // const title = this.translate.instant('timeline.mermaid.title', {
+      //   empresa: startExp.empresa,
+      // });
+      let mermaidText = `timeline\n \n`;
 
       const startIndex = this.experiencias.findIndex(
         (exp) => exp.id === startExp.id

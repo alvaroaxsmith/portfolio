@@ -1,0 +1,237 @@
+// :host aplica estilos ao próprio elemento <app-splash-screen>
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  z-index: 9999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  opacity: 1;
+  transition: opacity 0.3s ease-out;
+  will-change: opacity;
+  transform: translateZ(0);
+
+  // Efeito de vidro com overlay sutil
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      135deg,
+      rgba(255, 255, 255, 0.1) 0%,
+      rgba(255, 255, 255, 0.05) 25%,
+      rgba(0, 0, 0, 0.1) 50%,
+      rgba(255, 255, 255, 0.02) 75%,
+      rgba(0, 0, 0, 0.05) 100%
+    );
+    pointer-events: none;
+  }
+
+  // Quando a classe 'hide' é adicionada, o componente desaparece instantaneamente
+  &.hide {
+    opacity: 0;
+    pointer-events: none;
+  }
+}
+
+.grid-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: grid;
+  grid-template-columns: repeat(20, 1fr);
+  grid-template-rows: repeat(10, 1fr);
+  gap: 1px;
+  padding: 5px;
+  will-change: transform;
+  transform: translateZ(0);
+}
+
+// Estilos para os itens da grade - iluminação vetorial triangular retangular
+:host ::ng-deep .grid-item {
+  position: relative;
+  border-radius: 2px;
+  transition: background-color 0.2s ease-out;
+  will-change: background-color;
+  backface-visibility: hidden;
+  opacity: 0;
+  overflow: hidden;
+  --light-color: rgba(180, 180, 180, 0.4);
+
+  // Aparecem imediatamente quando fade-in é aplicado
+  &.fade-in {
+    opacity: 1;
+  }
+
+  // Triângulo superior esquerdo - metade do quadrado
+  &.light-top-left {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 50%;
+      background: var(--light-color, rgba(180, 180, 180, 0.4));
+      clip-path: polygon(0 0, 100% 0, 0 100%);
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+  }
+
+  // Triângulo superior direito - metade do quadrado
+  &.light-top-right {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 50%;
+      background: var(--light-color, rgba(180, 180, 180, 0.4));
+      clip-path: polygon(0 0, 100% 0, 100% 100%);
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+  }
+
+  // Triângulo inferior esquerdo - metade do quadrado
+  &.light-bottom-left {
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 50%;
+      height: 50%;
+      background: var(--light-color, rgba(180, 180, 180, 0.4));
+      clip-path: polygon(0 0, 0 100%, 100% 100%);
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+  }
+
+  // Triângulo inferior direito - metade do quadrado
+  &.light-bottom-right {
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      width: 50%;
+      height: 50%;
+      background: var(--light-color, rgba(180, 180, 180, 0.4));
+      clip-path: polygon(0 100%, 100% 0, 100% 100%);
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+  }
+
+  // Retângulo central horizontal - metade do quadrado
+  &.light-center {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 25%;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: var(--light-color, rgba(200, 200, 200, 0.4));
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+  }
+
+  // Retângulo superior - metade superior do quadrado
+  &.light-top {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: var(--light-color, rgba(190, 190, 190, 0.4));
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+  }
+
+  // Retângulo inferior - metade inferior do quadrado
+  &.light-bottom {
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: var(--light-color, rgba(190, 190, 190, 0.4));
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+  }
+
+  // Retângulo esquerdo - metade esquerda do quadrado
+  &.light-left {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 50%;
+      height: 100%;
+      background: var(--light-color, rgba(190, 190, 190, 0.4));
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+  }
+
+  // Retângulo direito - metade direita do quadrado
+  &.light-right {
+    &::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 50%;
+      height: 100%;
+      background: var(--light-color, rgba(190, 190, 190, 0.4));
+      opacity: 1;
+      transition: opacity 1s ease-out;
+    }
+  }
+}
+
+.splash-logo {
+  color: #e4e4e7;
+  font-size: 2rem;
+  font-weight: 200;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  opacity: 0;
+  transition: opacity 0.3s ease-out;
+  z-index: 10000;
+  will-change: opacity;
+
+  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.5);
+
+  &.show {
+    opacity: 1;
+  }
+
+  &.hide {
+    opacity: 0;
+  }
+}

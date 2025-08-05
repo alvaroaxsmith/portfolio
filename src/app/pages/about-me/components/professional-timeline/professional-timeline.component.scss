@@ -1,6 +1,6 @@
 :host {
   display: block;
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
   margin-top: 2rem;
   width: 100%;
 }
@@ -158,10 +158,10 @@ mat-card-header {
   cursor: pointer;
   min-height: 480px;
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); // Sombra mais forte no hover
-  }
+  // &:hover {
+  //   transform: translateY(-5px);
+  //   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); // Sombra mais forte no hover
+  // }
 }
 
 // Mermaid Section as a Carousel
@@ -195,10 +195,10 @@ mat-card-header {
   cursor: pointer;
   transition: all 0.3s ease;
 
-  &:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18); // Sombra mais forte no hover
-  }
+  // &:hover {
+  //   transform: translateY(-5px);
+  //   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18); // Sombra mais forte no hover
+  // }
 
   .mermaid-journey-container {
     width: 100%;
@@ -284,7 +284,6 @@ ul {
 
 // Para Celulares (telas até 480px de largura) - Layout Vertical
 @media (max-width: 480px) {
-
   // Transforma o layout principal em linha para acomodar a timeline vertical
   .professional-experience-container {
     flex-direction: row;

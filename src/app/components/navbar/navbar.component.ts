@@ -1,5 +1,11 @@
 import { Dialog } from './dialog/dialog.component';
-import { Component, HostBinding, HostListener, OnInit } from '@angular/core';
+import {
+  Component,
+  ChangeDetectorRef,
+  HostBinding,
+  HostListener,
+  OnInit,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TranslateService } from '@ngx-translate/core';
 
@@ -16,14 +22,17 @@ export class NavbarComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    public translate: TranslateService // Manter TranslateService injetado para uso
+    public translate: TranslateService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   switchLang(lang: string) {
     this.translate.use(lang);
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.cdr.detectChanges();
+  }
 
   @HostListener('window:scroll', [])
   onWindowScroll() {

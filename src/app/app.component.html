@@ -1,2 +1,10 @@
-<app-navbar></app-navbar>
-<router-outlet></router-outlet>
+<!-- A splash screen é mostrada por padrão -->
+<app-splash-screen
+  (animationFinished)="onSplashAnimationFinished()"
+></app-splash-screen>
+
+<!-- O conteúdo principal só é renderizado quando 'showMainContent' for true -->
+<main *ngIf="showMainContent">
+  <app-navbar></app-navbar>
+  <router-outlet></router-outlet>
+</main>

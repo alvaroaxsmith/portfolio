@@ -5,24 +5,40 @@ import { Subscription } from 'rxjs'; // Adicionar Subscription
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
-export class AppComponent implements OnInit, OnDestroy { // Implementar OnInit e OnDestroy
+export class AppComponent implements OnInit, OnDestroy {
+  // Implementar OnInit e OnDestroy
   title = 'portfolio';
+  // Controla a visibilidade do conteúdo principal. Começa como 'false'.
+  showMainContent = false;
   private langChangeSubscription: Subscription | undefined; // Para gerenciar a inscrição
 
   constructor(private translate: TranslateService) {
     this.initializeAppLanguage();
   }
 
+  /**
+   * Este método é chamado quando o evento (animationFinished)
+   * é emitido pelo SplashScreenComponent.
+   */
+  onSplashAnimationFinished() {
+    this.showMainContent = true;
+  }
+
   ngOnInit() {
     // Inscrever-se nas mudanças de idioma
-    this.langChangeSubscription = this.translate.onLangChange.subscribe((event: LangChangeEvent) => {
-      console.log('Evento de mudança de idioma:', event);
-      console.log('Novo idioma ativo:', event.lang);
-      console.log('Traduções para o novo idioma:', event.translations);
-      console.log('Idioma padrão atual (após mudança):', this.translate.defaultLang);
-    });
+    this.langChangeSubscription = this.translate.onLangChange.subscribe(
+      (event: LangChangeEvent) => {
+        console.log('Evento de mudança de idioma:', event);
+        console.log('Novo idioma ativo:', event.lang);
+        console.log('Traduções para o novo idioma:', event.translations);
+        console.log(
+          'Idioma padrão atual (após mudança):',
+          this.translate.defaultLang
+        );
+      }
+    );
   }
 
   initializeAppLanguage() {
@@ -37,7 +53,11 @@ export class AppComponent implements OnInit, OnDestroy { // Implementar OnInit e
     // Opcional: Verifique se o idioma padrão definido está na lista de idiomas suportados.
     // Se não estiver, você pode definir um fallback para o primeiro idioma suportado.
     if (!supportedLangs.includes(langToUse)) {
-      console.warn(`Idioma padrão definido "${langToUse}" não está na lista de idiomas suportados [${supportedLangs.join(', ')}]. Usando o primeiro idioma suportado como fallback.`);
+      console.warn(
+        `Idioma padrão definido "${langToUse}" não está na lista de idiomas suportados [${supportedLangs.join(
+          ', '
+        )}]. Usando o primeiro idioma suportado como fallback.`
+      );
       langToUse = supportedLangs[0] || 'EN'; // Fallback para o primeiro da lista ou 'EN' se a lista estiver vazia
     }
 
