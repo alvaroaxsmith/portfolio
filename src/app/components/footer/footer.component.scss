@@ -8,7 +8,8 @@
   position: fixed;
   bottom: 0;
   width: 100%;
-  height: 60px;
+  min-height: 56px;
+  padding: 8px 0;
   color: hsl(0, 0%, 37%);
 }
 
@@ -28,16 +29,16 @@ a {
   text-align: center;
 }
 
-@media (min-width:2000px) {
+@media (min-width: 2000px) {
   .container {
     font-size: 28px;
-    height: 100px;
+    min-height: 100px;
   }
 }
 
-@media (max-width:400px) {
+@media (max-width: 400px) {
   .container {
     font-size: 12px;
-    padding: 0;
+    padding: 4px 0;
   }
 }

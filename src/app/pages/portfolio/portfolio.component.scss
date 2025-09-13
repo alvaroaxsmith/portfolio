@@ -20,7 +20,7 @@ h1 {
 
   .filter-group {
     mat-form-field {
-      width: 200px;
+      width: min(280px, 46vw);
     }
   }
 }
@@ -71,7 +71,9 @@ a {
   text-decoration: none;
   color: #000;
   margin: auto;
-  width: min-content;
+  /* Allow links to wrap naturally on small screens */
+  width: auto;
+  max-width: 100%;
 }
 
 .project-card {
@@ -130,6 +132,9 @@ a {
 .portfolio-cards-area {
   display: flex;
   padding: 0 1rem;
+  // Center the content and avoid overly wide lines on large screens
+  max-width: 1400px;
+  margin: 0 auto;
 
   &.list-view {
     flex-direction: column;
@@ -143,25 +148,15 @@ a {
   }
 
   &.grid-view {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 0.3rem;
+    // Use CSS Grid for fluid, even distribution
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: clamp(0.75rem, 1.5vw, 1rem);
+    align-items: stretch; // Make rows balanced when content heights differ
 
     .project-wrapper {
-      width: 100%;
-
-      @media (min-width: 600px) {
-        width: calc(50% - (0.3rem / 2));
-      }
-
-      @media (min-width: 960px) {
-        width: calc(33.333% - (0.3rem * 2 / 3));
-      }
-
-      @media (min-width: 1280px) {
-        width: calc(25% - (0.3rem * 3 / 4));
-      }
+      height: 100%;
+      display: flex;
     }
   }
 }
