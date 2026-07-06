@@ -8,8 +8,9 @@ import {
   QueryList,
   AfterViewInit,
   Renderer2,
+  ChangeDetectionStrategy
 } from '@angular/core';
-import { CommonModule } from '@angular/common';
+
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -39,18 +40,17 @@ interface TimelineDefinition {
 }
 
 @Component({
-  selector: 'app-professional-timeline',
-  standalone: true,
-  imports: [
-    CommonModule,
+    selector: 'app-professional-timeline',
+    imports: [
     MatCardModule,
     MatButtonModule,
     MatIconModule,
     TranslateModule,
-    MatTooltipModule,
-  ],
-  templateUrl: './professional-timeline.component.html',
-  styleUrls: ['./professional-timeline.component.scss'],
+    MatTooltipModule
+],
+    templateUrl: './professional-timeline.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrls: ['./professional-timeline.component.scss']
 })
 export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
   // Using ViewChildren to get all mermaid containers in the journey view

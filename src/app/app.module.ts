@@ -15,7 +15,7 @@ import {
   TranslateModule,
   TranslateService,
 } from '@ngx-translate/core';
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClient, provideHttpClient, withInterceptorsFromDi, withXhr } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ProjectsService } from './pages/portfolio/services/projects.service';
 import { DialogComponent } from './pages/courses/dialog/dialog.component';
@@ -24,45 +24,39 @@ import { CoursesModule } from './pages/courses/courses.module';
 import { HomeModule } from './pages/home/home.module';
 import { PortfolioModule } from './pages/portfolio/portfolio.module';
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    Dialog,
-    NavbarComponent,
-    SplashScreenComponent,
-    ContactComponent,
-    DialogComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    MaterialModule,
-    HttpClientModule,
-    MatDialogModule,
-    CoursesModule,
-    HomeModule,
-    PortfolioModule,
-    AboutMeModule,
-    TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: httpTranslateLoader,
-        deps: [HttpClient],
-      },
-    }),
-  ],
-  providers: [
-    ProjectsService,
-    {
-      provide: APP_INITIALIZER,
-      useFactory: appInitializerFactory,
-      deps: [TranslateService],
-      multi: true,
-    },
-  ],
-  bootstrap: [AppComponent],
-})
+@NgModule({ declarations: [
+        AppComponent,
+        Dialog,
+        NavbarComponent,
+        SplashScreenComponent,
+        ContactComponent,
+        DialogComponent,
+    ],
+    bootstrap: [AppComponent], imports: [BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        MaterialModule,
+        MatDialogModule,
+        CoursesModule,
+        HomeModule,
+        PortfolioModule,
+        AboutMeModule,
+        TranslateModule.forRoot({
+            loader: {
+                provide: TranslateLoader,
+                useFactory: httpTranslateLoader,
+                deps: [HttpClient],
+            },
+        })], providers: [
+        ProjectsService,
+        {
+            provide: APP_INITIALIZER,
+            useFactory: appInitializerFactory,
+            deps: [TranslateService],
+            multi: true,
+        },
+        provideHttpClient(withXhr(), withInterceptorsFromDi()),
+    ] })
 export class AppModule {}
 
 export function httpTranslateLoader(http: HttpClient) {

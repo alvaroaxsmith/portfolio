@@ -1,17 +1,16 @@
 <section>
   <h1>{{ 'Welcome to my website' | translate }}</h1>
-  <ng-container *ngIf="isLoadingImage; else imageLoaded">
+  @if (isLoadingImage) {
     <figure class="spinner">
       <mat-spinner diameter="80"></mat-spinner>
     </figure>
-  </ng-container>
-  <ng-template #imageLoaded>
+  } @else {
     <figure>
       <div class="sleeve">
         <img [src]="imageUrl" alt="Alvaro Ferreira" loading="lazy">
       </div>
     </figure>
-  </ng-template>
+  }
   <h2>{{ 'Hi, I’m' | translate }} <span class="highlight">{{ 'Alvaro Ferreira' }}</span></h2>
   <h3><app-text></app-text></h3>
 </section>

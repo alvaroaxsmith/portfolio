@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { CourseService } from '../services/courses.service';
 import { Course } from '../interfaces/courses.interface';
@@ -6,9 +6,11 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { tap } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-dialog',
-  templateUrl: './dialog.component.html',
-  styleUrls: ['./dialog.component.scss']
+    selector: 'app-dialog',
+    templateUrl: './dialog.component.html',
+    styleUrls: ['./dialog.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class DialogComponent implements OnInit {
   safeUrl: SafeResourceUrl | null = null;

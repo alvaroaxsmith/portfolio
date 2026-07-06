@@ -1,11 +1,13 @@
-import { Component, OnInit, OnDestroy } from '@angular/core'; // Adicionar OnInit e OnDestroy
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core'; // Adicionar OnInit e OnDestroy
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core'; // Adicionar LangChangeEvent
 import { Subscription } from 'rxjs'; // Adicionar Subscription
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
   // Implementar OnInit e OnDestroy

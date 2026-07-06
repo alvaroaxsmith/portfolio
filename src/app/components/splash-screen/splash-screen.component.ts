@@ -8,14 +8,17 @@ import {
   ElementRef,
   Renderer2,
   HostBinding,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import { interval, Subscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-splash-screen',
-  templateUrl: './splash-screen.component.html',
-  styleUrls: ['./splash-screen.component.scss'],
+    selector: 'app-splash-screen',
+    templateUrl: './splash-screen.component.html',
+    styleUrls: ['./splash-screen.component.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class SplashScreenComponent implements OnInit, OnDestroy {
   // Evento emitido quando a animação de saída termina

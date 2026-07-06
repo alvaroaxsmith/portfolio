@@ -1,16 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'snack-bar',
-  template: `
+    selector: 'snack-bar',
+    template: `
     <div class="snackbar-container">
       <p>{{ getCourseCertificateMessage() }}</p>
       <button mat-button class="custom-button" (click)="dismissSnackBar()">X</button>
     </div>
   `,
-  styleUrls: ['./snack-bar.scss'],
+    styleUrls: ['./snack-bar.scss'],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class SnackBarComponent {
   constructor(private _snackBar: MatSnackBar, private translate: TranslateService) { }

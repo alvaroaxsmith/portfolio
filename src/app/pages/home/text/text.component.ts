@@ -1,22 +1,24 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-text',
-  templateUrl: './text.component.html',
-  animations: [
-    trigger('trocar-palavras', [
-      state('inicial', style({ opacity: 0, transform: 'translateX(-100px)' })),
-      transition('inicial => mostrar', [
-        animate('1500ms', style({ opacity: 1, transform: 'translateX(0px)' })),
-      ]),
-      transition('mostrar => inicial', [
-        style({ opacity: 0, transform: 'translateX(-100px)' }),
-        animate('1500ms', style({ opacity: 1, transform: 'translateX(0px)' })),
-      ]),
-    ]),
-  ],
+    selector: 'app-text',
+    templateUrl: './text.component.html',
+    animations: [
+        trigger('trocar-palavras', [
+            state('inicial', style({ opacity: 0, transform: 'translateX(-100px)' })),
+            transition('inicial => mostrar', [
+                animate('1500ms', style({ opacity: 1, transform: 'translateX(0px)' })),
+            ]),
+            transition('mostrar => inicial', [
+                style({ opacity: 0, transform: 'translateX(-100px)' }),
+                animate('1500ms', style({ opacity: 1, transform: 'translateX(0px)' })),
+            ]),
+        ]),
+    ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class TextComponent implements OnInit {
   palavras: any = ['Software Engineer', 'Front-end Developer', 'Back-end Developer', 'Full-stack Developer'];

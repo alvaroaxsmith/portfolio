@@ -14,8 +14,8 @@ html,
 body {
   height: 100%;
   --mat-option-selected-state-label-text-color: black; // Alterado para black
-  --mdc-outlined-text-field-focus-outline-color: black; // Alterado para black
-  --mdc-filled-text-field-container-color: transparent;
+  --mat-form-field-outlined-focus-outline-color: black; // Alterado para black
+  --mat-form-field-filled-container-color: transparent;
 
   ::-webkit-scrollbar {
     width: 8px;
@@ -99,7 +99,7 @@ body {
 }
 
 .mat-mdc-progress-spinner {
-  --mdc-circular-progress-active-indicator-color: black;
+  --mat-progress-spinner-active-indicator-color: black;
 }
 
 .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused

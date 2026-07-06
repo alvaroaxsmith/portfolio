@@ -4,7 +4,7 @@
     [routerLinkActiveOptions]="{ exact: true }"
     routerLink="/"
     style="cursor: pointer"
-  >
+    >
     <a routerLink="/" mat-button>HOME</a>
   </li>
   <li routerLinkActive="active" routerLink="/about-me" style="cursor: pointer">
@@ -23,13 +23,14 @@
   <li class="language no-hover">
     <a class="language-form">
       <mat-menu #menu="matMenu">
-        <button
-          mat-menu-item
-          *ngFor="let lang of translate.getLangs()"
-          (click)="translate.use(lang); (menu.closed)"
-        >
-          {{ lang }}
-        </button>
+        @for (lang of translate.getLangs(); track lang) {
+          <button
+            mat-menu-item
+            (click)="translate.use(lang); (menu.closed)"
+            >
+            {{ lang }}
+          </button>
+        }
       </mat-menu>
 
       <button
@@ -37,7 +38,7 @@
         matTooltip="{{ 'TRANSLATE' | translate }}"
         style="background-color: transparent"
         [matMenuTriggerFor]="menu"
-      >
+        >
         <mat-icon>translate</mat-icon>
       </button>
     </a>

@@ -7,13 +7,15 @@
       <mat-select
         (selectionChange)="filterByTech($event.value)"
         [(value)]="selectedTech"
-      >
+        >
         <mat-option [value]="null">{{
           "All Technologies" | translate
         }}</mat-option>
-        <mat-option *ngFor="let tech of availableTechs" [value]="tech">
-          {{ tech }}
-        </mat-option>
+        @for (tech of availableTechs; track tech) {
+          <mat-option [value]="tech">
+            {{ tech }}
+          </mat-option>
+        }
       </mat-select>
     </mat-form-field>
   </div>
@@ -24,7 +26,7 @@
       <mat-select
         (selectionChange)="sortByDate($event.value)"
         [(value)]="currentSortOrder"
-      >
+        >
         <mat-option value="recent">{{ "Most Recent" | translate }}</mat-option>
         <mat-option value="oldest">{{ "Oldest" | translate }}</mat-option>
       </mat-select>
@@ -40,72 +42,76 @@
       (currentView === 'list' ? 'Switch to Grid View' : 'Switch to List View')
         | translate
     "
-  >
+    >
     <mat-icon>{{ currentView === "list" ? "grid_on" : "view_list" }}</mat-icon>
   </button>
 </div>
 
-<ng-container *ngIf="!initialLoading; else stillLoading">
-  <div
-    *ngIf="projects.length > 0 || loadingMore; else noProjects"
-    class="portfolio-cards-area"
+@if (!initialLoading) {
+  @if (projects.length > 0 || loadingMore) {
+    <div
+      class="portfolio-cards-area"
     [ngClass]="{
       'list-view': currentView === 'list',
       'grid-view': currentView === 'grid'
     }"
-  >
-    <div
-      *ngFor="let project of projects | filterNoDescription; let i = index"
-      class="project-wrapper"
-      [@fadeInLeft]="getAnimationParams(i)"
-    >
-      <mat-card class="project-card">
-        <mat-card-title-group>
-          <mat-card-title>{{ project.name | translate }}</mat-card-title>
-          <mat-card-subtitle>{{ project.tech | translate }}</mat-card-subtitle>
-          <mat-card-subtitle class="project-date"
-            >{{ "Last updated" | translate }}:
-            {{ project.date | date : "dd/MM/yyyy" }}</mat-card-subtitle
+      >
+      @for (project of projects | filterNoDescription; track project; let i = $index) {
+        <div
+          class="project-wrapper"
+          [@fadeInLeft]="getAnimationParams(i)"
           >
-          <a
-            mat-raised-button
-            href="{{ project.repo }}"
-            target="_blank"
-            rel="noopener noreferrer"
-            >{{ "Repository" | translate }}</a
-          >
-        </mat-card-title-group>
-        <mat-card-content>
-          <p>{{ project.description | translate }}</p>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
+          <mat-card class="project-card">
+            <mat-card-title-group>
+              <mat-card-title>{{ project.name | translate }}</mat-card-title>
+              <mat-card-subtitle>{{ project.tech | translate }}</mat-card-subtitle>
+              <mat-card-subtitle class="project-date"
+                >{{ "Last updated" | translate }}:
+                {{ project.date | date : "dd/MM/yyyy" }}</mat-card-subtitle
+                >
+                <a
+                  mat-raised-button
+                  href="{{ project.repo }}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >{{ "Repository" | translate }}</a
+                  >
+                </mat-card-title-group>
+                <mat-card-content>
+                  <p>{{ project.description | translate }}</p>
+                </mat-card-content>
+              </mat-card>
+            </div>
+          }
+        </div>
+      } @else {
+        @if (!initialLoading && !loadingMore && projects.length === 0) {
+          <p
+            class="no-projects-message"
+            >
+            {{ "No projects found." | translate }}
+          </p>
+        }
+      }
+      <!-- Elemento gatilho para o IntersectionObserver e spinner de "carregar mais" -->
+      @if (
+        !allProjectsLoaded && !initialLoading && processedProjects.length > 0
+        ) {
+        <div
+          #loadMoreTrigger
+          style="height: 1px"
+        ></div>
+      }
+      @if (loadingMore && !initialLoading) {
+        <div class="load-more-spinner">
+          <mat-spinner diameter="50"></mat-spinner>
+        </div>
+      }
+    } @else {
+      @if (initialLoading) {
+        <div class="initial-spinner">
+          <mat-spinner></mat-spinner>
+        </div>
+      }
+    }
 
-  <!-- Elemento gatilho para o IntersectionObserver e spinner de "carregar mais" -->
-  <div
-    #loadMoreTrigger
-    *ngIf="
-      !allProjectsLoaded && !initialLoading && processedProjects.length > 0
-    "
-    style="height: 1px"
-  ></div>
-  <div *ngIf="loadingMore && !initialLoading" class="load-more-spinner">
-    <mat-spinner diameter="50"></mat-spinner>
-  </div>
-
-  <ng-template #noProjects>
-    <p
-      *ngIf="!initialLoading && !loadingMore && projects.length === 0"
-      class="no-projects-message"
-    >
-      {{ "No projects found." | translate }}
-    </p>
-  </ng-template>
-</ng-container>
-
-<ng-template #stillLoading>
-  <div class="initial-spinner" *ngIf="initialLoading">
-    <mat-spinner></mat-spinner>
-  </div>
-</ng-template>

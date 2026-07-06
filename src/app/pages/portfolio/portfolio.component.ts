@@ -1,25 +1,27 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy } from '@angular/core'; // Importar ChangeDetectorRef, ViewChild, ElementRef, OnDestroy
+import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core'; // Importar ChangeDetectorRef, ViewChild, ElementRef, OnDestroy
 import { trigger, style, transition, animate } from '@angular/animations';
 import { ProjectsService } from './services/projects.service';
 import { Project } from './Project';
 
 @Component({
-  selector: 'app-portfolio',
-  templateUrl: './portfolio.component.html',
-  styleUrls: ['./portfolio.component.scss'],
-  animations: [
-    trigger('fadeInLeft', [
-      transition(':enter', [
-        style({ opacity: 0, transform: 'translateX(-20px)' }),
-        animate('{{ delay }}ms ease-in-out', style({ opacity: 1, transform: 'translateX(0)' })),
-      ], { params: { delay: 0 } }),
-      // A transição :leave pode ser removida se não for mais necessária com o scroll infinito
-      // transition(':leave', [
-      //   style({ opacity: 1, transform: 'translateX(0)' }),
-      //   animate('{{ delay }}ms ease-in-out', style({ opacity: 0, transform: 'translateX(20px)' })),
-      // ], { params: { delay: 0 } }),
-    ]),
-  ],
+    selector: 'app-portfolio',
+    templateUrl: './portfolio.component.html',
+    styleUrls: ['./portfolio.component.scss'],
+    animations: [
+        trigger('fadeInLeft', [
+            transition(':enter', [
+                style({ opacity: 0, transform: 'translateX(-20px)' }),
+                animate('{{ delay }}ms ease-in-out', style({ opacity: 1, transform: 'translateX(0)' })),
+            ], { params: { delay: 0 } }),
+            // A transição :leave pode ser removida se não for mais necessária com o scroll infinito
+            // transition(':leave', [
+            //   style({ opacity: 1, transform: 'translateX(0)' }),
+            //   animate('{{ delay }}ms ease-in-out', style({ opacity: 0, transform: 'translateX(20px)' })),
+            // ], { params: { delay: 0 } }),
+        ]),
+    ],
+    changeDetection: ChangeDetectionStrategy.Eager,
+    standalone: false
 })
 export class PortfolioComponent implements OnInit, OnDestroy {
   allProjects: Project[] = [];

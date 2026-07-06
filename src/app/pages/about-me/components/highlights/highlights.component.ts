@@ -1,6 +1,6 @@
 // filepath: src/app/pages/about-me/components/highlights/highlights.component.ts
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
+
 import { TranslateModule } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,17 +13,16 @@ interface Highlight {
 }
 
 @Component({
-  selector: 'app-highlights',
-  standalone: true,
-  imports: [
-    CommonModule,
+    selector: 'app-highlights',
+    imports: [
     TranslateModule,
     MatCardModule,
     MatButtonModule,
     MatIconModule
-  ],
-  templateUrl: './highlights.component.html',
-  styleUrls: ['./highlights.component.scss']
+],
+    templateUrl: './highlights.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
+    styleUrls: ['./highlights.component.scss']
 })
 export class HighlightsComponent {
   highlights: Highlight[] = [
