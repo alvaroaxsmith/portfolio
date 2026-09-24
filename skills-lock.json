@@ -6,6 +6,12 @@
       "sourceType": "github",
       "skillPath": "skills/productivity/grill-me/SKILL.md",
       "computedHash": "f321507f77702a54af1db66549ec1685fc625390d06c57d7949cdcda8eb1b5c7"
+    },
+    "resume-writing": {
+      "source": "resumx/skills",
+      "sourceType": "github",
+      "skillPath": "skills/resume-writing/SKILL.md",
+      "computedHash": "f577e70d05869e9f9643b19139eafc254fd0ddfa43d7453efe9cf61e5cca239d"
     }
   }
 }

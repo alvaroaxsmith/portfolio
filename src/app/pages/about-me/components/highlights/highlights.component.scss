@@ -1,202 +1,201 @@
 :host {
-  display: block;
-  width: 100%;
-  font-family: 'Roboto', sans-serif;
+    display: block;
+    width: 100%;
 }
+
+.section-heading {
+    display: grid;
+    gap: 0.75rem;
+    max-width: 52rem;
+    margin-bottom: 1rem;
+}
+
+.eyebrow {
+    width: fit-content;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    color: var(--color-text-muted);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.section-copy {
+    max-width: 58ch;
+    color: var(--color-text-muted);
+    font-size: 0.98rem;
+}
+
 
 /* O container da linha do tempo */
+
 .timeline {
-  position: relative;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px 0;
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0.5rem 0;
 }
+
 
 /* A linha central da timeline */
+
 .timeline::after {
-  content: '';
-  position: absolute;
-  width: 4px;
-  background-color: #e0e0e0;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  margin-left: -2px;
+    content: '';
+    position: absolute;
+    width: 2px;
+    background: linear-gradient(180deg, rgba(148, 163, 184, 0.45), rgba(15, 23, 42, 0.2));
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -2px;
 }
+
 
 /* Container para cada item da timeline */
+
 .timeline-item {
-  padding: 10px 40px;
-  position: relative;
-  background-color: inherit;
-  width: 50%;
-  box-sizing: border-box;
+    padding: 10px 40px;
+    position: relative;
+    background-color: inherit;
+    width: 50%;
+    box-sizing: border-box;
 }
+
 
 /* O círculo na linha do tempo */
+
 .timeline-item::after {
-  content: '';
-  position: absolute;
-  width: 20px;
-  height: 20px;
-  right: -12px;
-  background-color: white;
-  border: 4px solid #616161;
-  /* Cor de destaque do Angular Material */
-  top: 25px;
-  border-radius: 50%;
-  z-index: 1;
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    right: -12px;
+    background-color: #fff;
+    border: 2px solid var(--color-accent);
+    top: 25px;
+    border-radius: 50%;
+    z-index: 1;
 }
+
 
 /* Itens à esquerda */
+
 .timeline-item:nth-child(odd) {
-  left: 0;
-  padding-right: 30px;
+    left: 0;
+    padding-right: 30px;
 }
+
 
 /* Itens à direita */
+
 .timeline-item:nth-child(even) {
-  left: 50%;
-  padding-left: 30px;
+    left: 50%;
+    padding-left: 30px;
 }
+
 
 /* A seta (galho) para os itens da esquerda */
+
 .timeline-item:nth-child(odd)::before {
-  content: " ";
-  height: 0;
-  position: absolute;
-  top: 30px;
-  width: 0;
-  z-index: 1;
-  right: 20px;
-  border: medium solid white;
-  border-width: 10px 0 10px 10px;
-  border-color: transparent transparent transparent #f5f5f5;
+    content: " ";
+    height: 0;
+    position: absolute;
+    top: 30px;
+    width: 0;
+    z-index: 1;
+    right: 20px;
+    border: medium solid transparent;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent rgba(255, 255, 255, 0.72);
 }
+
 
 /* A seta (galho) para os itens da direita */
+
 .timeline-item:nth-child(even)::before {
-  content: " ";
-  height: 0;
-  position: absolute;
-  top: 30px;
-  width: 0;
-  z-index: 1;
-  left: 20px;
-  border: medium solid white;
-  border-width: 10px 10px 10px 0;
-  border-color: transparent #f5f5f5 transparent transparent;
+    content: " ";
+    height: 0;
+    position: absolute;
+    top: 30px;
+    width: 0;
+    z-index: 1;
+    left: 20px;
+    border: medium solid transparent;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent rgba(255, 255, 255, 0.72) transparent transparent;
 }
+
 
 /* Ajusta o círculo para os itens da direita */
+
 .timeline-item:nth-child(even)::after {
-  left: -10px;
+    left: -10px;
 }
+
 
 /* O card de conteúdo */
+
 .timeline-content {
-  padding: 15px 20px;
-  background-color: #f5f5f5;
-  position: relative;
-  border-radius: 6px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-
-  h4 {
-    margin-top: 0;
-    font-weight: 600;
-  }
-
-  p {
-    margin-bottom: 0;
-  }
+    padding: 1rem 1.1rem;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid var(--color-border);
+    position: relative;
+    border-radius: 1rem;
+    box-shadow: var(--color-shadow);
+    h4 {
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        color: var(--color-text);
+        font-family: var(--font-sans);
+        font-size: 0.98rem;
+        font-weight: 700;
+        span {
+            color: var(--color-text-muted);
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 500;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+    }
+    p {
+        margin-bottom: 0;
+        color: var(--color-text-muted);
+        line-height: 1.65;
+    }
 }
+
 
 /* Media queries - Layout responsivo para telas menores */
+
 @media screen and (max-width: 768px) {
-
-  /* Move a linha para a esquerda */
-  .timeline::after {
-    left: 25px;
-  }
-
-  /* Todos os itens ficam à direita da linha */
-  .timeline-item {
-    width: 100%;
-    padding-left: 60px;
-    padding-right: 15px;
-  }
-
-  .timeline-item:nth-child(odd),
-  .timeline-item:nth-child(even) {
-    left: 0;
-  }
-
-  /* Todas as setas apontam para a esquerda */
-  .timeline-item::before {
-    left: 50px;
-    border: medium solid white;
-    border-width: 10px 10px 10px 0;
-    border-color: transparent white transparent transparent;
-  }
-
-  /* Posiciona os círculos na linha */
-  .timeline-item::after {
-    left: 15px;
-  }
-}
-
-.highlights-container {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.carousel-content {
-  flex-grow: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 150px;
-}
-
-.highlight-card {
-  width: 100%;
-  max-width: 500px;
-  margin: 0 auto;
-  text-align: center;
-}
-
-.nav-arrow {
-  flex-shrink: 0;
-}
-
-.dots-container {
-  text-align: center;
-  margin-top: 1rem;
-}
-
-.dot {
-  cursor: pointer;
-  height: 12px;
-  width: 12px;
-  margin: 0 4px;
-  background-color: #bbb;
-  border-radius: 50%;
-  display: inline-block;
-  transition: background-color 0.6s ease;
-}
-
-.dot.active {
-  background-color: #717171;
-}
-
-ul {
-  list-style-type: circle;
-  padding-left: 1.5rem;
-  margin: 0;
-}
-
-ul li {
-  margin-bottom: 0.5rem;
+    /* Move a linha para a esquerda */
+    .timeline::after {
+        left: 25px;
+    }
+    /* Todos os itens ficam à direita da linha */
+    .timeline-item {
+        width: 100%;
+        padding-left: 60px;
+        padding-right: 15px;
+    }
+    .timeline-item:nth-child(odd),
+    .timeline-item:nth-child(even) {
+        left: 0;
+    }
+    /* Todas as setas apontam para a esquerda */
+    .timeline-item::before {
+        left: 50px;
+        border: medium solid transparent;
+        border-width: 10px 10px 10px 0;
+        border-color: transparent rgba(255, 255, 255, 0.72) transparent transparent;
+    }
+    /* Posiciona os círculos na linha */
+    .timeline-item::after {
+        left: 15px;
+    }
 }

@@ -42,6 +42,10 @@ export class CoursesComponent implements AfterViewInit {
   dataSource: MatTableDataSource<Course> = new MatTableDataSource();
   isLoading: boolean = true;
 
+  get visibleCourses(): Course[] {
+    return this.dataSource.filter ? this.dataSource.filteredData : this.dataSource.data;
+  }
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort)
   sort: MatSort = new MatSort();

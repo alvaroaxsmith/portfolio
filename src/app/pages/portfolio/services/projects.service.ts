@@ -1,50 +1,80 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, map } from 'rxjs';
+import { Observable, map, of, tap } from 'rxjs';
 import { Project } from '../Project';
+
+interface GithubRepo {
+  id: number;
+  name: string;
+  language: string | null;
+  description: string | null;
+  html_url: string;
+  pushed_at: string;
+  topics?: string[];
+}
+
+interface CachedProjects {
+  savedAt: number;
+  projects: Project[];
+}
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProjectsService {
-  // Fetch up to 100 repos. We still request sorted by "updated" descending, but
-  // we'll enforce a local sort afterwards to guarantee consistency if the API
-  // response order changes or pagination introduces anomalies.
-  private apiUrl =
-    'https://api.github.com/users/alvaroaxsmith/repos?per_page=100&sort=updated&direction=desc&type=owner';
+  private readonly apiUrl =
+    'https://api.github.com/users/alvaroaxsmith/repos?per_page=100&type=owner&sort=pushed';
+  // Only repositories tagged with this topic on GitHub are shown on the page
+  private readonly portfolioTopic = 'portfolio-project';
+  private readonly cacheKey = 'portfolio:github-projects';
+  // Unauthenticated GitHub API allows 60 requests/hour per IP, so responses are reused for an hour
+  private readonly cacheTtlMs = 60 * 60 * 1000;
 
-  constructor(private http: HttpClient) {}
+  constructor(private readonly http: HttpClient) {}
 
   getProjects(): Observable<Project[]> {
-    return this.http.get<any[]>(this.apiUrl).pipe(
-      map((repos) => {
-        const mapped = repos.map((repo) => {
-          return {
+    const cached = this.readCache();
+    if (cached) {
+      return of(cached);
+    }
+
+    return this.http.get<GithubRepo[]>(this.apiUrl).pipe(
+      map((repos) =>
+        repos
+          .filter((repo) => repo.topics?.includes(this.portfolioTopic))
+          .map((repo) => ({
             id: repo.id,
             name: repo.name,
-            // Placeholder de tecnologia permanece 'N/A' para que o pipe existente possa
-            // decidir ocultar, mas garantimos string sem espaços.
-            tech:
-              repo.language && repo.language.trim()
-                ? repo.language.trim()
-                : 'N/A',
-            description: repo.description || 'No description',
+            tech: repo.language?.trim() ?? '',
+            description: repo.description?.trim() ?? '',
             repo: repo.html_url,
             pushed_at: repo.pushed_at,
-            date: repo.pushed_at, // Campo usado para ordenação no componente
-          } as Project;
-        });
-
-        // Ordenação defensiva local (mais recentes primeiro) usando pushed_at / date
-        return mapped.sort((a, b) => {
-          const timeA = new Date(a.pushed_at).getTime();
-          const timeB = new Date(b.pushed_at).getTime();
-          if (isNaN(timeA) && isNaN(timeB)) return 0;
-          if (isNaN(timeA)) return 1; // itens sem data vão para o fim
-          if (isNaN(timeB)) return -1;
-          return timeB - timeA; // descendente
-        });
-      })
+            date: repo.pushed_at,
+          }))
+      ),
+      tap((projects) => this.writeCache(projects))
     );
+  }
+
+  private readCache(): Project[] | null {
+    try {
+      const raw = localStorage.getItem(this.cacheKey);
+      if (!raw) {
+        return null;
+      }
+      const cached: CachedProjects = JSON.parse(raw);
+      return Date.now() - cached.savedAt < this.cacheTtlMs ? cached.projects : null;
+    } catch {
+      return null;
+    }
+  }
+
+  private writeCache(projects: Project[]): void {
+    try {
+      const entry: CachedProjects = { savedAt: Date.now(), projects };
+      localStorage.setItem(this.cacheKey, JSON.stringify(entry));
+    } catch {
+      // Storage may be unavailable (private mode, quota); the page still works without cache
+    }
   }
 }

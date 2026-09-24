@@ -1,19 +1,45 @@
-<h1>{{'Reach out to me!' | translate }}</h1>
-<small>{{'Send me a message' | translate }}</small>
-<section>
+<section class="contact-page">
+    <header>
+        <p class="eyebrow">{{ 'CONTACT' | translate }}</p>
+        <h1>{{ 'contact.title' | translate }}</h1>
+        <p>{{ 'contact.description' | translate }}</p>
+    </header>
 
-  <div class="icons">
-    <div class="contact">
-      <fa-icon [icon]="faGithub" alt="Github"></fa-icon><a href="https://github.com/alvaroaxsmith"
-        target="_blank">Github</a>
+    <div class="contact-list" role="list">
+        <a class="contact-card" role="listitem" href="tel:+5511951013956">
+            <fa-icon [icon]="faPhone" aria-hidden="true"></fa-icon>
+            <div>
+                <strong>{{ 'contact.labels.phone' | translate }}</strong>
+                <span>{{ 'contact.phone' | translate }}</span>
+            </div>
+        </a>
+        <a class="contact-card" role="listitem" href="mailto:alvaromachadoferreira@hotmail.com">
+            <fa-icon [icon]="faEnvelope" aria-hidden="true"></fa-icon>
+            <div>
+                <strong>{{ 'contact.labels.email' | translate }}</strong>
+                <span>alvaromachadoferreira@hotmail.com</span>
+            </div>
+        </a>
+        <div class="contact-card" role="listitem" aria-label="Localização">
+            <fa-icon [icon]="faLocation" aria-hidden="true"></fa-icon>
+            <div>
+                <strong>{{ 'contact.labels.location' | translate }}</strong>
+                <span>{{ 'contact.location' | translate }}</span>
+            </div>
+        </div>
+        <a class="contact-card" role="listitem" href="https://github.com/alvaroaxsmith" target="_blank" rel="noopener noreferrer">
+            <fa-icon [icon]="faGithub" aria-hidden="true"></fa-icon>
+            <div>
+                <strong>{{ 'contact.labels.github' | translate }}</strong>
+                <span>{{ 'contact.github' | translate }}</span>
+            </div>
+        </a>
+        <a class="contact-card" role="listitem" href="https://www.linkedin.com/in/alvaromachadoferreira/" target="_blank" rel="noopener noreferrer">
+            <fa-icon [icon]="faLinkedin" aria-hidden="true"></fa-icon>
+            <div>
+                <strong>{{ 'contact.labels.linkedin' | translate }}</strong>
+                <span>{{ 'contact.linkedin' | translate }}</span>
+            </div>
+        </a>
     </div>
-    <div class="contact">
-      <fa-icon [icon]="faLinkedin" alt="Linkedin"></fa-icon><a href="https://www.linkedin.com/in/alvaromachadoferreira/"
-        target="_blank">Linkedin</a>
-    </div>
-    <div class="contact">
-      <fa-icon [icon]="faEnvelope" alt="Gmail"></fa-icon><a href="mailto:machadoferreiraalvaro@gmail.com"
-        target="_blank">Gmail</a>
-    </div>
-  </div>
 </section>

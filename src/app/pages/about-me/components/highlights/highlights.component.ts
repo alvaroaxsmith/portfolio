@@ -26,10 +26,11 @@ interface Highlight {
 })
 export class HighlightsComponent {
   highlights: Highlight[] = [
+    { date: '2014 to', dateRange: '2018', description: 'UNESP - Energy Engineering (incomplete)' },
     { date: 'August 2018 to', dateRange: 'June 2023', description: 'Univesp Oficial - Bachelor\'s degree, Production Engineering' },
+    { date: 'April 2019 to', dateRange: 'April 2021', description: 'Internship at Metro de São Paulo' },
     { date: 'July 2021 to', dateRange: 'October 2021', description: 'Bootcamp at Gama Academy' },
     { date: 'January 2022 to', dateRange: 'June 2022', description: 'Bootcamp at SoulCode Academy' },
-    { date: 'February 2023 to', dateRange: 'December 2026', description: 'Universidade São Judas Tadeu - Bachelor\'s degree, Computer Science' },
     { date: 'March 2024 to', dateRange: 'December 2024', description: 'Instituto Federal do Sul de Minas Gerais - Postgraduate, Web Development' },
     { date: 'May 2025 to', dateRange: 'May 2027', description: 'Universidade Federal do ABC (UFABC) - Postgraduate, Information Technologies and Systems' }
   ];

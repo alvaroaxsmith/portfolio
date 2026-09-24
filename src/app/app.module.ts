@@ -19,10 +19,6 @@ import { HttpClient, provideHttpClient, withInterceptorsFromDi, withXhr } from '
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ProjectsService } from './pages/portfolio/services/projects.service';
 import { DialogComponent } from './pages/courses/dialog/dialog.component';
-import { AboutMeModule } from './pages/about-me/about-me.module';
-import { CoursesModule } from './pages/courses/courses.module';
-import { HomeModule } from './pages/home/home.module';
-import { PortfolioModule } from './pages/portfolio/portfolio.module';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -37,10 +33,6 @@ import { PortfolioModule } from './pages/portfolio/portfolio.module';
         BrowserAnimationsModule,
         MaterialModule,
         MatDialogModule,
-        CoursesModule,
-        HomeModule,
-        PortfolioModule,
-        AboutMeModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -67,13 +59,12 @@ export function appInitializerFactory(translate: TranslateService) {
   return () => {
     const supportedLangs = ['EN', 'PT-BR'];
     translate.addLangs(supportedLangs);
-    const defaultAppLanguage = 'EN';
+    const defaultAppLanguage = 'PT-BR';
     let langToUse = defaultAppLanguage;
     if (!supportedLangs.includes(langToUse)) {
-      langToUse = supportedLangs[0] || 'EN';
+      langToUse = supportedLangs[0] || 'PT-BR';
     }
     translate.setDefaultLang(langToUse);
-    // Carrega as traduções sem delay adicional - vai executar em paralelo com a splash screen
     return translate.use(langToUse).toPromise();
   };
 }

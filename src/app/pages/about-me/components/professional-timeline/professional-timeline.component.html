@@ -1,61 +1,48 @@
 <!-- Container principal que organiza o cabeçalho e as visualizações -->
 <div class="professional-experience-container">
-  <!-- Cabeçalho da Linha do Tempo (compartilhado entre as visualizações) -->
-  <div class="timeline-background">
-    <div class="timeline-line"></div>
-    <div class="timeline-icons">
-      <!-- O clique no ícone muda de função dependendo da visualização atual -->
-      @for (exp of experiencias; track exp; let i = $index) {
-        <div
-          class="icon-wrapper"
-          [class.active]="!isJourneyVisible && i === currentIndex"
-        [class.selected-for-journey]="
-          isJourneyVisible && i === journeyCurrentIndex
-        "
-          (click)="isJourneyVisible ? handleIconClickInJourneyView(exp) : goTo(i)"
-          [matTooltip]="exp.empresa"
-          >
-          <div class="timeline-icon">
-            {{ i + 1 }}
-          </div>
-        </div>
-      }
+    <div class="section-heading">
+        <p class="eyebrow">{{ "timeline.eyebrow" | translate }}</p>
+        <p class="section-copy">{{ "timeline.intro" | translate }}</p>
     </div>
-  </div>
 
-  <!-- Container que gerencia a transição entre a visualização do carrossel e da jornada -->
-  <div class="views-container" [class.journey-view-active]="isJourneyVisible">
-    <!-- Seção do Carrossel de Experiências -->
-    <div class="timeline-carousel-section">
-      <div class="carousel-wrapper">
-        <div
-          class="carousel-track"
-          [style.transform]="'translateX(-' + currentIndex * 100 + '%)'"
-          >
-          @for (experiencia of experiencias; track experiencia) {
-            <div class="carousel-item">
-              <!-- Card de Experiência Individual -->
-              <mat-card
-                class="timeline-content"
-                (click)="selecionarExperiencia(experiencia)"
-                >
-                <mat-card-header>
-                  <mat-card-title>{{
-                    experiencia.cargo | translate
-                  }}</mat-card-title>
-                  <mat-card-subtitle
-                    >{{ experiencia.empresa | translate }} |
-                    {{ experiencia.periodo | translate }}
-                    @if (experiencia.duracao) {
-                      <span
-                        >({{ experiencia.duracao | translate }})</span
+    <!-- Cabeçalho da Linha do Tempo (compartilhado entre as visualizações) -->
+    <div class="timeline-background">
+        <div class="timeline-line"></div>
+        <div class="timeline-icons">
+            <!-- O clique no ícone muda de função dependendo da visualização atual -->
+            @for (exp of experiencias; track exp; let i = $index) {
+            <button type="button" class="icon-wrapper" [class.active]="!isJourneyVisible && i === currentIndex" [class.selected-for-journey]="
+          isJourneyVisible && i === journeyCurrentIndex
+          " (click)="isJourneyVisible ? handleIconClickInJourneyView(exp) : goTo(i)" [matTooltip]="exp.tooltip || exp.empresa">
+                <div class="timeline-icon">
+                    {{ i + 1 }}
+                </div>
+            </button> }
+        </div>
+    </div>
+
+    <!-- Container que gerencia a transição entre a visualização do carrossel e da jornada -->
+    <div class="views-container" [class.journey-view-active]="isJourneyVisible">
+        <!-- Seção do Carrossel de Experiências -->
+        <div class="timeline-carousel-section">
+            <div class="carousel-wrapper">
+                <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+                    @for (experiencia of experiencias; track experiencia) {
+                    <div class="carousel-item">
+                        <!-- Card de Experiência Individual -->
+                        <mat-card class="timeline-content" (click)="selecionarExperiencia(experiencia)" (keydown)="handleActionKey($event, () => selecionarExperiencia(experiencia))" tabindex="0">
+                            <mat-card-header>
+                                <mat-card-title>{{ experiencia.cargo | translate }}
+                                </mat-card-title>
+                                <mat-card-subtitle>{{ experiencia.empresa | translate }} | {{ experiencia.periodo | translate }} @if (experiencia.duracao) {
+                                    <span>({{ experiencia.duracao | translate }})</span
                         >
                         }</mat-card-subtitle
                         >
                       </mat-card-header>
                       <mat-card-content #cardContent>
                         <p>{{ experiencia.descricao | translate }}</p>
-                        <strong>{{ "Main Activities" | translate }}:</strong>
+                        <strong class="content-label">{{ "Main Activities" | translate }}</strong>
                         <ul>
                           @for (atividade of experiencia.atividades; track atividade) {
                             <li>
@@ -63,7 +50,7 @@
                             </li>
                           }
                         </ul>
-                        <strong>{{ "timeline.technologies" | translate }}:</strong>
+                        <strong class="content-label">{{ "timeline.technologies" | translate }}</strong>
                         <div class="tech-list">
                           @for (tech of experiencia.tecnologias; track tech) {
                             <span
@@ -72,7 +59,7 @@
                               >
                             }
                           </div>
-                          <strong>{{ "timeline.skills" | translate }}:</strong>
+                          <strong class="content-label">{{ "timeline.skills" | translate }}</strong>
                           <div class="tech-list">
                             @for (comp of experiencia.competencias; track comp) {
                               <span
@@ -104,6 +91,8 @@
                         <mat-card
                           class="mermaid-journey-card"
                           (click)="voltarParaTimeline()"
+                          (keydown)="handleActionKey($event, () => voltarParaTimeline())"
+                          tabindex="0"
                           >
                           <!-- O container do diagrama. #mermaidJourneyContainer é usado para renderizar o SVG -->
                           <div

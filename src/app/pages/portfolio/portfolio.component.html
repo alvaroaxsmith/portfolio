@@ -1,117 +1,90 @@
-<h1>{{ "Independent Projects and Studies" | translate }}</h1>
+<section class="portfolio-page">
+    <header class="page-header">
+        <p class="eyebrow">{{ "PROJECTS" | translate }}</p>
+        <h1>{{ "portfolio.title" | translate }}</h1>
+        <p class="page-intro">{{ "portfolio.intro" | translate }}</p>
+    </header>
 
-<div class="filters-toolbar">
-  <div class="filter-group">
-    <mat-form-field appearance="fill">
-      <mat-label>{{ "Filter by Technology" | translate }}</mat-label>
-      <mat-select
-        (selectionChange)="filterByTech($event.value)"
-        [(value)]="selectedTech"
-        >
-        <mat-option [value]="null">{{
-          "All Technologies" | translate
-        }}</mat-option>
-        @for (tech of availableTechs; track tech) {
-          <mat-option [value]="tech">
-            {{ tech }}
-          </mat-option>
-        }
-      </mat-select>
-    </mat-form-field>
-  </div>
+    <div class="filters-toolbar">
+        <div class="filter-group">
+            <mat-form-field appearance="fill">
+                <mat-label>{{ "Filter by Technology" | translate }}</mat-label>
+                <mat-select (selectionChange)="filterByTech($event.value)" [(value)]="selectedTech">
+                    <mat-option [value]="null">{{ "All Technologies" | translate }}</mat-option>
+                    @for (tech of availableTechs; track tech) {
+                    <mat-option [value]="tech">
+                        {{ tech }}
+                    </mat-option>
+                    }
+                </mat-select>
+            </mat-form-field>
+        </div>
 
-  <div class="filter-group">
-    <mat-form-field appearance="fill">
-      <mat-label>{{ "Sort by Date" | translate }}</mat-label>
-      <mat-select
-        (selectionChange)="sortByDate($event.value)"
-        [(value)]="currentSortOrder"
-        >
-        <mat-option value="recent">{{ "Most Recent" | translate }}</mat-option>
-        <mat-option value="oldest">{{ "Oldest" | translate }}</mat-option>
-      </mat-select>
-    </mat-form-field>
-  </div>
-</div>
+        <div class="filter-group">
+            <mat-form-field appearance="fill">
+                <mat-label>{{ "Sort by Date" | translate }}</mat-label>
+                <mat-select (selectionChange)="sortByDate($event.value)" [(value)]="currentSortOrder">
+                    <mat-option value="recent">{{ "Most Recent" | translate }}</mat-option>
+                    <mat-option value="oldest">{{ "Oldest" | translate }}</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+    </div>
 
-<div class="view-controls">
-  <button
-    mat-icon-button
-    (click)="toggleView()"
-    [matTooltip]="
-      (currentView === 'list' ? 'Switch to Grid View' : 'Switch to List View')
-        | translate
-    "
-    >
-    <mat-icon>{{ currentView === "list" ? "grid_on" : "view_list" }}</mat-icon>
-  </button>
-</div>
+    <div class="view-controls">
+        <button mat-icon-button type="button" (click)="toggleView()" [matTooltip]="
+        (currentView === 'list' ? 'Switch to Grid View' : 'Switch to List View')
+          | translate
+      ">
+      <mat-icon>{{ currentView === "list" ? "grid_on" : "view_list" }}</mat-icon>
+    </button>
+    </div>
 
-@if (!initialLoading) {
-  @if (projects.length > 0 || loadingMore) {
-    <div
-      class="portfolio-cards-area"
-    [ngClass]="{
-      'list-view': currentView === 'list',
-      'grid-view': currentView === 'grid'
-    }"
-      >
-      @for (project of projects | filterNoDescription; track project; let i = $index) {
-        <div
-          class="project-wrapper"
-          [@fadeInLeft]="getAnimationParams(i)"
-          >
-          <mat-card class="project-card">
-            <mat-card-title-group>
-              <mat-card-title>{{ project.name | translate }}</mat-card-title>
-              <mat-card-subtitle>{{ project.tech | translate }}</mat-card-subtitle>
-              <mat-card-subtitle class="project-date"
-                >{{ "Last updated" | translate }}:
-                {{ project.date | date : "dd/MM/yyyy" }}</mat-card-subtitle
-                >
-                <a
-                  mat-raised-button
-                  href="{{ project.repo }}"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  >{{ "Repository" | translate }}</a
-                  >
+    @if (!initialLoading) { @if (projects.length > 0 || loadingMore) {
+    <div class="portfolio-cards-area" [ngClass]="{
+          'list-view': currentView === 'list',
+          'grid-view': currentView === 'grid'
+        }">
+        @for (project of projects; track project.id; let i = $index) {
+        <article class="project-wrapper" [@fadeInLeft]="getAnimationParams(i)">
+            <mat-card class="project-card">
+                <mat-card-title-group>
+                    <mat-card-title>{{ project.name }}</mat-card-title>
+                    @if (project.tech) {
+                    <mat-card-subtitle class="project-tech">{{ project.tech }}</mat-card-subtitle>
+                    }
+                    <mat-card-subtitle class="project-date">
+                        {{ "Last updated" | translate }}: {{ project.date | date : "dd/MM/yyyy" }}
+                    </mat-card-subtitle>
+                    <a mat-stroked-button href="{{ project.repo }}" target="_blank" rel="noopener noreferrer">{{ "Repository" | translate }}</a>
                 </mat-card-title-group>
+                @if (descriptionFor(project); as description) {
                 <mat-card-content>
-                  <p>{{ project.description | translate }}</p>
+                    <p>{{ description }}</p>
                 </mat-card-content>
-              </mat-card>
-            </div>
-          }
-        </div>
-      } @else {
-        @if (!initialLoading && !loadingMore && projects.length === 0) {
-          <p
-            class="no-projects-message"
-            >
-            {{ "No projects found." | translate }}
-          </p>
+                }
+            </mat-card>
+        </article>
         }
-      }
-      <!-- Elemento gatilho para o IntersectionObserver e spinner de "carregar mais" -->
-      @if (
-        !allProjectsLoaded && !initialLoading && processedProjects.length > 0
-        ) {
-        <div
-          #loadMoreTrigger
-          style="height: 1px"
-        ></div>
-      }
-      @if (loadingMore && !initialLoading) {
-        <div class="load-more-spinner">
-          <mat-spinner diameter="50"></mat-spinner>
-        </div>
-      }
-    } @else {
-      @if (initialLoading) {
-        <div class="initial-spinner">
-          <mat-spinner></mat-spinner>
-        </div>
-      }
+    </div>
+    } @else { @if (!initialLoading && !loadingMore && projects.length === 0) {
+    <p class="no-projects-message">
+        @if (loadError) {
+        {{ "portfolio.error" | translate }}
+        <a href="https://github.com/alvaroaxsmith" target="_blank" rel="noopener noreferrer">github.com/alvaroaxsmith</a>
+        } @else {
+        {{ "No projects found." | translate }}
+        }
+    </p>
+    } } @if (!allProjectsLoaded && !initialLoading && processedProjects.length > 0) {
+    <div #loadMoreTrigger style="height: 1px"></div>
+    } @if (loadingMore && !initialLoading) {
+    <div class="load-more-spinner">
+        <mat-spinner diameter="50"></mat-spinner>
+    </div>
+    } } @else {
+    <div class="initial-spinner">
+        <mat-spinner></mat-spinner>
+    </div>
     }
-
+</section>

@@ -2,7 +2,6 @@ import {
   Component,
   OnInit,
   ChangeDetectorRef,
-  ViewChild,
   ElementRef,
   ViewChildren,
   QueryList,
@@ -23,6 +22,7 @@ export interface Experiencia {
   id: number;
   cargo: string;
   empresa: string;
+  tooltip?: string;
   periodo: string;
   duracao?: string;
   local: string;
@@ -63,8 +63,27 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
 
   experiencias: Experiencia[] = [
     {
-      id: 5,
-      cargo: 'Desenvolvedor back end',
+      id: 1,
+      cargo: 'Estagiário em Engenharia de Produção',
+      empresa: 'Metrô de São Paulo',
+      periodo: 'abr de 2019 - abr de 2021',
+      duracao: '2 anos e 1 mês',
+      local: 'São Paulo, Brasil',
+      remoto: false,
+      descricao: 'timeline.metro.description',
+      atividades: ['timeline.metro.activity1', 'timeline.metro.activity2'],
+      tecnologias: [
+        'Power BI',
+        'Excel',
+        'SAP ERP',
+        'Análise de Dados',
+        'Cronoanálise',
+      ],
+      competencias: ['Análise de Processos', 'Dados Operacionais', 'Melhoria Contínua'],
+    },
+    {
+      id: 2,
+      cargo: 'Desenvolvedor Back-end',
       empresa: 'Gama Academy',
       periodo: 'ago de 2022 - set de 2022',
       duracao: '2 meses',
@@ -73,24 +92,24 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
       descricao: 'timeline.gama.description',
       atividades: ['timeline.gama.activity1', 'timeline.gama.activity2'],
       tecnologias: [
-        'Nestjs',
+        'NestJS',
         'REST',
-        'Typescript',
-        'Postgresql',
-        'Docker-Compose',
+        'TypeScript',
+        'PostgreSQL',
+        'Docker Compose',
         'Swagger',
-        'Typeorm',
-        'Github',
+        'TypeORM',
+        'GitHub',
         'CI/CD',
       ],
-      competencias: ['Conventional Commits', 'Eslint', 'Prettier', 'Gitflow'],
+      competencias: ['Spec Driven Development', 'API Design', 'Clean Code', 'Scrum'],
     },
     {
-      id: 4,
-      cargo: 'Desenvolvedor full stack',
+      id: 3,
+      cargo: 'Desenvolvedor Full Stack',
       empresa: 'V.tal',
       periodo: 'out de 2022 - out de 2023',
-      duracao: '1 ano 1 mês',
+      duracao: '1 ano e 1 mês',
       local: 'São Paulo, São Paulo, Brasil',
       remoto: false,
       descricao: 'timeline.vtal.description',
@@ -98,7 +117,6 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
         'timeline.vtal.activity1',
         'timeline.vtal.activity2',
         'timeline.vtal.activity3',
-        'timeline.vtal.activity4',
       ],
       tecnologias: [
         'Vue2',
@@ -115,8 +133,8 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
       competencias: ['CI/CD', 'TDD', 'Clean Architecture', 'SOLID', 'Jest'],
     },
     {
-      id: 3,
-      cargo: 'Desenvolvedor full stack',
+      id: 4,
+      cargo: 'Desenvolvedor Full Stack',
       empresa: 'Xmart Solutions',
       periodo: 'jan de 2024 - abr de 2024',
       duracao: '4 meses',
@@ -152,8 +170,8 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
       ],
     },
     {
-      id: 2,
-      cargo: 'Desenvolvedor front end',
+      id: 5,
+      cargo: 'Desenvolvedor Front-end',
       empresa: 'Marttech Desenvolvimento de Software',
       periodo: 'mai de 2024 - jun de 2024',
       duracao: '2 meses',
@@ -176,30 +194,57 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
       competencias: ['TDD', 'Clean Architecture', 'Revisão de código'],
     },
     {
-      id: 1,
-      cargo: 'Desenvolvedor full stack',
+      id: 6,
+      cargo: 'Desenvolvedor Full Stack',
       empresa: 'Mutant',
-      periodo: 'jun de 2024 - o momento',
+      periodo: 'jun de 2024 - out de 2025',
+      duracao: '1 ano e 5 meses',
       local: 'São Paulo, São Paulo, Brasil',
       remoto: true,
-      descricao: 'timeline.mutant.description',
-      atividades: ['timeline.mutant.activity1', 'timeline.mutant.activity2'],
+      descricao: 'timeline.mutantFs.description',
+      atividades: ['timeline.mutantFs.activity1', 'timeline.mutantFs.activity2'],
       tecnologias: [
         'Java',
         'Spring Boot',
-        'Node.js com TypeScript',
+        'Node.js',
         'NestJS',
         'React',
-        'Vue2',
-        'Hooks',
-        'Redux',
-        'Context API',
+        'Micro Front-Ends',
+        'BFF',
         'Azure DevOps',
         'Docker',
         'Redis',
         'MongoDB',
       ],
-      competencias: ['TDD', 'Stryker', 'Cypress', 'Jest', 'Clean Code'],
+      competencias: ['TDD', 'Jest', 'Cypress', 'Clean Code', 'Arquitetura de Software'],
+    },
+    {
+      id: 7,
+      cargo: 'Tech Lead Cross',
+      empresa: 'Mutant (Alocado na Telefônica Vivo)',
+      tooltip: 'Mutant',
+      periodo: 'out de 2025 - o momento',
+      local: 'São Paulo, São Paulo, Brasil',
+      remoto: true,
+      descricao: 'timeline.mutantLead.description',
+      atividades: [
+        'timeline.mutantLead.activity1',
+        'timeline.mutantLead.activity2',
+        'timeline.mutantLead.activity3',
+        'timeline.mutantLead.activity4',
+      ],
+      tecnologias: [
+        'Node.js',
+        'React',
+        'Java',
+        'Spring Boot',
+        'Micro Front-Ends',
+        'BFFs',
+        'Agentic AI',
+        'Prompt Engineering',
+        'Azure DevOps',
+      ],
+      competencias: ['Spec Driven Development', 'Arquitetura de Software', 'Boas Práticas', 'Code Review'],
     },
   ];
 
@@ -210,9 +255,9 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
   isJourneyVisible = false;
 
   constructor(
-    private cdr: ChangeDetectorRef,
+    private readonly cdr: ChangeDetectorRef,
     public translate: TranslateService,
-    private renderer: Renderer2
+    private readonly renderer: Renderer2
   ) {}
 
   ngOnInit(): void {
@@ -274,12 +319,16 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
     this.journeyCurrentIndex = newIndex;
   }
 
+  handleActionKey(event: KeyboardEvent, action: () => void): void {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      action();
+    }
+  }
+
   /** Generates all possible timeline definitions from the experiences array. */
   generateAllMermaidTimelines(): void {
     this.timelineDefinitions = this.experiencias.map((startExp) => {
-      // const title = this.translate.instant('timeline.mermaid.title', {
-      //   empresa: startExp.empresa,
-      // });
       let mermaidText = `timeline\n \n`;
 
       const startIndex = this.experiencias.findIndex(
@@ -305,8 +354,8 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
     }
 
     const containers = this.mermaidJourneyContainers.toArray();
-    for (let i = 0; i < containers.length; i++) {
-      const container = containers[i].nativeElement;
+    for (const mermaidContainer of containers) {
+      const container = mermaidContainer.nativeElement;
       const experienceId = container.dataset.experienceId;
       const timelineDef = this.timelineDefinitions.find(
         (def) => def.id.toString() === experienceId
@@ -316,7 +365,7 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
         try {
           // Ensure the container is empty before rendering
           container.innerHTML = '';
-          const uniqueId = `mermaid-graph-${experienceId}-${new Date().getTime()}`;
+          const uniqueId = `mermaid-graph-${experienceId}-${Date.now()}`;
           const { svg } = await mermaid.render(
             uniqueId,
             timelineDef.definition

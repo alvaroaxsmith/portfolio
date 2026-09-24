@@ -1,34 +1,36 @@
-<button mat-icon-button mat-dialog-close>
-  <mat-icon>close</mat-icon>
-</button>
+<section class="sheet" aria-label="Menu mobile">
+    <div class="sheet-header">
+        <p>{{ "Navigation" | translate }}</p>
+        <button mat-icon-button type="button" (click)="dismiss()" aria-label="Fechar menu">
+      <mat-icon>close</mat-icon>
+    </button>
+    </div>
 
-<ul>
-  <li>
-    <a routerLink="/about-me" mat-button mat-dialog-close>{{ "ABOUT ME" | translate }}</a>
-  </li>
-  <li>
-    <a routerLink="/courses" mat-button mat-dialog-close>{{ "COURSES" | translate }}</a>
-  </li>
-  <li><a routerLink="/portfolio" mat-button mat-dialog-close>{{ "PROJECTS" | translate }}</a></li>
-  <!-- <li><a routerLink="/blog" mat-dialog-close>Blog</a></li> -->
-  <li>
-    <a routerLink="/contact" mat-button mat-dialog-close>{{ "CONTACT" | translate }}</a>
-  </li>
-  <li class="language">
-    <a class="language-form">
-      <mat-menu #menu="matMenu">
-        @for (lang of translate.getLangs(); track trackByLang($index, lang)) {
-          <button mat-menu-item
-            (click)="switchLang(lang); menu.close">
-            {{ lang }}
-          </button>
-        }
-      </mat-menu>
+    <ul>
+        <li>
+            <a routerLink="/" mat-button (click)="dismiss()">{{ "HOME" | translate }}</a>
+        </li>
+        <li>
+            <a routerLink="/about-me" mat-button (click)="dismiss()">{{ "ABOUT ME" | translate }}</a>
+        </li>
+        <li>
+            <a routerLink="/courses" mat-button (click)="dismiss()">{{ "COURSES" | translate }}</a>
+        </li>
+        <li>
+            <a routerLink="/portfolio" mat-button (click)="dismiss()">{{ "PROJECTS" | translate }}</a>
+        </li>
+        <li>
+            <a routerLink="/contact" mat-button (click)="dismiss()">{{ "CONTACT" | translate }}</a>
+        </li>
+    </ul>
 
-      <button mat-icon-button [matMenuTriggerFor]="menu">
-        <mat-icon>translate</mat-icon>
-      </button>
-    </a>
-  </li>
-
-</ul>
+    <div class="sheet-actions">
+        <span>{{ "Language" | translate }}</span>
+        <div class="language-buttons">
+            @for (lang of translate.getLangs(); track trackByLang($index, lang)) {
+            <button mat-stroked-button type="button" (click)="switchLang(lang)">
+          {{ lang }}
+        </button> }
+        </div>
+    </div>
+</section>

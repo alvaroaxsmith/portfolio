@@ -1,12 +1,11 @@
 <!-- A splash screen é mostrada por padrão -->
-<app-splash-screen
-  (animationFinished)="onSplashAnimationFinished()"
-></app-splash-screen>
+<app-splash-screen (animationFinished)="onSplashAnimationFinished()"></app-splash-screen>
 
 <!-- O conteúdo principal só é renderizado quando 'showMainContent' for true -->
 @if (showMainContent) {
-  <main>
+<a class="skip-link" href="#main-content">Pular para o conteúdo principal</a>
+<main id="main-content">
     <app-navbar></app-navbar>
     <router-outlet></router-outlet>
-  </main>
+</main>
 }

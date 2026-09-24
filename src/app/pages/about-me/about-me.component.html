@@ -1,88 +1,61 @@
 <div class="container">
-  <header>
-    <h1>{{ "About me" | translate }}</h1>
-  </header>
+    <header>
+        <p class="eyebrow">{{ "ABOUT ME" | translate }}</p>
+        <h1>{{ "Who am I?" | translate }}</h1>
+        <p class="intro">{{ "about.summary" | translate }}</p>
+    </header>
 
-  <section class="content">
-    <mat-accordion class="headers-align">
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            {{ "Bio" | translate }}
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-action-row class="bio">
-          <div class="bio-margin">
-            <div
-              class="bio-margin"
-              [innerHTML]="'bio.description' | translate"
-            ></div>
-          </div>
-        </mat-action-row>
-      </mat-expansion-panel>
+    <section class="content">
+        <mat-accordion class="headers-align">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{ "Bio" | translate }}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-action-row class="bio">
+                    <div class="bio-margin">
+                        <div class="bio-margin" [innerHTML]="'bio.description' | translate"></div>
+                    </div>
+                </mat-action-row>
+            </mat-expansion-panel>
 
-      <mat-expansion-panel [expanded]="true">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            {{ "Professional" | translate }}
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-action-row>
-          <app-professional-timeline></app-professional-timeline>
-        </mat-action-row>
-      </mat-expansion-panel>
+            <mat-expansion-panel [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{ "Professional" | translate }}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-action-row>
+                    <app-professional-timeline></app-professional-timeline>
+                </mat-action-row>
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{ "Highlights" | translate }}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-action-row class="highlights">
+                    <app-highlights></app-highlights>
+                </mat-action-row>
+            </mat-expansion-panel>
 
-      <!-- <mat-expansion-panel hideToggle>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            {{ "Skills" | translate }}
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-action-row class="skills">
-          <div>
-            <app-skill-chip
-              *ngFor="let skill of skills"
-              [skill]="skill"
-            ></app-skill-chip>
-          </div>
-        </mat-action-row>
-      </mat-expansion-panel> -->
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            {{ "Highlights" | translate }}
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-action-row class="highlights">
-          <app-highlights></app-highlights>
-        </mat-action-row>
-      </mat-expansion-panel>
-
-      <mat-expansion-panel>
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            {{ "Hobbies" | translate }}
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-action-row class="hobbies">
-          <div class="hobbies">
-            <p>
-              {{
-                "I have a certain facility for developing hobbies, I will only mention the main ones because I have many. 😅"
-                  | translate
-              }}
-            </p>
-            <h4>{{ "Amateur Chess ♟️" | translate }}</h4>
-            <p>
-              {{
-                "I learned to play chess at the age of 7, but I started to practice constantly in the pandemic and today I have more than a thousand games on "
-                  | translate
-              }}
-              <a
-                href="https://www.chess.com/member/ferreiraalvaro"
-                target="_blank"
-                >chess.com</a
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        {{ "Hobbies" | translate }}
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-action-row class="hobbies">
+                    <div class="hobbies">
+                        <p>
+                            {{ "I have a certain facility for developing hobbies, I will only mention the main ones because I have many. 😅" | translate }}
+                        </p>
+                        <h4>{{ "Amateur Chess ♟️" | translate }}</h4>
+                        <p>
+                            {{ "I learned to play chess at the age of 7, but I started to practice constantly in the pandemic and today I have more than a thousand games on " | translate }}
+                            <a href="https://www.chess.com/member/ferreiraalvaro" target="_blank" rel="noopener noreferrer">chess.com</a
               >.
             </p>
 
@@ -94,36 +67,8 @@
               }}
             </p>
 
-            <h4>{{ "Podcast Listener 🎙️" | translate }}</h4>
-            <p>
-              {{
-                "I can't deny that I spend hours listening to podcasts, my favorite podcasts are:"
-                  | translate
-              }}
-            </p>
-            <ul>
-              <li>
-                <a
-                  href="https://open.spotify.com/show/5qFSRB3x4SP9xZgr4my7fO"
-                  target="_blank"
-                  ><strong>Like A Boss (Alura)</strong></a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://open.spotify.com/show/07Ze7DxJjgyS5fsV8lNPSw"
-                  target="_blank"
-                  ><strong>Ciencia Sem Fim</strong></a
-                >
-              </li>
-              <li>
-                <a
-                  href="https://open.spotify.com/show/5BqnrP8ztYwYnHNtWRXrUs"
-                  target="_blank"
-                  ><strong>Amplifica</strong></a
-                >
-              </li>
-            </ul>
+            <h4>{{ "hobbies.sports.title" | translate }}</h4>
+            <p>{{ "hobbies.sports.description" | translate }}</p>
           </div>
         </mat-action-row>
       </mat-expansion-panel>

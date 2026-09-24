@@ -1,218 +1,177 @@
-h1 {
-  font-family: "Roboto", sans-serif;
-  font-style: normal;
-  font-weight: 500;
-  text-align: center;
-  margin: 2rem 0;
-  line-height: 1.2;
-  color: #333;
-  margin-top: 4rem;
+.portfolio-page {
+    width: var(--page-width);
+    margin: 0 auto;
+    padding: 1rem 0 4rem;
+}
+
+.page-header {
+    display: grid;
+    gap: 1rem;
+    max-width: 52rem;
+    margin-bottom: 2rem;
+}
+
+.eyebrow {
+    width: fit-content;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.page-intro {
+    max-width: 58ch;
+    font-size: 1rem;
 }
 
 .filters-toolbar {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  margin-bottom: 1.5rem;
-  padding: 0 1rem;
-  flex-wrap: wrap;
-
-  .filter-group {
-    mat-form-field {
-      width: min(280px, 46vw);
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+    .filter-group {
+        mat-form-field {
+            width: min(280px, 100%);
+        }
     }
-  }
 }
 
 .view-controls {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 1rem;
-  padding: 0 1rem;
-
-  @media (max-width: 767px) {
-    display: none;
-  }
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 1rem;
+    @media (max-width: 767px) {
+        display: none;
+    }
 }
 
 .initial-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 2rem;
-  height: 100px; // Para dar espaço ao spinner inicial
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 2rem;
+    height: 100px;
 }
 
 .load-more-spinner {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 20px 0;
-  height: 80px; // Para dar espaço ao spinner de "carregar mais"
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+    height: 80px;
 }
 
-.portfolio-container,
 mat-card-title-group,
 mat-card-content {
-  display: flex;
-  flex-direction: column;
-  font-family: "Lexend Tera";
-  font-style: normal;
-  font-weight: 600;
-  font-size: 12px;
-  text-align: center;
-  color: #444;
+    display: flex;
+    flex-direction: column;
+    text-align: left;
 }
 
 a {
-  border: 1px solid #000;
-  text-decoration: none;
-  color: #000;
-  margin: auto;
-  /* Allow links to wrap naturally on small screens */
-  width: auto;
-  max-width: 100%;
+    text-decoration: none;
+    color: var(--color-text);
+    width: fit-content;
+    max-width: 100%;
 }
 
 .project-card {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  border: 1px solid #444;
-
-  mat-card-title-group {
+    width: 100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
-    font-family: "Lexend Tera";
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    text-align: center;
-    color: #444;
-    padding: 1rem;
-
-    a {
-      border: 1px solid #000;
-      text-decoration: none;
-      color: #000;
-      margin-top: 0.5rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    background: rgba(255, 255, 255, 0.72);
+    box-shadow: var(--color-shadow);
+    mat-card-title-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.55rem;
+        padding: 1.25rem 1.25rem 0.75rem;
+        a {
+            margin-top: 0.5rem;
+        }
+        .mat-mdc-card-title {
+            font-family: var(--font-sans);
+            font-size: 1.25rem;
+            line-height: 1.1;
+            color: var(--color-text);
+        }
+        .project-tech {
+            color: var(--color-text);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            font-family: var(--font-mono);
+            font-size: 0.74rem;
+        }
+        .project-date {
+            font-size: 0.85rem;
+            color: var(--color-text-muted);
+        }
     }
-
-    .project-date {
-      font-size: 11px;
-      color: #666;
-      margin-top: 4px;
+    mat-card-content {
+        padding: 0 1.25rem 1.25rem;
+        flex-grow: 1;
+        p {
+            width: 100%;
+            margin: 0;
+            font-size: 0.97rem;
+            line-height: 1.68;
+            color: var(--color-text-muted);
+        }
     }
-  }
-
-  mat-card-content {
-    display: flex;
-    flex-direction: column;
-    font-family: "Lexend Tera";
-    font-style: normal;
-    font-weight: 600;
-    font-size: 12px;
-    text-align: center;
-    color: #444;
-    padding: 0 1rem 1rem 1rem;
-    flex-grow: 1;
-
-    p {
-      padding-top: 1rem;
-      width: 100%;
-      margin: 0;
-      word-wrap: break-word;
-    }
-  }
 }
 
 .portfolio-cards-area {
-  display: flex;
-  padding: 0 1rem;
-  // Center the content and avoid overly wide lines on large screens
-  max-width: 1400px;
-  margin: 0 auto;
-
-  &.list-view {
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-
-    .project-wrapper {
-      width: 100%;
-      max-width: 800px;
+    display: flex;
+    &.list-view {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 1rem;
+        .project-wrapper {
+            width: 100%;
+            max-width: 100%;
+        }
     }
-  }
-
-  &.grid-view {
-    // Use CSS Grid for fluid, even distribution
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: clamp(0.75rem, 1.5vw, 1rem);
-    align-items: stretch; // Make rows balanced when content heights differ
-
-    .project-wrapper {
-      height: 100%;
-      display: flex;
+    &.grid-view {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: clamp(0.75rem, 1.5vw, 1rem);
+        align-items: stretch;
+        .project-wrapper {
+            height: 100%;
+            display: flex;
+        }
     }
-  }
 }
 
 .no-projects-message {
-  text-align: center;
-  margin-top: 2rem;
-  font-size: 1.2rem;
-  color: #666;
+    text-align: center;
+    margin-top: 2rem;
+    font-size: 1.2rem;
+    color: var(--color-text-muted);
 }
 
-@media (min-width: 320px) {
-  a {
-    border: 1px solid #000;
-    text-decoration: none;
-    color: #000;
-    margin: auto;
-    width: min-content;
-  }
-
-  .project-card {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid #444;
-  }
-
-  p {
-    padding-top: 1rem;
-  }
-}
-
-@media (min-width: 600px) {
-  .portfolio-container {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    flex-wrap: wrap;
-  }
-
-  p {
-    width: fit-content;
-    margin: auto;
-  }
-
-  a {
-    width: min-content;
-    margin: auto;
-  }
-}
-
-@media (min-width: 2000px) {
-  h1 {
-    margin-top: 10rem;
-    font-size: 160%;
-  }
+@media (max-width: 767px) {
+    .portfolio-page {
+        padding-bottom: 2rem;
+    }
+    .project-card {
+        mat-card-title-group,
+        mat-card-content {
+            padding-left: 1rem;
+            padding-right: 1rem;
+        }
+    }
 }

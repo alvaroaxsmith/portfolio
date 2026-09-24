@@ -1,4 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -9,17 +10,21 @@ import { TranslateService } from '@ngx-translate/core';
     standalone: false
 })
 export class Dialog {
-  constructor(public translate: TranslateService) { // Manter TranslateService injetado para uso
-    // Remova as seguintes linhas:
-    // translate.addLangs(['EN', 'PT-BR']);
-    // translate.setDefaultLang('EN');
-  }
+  constructor(
+    public translate: TranslateService,
+    private bottomSheetRef: MatBottomSheetRef<Dialog>
+  ) {}
 
   switchLang(lang: string) {
     this.translate.use(lang);
+    this.dismiss();
+  }
+
+  dismiss() {
+    this.bottomSheetRef.dismiss();
   }
 
   trackByLang(index: number, lang: string): string {
-    return lang; // Use um identificador único para cada item (neste caso, a própria string do idioma).
+    return lang;
   }
 }

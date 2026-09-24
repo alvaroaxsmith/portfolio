@@ -1,131 +1,234 @@
 {
-  "ABOUT ME": "SOBRE MIM",
-  "Certifications": "Cursos",
-  "CONTACT": "CONTATO",
-  "TRANSLATE": "TRADUÇÃO",
-  "PROJECTS": "PROJETOS",
-  "Made by": "Desenvolvido por",
-  "courseCertificateMessage": "Clique no nome do curso para ver o certificado.",
-  "Technologies Used": "Tecnologias Utilizadas",
-  "Welcome to my website": "Seja bem vindo",
-  "Hi, I’m": "Olá, eu me chamo",
-  "Software Engineer": "Engenheiro de Software",
-  "Back-end Developer": "Desenvolvedor Back-end",
-  "Front-end Developer": "Desenvolvedor Front-end",
-  "Full-stack Developer": "Desenvolvedor Full-stack",
-  "About me": "Sobre mim",
-  "Who am I?": "Quem sou eu?",
-  "bio": {
-    "description": "Sou graduado em Engenharia de Produção pela UNIVESP e atuo como desenvolvedor <strong>Full-stack</strong>. Comprometo-me constantemente com a implementação de boas práticas de programação, como os princípios <strong>SOLID</strong>, e incorporo <em>testes automatizados</em> em todos os projetos em que estou envolvido. Essa abordagem não apenas fortalece a qualidade do código, mas também contribui para a confiabilidade e robustez dos sistemas que desenvolvo. Estou sempre em busca de aprimorar minhas habilidades e oferecer soluções eficientes e inovadoras."
-  },
-  "Skills": "Habilidades",
-  "Highlights": "Destaques",
-  "August 2018": "Agosto de 2018",
-  "Admission to UNIVESP": "Ingresso na UNIVESP",
-  "April 2019 to": "Abril 2019 até",
-  "April 2021": "Abril de 2021",
-  "Internship at Metro de São Paulo": "Estágio no Metro de São Paulo",
-  "July 2021 to": "Julho 2021 até",
-  "October 2021": "Outubro 2021",
-  "Bootcamp at Gama Academy": "Bootcamp na Gama Academy",
-  "January 2022 to": "Janeiro 2022 até",
-  "June 2022": "Junho 2022",
-  "Bootcamp at SoulCode Academy": "Bootcamp na SoulCode Academy",
-  "August 2022 to": "Agosto de 2022 até",
-  "September 2022": "Setembro 2022",
-  "1st place in the Gama-lab Tech Experience": "1º lugar no Gama-lab Tech Experience",
-  "October 2022": "Outubro de 2022 até",
-  "Software Developer at V.tal": "Desenvolvedor de Software na V.tal",
-  "August 2018 to": "Agosto de 2018 até",
-  "June 2023": "Junho de 2023",
-  "Univesp Oficial - Bachelor's degree, Production Engineering": "Univesp Oficial - Bacharelado, Engenharia de Produção",
-  "February 2023 to": "Fevereiro de 2023 até",
-  "December 2026": "Dezembro de 2026",
-  "Universidade São Judas Tadeu - Bachelor's degree, Computer Science": "Universidade São Judas Tadeu - Bacharelado, Ciência da Computação",
-  "March 2024 to": "Março de 2024 até",
-  "December 2024": "Dezembro de 2024",
-  "Instituto Federal do Sul de Minas Gerais - Postgraduate, Web Development": "Instituto Federal do Sul de Minas Gerais - Pós-graduação, Desenvolvimento Web",
-  "May 2025 to": "Maio de 2025 até",
-  "May 2027": "Maio de 2027",
-  "Universidade Federal do ABC (UFABC) - Postgraduate, Information Technologies and Systems": "Universidade Federal do ABC (UFABC) - Pós-graduação, Tecnologias e Sistemas de Informação",
-  "Professional": "Tragetória Profissional",
-  "I have a certain facility for developing hobbies, I will only mention the main ones because I have many. 😅": "Eu tenho uma certa facilidade para desenvolver hobbies, vou apenas mencionar os principais porque eu tenho muitos. 😅",
-  "Amateur Chess ♟️": "Xadrez Amador ♟️",
-  "I learned to play chess at the age of 7, but I started to practice constantly in the pandemic and today I have more than a thousand games on ": "Eu aprendi a jogar xadrez aos 7 anos, mas comecei a praticar constantemente na pandemia e hoje tenho mais de mil partidas no ",
-  "Guitar Player 🎶": "Toco Violão",
-  "I play guitar since I was 12 years old, I like to listen to all kinds of music and I like to create musical arrangements, soon I will post it on soundcloud.": "Eu toco violão desde os 12 anos, gosto de ouvir todo tipo de música e gosto de criar arranjos musicais, em breve pretendo postar no soundcloud.",
-  "Podcast Listener 🎙️": "Ouvinte de Podcasts 🎙️",
-  "I can't deny that I spend hours listening to podcasts, my favorite podcasts are:": "Eu não posso negar que eu gasto horas ouvindo podcasts, meus podcasts favoritos são:",
-  "Reach out to me!": "Entre em contato!",
-  "Send me a message": "Envie-me uma mensagem",
-  "Ribeirão Pires - SP, Brazil": "Ribeirão Pires - SP, Brasil",
-  "COURSES": "CURSOS",
-  "Courses": "Cursos",
-  "Filter": "Buscar",
-  "FIELD": "ÁREA",
-  "NAME": "NOME",
-  "SCHOOL": "ESCOLA",
-  "HOURS": "HORAS",
-  "DATE": "DATA",
-  "Select page of courses": "Selecione a página de cursos",
-  "Projects": "Projetos",
-  "Independent Projects and Studies": "Projetos Pessoais e Estudos",
-  "Repository": "Repositório",
-  "Last updated": "Última atualização",
-  "Responsive website of a fictional gym.": "Site responsivo de uma academia fictícia.",
-  "Mammography Data System": "Dados de Exames de Mamografia",
-  "System for providing data on mammography exams performed by Brazilian women in the national territory.": "Sistema para fornecimento de dados sobre exames de mamografia realizados por mulheres brasileiras no território nacional.",
-  "Github User Finder": "Buscador de Usuários do Github",
-  "This application does Github user searches using an official Github api.": "Esta aplicação faz buscas de usuários do Github utilizando uma api oficial do Github.",
-  "Personal website where I present my biography, CV, courses and projects. The frontend part consumes a fake API that uses mocked data, being implemented with JSON Server.": "Site pessoal onde eu apresento minha biografia, CV, cursos e projetos. A parte do frontend consome uma API fake que usa dados mockados, implementada com JSON Server.",
-  "This is a landing page for a fictional car maintenance company, built using React, TypeScript, Next.js and Tailwind CSS.": "Esta é uma página inicial para uma empresa de manutenção fictível, construída usando React, TypeScript, Next.js e Tailwind CSS.",
-  "This API is designed to facilitate a unique referral code generation process for customers upon making a purchase.": "Esta API é projetada para facilitar o processo de geração de código de refereência exclusivo para os clientes ao fazer uma compra.",
-  "Switch to Grid View": "Mudar para Grade",
-  "Switch to List View": "Mudar para Lista",
-  "Filter by Technology": "Filtrar por Tecnologia",
-  "All Technologies": "Todas as Tecnologias",
-  "Sort by Date": "Ordenar por Data",
-  "Most Recent": "Mais Recentes",
-  "Oldest": "Mais Antigos",
-  "No projects found.": "Nenhum projeto encontrado.",
-  "Main Activities": "Principais Atividades",
-  "timeline": {
-    "technologies": "Tecnologias e Ferramentas",
-    "skills": "Competências",
-    "mermaid": {
-      "header": "Visualização da Jornada",
-      "placeholder": "Selecione uma experiência na linha do tempo para ver a jornada.",
-      "title": "Linha do Tempo",
-      "error": "Erro ao renderizar o diagrama Mermaid."
+    "HOME": "INÍCIO",
+    "Navigation": "Navegação",
+    "Language": "Idioma",
+    "ABOUT ME": "SOBRE MIM",
+    "Certifications": "Cursos",
+    "CONTACT": "CONTATO",
+    "TRANSLATE": "TRADUÇÃO",
+    "PROJECTS": "PROJETOS",
+    "Made by": "Desenvolvido por",
+    "courseCertificateMessage": "Clique no nome do curso para ver o certificado.",
+    "Technologies Used": "Tecnologias Utilizadas",
+    "Welcome to my website": "Seja bem-vindo",
+    "Hi, I’m": "Olá, eu me chamo",
+    "home": {
+        "eyebrow": "Bem-vindo!",
+        "title": "Engenheiro de Software | GenAI | Full Cycle",
+        "description": "Construo sistemas desde 2022, com foco em arquiteturas escaláveis e no uso de IA Generativa para tornar a engenharia mais rápida e confiável.",
+        "rolePrefix": "foco:",
+        "photoAlt": "Retrato de Alvaro Ferreira",
+        "cta": {
+            "downloadCv": "Baixar CV",
+            "linkedin": "Falar no LinkedIn"
+        },
+        "highlight": {
+            "one": "Do back-end ao front-end: Java, Node.js, TypeScript e React em microsserviços, sistemas orientados a eventos, BFFs e MFEs.",
+            "two": "Desenvolvimento assistido por IA, com Spec-Driven Development e agentes de código integrados ao dia a dia do time."
+        }
     },
-    "mutant": {
-      "description": "Atuo como Desenvolvedor Full Stack na Mutant, alocado na Telefônica Vivo, contribuindo para o desenvolvimento e aprimoramento das jornadas do aplicativo Vivo.",
-      "activity1": "Desenvolvimento de diversas jornadas no aplicativo Vivo, como Suporte Técnico, Vivo Travel, Troca de Chip, e-SIM, Negociação de Fatura.",
-      "activity2": "Integro uma squad dedicada às jornadas de Acompanhamento de Pedidos e Casa Inteligente."
+    "Full Cycle Development": "Desenvolvimento de Ponta a Ponta",
+    "Full-stack Developer": "Desenvolvedor Full-stack",
+    "About me": "Sobre mim",
+    "about": {
+        "summary": "Hoje atuo como Tech Lead Cross na Mutant, alocado na Telefônica Vivo, onde apoio múltiplas squads em jornadas financeiras e serviços digitais, garantindo excelência técnica, resiliência e evolução arquitetural.",
+        "summary2": "Minha prática de engenharia é guiada por Clean Code, TDD e cultura ágil. Busco constantemente otimizar o ciclo de desenvolvimento integrado a ferramentas modernas de IA, como Codeium, promovendo entregas eficientes e arquiteturas sustentáveis."
     },
-    "marttech": {
-      "description": "Atuei no desenvolvimento da plataforma Curar Saúde, uma solução inovadora que oferece mini cursos, vídeos educacionais e desafios interativos.",
-      "activity1": "Criei interfaces modernas e responsivas com TypeScript, React e Material UI.",
-      "activity2": "Implementei uma gestão de estado eficiente utilizando React Hooks e Context API.",
-      "activity3": "Configurei pipelines de CI/CD e realizei deploy na plataforma Azure DevOps."
+    "Who am I?": "Quem sou eu?",
+    "bio": {
+        "description": "Minha trajetória começou na Engenharia de Produção (UNIVESP) e, ao longo dos anos, mergulhei de cabeça no desenvolvimento de software. Sou pós-graduado em Desenvolvimento Web (IF Sul de Minas) e hoje curso uma segunda pós, em Tecnologias e Sistemas de Informação (UFABC). Tenho grande interesse em solucionar problemas complexos, estruturando desde arquiteturas robustas em cloud até integrações inovadoras com IA, sempre com foco em gerar impacto real no negócio."
     },
-    "xmart": {
-      "description": "Atuei como Desenvolvedor Full Stack no desenvolvimento do aplicativo de segurança (AppSec) xGuardian e da landing page institucional da empresa.",
-      "activity1": "Desenvolvi interfaces com React, utilizando bibliotecas como Shadcn/ui e Tailwind.",
-      "activity2": "Implementei APIs com Python e FastAPI, integrando bancos de dados MySQL e MariaDB.",
-      "activity3": "Contribui para a renovação de UI/UX da Landing Page Institucional."
+    "hobbies": {
+        "sports": {
+            "title": "Esportes ⚽",
+            "description": "Pratico esportes para manter o corpo em movimento: jogo futebol e, sempre que posso, faço trilhas em meio à natureza."
+        }
     },
-    "vtal": {
-      "description": "Atuei como Desenvolvedor Full Stack na V.tal, contribuindo para projetos estratégicos com foco em manutenção, desenvolvimento e inovação de sistemas.",
-      "activity1": "Mantive e corrigi bugs em sistema legado (Portal Operacional).",
-      "activity2": "Participei do planejamento e desenvolvimento da nova versão do módulo de Gestão de Acesso.",
-      "activity3": "Contribuí no planejamento e desenvolvimento de módulo de Suporte Técnico para operadoras.",
-      "activity4": "Desenvolvi site estático para documentação de APIs (Portal de Desenvolvedores)."
+    "Skills": "Habilidades",
+    "Highlights": "Destaques",
+    "August 2018": "Agosto de 2018",
+    "Admission to UNIVESP": "Ingresso na UNIVESP",
+    "April 2019 to": "Abril de 2019 até",
+    "April 2021": "Abril de 2021",
+    "Internship at Metro de São Paulo": "Estágio no Metrô de São Paulo",
+    "July 2021 to": "Julho de 2021 até",
+    "October 2021": "Outubro de 2021",
+    "Bootcamp at Gama Academy": "Bootcamp na Gama Academy",
+    "January 2022 to": "Janeiro de 2022 até",
+    "June 2022": "Junho de 2022",
+    "Bootcamp at SoulCode Academy": "Bootcamp na SoulCode Academy",
+    "August 2022 to": "Agosto de 2022 até",
+    "September 2022": "Setembro de 2022",
+    "1st place in the Gama-lab Tech Experience": "1º lugar no Gama-lab Tech Experience",
+    "October 2022": "Outubro de 2022 até",
+    "Software Developer at V.tal": "Desenvolvedor de Software na V.tal",
+    "August 2018 to": "Agosto de 2018 até",
+    "June 2023": "Junho de 2023",
+    "Univesp Oficial - Bachelor's degree, Production Engineering": "Univesp Oficial - Bacharelado, Engenharia de Produção",
+    "March 2024 to": "Março de 2024 até",
+    "December 2024": "Dezembro de 2024",
+    "Instituto Federal do Sul de Minas Gerais - Postgraduate, Web Development": "Instituto Federal do Sul de Minas Gerais - Pós-graduação, Desenvolvimento Web",
+    "May 2025 to": "Maio de 2025 até",
+    "May 2027": "Maio de 2027",
+    "Universidade Federal do ABC (UFABC) - Postgraduate, Information Technologies and Systems": "Universidade Federal do ABC (UFABC) - Pós-graduação, Tecnologias e Sistemas de Informação",
+    "Professional": "Trajetória Profissional",
+    "I have a certain facility for developing hobbies, I will only mention the main ones because I have many. 😅": "Tenho bastante facilidade para desenvolver hobbies, então vou mencionar apenas alguns dos principais. 😅",
+    "Amateur Chess ♟️": "Xadrez Amador ♟️",
+    "I learned to play chess at the age of 7, but I started to practice constantly in the pandemic and today I have more than a thousand games on ": "Aprendi a jogar xadrez aos 7 anos, mas comecei a praticar com frequência durante a pandemia e hoje acumulo mais de mil partidas no ",
+    "Guitar Player 🎶": "Toco Violão 🎶",
+    "I play guitar since I was 12 years old, I like to listen to all kinds of music and I like to create musical arrangements, soon I will post it on soundcloud.": "Toco violão desde os 10 anos. Gosto de explorar novos arranjos musicais, do pop à MPB — arriscando clássicos como 'Lilás' do Djavan —, e em breve pretendo postar alguns no SoundCloud.",
+    "Reach out to me!": "Entre em contato!",
+    "Send me a message": "Envie-me uma mensagem",
+    "contact": {
+        "title": "Vamos conversar",
+        "description": "Se você procura um perfil com forte visão arquitetural, experiência no ciclo completo de desenvolvimento e foco em inovação digital, estes são os canais mais rápidos para falar comigo.",
+        "phone": "+55 11 95101-3956",
+        "location": "Ribeirão Pires, SP, Brasil",
+        "github": "Código, experimentos open-source e histórico técnico.",
+        "linkedin": "Perfil profissional detalhado e networking.",
+        "email": "Contato direto para oportunidades e projetos.",
+        "labels": {
+            "phone": "Telefone",
+            "email": "Email",
+            "location": "Localização",
+            "github": "GitHub",
+            "linkedin": "LinkedIn"
+        }
     },
-    "gama": {
-      "description": "Fui selecionado para participar de um programa de imersão e aprendizado em uma squad ágil como desenvolvedor back-end durante 45 días. Ao final do programa, minha squad foi premiada com o 1º lugar.",
-      "activity1": "Construção da API para uma plataforma educacional LMS com questionários de múltipla escolha.",
-      "activity2": "Trabalho com metodologia ágil Scrum."
+    "Ribeirão Pires - SP, Brazil": "Ribeirão Pires - SP, Brasil",
+    "COURSES": "CURSOS",
+    "Courses": "Cursos",
+    "courses": {
+        "title": "Aprendizado contínuo",
+        "intro": "Especializações e cursos que sustentam minha base em engenharia de software e tecnologias emergentes.",
+        "filterPlaceholder": "Ex.: Arquitetura, Java, GenAI",
+        "noData": "Nenhum curso encontrado para o filtro",
+        "emptyState": "Nenhum curso corresponde ao filtro atual."
+    },
+    "Filter": "Buscar",
+    "FIELD": "ÁREA",
+    "NAME": "NOME",
+    "SCHOOL": "ESCOLA",
+    "HOURS": "HORAS",
+    "DATE": "DATA",
+    "Select page of courses": "Selecione a página de cursos",
+    "Projects": "Projetos",
+    "portfolio": {
+        "title": "Código aberto",
+        "intro": "Projetos pessoais publicados no meu GitHub, onde exploro novas tecnologias e padrões de arquitetura.",
+        "error": "Não foi possível carregar os projetos agora. Veja todos no meu GitHub:"
+    },
+    "repo": {
+        "referral_system": "API focada na geração dinâmica de códigos de referência exclusivos para programas de fidelização em e-commerces."
+    },
+    "2014 to": "2014 até",
+    "UNESP - Energy Engineering (incomplete)": "UNESP - Engenharia de Energia (incompleto)",
+    "highlights": {
+        "eyebrow": "formação e marcos",
+        "intro": "Uma visão rápida dos principais ciclos acadêmicos que complementam minha visão holística de engenharia e negócios."
+    },
+    "Repository": "Repositório",
+    "Last updated": "Última atualização",
+    "Switch to Grid View": "Mudar para Grade",
+    "Switch to List View": "Mudar para Lista",
+    "Filter by Technology": "Filtrar por Tecnologia",
+    "All Technologies": "Todas as Tecnologias",
+    "Sort by Date": "Ordenar por Data",
+    "Most Recent": "Mais Recentes",
+    "Oldest": "Mais Antigos",
+    "No projects found.": "Nenhum projeto encontrado.",
+    "Main Activities": "Principais Atividades",
+    "1 ano e 5 meses": "1 ano e 5 meses",
+    "4 meses": "4 meses",
+    "1 ano e 1 mês": "1 ano e 1 mês",
+    "2 meses": "2 meses",
+    "2 anos e 1 mês": "2 anos e 1 mês",
+    "out de 2025 - o momento": "out de 2025 - o momento",
+    "jun de 2024 - out de 2025": "jun de 2024 - out de 2025",
+    "mai de 2024 - jun de 2024": "mai de 2024 - jun de 2024",
+    "jan de 2024 - abr de 2024": "jan de 2024 - abr de 2024",
+    "out de 2022 - out de 2023": "out de 2022 - out de 2023",
+    "ago de 2022 - set de 2022": "ago de 2022 - set de 2022",
+    "abr de 2019 - abr de 2021": "abr de 2019 - abr de 2021",
+    "Mutant (Alocado na Telefônica Vivo)": "Mutant (Alocado na Telefônica Vivo)",
+    "Tech Lead Cross": "Tech Lead Cross",
+    "Desenvolvedor Full Stack": "Desenvolvedor Full Stack",
+    "Desenvolvedor Front-end": "Desenvolvedor Front-end",
+    "Desenvolvedor Back-end": "Desenvolvedor Back-end",
+    "Estagiário em Engenharia de Produção": "Estagiário em Engenharia de Produção",
+    "timeline": {
+        "eyebrow": "experiência profissional",
+        "intro": "Linha do tempo destacando minha evolução técnica: do desenvolvimento front-end à liderança de arquiteturas full stack com IA.",
+        "technologies": "Tecnologias e Ferramentas",
+        "skills": "Competências",
+        "mermaid": {
+            "header": "Visualização da Jornada",
+            "placeholder": "Selecione uma experiência na linha do tempo para expandir os detalhes.",
+            "title": "Linha do Tempo",
+            "error": "Erro ao renderizar o diagrama Mermaid."
+        },
+        "mutantLead": {
+            "description": "Atuo de forma hands-on apoiando múltiplas squads ágeis no ecossistema do aplicativo Vivo. Minha atuação une desenvolvimento ativo, definição de arquitetura e uso de GenAI no ciclo de engenharia.",
+            "activity1": "Liderança técnica em jornadas críticas financeiras, como Pagamento Automático de Faturas, PIX Automático e Débito Automático.",
+            "activity2": "Desenho de arquiteturas escaláveis em microsserviços, BFFs e MFEs utilizando Java, Spring Boot, Node.js e React.",
+            "activity3": "Disseminação de cultura técnica (Clean Code, TDD) através de code reviews construtivos e mentorias internas.",
+            "activity4": "Integração do desenvolvimento assistido por IA e melhores práticas DevSecOps na rotina do time."
+        },
+        "mutantFs": {
+            "description": "Desenvolvimento e aprimoramento das jornadas no App Vivo, entregando soluções para milhões de clientes com foco em performance e estabilidade.",
+            "activity1": "Construção de fluxos complexos em jornadas como Casa Inteligente, Suporte Técnico, Vivo Travel e e-SIM.",
+            "activity2": "Atuação com arquitetura de microsserviços e integração de sistemas legados em ambientes de nuvem (Azure/Kubernetes).",
+            "activity3": "Aplicação intensa de testes unitários (Jest), de mutação (Stryker) e E2E (Cypress) para assegurar a resiliência do código."
+        },
+        "marttech": {
+            "description": "Desenvolvimento da plataforma Curar Saúde, uma solução de educação e engajamento focada em usabilidade e interatividade.",
+            "activity1": "Criação de interfaces responsivas com TypeScript, React e Material UI baseadas em protótipos do Figma.",
+            "activity2": "Planejamento, distribuição de tarefas técnicas e auxílio no nivelamento de desenvolvedores juniores.",
+            "activity3": "Configuração de pipelines CI/CD e esteiras de deploy contínuo no Azure DevOps."
+        },
+        "xmart": {
+            "description": "Desenvolvimento Full Stack do aplicativo de segurança xGuardian, priorizando arquitetura limpa e alta performance.",
+            "activity1": "Implementação do backend via Python e FastAPI no padrão BFF, integrando bancos MySQL/MariaDB.",
+            "activity2": "Criação de interfaces no frontend utilizando React, Tailwind e componentes Shadcn/ui.",
+            "activity3": "Refatoração de código e estruturação de projetos sob os preceitos de Clean Architecture e testes de segurança (Dast/Sast)."
+        },
+        "vtal": {
+            "description": "Manutenção, inovação e modernização de portais e sistemas estratégicos de telecomunicação.",
+            "activity1": "Desenvolvimento do módulo de Gestão de Acesso (React/NestJS) e de Suporte Técnico para operadoras (React/Spring Boot).",
+            "activity2": "Estruturação de um Portal de Desenvolvedores estático para documentação de APIs, integrando foco em Developer Experience (DX).",
+            "activity3": "Correção de bugs e sustentação de sistemas legados de missão crítica ligados ao OracleDB."
+        },
+        "gama": {
+            "description": "Programa intensivo de imersão ágil. Trabalhei 45 dias no desenvolvimento de um produto digital que rendeu o 1º lugar no hackathon Gama-lab.",
+            "activity1": "Construção da API para um Learning Management System (LMS) robusto usando NestJS, TypeORM e PostgreSQL.",
+            "activity2": "Aplicação de Scrum, versionamento com Gitflow e padronização com Conventional Commits."
+        },
+        "metro": {
+            "description": "Apoio a operações de engenharia de manutenção com foco em análise de dados e melhoria contínua de processos no Metrô de São Paulo.",
+            "activity1": "Criação de dashboards gerenciais e tratamento de dados operacionais com Power BI e Excel.",
+            "activity2": "Apoio analítico à implantação do ERP SAP e execução de estudos de cronoanálise."
+        }
+    },
+    "seo": {
+        "home": {
+            "title": "Alvaro Ferreira | Tech Lead | Full Cycle | GenAI",
+            "description": "Portfólio de Álvaro Ferreira. Tech Lead focado em arquitetura escalável, jornadas financeiras de alta volumetria e desenvolvimento com IA."
+        },
+        "about": {
+            "title": "Sobre | Alvaro Ferreira",
+            "description": "Trajetória acadêmica e profissional, desde engenharia até a liderança técnica em ecossistemas de grande escala."
+        },
+        "courses": {
+            "title": "Formação | Alvaro Ferreira",
+            "description": "Minhas especializações e bases técnicas nas áreas de computação, gestão de projetos e engenharia de software."
+        },
+        "portfolio": {
+            "title": "Projetos | Alvaro Ferreira",
+            "description": "Projetos pessoais e de código aberto de Alvaro Ferreira, carregados direto do GitHub."
+        },
+        "contact": {
+            "title": "Contato | Alvaro Ferreira",
+            "description": "Entre em contato para discutirmos inovação técnica, liderança em engenharia e escalabilidade."
+        }
     }
-  }
 }

@@ -1,17 +1,35 @@
-<section>
-  <h1>{{ 'Welcome to my website' | translate }}</h1>
-  @if (isLoadingImage) {
-    <figure class="spinner">
-      <mat-spinner diameter="80"></mat-spinner>
+<section class="hero">
+    <div class="hero-copy">
+        <p class="eyebrow">{{ 'home.eyebrow' | translate }}</p>
+        <h1>{{ 'home.title' | translate }}</h1>
+        <p class="lead">{{ 'home.description' | translate }}</p>
+        <div class="hero-role">
+            <span>{{ 'home.rolePrefix' | translate }}</span>
+            <app-text></app-text>
+        </div>
+        <div class="hero-actions">
+            <a mat-flat-button href="/assets/cv/alvaro-machado-ferreira-cv.txt" download="alvaro-machado-ferreira-cv.txt">{{ 'home.cta.downloadCv' | translate }}</a>
+            <a mat-stroked-button href="https://www.linkedin.com/in/alvaromachadoferreira/" target="_blank" rel="noopener noreferrer">{{ 'home.cta.linkedin' | translate }}</a>
+        </div>
+        <ul class="hero-highlights" aria-label="Destaques profissionais">
+            <li>{{ 'home.highlight.one' | translate }}</li>
+            <li>{{ 'home.highlight.two' | translate }}</li>
+        </ul>
+    </div>
+
+    @if (isLoadingImage) {
+    <figure class="hero-media spinner">
+        <mat-spinner diameter="80"></mat-spinner>
     </figure>
-  } @else {
-    <figure>
-      <div class="sleeve">
-        <img [src]="imageUrl" alt="Alvaro Ferreira" loading="lazy">
-      </div>
+    } @else {
+    <figure class="hero-media">
+        <div class="sleeve">
+            <div class="metrics" aria-hidden="true">
+                <span>Alvaro Machado Ferreira</span>
+            </div>
+            <img [src]="imageUrl" [alt]="'home.photoAlt' | translate" loading="lazy">
+        </div>
     </figure>
-  }
-  <h2>{{ 'Hi, I’m' | translate }} <span class="highlight">{{ 'Alvaro Ferreira' }}</span></h2>
-  <h3><app-text></app-text></h3>
+    }
 </section>
 <app-footer></app-footer>

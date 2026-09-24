@@ -1,75 +1,96 @@
-<h1>{{ "Courses" | translate }}</h1>
-<section>
-  <div class="mat-field-container">
-    <mat-form-field class="form-field">
-      <mat-label class="label">{{ "Filter" | translate }}</mat-label>
-      <input class="form-field" matInput (keyup)="applyFilter($event)" placeholder="Ex. Tecnologia" #input />
-      <mat-icon matSuffix>search</mat-icon>
-    </mat-form-field>
-  </div>
-  <div class="table-container">
-    <table mat-table [dataSource]="dataSource" matSort>
-      <!-- Field Column -->
-      <ng-container matColumnDef="field">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ "FIELD" | translate }}
-        </th>
-        <td mat-cell *matCellDef="let row">{{ row.field }}</td>
-      </ng-container>
+<section class="courses-page">
+    <header class="page-header">
+        <p class="eyebrow">{{ "COURSES" | translate }}</p>
+        <h1>{{ "courses.title" | translate }}</h1>
+        <p class="page-intro">{{ "courses.intro" | translate }}</p>
+    </header>
 
-      <!-- Name Column -->
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ "NAME" | translate }}
-        </th>
-        <td class="dialog" mat-cell *matCellDef="let row">
-          {{ row.name }}
-        </td>
-      </ng-container>
+    <div class="mat-field-container">
+        <mat-form-field class="form-field">
+            <mat-label class="label">{{ "Filter" | translate }}</mat-label>
+            <input class="form-field" matInput (keyup)="applyFilter($event)" [placeholder]="'courses.filterPlaceholder' | translate" #input />
+            <mat-icon matSuffix>search</mat-icon>
+        </mat-form-field>
+    </div>
+
+    <div class="table-container desktop-table">
+        <table mat-table [dataSource]="dataSource" matSort>
+            <!-- Field Column -->
+            <ng-container matColumnDef="field">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{ "FIELD" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.field }}</td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{ "NAME" | translate }}
+                </th>
+                <td class="dialog" mat-cell *matCellDef="let row">
+                    {{ row.name }}
+                </td>
+            </ng-container>
 
 
-      <!-- School Column -->
-      <ng-container matColumnDef="school">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ "SCHOOL" | translate }}
-        </th>
-        <td mat-cell *matCellDef="let row">{{ row.school }}</td>
-      </ng-container>
+            <!-- School Column -->
+            <ng-container matColumnDef="school">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{ "SCHOOL" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.school }}</td>
+            </ng-container>
 
-      <!-- Time Column -->
-      <ng-container matColumnDef="time">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ "HOURS" | translate }}
-        </th>
-        <td mat-cell *matCellDef="let row">{{ row.time }}</td>
-      </ng-container>
+            <!-- Time Column -->
+            <ng-container matColumnDef="time">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{ "HOURS" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.time }}</td>
+            </ng-container>
 
-      <!-- Date Column -->
-      <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>
-          {{ "DATE" | translate }}
-        </th>
-        <td mat-cell *matCellDef="let row">{{ row.date }}</td>
-      </ng-container>
+            <!-- Date Column -->
+            <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header>
+                    {{ "DATE" | translate }}
+                </th>
+                <td mat-cell *matCellDef="let row">{{ row.date }}</td>
+            </ng-container>
 
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openDialog(row)"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openDialog(row)"></tr>
 
-      <!-- Row shown when there is no matching data. -->
-      <tr class="mat-row" *matNoDataRow>
-        @if (showNoDataMessage) {
-          <td class="mat-cell" [attr.colspan]="displayedColumns.length">
-            No data matching the filter "{{ input.value }}"
-          </td>
+            <!-- Row shown when there is no matching data. -->
+            <tr class="mat-row" *matNoDataRow>
+                @if (showNoDataMessage) {
+                <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                    {{ 'courses.noData' | translate }} "{{ input.value }}"
+                </td>
+                }
+            </tr>
+        </table>
+        @if (dataSource.data.length === 0) {
+        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
         }
-      </tr>
-    </table>
-    @if (dataSource.data.length === 0) {
-      <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
-    }
-  </div>
-  <div class="paginator">
-    <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" [length]="dataSource.data.length"
-    aria-label="Select page of courses"></mat-paginator>
-  </div>
+    </div>
+
+    <div class="mobile-course-list" role="list">
+        @if (!isLoading) { @for (course of visibleCourses; track course.name) {
+        <button type="button" class="course-card" role="listitem" (click)="openDialog(course)">
+          <span class="course-field">{{ course.field }}</span>
+          <strong>{{ course.name }}</strong>
+          <p>{{ course.school }}</p>
+          <div class="course-meta">
+            <span>{{ course.time }}</span>
+            <span>{{ course.date }}</span>
+          </div>
+        </button> } @if (visibleCourses.length === 0) {
+        <p class="empty-state">{{ 'courses.emptyState' | translate }}</p>
+        } }
+    </div>
+
+    <div class="paginator">
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" [length]="dataSource.data.length" aria-label="Select page of courses"></mat-paginator>
+    </div>
 </section>

@@ -1,6 +1,9 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy } from '@angular/core'; // Adicionar OnInit e OnDestroy
-import { TranslateService, LangChangeEvent } from '@ngx-translate/core'; // Adicionar LangChangeEvent
-import { Subscription } from 'rxjs'; // Adicionar Subscription
+import { DOCUMENT } from '@angular/common';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { Subject, filter, takeUntil } from 'rxjs';
+import { SeoService } from './services/seo.service';
 
 @Component({
     selector: 'app-root',
@@ -10,71 +13,96 @@ import { Subscription } from 'rxjs'; // Adicionar Subscription
     standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
-  // Implementar OnInit e OnDestroy
   title = 'portfolio';
-  // Controla a visibilidade do conteúdo principal. Começa como 'false'.
   showMainContent = false;
-  private langChangeSubscription: Subscription | undefined; // Para gerenciar a inscrição
+  private readonly destroy$ = new Subject<void>();
 
-  constructor(private translate: TranslateService) {
+  constructor(
+    private translate: TranslateService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
+    private seoService: SeoService,
+    @Inject(DOCUMENT) private document: Document
+  ) {
     this.initializeAppLanguage();
   }
 
-  /**
-   * Este método é chamado quando o evento (animationFinished)
-   * é emitido pelo SplashScreenComponent.
-   */
   onSplashAnimationFinished() {
     this.showMainContent = true;
   }
 
   ngOnInit() {
-    // Inscrever-se nas mudanças de idioma
-    this.langChangeSubscription = this.translate.onLangChange.subscribe(
-      (event: LangChangeEvent) => {
-        console.log('Evento de mudança de idioma:', event);
-        console.log('Novo idioma ativo:', event.lang);
-        console.log('Traduções para o novo idioma:', event.translations);
-        console.log(
-          'Idioma padrão atual (após mudança):',
-          this.translate.defaultLang
-        );
-      }
-    );
+    this.updateDocumentLanguage(this.translate.currentLang || this.translate.defaultLang);
+    this.updateSeo();
+
+    this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        takeUntil(this.destroy$)
+      )
+      .subscribe(() => this.updateSeo());
+
+    this.translate.onLangChange
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event: LangChangeEvent) => {
+        this.updateDocumentLanguage(event.lang);
+        this.updateSeo();
+      });
   }
 
   initializeAppLanguage() {
     const supportedLangs = ['EN', 'PT-BR'];
     this.translate.addLangs(supportedLangs);
-
-    // Defina o idioma padrão que você deseja usar, independentemente do navegador.
-    // Por exemplo, 'EN' ou 'PT-BR'.
-    const defaultAppLanguage = 'EN';
+    const defaultAppLanguage = 'PT-BR';
     let langToUse = defaultAppLanguage;
-
-    // Opcional: Verifique se o idioma padrão definido está na lista de idiomas suportados.
-    // Se não estiver, você pode definir um fallback para o primeiro idioma suportado.
     if (!supportedLangs.includes(langToUse)) {
-      console.warn(
-        `Idioma padrão definido "${langToUse}" não está na lista de idiomas suportados [${supportedLangs.join(
-          ', '
-        )}]. Usando o primeiro idioma suportado como fallback.`
-      );
-      langToUse = supportedLangs[0] || 'EN'; // Fallback para o primeiro da lista ou 'EN' se a lista estiver vazia
+      langToUse = supportedLangs[0] || 'PT-BR';
     }
 
     this.translate.setDefaultLang(langToUse);
-    // O use() aqui define o idioma inicial.
-    this.translate.use(langToUse).subscribe(() => {
-      console.log('Idioma ativo (inicial):', this.translate.currentLang);
-      console.log('Idioma padrão (inicial):', this.translate.defaultLang);
-    });
+    this.translate.use(langToUse).subscribe();
   }
 
   ngOnDestroy() {
-    // Cancelar a inscrição para evitar vazamentos de memória
-    if (this.langChangeSubscription) {
-      this.langChangeSubscription.unsubscribe();
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
+  private updateSeo() {
+    const seo = this.getCurrentSeoConfig();
+    if (!seo) {
+      return;
     }
+
+    this.seoService.update({
+      title: this.translate.instant(seo.titleKey),
+      description: this.translate.instant(seo.descriptionKey)
+    });
+  }
+
+  private getCurrentSeoConfig() {
+    const currentRoute = this.router.routerState.snapshot.root;
+    const dataFromTree = [...currentRoute.pathFromRoot]
+      .reverse()
+      .map((route) => route.data['seo'])
+      .find(Boolean);
+
+    if (dataFromTree) {
+      return dataFromTree;
+    }
+
+    let route = this.activatedRoute;
+    while (route.firstChild) {
+      route = route.firstChild;
+      if (route.snapshot.data['seo']) {
+        return route.snapshot.data['seo'];
+      }
+    }
+
+    return null;
+  }
+
+  private updateDocumentLanguage(lang: string) {
+    this.document.documentElement.lang = lang === 'PT-BR' ? 'pt-BR' : 'en';
   }
 }

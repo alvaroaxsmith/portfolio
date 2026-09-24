@@ -1,6 +1,6 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
-import { faEnvelope, faLocationDot } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
 @Component({
     selector: 'app-contact',
     templateUrl: './contact.component.html',
@@ -14,6 +14,7 @@ export class ContactComponent implements OnInit {
   faLinkedin = faLinkedin;
   faEnvelope = faEnvelope;
   faLocation = faLocationDot;
+  faPhone = faPhone;
 
   constructor() { }
 

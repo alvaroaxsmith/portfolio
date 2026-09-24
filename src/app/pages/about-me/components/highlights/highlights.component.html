@@ -1,10 +1,10 @@
 <!-- filepath: src/app/pages/about-me/components/highlights/highlights.component.html -->
 <div class="highlights-container">
-  <!-- <button mat-icon-button class="nav-arrow" (click)="prev()" aria-label="Previous highlight">
+    <!-- <button mat-icon-button class="nav-arrow" (click)="prev()" aria-label="Previous highlight">
   <mat-icon>chevron_left</mat-icon>
 </button> -->
 
-<!-- <div class="carousel-content">
+    <!-- <div class="carousel-content">
 <div *ngFor="let highlight of highlights; let i = index">
   <mat-card class="highlight-card">
     <mat-card-header>
@@ -20,7 +20,7 @@
 </div>
 </div> -->
 
-<!-- <button mat-icon-button class="nav-arrow" (click)="next()" aria-label="Next highlight">
+    <!-- <button mat-icon-button class="nav-arrow" (click)="next()" aria-label="Next highlight">
 <mat-icon>chevron_right</mat-icon>
 </button> -->
 </div>
@@ -33,18 +33,21 @@
 </span>
 </div> -->
 
+<div class="section-heading">
+    <p class="eyebrow">{{ "highlights.eyebrow" | translate }}</p>
+    <p class="section-copy">{{ "highlights.intro" | translate }}</p>
+</div>
+
 <div class="timeline">
-  @for (highlight of highlights; track highlight) {
+    @for (highlight of highlights; track highlight) {
     <div class="timeline-item">
-      <div class="timeline-content">
-        <h4>
-          {{ highlight.date | translate }}
-          @if (highlight.dateRange) {
-            <span> {{ highlight.dateRange | translate }}</span>
-          }
-        </h4>
-        <p>{{ highlight.description | translate }}</p>
-      </div>
+        <div class="timeline-content">
+            <h4>
+                {{ highlight.date | translate }} @if (highlight.dateRange) {
+                <span> {{ highlight.dateRange | translate }}</span> }
+            </h4>
+            <p>{{ highlight.description | translate }}</p>
+        </div>
     </div>
-  }
+    }
 </div>

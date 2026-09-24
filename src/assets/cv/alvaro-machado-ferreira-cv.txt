@@ -1,0 +1,62 @@
+ALVARO MACHADO FERREIRA
+Software Engineer | Full Cycle Development | GenAI
+Sao Paulo, SP, Brasil
+LinkedIn: https://www.linkedin.com/in/alvaromachadoferreira/
+Email: alvaromachadoferreira@hotmail.com
+Telefone: +55 11 95101-3956
+
+Resumo Profissional
+Engenheiro de Software com forte atuacao em arquitetura de software,
+desenvolvimento escalavel e integracao de Inteligencia Artificial Generativa (GenAI).
+Atualmente atuo no ecossistema da Telefonica Vivo pela Mutant, com participacao hands-on na
+evolucao de jornadas e servicos digitais.
+Experiencia em adocao de novos padroes tecnologicos, Spec Driven Development,
+Prompt Engineering e integracao de Agentic AI.
+Foco em cultura de engenharia (Clean Code, TDD), seguranca, alta disponibilidade
+e entregas consistentes.
+
+Principais Competencias
+- GenAI e Inovacao: Prompt Engineering, Agentic AI, Spec Driven Development, AI-Assisted Development
+- Desenvolvimento de Ponta a Ponta: Java, Spring Boot, Node.js (TypeScript), NestJS, Python, FastAPI,
+  React, Vue.js, Angular, Microsservicos, BFF, APIs REST/GraphQL, Kafka, Micro Front-Ends (MFE)
+- Cloud, DevOps e Dados: AWS, Azure DevOps, Kubernetes (AKS), Docker, CI/CD, ArgoCD, Jenkins,
+  MongoDB, Redis, PostgreSQL, OracleDB
+- Qualidade e Boas Praticas: TDD, Clean Code, DevSecOps, Jest, Cypress, Stryker, Code Review
+
+Experiencia Profissional
+Mutant (Alocado na Telefonica Vivo)
+- Engenheiro de Software (Out/2025 - Presente)
+  Atuacao no ecossistema do App Vivo com foco em arquitetura, desenvolvimento de ponta a ponta
+  e evolucao tecnica de jornadas digitais.
+  Aplicacao de GenAI no ciclo de desenvolvimento, code review e melhoria continua dos padroes de engenharia.
+
+- Desenvolvedor Full Stack (Jun/2024 - Out/2025)
+  Desenvolvimento de jornadas-chave no App Vivo (Suporte Tecnico, Vivo Travel, e-SIM, Casa Inteligente).
+  Atuacao em microsservicos, BFFs e MFEs com React, Node.js, Java e Spring Boot.
+
+Marttech
+- Engenheiro de Software (Mai/2024 - Jun/2024)
+  Desenvolvimento da plataforma Curar Saude com React, TypeScript e Material UI.
+  CI/CD com Azure DevOps e aplicacao de TDD e Clean Architecture.
+
+Xmart Solutions
+- Desenvolvedor Full Stack (Jan/2024 - Abr/2024)
+  Desenvolvimento do app de seguranca xGuardian e landing page institucional.
+  APIs escalaveis com Python e FastAPI, padrao BFF e integracao com MySQL/MariaDB.
+
+V.tal
+- Desenvolvedor Full Stack (Out/2022 - Out/2023)
+  Manutencao e modernizacao de sistemas legados e modulos de Gestao de Acesso.
+  Atuacao no ciclo completo de desenvolvimento com Vue2/Vuex, React/TypeScript, Java Spring Boot e NestJS.
+  Criacao de portal de desenvolvedores para documentacao de APIs com foco em DX.
+
+Experiencias Anteriores Relevantes
+- Gama Academy: desenvolvimento de APIs com NestJS e PostgreSQL em sprints ageis, time premiado em 1o lugar
+- Metro de Sao Paulo: Estagio em Engenharia de Producao (Power BI, Excel, cronoanalise, ERP SAP)
+
+Formacao Academica
+- Pos-graduacao Lato Sensu em Tecnologias e Sistemas de Informacao | UFABC | Mai/2025 - Mai/2027
+- Bacharelado em Ciencia da Computacao | Universidade Sao Judas Tadeu | Fev/2023 - Dez/2026
+- Pos-graduacao em Desenvolvimento Web | IF Sul de Minas Gerais | Mar/2024 - Dez/2024
+- Bacharelado em Engenharia de Producao | Univesp | Ago/2018 - Jun/2023
+- Superior incompleto em Engenharia de Energia | UNESP | 2014 - 2018

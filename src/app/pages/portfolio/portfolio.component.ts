@@ -2,6 +2,7 @@ import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementR
 import { trigger, style, transition, animate } from '@angular/animations';
 import { ProjectsService } from './services/projects.service';
 import { Project } from './Project';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-portfolio',
@@ -29,6 +30,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   processedProjects: Project[] = [];
 
   initialLoading: boolean = true;
+  loadError = false;
   loadingMore: boolean = false;
   allProjectsLoaded: boolean = false;
   pageSize = 6;
@@ -53,7 +55,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   constructor(
     private projectsService: ProjectsService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -62,16 +65,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.projectsService.getProjects().subscribe(
       (fetchedProjects) => {
         this.allProjects = fetchedProjects;
-
-        // Filtra os projetos de acordo com os critérios do pipe antes de definir as tecnologias disponíveis
-        const displayableProjects = this.allProjects.filter(project => {
-          const hasValidDescription = project.description !== 'No description';
-          const hasValidTech = project.tech && project.tech !== 'N/A' && project.tech.trim() !== '';
-          return hasValidDescription && hasValidTech;
-        });
-
-        // Popula availableTechs apenas com tecnologias de projetos "exibíveis"
-        this.availableTechs = [...new Set(displayableProjects.map(p => p.tech).filter(t => t))].sort(); // Adiciona .filter(t => t) para remover nulos/undefined e .sort() para ordenar
+        this.availableTechs = [...new Set(this.allProjects.map(p => p.tech).filter(t => t))].sort();
 
         // Se a tecnologia selecionada anteriormente não estiver mais na lista de tecnologias disponíveis (após a filtragem),
         // reseta o selectedTech para null para evitar um estado de filtro inconsistente.
@@ -94,6 +88,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
         }
       },
       () => {
+        this.loadError = true;
         this.allProjects = [];
         this.availableTechs = [];
         this.initialLoading = false;
@@ -137,8 +132,6 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.projectListAnimationState = 'initial';
     let result = [...this.allProjects];
 
-    // A lógica de filtragem por selectedTech permanece,
-    // mas selectedTech agora é baseado em availableTechs que já considera projetos válidos.
     if (this.selectedTech) {
       result = result.filter(p => p.tech === this.selectedTech);
     }
@@ -158,9 +151,6 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       return this.currentSortOrder === 'recent' ? timeB - timeA : timeA - timeB;
     });
 
-    // Importante: processedProjects agora são os projetos que correspondem ao selectedTech (se houver)
-    // E que também atendem aos critérios de descrição/tech do pipe, pois availableTechs foi baseado nisso.
-    // O pipe no template fará a filtragem final na lista 'projects' que é derivada de 'processedProjects'.
     this.processedProjects = result;
     this.currentPage = 1;
     this.projects = []; // Limpa os projetos atualmente exibidos
@@ -220,6 +210,13 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       }
     }
     this.cdr.detectChanges();
+  }
+
+  // Uses the optional `repo.<name>` translation when present, otherwise the GitHub description
+  descriptionFor(project: Project): string {
+    const key = `repo.${project.name}`;
+    const translated = this.translate.instant(key);
+    return translated !== key ? translated : project.description;
   }
 
   filterByTech(tech: string | null): void {

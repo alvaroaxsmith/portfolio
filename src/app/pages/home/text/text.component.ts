@@ -21,11 +21,11 @@ import { TranslateService } from '@ngx-translate/core';
     standalone: false
 })
 export class TextComponent implements OnInit {
-  palavras: any = ['Software Engineer', 'Front-end Developer', 'Back-end Developer', 'Full-stack Developer'];
+  palavras: string[] = ['Full Cycle Development', 'GenAI'];
   estadoAnimacao = 'inicial';
   indiceAtual = 0;
 
-  constructor(private translate: TranslateService) { }
+  constructor(private readonly translate: TranslateService) { }
 
   ngOnInit() {
     setTimeout(() => {

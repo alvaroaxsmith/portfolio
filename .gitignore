@@ -28,8 +28,24 @@ yarn-error.log
 !.vscode/extensions.json
 .history/*
 
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Deploy
+.vercel
+
+# Local tooling and AI agents artifacts
+.playwright-mcp/
+.claude/settings.local.json
+*.tmp
+
+# Logs
+*.log
+
 # Miscellaneous
-/.angular/cache
+/.angular
 .sass-cache/
 /connect.lock
 /coverage

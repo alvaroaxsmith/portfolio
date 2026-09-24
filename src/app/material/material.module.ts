@@ -17,6 +17,7 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
+import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
 
 
 @NgModule({
@@ -39,6 +40,7 @@ import { MatSelectModule } from '@angular/material/select';
     MatSnackBarModule,
     MatTooltipModule,
     MatSelectModule, // Exportar MatSelectModule
+    MatBottomSheetModule,
   ]
 })
 export class MaterialModule {

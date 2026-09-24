@@ -7,7 +7,7 @@ import {
   OnInit,
   ChangeDetectionStrategy
 } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { TranslateService } from '@ngx-translate/core';
 
 @Component({
@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
   @HostBinding('class.navbar-hidden') navbarHidden = false;
 
   constructor(
-    public dialog: MatDialog,
+    public bottomSheet: MatBottomSheet,
     public translate: TranslateService,
     private cdr: ChangeDetectorRef
   ) {}
@@ -55,9 +55,9 @@ export class NavbarComponent implements OnInit {
   }
 
   openDialog() {
-    this.dialog
-      .open(Dialog)
-      .afterClosed()
-      .subscribe(() => {});
+    this.bottomSheet.open(Dialog, {
+      panelClass: 'mobile-nav-sheet',
+      ariaLabel: 'Menu de navegação'
+    });
   }
 }

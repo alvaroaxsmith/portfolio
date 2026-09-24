@@ -12,20 +12,14 @@ import { Subscription } from 'rxjs';
 })
 export class HomeComponent implements OnInit, OnDestroy {
   private imageSubscription: Subscription | undefined;
-  isLoadingImage: boolean = true;
+  isLoadingImage = true;
   imageUrl: string | undefined;
 
   constructor(
     private translate: TranslateService,
     private imageService: ImageService
-  ) {
-    translate.addLangs(['EN', 'PT-BR']);
-    translate.setDefaultLang('EN');
-  }
+  ) {}
 
-  switchLang(lang: string) {
-    this.translate.use(lang);
-  }
   ngOnInit(): void {
     this.imageService.getImage(0)
       .then(url => {
@@ -36,6 +30,7 @@ export class HomeComponent implements OnInit, OnDestroy {
         console.error('Error loading image:', error);
       });
   }
+
   ngOnDestroy(): void {
     if (this.imageSubscription) {
       this.imageSubscription.unsubscribe();
