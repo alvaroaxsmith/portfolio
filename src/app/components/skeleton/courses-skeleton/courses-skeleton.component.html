@@ -1,0 +1,23 @@
+@if (layout === 'table') {
+@for (item of items; track item) {
+<div class="table-row">
+    <app-skeleton width="70%"></app-skeleton>
+    <app-skeleton [width]="nameWidth(item)"></app-skeleton>
+    <app-skeleton width="2rem"></app-skeleton>
+    <app-skeleton width="60%"></app-skeleton>
+    <app-skeleton width="4.5rem"></app-skeleton>
+</div>
+}
+} @else {
+@for (item of items; track item) {
+<div class="course-card">
+    <app-skeleton width="30%" height="0.75rem"></app-skeleton>
+    <app-skeleton [width]="nameWidth(item)" height="1.1rem"></app-skeleton>
+    <app-skeleton width="50%" height="0.9rem"></app-skeleton>
+    <div class="course-meta">
+        <app-skeleton width="3rem" height="0.85rem"></app-skeleton>
+        <app-skeleton width="5rem" height="0.85rem"></app-skeleton>
+    </div>
+</div>
+}
+}

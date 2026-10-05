@@ -30,18 +30,12 @@
     font-size: 0.98rem;
 }
 
-
-/* O container da linha do tempo */
-
 .timeline {
     position: relative;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0.5rem 0;
 }
-
-
-/* A linha central da timeline */
 
 .timeline::after {
     content: '';
@@ -54,9 +48,6 @@
     margin-left: -2px;
 }
 
-
-/* Container para cada item da timeline */
-
 .timeline-item {
     padding: 10px 40px;
     position: relative;
@@ -64,9 +55,6 @@
     width: 50%;
     box-sizing: border-box;
 }
-
-
-/* O círculo na linha do tempo */
 
 .timeline-item::after {
     content: '';
@@ -81,24 +69,15 @@
     z-index: 1;
 }
 
-
-/* Itens à esquerda */
-
 .timeline-item:nth-child(odd) {
     left: 0;
     padding-right: 30px;
 }
 
-
-/* Itens à direita */
-
 .timeline-item:nth-child(even) {
     left: 50%;
     padding-left: 30px;
 }
-
-
-/* A seta (galho) para os itens da esquerda */
 
 .timeline-item:nth-child(odd)::before {
     content: " ";
@@ -113,9 +92,6 @@
     border-color: transparent transparent transparent rgba(255, 255, 255, 0.72);
 }
 
-
-/* A seta (galho) para os itens da direita */
-
 .timeline-item:nth-child(even)::before {
     content: " ";
     height: 0;
@@ -129,15 +105,9 @@
     border-color: transparent rgba(255, 255, 255, 0.72) transparent transparent;
 }
 
-
-/* Ajusta o círculo para os itens da direita */
-
 .timeline-item:nth-child(even)::after {
     left: -10px;
 }
-
-
-/* O card de conteúdo */
 
 .timeline-content {
     padding: 1rem 1.1rem;
@@ -169,15 +139,70 @@
     }
 }
 
-
-/* Media queries - Layout responsivo para telas menores */
+.timeline.is-parallax {
+    &::after {
+        bottom: auto;
+        height: var(--track, 0px);
+        transition: height 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+    }
+    &::before {
+        content: '';
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 50%;
+        width: 2px;
+        height: var(--fill, 0px);
+        margin-left: -2px;
+        background: var(--color-accent);
+        transition: height 0.3s ease-out;
+    }
+    .timeline-item {
+        --depth: 0;
+        --slide: -2.5rem;
+        --parallax: 18px;
+        &:nth-child(even) {
+            --slide: 2.5rem;
+            --parallax: 36px;
+        }
+    }
+    .timeline-item::before,
+    .timeline-content,
+    .timeline-item::after {
+        opacity: 0;
+        transition: opacity 0.6s ease var(--delay, 0ms), transform 0.6s cubic-bezier(0.2, 0.7, 0.2, 1) var(--delay, 0ms);
+    }
+    .timeline-item::before,
+    .timeline-content {
+        translate: 0 calc(var(--depth) * var(--parallax));
+        transform: translate3d(var(--slide), 1.5rem, 0) scale(0.96);
+        will-change: transform, opacity, translate;
+    }
+    .timeline-item::after {
+        transform: scale(0.4);
+    }
+    .timeline-item.is-visible {
+        &::before,
+        .timeline-content,
+        &::after {
+            opacity: 1;
+            transform: none;
+        }
+    }
+    .timeline-item.is-visible::after {
+        transition: opacity 0.4s ease var(--delay, 0ms), transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    .timeline-item.is-visible.is-reached::after {
+        background-color: var(--color-accent);
+        transform: scale(1.15);
+        box-shadow: 0 0 0 4px rgba(17, 24, 39, 0.12);
+    }
+}
 
 @media screen and (max-width: 768px) {
-    /* Move a linha para a esquerda */
     .timeline::after {
         left: 25px;
     }
-    /* Todos os itens ficam à direita da linha */
     .timeline-item {
         width: 100%;
         padding-left: 60px;
@@ -186,16 +211,32 @@
     .timeline-item:nth-child(odd),
     .timeline-item:nth-child(even) {
         left: 0;
+        padding-left: 60px;
+        padding-right: 15px;
     }
-    /* Todas as setas apontam para a esquerda */
-    .timeline-item::before {
+    .timeline-item:nth-child(odd)::before,
+    .timeline-item:nth-child(even)::before {
         left: 50px;
+        right: auto;
         border: medium solid transparent;
         border-width: 10px 10px 10px 0;
         border-color: transparent rgba(255, 255, 255, 0.72) transparent transparent;
     }
-    /* Posiciona os círculos na linha */
-    .timeline-item::after {
+    .timeline-item:nth-child(odd)::after,
+    .timeline-item:nth-child(even)::after {
         left: 15px;
+    }
+    .timeline.is-parallax {
+        &::before {
+            left: 25px;
+        }
+        .timeline-item,
+        .timeline-item:nth-child(even) {
+            --slide: 1.5rem;
+            --parallax: 12px;
+        }
+        .timeline-item:nth-child(even) {
+            --parallax: 22px;
+        }
     }
 }

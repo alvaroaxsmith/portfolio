@@ -9,13 +9,25 @@
     "PROJECTS": "PROJETOS",
     "Made by": "Desenvolvido por",
     "courseCertificateMessage": "Clique no nome do curso para ver o certificado.",
+    "splash": {
+        "loading": "Carregando"
+    },
+    "courseHint": {
+        "label": "Dica",
+        "close": "Fechar dica"
+    },
+    "certificate": {
+        "close": "Fechar certificado",
+        "openNewTab": "Abrir em nova aba",
+        "loading": "Carregando certificado…"
+    },
     "Technologies Used": "Tecnologias Utilizadas",
     "Welcome to my website": "Seja bem-vindo",
     "Hi, I’m": "Olá, eu me chamo",
     "home": {
         "eyebrow": "Bem-vindo!",
         "title": "Engenheiro de Software | GenAI | Full Cycle",
-        "description": "Construo sistemas desde 2022, com foco em arquiteturas escaláveis e no uso de IA Generativa para tornar a engenharia mais rápida e confiável.",
+        "description": "Desde 2022, construo sistemas que escalam junto com o negócio e uso IA Generativa para que times entreguem mais rápido e com mais confiança.",
         "rolePrefix": "foco:",
         "photoAlt": "Retrato de Alvaro Ferreira",
         "cta": {
@@ -99,6 +111,7 @@
     "COURSES": "CURSOS",
     "Courses": "Cursos",
     "courses": {
+        "allLoaded": "Você viu todos os cursos",
         "title": "Aprendizado contínuo",
         "intro": "Especializações e cursos que sustentam minha base em engenharia de software e tecnologias emergentes.",
         "filterPlaceholder": "Ex.: Arquitetura, Java, GenAI",
@@ -113,7 +126,15 @@
     "DATE": "DATA",
     "Select page of courses": "Selecione a página de cursos",
     "Projects": "Projetos",
+    "loading": {
+        "photo": "Carregando foto",
+        "courses": "Carregando cursos",
+        "projects": "Carregando projetos",
+        "moreProjects": "Carregando mais projetos",
+        "moreCourses": "Carregando mais cursos"
+    },
     "portfolio": {
+        "allLoaded": "Você viu todos os projetos",
         "title": "Código aberto",
         "intro": "Projetos pessoais publicados no meu GitHub, onde exploro novas tecnologias e padrões de arquitetura.",
         "error": "Não foi possível carregar os projetos agora. Veja todos no meu GitHub:"

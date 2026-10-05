@@ -6,6 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { TextComponent } from './text/text.component';
 import { FooterComponent } from 'src/app/components/footer/footer.component';
+import { SkeletonModule } from 'src/app/components/skeleton/skeleton.module';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -13,7 +14,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [HomeComponent, TextComponent, FooterComponent],
-  imports: [CommonModule, MaterialModule, RouterModule.forChild(routes), TranslateModule.forChild(),],
+  imports: [CommonModule, MaterialModule, SkeletonModule, RouterModule.forChild(routes), TranslateModule.forChild(),],
   exports: [
     HomeComponent,
   ],

@@ -1,0 +1,15 @@
+:host {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 1rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: var(--skeleton-base);
+  background-image:
+    linear-gradient(var(--skeleton-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--skeleton-line) 1px, transparent 1px),
+    var(--skeleton-noise, none);
+  background-size: 12px 12px, 12px 12px, var(--skeleton-noise-size, auto);
+  background-attachment: fixed;
+}

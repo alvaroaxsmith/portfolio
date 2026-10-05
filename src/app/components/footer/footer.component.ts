@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { faAngular, faNodeJs } from '@fortawesome/free-brands-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
 
-
 @Component({
     selector: 'app-footer',
     templateUrl: './footer.component.html',
@@ -19,11 +18,8 @@ export class FooterComponent implements OnInit {
   faNodeJs = faNodeJs;
 
   constructor(
-    public translate: TranslateService // Manter TranslateService injetado para uso
+    public translate: TranslateService
   ) {
-    // Remova as seguintes linhas:
-    // translate.addLangs(['EN', 'PT-BR']);
-    // translate.setDefaultLang('EN');
   }
 
   switchLang(lang: string) {

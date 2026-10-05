@@ -33,10 +33,10 @@ npm test        # testes unitários
 ```
 src/
 ├── app/
-│   ├── components/   # navbar, footer, splash-screen
+│   ├── components/   # navbar, footer, splash-screen, skeleton
 │   ├── material/     # MaterialModule compartilhado
 │   ├── pages/        # home, about-me, courses, portfolio, contact
-│   └── services/     # SeoService
+│   └── services/     # SeoService, language-storage
 ├── assets/
 │   ├── i18n/         # PT-BR.json e EN.json
 │   └── cv/           # currículo baixado pelo botão da home
@@ -47,7 +47,11 @@ src/
 
 - **Rotas:** cada página é um módulo com lazy loading (`loadChildren`) e `NoPreloading`. A exceção é `contact`, carregada junto com a aplicação.
 - **SEO:** cada rota declara `data.seo` com `titleKey` e `descriptionKey`. O `AppComponent` traduz essas chaves e o `SeoService` atualiza `title`, `description`, Open Graph e Twitter Card a cada navegação e troca de idioma.
-- **Idioma:** o padrão é `PT-BR`, definido no `APP_INITIALIZER`. O idioma muda em tempo de execução, sem recarregar a página.
+- **Idioma:** o padrão é `PT-BR`. A escolha do visitante fica em `localStorage` (`portfolio:lang`) e é lida no `APP_INITIALIZER`, então vale já no próximo carregamento, inclusive na splash. O idioma muda em tempo de execução, sem recarregar a página.
+- **Splash:** um canvas no `index.html` desenha a grade de 24px do fundo do site antes de o JavaScript carregar. Os quadrados cintilam em tons de cinza que clareiam com o tempo. O `SplashScreenComponent` adota essa grade, mostra o "Carregando" traduzido e, após no mínimo 3s, dispara a saída (os quadrados se dissolvem e revelam o fundo do site). Se o app não chamar a saída, ela acontece sozinha em 8s. A página não tem barra de rolagem enquanto a splash está visível.
+- **Skeletons:** todo carregamento usa o `SkeletonModule` (`app-skeleton`, `app-project-card-skeleton`, `app-courses-skeleton`). Os quadradinhos dos skeletons mudam de tom de forma aleatória, por uma textura SVG animada gerada uma vez por carregamento.
+- **Carregamento infinito:** na página de projetos (grid e lista) e na lista de cursos no celular, os itens chegam em lotes ao rolar, com skeletons do próximo lote no fim da lista.
+- **Estado entre rotas:** o `CoursesStateService` guarda filtro, ordenação, página, itens já carregados no celular e se a dica de cursos já foi exibida. Fica só em memória: recarregar a página reinicia esse estado.
 
 ## Fontes de dados
 
@@ -85,3 +89,29 @@ src/
 ### Código
 14. TypeScript `strict` e `strictTemplates` ficam ligados. O build não pode ter erros de tipo.
 15. Acesso a `localStorage` sempre dentro de `try/catch`, e a página precisa funcionar sem ele.
+16. O código em `src/` não tem comentários. Explicações de decisões ficam neste README e nas mensagens de commit.
+17. Animações respeitam `prefers-reduced-motion`: sem movimento contínuo, só transições curtas.
+
+### Valores acoplados
+Estes valores aparecem em mais de um arquivo e precisam mudar juntos:
+
+| Valor | Onde |
+| --- | --- |
+| Largura mínima do card de projeto (300px) | `GRID_MIN_CARD_WIDTH` em `portfolio.component.ts` e `minmax` do grid em `portfolio.component.scss` |
+| Duração da dica de cursos (5s) | `COURSE_HINT_DURATION_MS` em `snackbar.component.ts` e `--hint-duration` em `snack-bar.scss` |
+| Passo da grade (24px) | `background-size` do `body` em `styles.scss` e `CELL` da splash no `index.html` |
+| Cor do texto da splash | `--color-text` (`#0f172a`) e `MIN_TONE` da splash no `index.html`, que impede os quadrados de ficarem tão escuros quanto o texto |
+
+## Histórico de versões
+
+### v2.1.0
+- **Splash refeita:** grade em canvas desde o primeiro quadro, tons de cinza que clareiam, saída por dissolução e "Carregando" traduzido e animado.
+- **Skeletons:** em todas as páginas que carregam dados, com quadradinhos que mudam de tom aleatoriamente.
+- **Projetos:** carregamento infinito responsivo no grid e na lista, com skeletons e aviso de fim da lista.
+- **Cursos:** certificado em bottom sheet responsivo, carregamento infinito no celular e dica em notificação no canto superior direito, com relógio de 5s.
+- **Sobre mim:** linha do tempo de destaques revelada com parallax ao rolar; cards de experiência sem ação de clique no celular.
+- **Idioma salvo no navegador** e barra de rolagem nativa em telas de toque.
+- **Texto da home revisado** e remoção dos comentários do código.
+
+### v2.0.0
+- Projetos direto do GitHub, textos revisados em PT-BR e EN, SEO por rota e README técnico.

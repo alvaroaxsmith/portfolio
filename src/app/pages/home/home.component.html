@@ -18,8 +18,9 @@
     </div>
 
     @if (isLoadingImage) {
-    <figure class="hero-media spinner">
-        <mat-spinner diameter="80"></mat-spinner>
+    <figure class="hero-media" role="status">
+        <span class="cdk-visually-hidden">{{ 'loading.photo' | translate }}</span>
+        <app-skeleton class="sleeve-skeleton" radius="1.5rem"></app-skeleton>
     </figure>
     } @else {
     <figure class="hero-media">

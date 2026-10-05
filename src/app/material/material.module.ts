@@ -6,7 +6,6 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatExpansionModule } from '@angular/material/expansion';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTableModule } from '@angular/material/table';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
@@ -30,7 +29,6 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
     MatInputModule,
     MatTableModule,
     MatButtonModule,
-    MatProgressSpinnerModule,
     MatDividerModule,
     MatButtonToggleModule,
     MatMenuModule,
@@ -39,7 +37,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
     MatSortModule,
     MatSnackBarModule,
     MatTooltipModule,
-    MatSelectModule, // Exportar MatSelectModule
+    MatSelectModule,
     MatBottomSheetModule,
   ]
 })

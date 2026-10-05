@@ -140,8 +140,9 @@ img {
     object-fit: cover;
 }
 
-.spinner {
-    min-height: 320px;
+.sleeve-skeleton {
+    width: clamp(240px, 32vw, 360px);
+    height: clamp(300px, 44vw, 440px);
 }
 
 @media (max-width: 1023px) {
@@ -174,6 +175,10 @@ img {
     .sleeve {
         min-width: min(100%, 340px);
         min-height: 320px;
+    }
+    .sleeve-skeleton {
+        width: min(100%, 340px);
+        height: 320px;
     }
     img {
         width: min(100%, 260px);

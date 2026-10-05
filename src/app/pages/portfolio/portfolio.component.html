@@ -1,4 +1,4 @@
-<section class="portfolio-page">
+<section class="portfolio-page" #page>
     <header class="page-header">
         <p class="eyebrow">{{ "PROJECTS" | translate }}</p>
         <h1>{{ "portfolio.title" | translate }}</h1>
@@ -65,8 +65,21 @@
                 }
             </mat-card>
         </article>
-        }
+        } @if (loadingMore) {
+        @for (placeholder of loadingMoreSkeletons; track placeholder) {
+        <div class="project-wrapper">
+            <app-project-card-skeleton [layout]="currentView"></app-project-card-skeleton>
+        </div>
+        } }
     </div>
+    <span class="cdk-visually-hidden" role="status">
+        @if (loadingMore) {
+        {{ "loading.moreProjects" | translate }}
+        }
+    </span>
+    @if (allProjectsLoaded && projects.length > 0) {
+    <p class="end-of-list">{{ "portfolio.allLoaded" | translate }}</p>
+    }
     } @else { @if (!initialLoading && !loadingMore && projects.length === 0) {
     <p class="no-projects-message">
         @if (loadError) {
@@ -76,15 +89,19 @@
         {{ "No projects found." | translate }}
         }
     </p>
-    } } @if (!allProjectsLoaded && !initialLoading && processedProjects.length > 0) {
-    <div #loadMoreTrigger style="height: 1px"></div>
-    } @if (loadingMore && !initialLoading) {
-    <div class="load-more-spinner">
-        <mat-spinner diameter="50"></mat-spinner>
-    </div>
+    } } @if (!allProjectsLoaded && processedProjects.length > 0) {
+    <div #loadMoreTrigger class="load-more-trigger" aria-hidden="true"></div>
     } } @else {
-    <div class="initial-spinner">
-        <mat-spinner></mat-spinner>
+    <div class="portfolio-cards-area" role="status" [ngClass]="{
+          'list-view': currentView === 'list',
+          'grid-view': currentView === 'grid'
+        }">
+        <span class="cdk-visually-hidden">{{ "loading.projects" | translate }}</span>
+        @for (placeholder of initialSkeletons; track placeholder) {
+        <div class="project-wrapper">
+            <app-project-card-skeleton [layout]="currentView"></app-project-card-skeleton>
+        </div>
+        }
     </div>
     }
 </section>

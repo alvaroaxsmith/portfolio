@@ -53,6 +53,7 @@ mat-expansion-panel {
     border-radius: 1rem;
     margin-bottom: 1rem;
     box-shadow: var(--color-shadow);
+    scroll-margin-top: calc(var(--navbar-height) + 1rem);
 }
 
 ::ng-deep .mat-expansion-panel-header {

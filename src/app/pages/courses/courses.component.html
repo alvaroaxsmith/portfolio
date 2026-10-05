@@ -8,14 +8,13 @@
     <div class="mat-field-container">
         <mat-form-field class="form-field">
             <mat-label class="label">{{ "Filter" | translate }}</mat-label>
-            <input class="form-field" matInput (keyup)="applyFilter($event)" [placeholder]="'courses.filterPlaceholder' | translate" #input />
+            <input class="form-field" matInput [value]="state.filter" (input)="applyFilter($event)" [placeholder]="'courses.filterPlaceholder' | translate" #input />
             <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
     </div>
 
     <div class="table-container desktop-table">
         <table mat-table [dataSource]="dataSource" matSort>
-            <!-- Field Column -->
             <ng-container matColumnDef="field">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ "FIELD" | translate }}
@@ -23,7 +22,6 @@
                 <td mat-cell *matCellDef="let row">{{ row.field }}</td>
             </ng-container>
 
-            <!-- Name Column -->
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ "NAME" | translate }}
@@ -33,8 +31,6 @@
                 </td>
             </ng-container>
 
-
-            <!-- School Column -->
             <ng-container matColumnDef="school">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ "SCHOOL" | translate }}
@@ -42,7 +38,6 @@
                 <td mat-cell *matCellDef="let row">{{ row.school }}</td>
             </ng-container>
 
-            <!-- Time Column -->
             <ng-container matColumnDef="time">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ "HOURS" | translate }}
@@ -50,7 +45,6 @@
                 <td mat-cell *matCellDef="let row">{{ row.time }}</td>
             </ng-container>
 
-            <!-- Date Column -->
             <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ "DATE" | translate }}
@@ -59,9 +53,8 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openDialog(row)"></tr>
+            <tr mat-row class="course-row" *matRowDef="let row; columns: displayedColumns" tabindex="0" (click)="openDialog(row)" (keydown.enter)="openDialog(row)" (keydown.space)="$event.preventDefault(); openDialog(row)"></tr>
 
-            <!-- Row shown when there is no matching data. -->
             <tr class="mat-row" *matNoDataRow>
                 @if (showNoDataMessage) {
                 <td class="mat-cell" [attr.colspan]="displayedColumns.length">
@@ -70,27 +63,56 @@
                 }
             </tr>
         </table>
-        @if (dataSource.data.length === 0) {
-        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+        @if (isLoading) {
+        <div role="status">
+            <span class="cdk-visually-hidden">{{ 'loading.courses' | translate }}</span>
+            <app-courses-skeleton layout="table"></app-courses-skeleton>
+        </div>
         }
     </div>
 
-    <div class="mobile-course-list" role="list">
-        @if (!isLoading) { @for (course of visibleCourses; track course.name) {
-        <button type="button" class="course-card" role="listitem" (click)="openDialog(course)">
-          <span class="course-field">{{ course.field }}</span>
-          <strong>{{ course.name }}</strong>
-          <p>{{ course.school }}</p>
-          <div class="course-meta">
-            <span>{{ course.time }}</span>
-            <span>{{ course.date }}</span>
-          </div>
-        </button> } @if (visibleCourses.length === 0) {
+    @if (isLoading) {
+    <div class="mobile-course-skeleton" role="status">
+        <span class="cdk-visually-hidden">{{ 'loading.courses' | translate }}</span>
+        <app-courses-skeleton layout="cards" [count]="3"></app-courses-skeleton>
+    </div>
+    }
+
+    <div class="mobile-course-list">
+        @if (!isLoading) {
+        <div class="mobile-course-items" role="list">
+            @for (course of mobileCourses; track course.name) {
+            <button type="button" class="course-card" role="listitem" (click)="openDialog(course)">
+              <span class="course-field">{{ course.field }}</span>
+              <strong>{{ course.name }}</strong>
+              <p>{{ course.school }}</p>
+              <div class="course-meta">
+                <span>{{ course.time }}</span>
+                <span>{{ course.date }}</span>
+              </div>
+            </button>
+            }
+        </div>
+        @if (mobileLoadingMore) {
+        <app-courses-skeleton layout="cards" [count]="mobileSkeletonCount"></app-courses-skeleton>
+        }
+        <span class="cdk-visually-hidden" role="status">
+            @if (mobileLoadingMore) {
+            {{ 'loading.moreCourses' | translate }}
+            }
+        </span>
+        @if (hasMoreMobileCourses) {
+        <div #mobileLoadTrigger class="mobile-load-trigger" aria-hidden="true"></div>
+        } @else if (visibleCourses.length > 0) {
+        <p class="end-of-list">{{ 'courses.allLoaded' | translate }}</p>
+        }
+        @if (visibleCourses.length === 0) {
         <p class="empty-state">{{ 'courses.emptyState' | translate }}</p>
-        } }
+        }
+        }
     </div>
 
     <div class="paginator">
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" [length]="dataSource.data.length" aria-label="Select page of courses"></mat-paginator>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="state.pageSize" [length]="dataSource.data.length" aria-label="Select page of courses"></mat-paginator>
     </div>
 </section>

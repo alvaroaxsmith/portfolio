@@ -1,15 +1,12 @@
-<!-- Container principal que organiza o cabeçalho e as visualizações -->
 <div class="professional-experience-container">
     <div class="section-heading">
         <p class="eyebrow">{{ "timeline.eyebrow" | translate }}</p>
         <p class="section-copy">{{ "timeline.intro" | translate }}</p>
     </div>
 
-    <!-- Cabeçalho da Linha do Tempo (compartilhado entre as visualizações) -->
     <div class="timeline-background">
         <div class="timeline-line"></div>
         <div class="timeline-icons">
-            <!-- O clique no ícone muda de função dependendo da visualização atual -->
             @for (exp of experiencias; track exp; let i = $index) {
             <button type="button" class="icon-wrapper" [class.active]="!isJourneyVisible && i === currentIndex" [class.selected-for-journey]="
           isJourneyVisible && i === journeyCurrentIndex
@@ -21,16 +18,13 @@
         </div>
     </div>
 
-    <!-- Container que gerencia a transição entre a visualização do carrossel e da jornada -->
     <div class="views-container" [class.journey-view-active]="isJourneyVisible">
-        <!-- Seção do Carrossel de Experiências -->
         <div class="timeline-carousel-section">
             <div class="carousel-wrapper">
                 <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
                     @for (experiencia of experiencias; track experiencia) {
                     <div class="carousel-item">
-                        <!-- Card de Experiência Individual -->
-                        <mat-card class="timeline-content" (click)="selecionarExperiencia(experiencia)" (keydown)="handleActionKey($event, () => selecionarExperiencia(experiencia))" tabindex="0">
+                        <mat-card class="timeline-content" [class.is-interactive]="!isMobile" (click)="selecionarExperiencia(experiencia)" (keydown)="handleActionKey($event, () => selecionarExperiencia(experiencia))" [attr.tabindex]="isMobile ? null : 0">
                             <mat-card-header>
                                 <mat-card-title>{{ experiencia.cargo | translate }}
                                 </mat-card-title>
@@ -76,14 +70,12 @@
                 </div>
               </div>
 
-              <!-- Seção da Jornada (agora como um carrossel de linhas do tempo) -->
               <div class="mermaid-section">
                 <div class="mermaid-journey-wrapper">
                   <div
                     class="mermaid-journey-track"
                     [style.transform]="'translateX(-' + journeyCurrentIndex * 100 + '%)'"
                     >
-                    <!-- Itera sobre as definições de timeline para criar um card para cada -->
                     @for (timeline of timelineDefinitions; track timeline) {
                       <div
                         class="mermaid-journey-item"
@@ -94,13 +86,11 @@
                           (keydown)="handleActionKey($event, () => voltarParaTimeline())"
                           tabindex="0"
                           >
-                          <!-- O container do diagrama. #mermaidJourneyContainer é usado para renderizar o SVG -->
                           <div
                             #mermaidJourneyContainer
                             class="mermaid-journey-container"
                             [attr.data-experience-id]="timeline.id"
                             >
-                            <!-- O Mermaid SVG será injetado aqui pelo componente TS -->
                           </div>
                         </mat-card>
                       </div>
