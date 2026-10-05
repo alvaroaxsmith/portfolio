@@ -16,6 +16,9 @@ Este README descreve as especificações técnicas do projeto e as regras que to
 | Build | `@angular/build:application` |
 | Testes | Karma + Jasmine |
 | CI | GitHub Actions: CodeQL em `main` |
+| Analytics | Google Tag Manager + GA4, com Consent Mode v2 |
+| SEO | Google Search Console, `robots.txt`, `sitemap.xml` e `canonical` por rota |
+| Deploy | Vercel, com preview por PR e produção a cada push em `main` |
 
 **Node.js:** `^22.22.3 || ^24.15.0 || >=26.0.0` (faixa exigida pelo Angular 22).
 
@@ -70,6 +73,9 @@ O site usa **Google Tag Manager** para carregar o **GA4**, com **Consent Mode v2
 - O GTM só carrega quando `GTM_ID` está preenchido e o site roda em `alvaromachadoferreira.vercel.app`. Em desenvolvimento e nos previews da Vercel nada é enviado.
 - O banner (`app-consent-banner`) aparece depois da splash, só para quem ainda não escolheu. "Aceitar" libera apenas `analytics_storage`; os sinais de anúncio continuam negados. O link "Preferências de cookies" no rodapé reabre o banner.
 - O `AnalyticsService` envia os eventos ao `dataLayer` e zera os parâmetros do evento anterior a cada envio. O `page_view` é enviado a cada navegação do Router, depois de o título da página ser atualizado.
+- O `page_location` do `page_view` é a URL completa, com a query string: é dela que o GA4 lê os UTMs para atribuir a origem da sessão. O `page_path` vai sem a query.
+- O GA4 (`G-3FW1JM39H9`) é configurado só dentro do contêiner do GTM (`GTM-PCV39BS2`): Tag Google com `send_page_view` desligado e uma tag de evento do GA4 que recebe os eventos do plano de medição.
+- Com Consent Mode no modo avançado, as tags do Google enviam pings sem cookies e sem identificadores enquanto o consentimento está negado.
 - O `SeoService` atualiza `canonical` e `og:url` a cada rota.
 - Para não contar suas próprias visitas, abra o site uma vez com `?analytics=off` (desliga neste navegador). `?analytics=on` religa.
 
@@ -91,6 +97,24 @@ O site usa **Google Tag Manager** para carregar o **GA4**, com **Consent Mode v2
 | `certificate_open_new_tab` | Abrir certificado em nova aba | `course` |
 
 Nomes de eventos e parâmetros são fixos e em inglês, independentes do idioma da página. Nunca enviar dados pessoais.
+
+### Links com UTM
+Links do site divulgados fora dele levam UTMs para que a origem apareça no GA4 (Aquisição de tráfego):
+
+| Onde | `utm_source` | `utm_medium` | `utm_campaign` |
+| --- | --- | --- | --- |
+| Perfil do LinkedIn | `linkedin` | `profile` | — |
+| Destaques do LinkedIn | `linkedin` | `featured` | — |
+| Posts do LinkedIn | `linkedin` | `post` | tema do post |
+| CV em PDF | `cv` | `pdf` | — |
+| Perfil do GitHub | `github` | `profile` | — |
+| README de projeto | `github` | `readme` | nome do repositório |
+| Candidatura a vaga | nome da empresa | `application` | vaga |
+| Assinatura de e-mail | `email` | `signature` | — |
+
+Exemplo: `https://alvaromachadoferreira.vercel.app/?utm_source=linkedin&utm_medium=profile`
+
+Regras: valores sempre em minúsculas e com hífen, nomes estáveis ao longo do tempo e nenhum UTM em links internos do site.
 
 ## Regras do projeto
 
@@ -137,6 +161,14 @@ Estes valores aparecem em mais de um arquivo e precisam mudar juntos:
 | Cor do texto da splash | `--color-text` (`#0f172a`) e `MIN_TONE` da splash no `index.html`, que impede os quadrados de ficarem tão escuros quanto o texto |
 
 ## Histórico de versões
+
+### v2.2.0
+- **Analytics:** GA4 carregado pelo Google Tag Manager, só no domínio de produção, com Consent Mode v2 começando com tudo negado.
+- **Banner de consentimento (LGPD)** depois da splash e link "Preferências de cookies" no rodapé.
+- **Plano de medição:** `page_view` a cada navegação e eventos de CV, LinkedIn, contato, repositórios, filtros e visualização de projetos, certificados e troca de idioma.
+- **Atribuição por UTM:** o `page_view` envia a URL completa, com a query string.
+- **Exclusão do próprio tráfego** com `?analytics=off` (e `?analytics=on` para religar).
+- **SEO técnico:** `canonical` e `og:url` por rota, `robots.txt`, `sitemap.xml` e verificação no Google Search Console.
 
 ### v2.1.0
 - **Splash refeita:** grade em canvas desde o primeiro quadro, tons de cinza que clareiam, saída por dissolução e "Carregando" traduzido e animado.
