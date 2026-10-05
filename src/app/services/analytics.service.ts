@@ -56,7 +56,7 @@ export class AnalyticsService {
   pageView(path: string, title: string, language: string): void {
     this.track('page_view', {
       page_path: path,
-      page_location: location.origin + path,
+      page_location: location.href,
       page_title: title,
       language
     });
