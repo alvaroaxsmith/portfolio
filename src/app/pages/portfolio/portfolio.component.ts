@@ -3,6 +3,7 @@ import { trigger, style, transition, animate } from '@angular/animations';
 import { ProjectsService } from './services/projects.service';
 import { Project } from './Project';
 import { TranslateService } from '@ngx-translate/core';
+import { AnalyticsService } from '../../services/analytics.service';
 
 const GRID_MIN_CARD_WIDTH = 300;
 const GRID_ROWS_PER_PAGE = 2;
@@ -60,8 +61,13 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   constructor(
     private projectsService: ProjectsService,
     private cdr: ChangeDetectorRef,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private analytics: AnalyticsService
   ) { }
+
+  trackRepo(project: Project): void {
+    this.analytics.track('repo_click', { repo: project.name, tech: project.tech || 'none', view: this.currentView });
+  }
 
   get loadingMoreCount(): number {
     return Math.min(this.nextBatchSize(), this.processedProjects.length - this.projects.length);
@@ -212,11 +218,13 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   filterByTech(tech: string | null): void {
     this.selectedTech = tech;
+    this.analytics.track('projects_filter', { tech: tech ?? 'all' });
     this.applyFiltersAndSorting();
   }
 
   sortByDate(order: 'recent' | 'oldest'): void {
     this.currentSortOrder = order;
+    this.analytics.track('projects_sort', { sort: order });
     this.applyFiltersAndSorting();
   }
 
@@ -232,6 +240,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   toggleView(): void {
     this.currentView = this.currentView === 'list' ? 'grid' : 'list';
+    this.analytics.track('projects_view_toggle', { view: this.currentView });
     this.projectListAnimationState = 'viewToggle';
     this.updatePageSize();
     this.cdr.detectChanges();

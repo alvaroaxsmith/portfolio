@@ -4,6 +4,7 @@ import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Subject, filter, takeUntil } from 'rxjs';
 import { SeoService } from './services/seo.service';
+import { AnalyticsService } from './services/analytics.service';
 import { DEFAULT_LANG, SUPPORTED_LANGS, getInitialLang, storeLang } from './services/language-storage';
 
 @Component({
@@ -23,6 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private router: Router,
     private activatedRoute: ActivatedRoute,
     private seoService: SeoService,
+    private analytics: AnalyticsService,
     @Inject(DOCUMENT) private document: Document
   ) {
     this.initializeAppLanguage();
@@ -35,17 +37,25 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnInit() {
     this.updateDocumentLanguage(this.translate.currentLang || this.translate.defaultLang);
     this.updateSeo();
+    let currentLang = this.translate.currentLang || this.translate.defaultLang;
 
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
         takeUntil(this.destroy$)
       )
-      .subscribe(() => this.updateSeo());
+      .subscribe(() => {
+        this.updateSeo();
+        this.analytics.pageView(this.router.url.split(/[?#]/)[0], this.document.title, this.translate.currentLang);
+      });
 
     this.translate.onLangChange
       .pipe(takeUntil(this.destroy$))
       .subscribe((event: LangChangeEvent) => {
+        if (event.lang !== currentLang) {
+          this.analytics.track('language_switch', { from: currentLang, to: event.lang });
+          currentLang = event.lang;
+        }
         storeLang(event.lang);
         this.updateDocumentLanguage(event.lang);
         this.updateSeo();
@@ -71,7 +81,8 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.seoService.update({
       title: this.translate.instant(seo.titleKey),
-      description: this.translate.instant(seo.descriptionKey)
+      description: this.translate.instant(seo.descriptionKey),
+      path: this.router.url.split(/[?#]/)[0]
     });
   }
 

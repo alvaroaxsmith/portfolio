@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/
 import { TranslateService } from '@ngx-translate/core';
 import { ImageService } from '../home/services/image.service';
 import { Subscription } from 'rxjs';
+import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
     selector: 'app-home',
@@ -17,8 +18,17 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   constructor(
     private translate: TranslateService,
-    private imageService: ImageService
+    private imageService: ImageService,
+    private analytics: AnalyticsService
   ) {}
+
+  trackCvDownload(): void {
+    this.analytics.track('cv_download', { language: this.translate.currentLang });
+  }
+
+  trackLinkedin(): void {
+    this.analytics.track('linkedin_click', { location: 'home' });
+  }
 
   ngOnInit(): void {
     this.imageService.getImage(0)

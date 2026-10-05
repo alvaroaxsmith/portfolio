@@ -4,6 +4,7 @@ import { CourseService } from '../services/courses.service';
 import { Course } from '../interfaces/courses.interface';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { tap } from 'rxjs/operators';
+import { AnalyticsService } from '../../../services/analytics.service';
 
 @Component({
     selector: 'app-dialog',
@@ -21,8 +22,13 @@ export class DialogComponent implements OnInit {
     @Inject(MAT_BOTTOM_SHEET_DATA) public rowData: Course,
     private bottomSheetRef: MatBottomSheetRef<DialogComponent>,
     private courseService: CourseService,
-    private domSanitizer: DomSanitizer
+    private domSanitizer: DomSanitizer,
+    private analytics: AnalyticsService
   ) { }
+
+  trackOpenNewTab(): void {
+    this.analytics.track('certificate_open_new_tab', { course: this.rowData.name });
+  }
 
   ngOnInit(): void {
     this.loadCourseData();

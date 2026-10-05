@@ -33,10 +33,10 @@ npm test        # testes unitários
 ```
 src/
 ├── app/
-│   ├── components/   # navbar, footer, splash-screen, skeleton
+│   ├── components/   # navbar, footer, splash-screen, skeleton, consent-banner
 │   ├── material/     # MaterialModule compartilhado
 │   ├── pages/        # home, about-me, courses, portfolio, contact
-│   └── services/     # SeoService, language-storage
+│   └── services/     # SeoService, AnalyticsService, language-storage
 ├── assets/
 │   ├── i18n/         # PT-BR.json e EN.json
 │   └── cv/           # currículo baixado pelo botão da home
@@ -60,6 +60,37 @@ src/
 | Projetos | API pública do GitHub (`/users/alvaroaxsmith/repos`) | Só aparecem repositórios com o topic `portfolio-project`, ordenados por `pushed_at`. A resposta fica em `localStorage` por 1 hora. |
 | Cursos | JSON Server hospedado na Vercel | Lista servida por API externa. |
 | Demais textos | `src/assets/i18n/*.json` | Todo o conteúdo textual do site. |
+
+## Analytics e SEO técnico
+
+O site usa **Google Tag Manager** para carregar o **GA4**, com **Consent Mode v2** e banner de consentimento (LGPD), além de `robots.txt` e `sitemap.xml` para o **Google Search Console**.
+
+### Como funciona
+- O `<head>` do `index.html` define o consentimento padrão com tudo negado antes de carregar o GTM. Se o visitante já aceitou (`portfolio:consent` no `localStorage`), o consentimento é restaurado antes do GTM.
+- O GTM só carrega quando `GTM_ID` está preenchido e o site roda em `alvaromachadoferreira.vercel.app`. Em desenvolvimento e nos previews da Vercel nada é enviado.
+- O banner (`app-consent-banner`) aparece depois da splash, só para quem ainda não escolheu. "Aceitar" libera apenas `analytics_storage`; os sinais de anúncio continuam negados. O link "Preferências de cookies" no rodapé reabre o banner.
+- O `AnalyticsService` envia os eventos ao `dataLayer` e zera os parâmetros do evento anterior a cada envio. O `page_view` é enviado a cada navegação do Router, depois de o título da página ser atualizado.
+- O `SeoService` atualiza `canonical` e `og:url` a cada rota.
+- Para não contar suas próprias visitas, abra o site uma vez com `?analytics=off` (desliga neste navegador). `?analytics=on` religa.
+
+### Plano de medição
+
+| Evento | Quando | Parâmetros |
+| --- | --- | --- |
+| `page_view` | Cada navegação | `page_path`, `page_location`, `page_title`, `language` |
+| `consent_update` | Escolha no banner | `analytics_storage` |
+| `language_switch` | Troca de idioma | `from`, `to` |
+| `cv_download` | Botão "Baixar CV" | `language` |
+| `linkedin_click` | CTA do LinkedIn na home | `location` |
+| `contact_click` | Cards da página de contato | `channel` (`phone`, `email`, `github`, `linkedin`) |
+| `repo_click` | Botão "Repositório" de um projeto | `repo`, `tech`, `view` |
+| `projects_filter` | Filtro de tecnologia | `tech` |
+| `projects_sort` | Ordenação por data | `sort` |
+| `projects_view_toggle` | Troca entre grid e lista | `view` |
+| `certificate_open` | Abrir um certificado | `course`, `school` |
+| `certificate_open_new_tab` | Abrir certificado em nova aba | `course` |
+
+Nomes de eventos e parâmetros são fixos e em inglês, independentes do idioma da página. Nunca enviar dados pessoais.
 
 ## Regras do projeto
 
@@ -100,6 +131,9 @@ Estes valores aparecem em mais de um arquivo e precisam mudar juntos:
 | Largura mínima do card de projeto (300px) | `GRID_MIN_CARD_WIDTH` em `portfolio.component.ts` e `minmax` do grid em `portfolio.component.scss` |
 | Duração da dica de cursos (5s) | `COURSE_HINT_DURATION_MS` em `snackbar.component.ts` e `--hint-duration` em `snack-bar.scss` |
 | Passo da grade (24px) | `background-size` do `body` em `styles.scss` e `CELL` da splash no `index.html` |
+| Domínio de produção | `PRODUCTION_HOST` no `index.html`, `SITE_URL` no `seo.service.ts`, `robots.txt` e `sitemap.xml` |
+| Rotas do site | `app-routing.module.ts` e `sitemap.xml` |
+| Chave do consentimento (`portfolio:consent`) | Script do `<head>` no `index.html` e `analytics.service.ts` |
 | Cor do texto da splash | `--color-text` (`#0f172a`) e `MIN_TONE` da splash no `index.html`, que impede os quadrados de ficarem tão escuros quanto o texto |
 
 ## Histórico de versões

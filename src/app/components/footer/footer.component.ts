@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { faAngular, faNodeJs } from '@fortawesome/free-brands-svg-icons';
 import { TranslateService } from '@ngx-translate/core';
+import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
     selector: 'app-footer',
@@ -18,7 +19,8 @@ export class FooterComponent implements OnInit {
   faNodeJs = faNodeJs;
 
   constructor(
-    public translate: TranslateService
+    public translate: TranslateService,
+    public analytics: AnalyticsService
   ) {
   }
 

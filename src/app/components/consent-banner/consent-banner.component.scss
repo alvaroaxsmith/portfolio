@@ -1,0 +1,76 @@
+:host {
+    position: fixed;
+    left: 1rem;
+    bottom: 1rem;
+    z-index: 1200;
+    width: min(400px, calc(100vw - 2rem));
+}
+
+.consent {
+    display: grid;
+    gap: 0.6rem;
+    padding: 1rem 1.1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    color: var(--color-text);
+    background-color: rgba(255, 255, 255, 0.9);
+    background-image:
+        linear-gradient(rgba(148, 163, 184, 0.14) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.14) 1px, transparent 1px);
+    background-size: 12px 12px;
+    background-attachment: fixed;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.14);
+    animation: consent-in 0.4s cubic-bezier(0.2, 0.9, 0.3, 1) both;
+
+    p {
+        margin: 0;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        color: var(--color-text);
+    }
+}
+
+.consent-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.consent-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    .mat-mdc-unelevated-button {
+        --mdc-filled-button-container-color: var(--color-accent);
+        --mat-button-filled-container-color: var(--color-accent);
+        --mdc-filled-button-label-text-color: #fff;
+        --mat-button-filled-label-text-color: #fff;
+    }
+}
+
+@keyframes consent-in {
+    from {
+        opacity: 0;
+        transform: translateY(1rem);
+    }
+}
+
+@media (max-width: 599px) {
+    :host {
+        left: 1rem;
+        right: 1rem;
+        bottom: max(1rem, env(safe-area-inset-bottom));
+        width: auto;
+    }
+
+    .consent-actions button {
+        flex: 1;
+    }
+}

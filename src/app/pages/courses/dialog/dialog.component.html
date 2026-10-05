@@ -15,7 +15,7 @@
 
     <div class="actions">
       @if (externalUrl) {
-        <a mat-icon-button [href]="externalUrl" target="_blank" rel="noopener noreferrer"
+        <a mat-icon-button [href]="externalUrl" target="_blank" rel="noopener noreferrer" (click)="trackOpenNewTab()"
           [attr.aria-label]="'certificate.openNewTab' | translate"
           [title]="'certificate.openNewTab' | translate">
           <mat-icon>open_in_new</mat-icon>

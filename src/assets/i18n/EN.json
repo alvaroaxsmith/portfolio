@@ -9,6 +9,13 @@
     "PROJECTS": "PROJECTS",
     "Made by": "Made by",
     "courseCertificateMessage": "Click on the course name to view the certificate.",
+    "consent": {
+        "label": "Privacy",
+        "text": "I use Google Analytics, with cookies, only to understand which parts of the site get the most visits. No data is used for advertising.",
+        "accept": "Accept",
+        "reject": "Decline",
+        "preferences": "Cookie preferences"
+    },
     "splash": {
         "loading": "Loading"
     },

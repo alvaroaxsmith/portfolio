@@ -8,8 +8,8 @@
             <app-text></app-text>
         </div>
         <div class="hero-actions">
-            <a mat-flat-button href="/assets/cv/alvaro-machado-ferreira-cv.txt" download="alvaro-machado-ferreira-cv.txt">{{ 'home.cta.downloadCv' | translate }}</a>
-            <a mat-stroked-button href="https://www.linkedin.com/in/alvaromachadoferreira/" target="_blank" rel="noopener noreferrer">{{ 'home.cta.linkedin' | translate }}</a>
+            <a mat-flat-button href="/assets/cv/alvaro-machado-ferreira-cv.txt" download="alvaro-machado-ferreira-cv.txt" (click)="trackCvDownload()">{{ 'home.cta.downloadCv' | translate }}</a>
+            <a mat-stroked-button href="https://www.linkedin.com/in/alvaromachadoferreira/" target="_blank" rel="noopener noreferrer" (click)="trackLinkedin()">{{ 'home.cta.linkedin' | translate }}</a>
         </div>
         <ul class="hero-highlights" aria-label="Destaques profissionais">
             <li>{{ 'home.highlight.one' | translate }}</li>

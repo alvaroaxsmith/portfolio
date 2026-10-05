@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
+import { AnalyticsService } from '../../services/analytics.service';
 @Component({
     selector: 'app-contact',
     templateUrl: './contact.component.html',
@@ -16,7 +17,11 @@ export class ContactComponent implements OnInit {
   faLocation = faLocationDot;
   faPhone = faPhone;
 
-  constructor() { }
+  constructor(private analytics: AnalyticsService) { }
+
+  trackContact(channel: string): void {
+    this.analytics.track('contact_click', { channel });
+  }
 
   ngOnInit(): void {
   }
