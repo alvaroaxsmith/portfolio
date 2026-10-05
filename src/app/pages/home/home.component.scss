@@ -140,7 +140,6 @@ img {
     object-fit: cover;
 }
 
-// Mesmas dimensões do .sleeve para não haver salto quando a foto carrega
 .sleeve-skeleton {
     width: clamp(240px, 32vw, 360px);
     height: clamp(300px, 44vw, 440px);

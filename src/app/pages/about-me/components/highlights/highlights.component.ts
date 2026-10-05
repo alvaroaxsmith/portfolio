@@ -1,4 +1,3 @@
-// filepath: src/app/pages/about-me/components/highlights/highlights.component.ts
 import {
   Component,
   ChangeDetectionStrategy,
@@ -49,7 +48,6 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
   @ViewChildren('timelineItem') itemRefs!: QueryList<ElementRef<HTMLElement>>;
 
   private frame: number | null = null;
-  // Só revela itens com o painel totalmente aberto (ver start/stop)
   private active = false;
   private activateTimer?: ReturnType<typeof setTimeout>;
   private readonly activate = () => {
@@ -72,13 +70,9 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    // O parallax só mexe em variáveis CSS: roda fora do Angular para não
-    // disparar detecção de mudanças a cada frame de rolagem
     this.zone.runOutsideAngular(() => {
       this.timelineRef.nativeElement.classList.add('is-parallax');
 
-      // Só escuta a rolagem enquanto a linha do tempo está na tela (o painel
-      // começa fechado, então na maior parte do tempo nada roda)
       this.intersection = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting) {
           window.addEventListener('scroll', this.onScroll, { passive: true, capture: true });
@@ -95,13 +89,6 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  /**
-   * Chamado pelo painel ao terminar de abrir. Durante a animação do acordeão
-   * (este painel abrindo e outro fechando) as posições mudam a cada frame e os
-   * itens ainda estão recortados; revelar nesse momento faria tudo aparecer
-   * de uma vez. Leva o topo do painel para o alto da tela, para que os itens
-   * abaixo surjam conforme a rolagem, e só então libera a entrada.
-   */
   start(): void {
     const panel = this.host.nativeElement.closest('mat-expansion-panel');
     const scrollMargin = panel ? Number.parseFloat(getComputedStyle(panel).scrollMarginTop) || 0 : 0;
@@ -111,15 +98,11 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    // Revelar durante a rolagem suave faria a timeline inteira, passando pela
-    // tela, aparecer de uma vez: espera a rolagem acabar (com um limite caso
-    // o navegador não emita scrollend ou a rolagem seja interrompida)
     window.addEventListener('scrollend', this.activate, { capture: true });
     this.activateTimer = setTimeout(this.activate, 900);
     panel.scrollIntoView({ behavior: this.reducedMotion ? 'auto' : 'smooth', block: 'start' });
   }
 
-  /** Chamado pelo painel ao fechar: a entrada volta ao início. */
   stop(): void {
     this.cancelPendingActivation();
     this.active = false;
@@ -163,13 +146,10 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
     const timelineRect = timeline.getBoundingClientRect();
     const items = this.itemRefs.map(ref => ref.nativeElement);
 
-    // Cada item aparece uma única vez, ao entrar na tela. Os que entram no
-    // mesmo frame (ex.: ao expandir o painel) aparecem em cascata
     let batch = 0;
     let lastVisible = -1;
     items.forEach((item, index) => {
       const rect = item.getBoundingClientRect();
-      // -1 (acima do centro) a 1 (abaixo): define o deslocamento do parallax
       const depth = this.clamp((rect.top + rect.height / 2 - center) / center, -1, 1);
       item.style.setProperty('--depth', depth.toFixed(4));
 
@@ -182,7 +162,6 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
       }
     });
 
-    // A linha cinza só vai até o último item exibido, sem trecho vazio abaixo
     const dotOffset = 25;
     let track = 0;
     if (lastVisible === items.length - 1) {
@@ -192,8 +171,6 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
     }
     timeline.style.setProperty('--track', `${track}px`);
 
-    // O preenchimento acompanha ~60% da tela, ou vai até o fim quando o fim
-    // da linha já está na tela (a página pode acabar antes)
     const fillY = timelineRect.bottom <= viewport * 0.95
       ? track
       : this.clamp(viewport * 0.6 - timelineRect.top, 0, track);
@@ -204,7 +181,6 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  /** Ao fechar o painel ou sair da tela, a animação de entrada volta ao início. */
   private reset(): void {
     const timeline = this.timelineRef.nativeElement;
     timeline.style.removeProperty('--track');

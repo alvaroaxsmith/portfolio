@@ -46,7 +46,6 @@ export class AppComponent implements OnInit, OnDestroy {
     this.translate.onLangChange
       .pipe(takeUntil(this.destroy$))
       .subscribe((event: LangChangeEvent) => {
-        // Salva a escolha venha de onde vier (navbar, menu mobile, rodapé...)
         storeLang(event.lang);
         this.updateDocumentLanguage(event.lang);
         this.updateSeo();

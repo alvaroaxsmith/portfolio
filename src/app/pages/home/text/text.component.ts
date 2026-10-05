@@ -48,7 +48,6 @@ export class TextComponent implements OnInit {
     }, 100);
   }
 
-  // Método para obter a palavra traduzida
   getTranslatedWord(word: string): string {
     return this.translate.instant(word);
   }

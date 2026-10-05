@@ -15,7 +15,6 @@
 
     <div class="table-container desktop-table">
         <table mat-table [dataSource]="dataSource" matSort>
-            <!-- Field Column -->
             <ng-container matColumnDef="field">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ "FIELD" | translate }}
@@ -23,7 +22,6 @@
                 <td mat-cell *matCellDef="let row">{{ row.field }}</td>
             </ng-container>
 
-            <!-- Name Column -->
             <ng-container matColumnDef="name">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ "NAME" | translate }}
@@ -33,8 +31,6 @@
                 </td>
             </ng-container>
 
-
-            <!-- School Column -->
             <ng-container matColumnDef="school">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ "SCHOOL" | translate }}
@@ -42,7 +38,6 @@
                 <td mat-cell *matCellDef="let row">{{ row.school }}</td>
             </ng-container>
 
-            <!-- Time Column -->
             <ng-container matColumnDef="time">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ "HOURS" | translate }}
@@ -50,7 +45,6 @@
                 <td mat-cell *matCellDef="let row">{{ row.time }}</td>
             </ng-container>
 
-            <!-- Date Column -->
             <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header>
                     {{ "DATE" | translate }}
@@ -61,7 +55,6 @@
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row class="course-row" *matRowDef="let row; columns: displayedColumns" tabindex="0" (click)="openDialog(row)" (keydown.enter)="openDialog(row)" (keydown.space)="$event.preventDefault(); openDialog(row)"></tr>
 
-            <!-- Row shown when there is no matching data. -->
             <tr class="mat-row" *matNoDataRow>
                 @if (showNoDataMessage) {
                 <td class="mat-cell" [attr.colspan]="displayedColumns.length">
@@ -103,7 +96,6 @@
         @if (mobileLoadingMore) {
         <app-courses-skeleton layout="cards" [count]="mobileSkeletonCount"></app-courses-skeleton>
         }
-        <!-- Região sempre presente para o leitor de tela anunciar cada carregamento -->
         <span class="cdk-visually-hidden" role="status">
             @if (mobileLoadingMore) {
             {{ 'loading.moreCourses' | translate }}
@@ -120,7 +112,6 @@
         }
     </div>
 
-    <!-- No celular a paginação dá lugar ao carregamento infinito -->
     <div class="paginator">
         <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="state.pageSize" [length]="dataSource.data.length" aria-label="Select page of courses"></mat-paginator>
     </div>

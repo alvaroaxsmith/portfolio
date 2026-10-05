@@ -1,9 +1,6 @@
-// Moldura e quadriculado seguem o skeleton e os cards: superfície branca
-// translúcida com a grade de 12px presa à viewport, alinhada ao fundo
 :host {
     --hint-duration: 5s;
     display: block;
-    // Invisível até o conteúdo chegar à região aria-live (ver is-ready no componente)
     opacity: 0;
 }
 
@@ -63,7 +60,6 @@
     color: var(--color-text-muted);
 }
 
-// Relógio: o anel se esvazia enquanto o ponteiro dá uma volta completa
 .timer {
     width: 2.25rem;
     height: 2.25rem;
@@ -83,7 +79,6 @@
     stroke-linecap: round;
     stroke-dasharray: 100;
     stroke-dashoffset: 0;
-    // Começa às 12 horas, como o ponteiro
     transform: rotate(-90deg);
     transform-origin: 16px 16px;
 }
@@ -95,7 +90,6 @@
     transform-origin: 16px 16px;
 }
 
-// O relógio só corre depois que a notificação está pronta
 :host(.is-ready) {
     .timer-progress {
         animation: timer-drain var(--hint-duration) linear forwards;
@@ -109,7 +103,6 @@
     fill: var(--color-accent);
 }
 
-// Mouse em cima ou foco pausa o relógio e, com ele, o fechamento
 :host(.is-paused) {
     .timer-progress,
     .timer-hand {
@@ -135,7 +128,6 @@
     }
 }
 
-// Offset negativo: o trecho vazio cresce atrás do ponteiro, no sentido horário
 @keyframes timer-drain {
     to {
         stroke-dashoffset: -100;

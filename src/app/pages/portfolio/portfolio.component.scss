@@ -130,7 +130,6 @@ a {
     }
     &.grid-view {
         display: grid;
-        /* 300px precisa acompanhar GRID_MIN_CARD_WIDTH no componente */
         grid-template-columns: repeat(auto-fill, minmax(min(300px, 100%), 1fr));
         gap: clamp(0.75rem, 1.5vw, 1rem);
         align-items: stretch;

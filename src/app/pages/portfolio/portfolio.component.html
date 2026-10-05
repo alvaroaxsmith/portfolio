@@ -66,14 +66,12 @@
             </mat-card>
         </article>
         } @if (loadingMore) {
-        <!-- Exatamente os itens que vão chegar, completando a linha do grid -->
         @for (placeholder of loadingMoreSkeletons; track placeholder) {
         <div class="project-wrapper">
             <app-project-card-skeleton [layout]="currentView"></app-project-card-skeleton>
         </div>
         } }
     </div>
-    <!-- Região sempre presente para o leitor de tela anunciar cada carregamento -->
     <span class="cdk-visually-hidden" role="status">
         @if (loadingMore) {
         {{ "loading.moreProjects" | translate }}

@@ -14,7 +14,6 @@ import { tap } from 'rxjs/operators';
 })
 export class DialogComponent implements OnInit {
   safeUrl: SafeResourceUrl | null = null;
-  // Link para abrir o certificado em tela cheia numa nova aba
   externalUrl: string | null = null;
   isFrameLoaded = false;
 
@@ -61,7 +60,6 @@ export class DialogComponent implements OnInit {
 
   private setUrls(link: string): void {
     this.safeUrl = this.getSafeUrl(link);
-    // O /preview do Google Drive é feito para embed; o /view traz o visualizador completo
     this.externalUrl = link.replace('/preview', '/view');
   }
 }

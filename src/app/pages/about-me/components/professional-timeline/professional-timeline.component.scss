@@ -54,14 +54,12 @@ mat-card-header {
     font-size: 0.98rem;
 }
 
-// Main container with column layout
 .professional-experience-container {
     display: flex;
     flex-direction: column;
     width: 100%;
 }
 
-// Shared timeline header
 .timeline-background {
     position: relative;
     width: 100%;
@@ -73,7 +71,7 @@ mat-card-header {
     justify-content: center;
     padding: 0 2rem;
     box-sizing: border-box;
-    z-index: 20; // Keep it on top
+    z-index: 20;
 }
 
 .timeline-line {
@@ -116,8 +114,7 @@ mat-card-header {
         transform: scale(0.9);
         box-shadow: 0 10px 26px rgba(15, 23, 42, 0.08);
     }
-    // Active in carousel view
-    &.active .timeline-icon, // Selected in journey view
+    &.active .timeline-icon,
     &.selected-for-journey .timeline-icon {
         background: var(--color-accent);
         color: #fff;
@@ -126,7 +123,6 @@ mat-card-header {
     }
 }
 
-// Container for swapping views
 .views-container {
     position: relative;
     width: 100%;
@@ -137,7 +133,6 @@ mat-card-header {
         transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.6s ease;
         backface-visibility: hidden;
     }
-    // The carousel stays in normal flow so the container grows with its tallest card
     .timeline-carousel-section {
         position: relative;
         transform: translateX(0);
@@ -155,7 +150,6 @@ mat-card-header {
         display: flex;
         align-items: center;
     }
-    // View transition
     &.journey-view-active {
         .timeline-carousel-section {
             transform: translateX(-100%);
@@ -168,7 +162,6 @@ mat-card-header {
     }
 }
 
-// Experience Carousel
 .carousel-wrapper {
     width: 100%;
     max-width: 800px;
@@ -188,7 +181,6 @@ mat-card-header {
     padding: 0 1rem;
 }
 
-// No shadow: the card sits inside the accordion panel and the carousel clips overflow
 .timeline-content {
     flex: 1;
     background: rgba(255, 255, 255, 0.76);
@@ -202,13 +194,8 @@ mat-card-header {
     mat-card-content {
         padding: 0;
     }
-    // &:hover {
-    //   transform: translateY(-5px);
-    //   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); // Sombra mais forte no hover
-    // }
 }
 
-// Mermaid Section as a Carousel
 .mermaid-journey-wrapper {
     width: 100%;
     max-width: 800px;
@@ -238,17 +225,12 @@ mat-card-header {
     justify-content: center;
     cursor: pointer;
     transition: all 0.3s ease;
-    // &:hover {
-    //   transform: translateY(-5px);
-    //   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.18); // Sombra mais forte no hover
-    // }
     .mermaid-journey-container {
         width: 100%;
         height: 100%;
     }
 }
 
-// *** ESTILOS RESTAURADOS ***
 strong {
     display: block;
     margin-top: 1rem;
@@ -297,11 +279,6 @@ ul {
     color: var(--color-text);
 }
 
-// *** FIM DOS ESTILOS RESTAURADOS ***
-
-/* Estilos Responsivos */
-
-// Para Tablets (telas até 768px de largura)
 @media (max-width: 768px) {
     .professional-experience-container {
         padding: 0.5rem 0;
@@ -328,9 +305,7 @@ ul {
     }
 }
 
-// Para Celulares (telas até 480px de largura) - Layout Vertical
 @media (max-width: 480px) {
-    // Cabeçalho ocupa a linha inteira; abaixo, timeline vertical à esquerda e cards à direita
     .professional-experience-container {
         display: grid;
         grid-template-columns: 60px minmax(0, 1fr);
@@ -340,7 +315,6 @@ ul {
     .section-heading {
         grid-column: 1 / -1;
     }
-    // Ajusta a barra da timeline para ser vertical na lateral
     .timeline-background {
         max-width: 60px;
         width: 60px;
@@ -349,7 +323,6 @@ ul {
         padding: 2rem 0;
         justify-content: flex-start;
     }
-    // Transforma a linha em vertical
     .timeline-line {
         width: 4px;
         height: calc(100% - 4rem);
@@ -358,17 +331,16 @@ ul {
         transform: translateX(-50%);
     }
     .timeline-icons {
-        flex-direction: column; // Empilha os ícones verticalmente
+        flex-direction: column;
         height: 100%;
         width: 100%;
         .icon-wrapper {
-            margin: 0 auto; // Centraliza os ícones na barra vertical
+            margin: 0 auto;
             .timeline-icon mat-icon {
                 font-size: 22px;
             }
         }
     }
-    // Ajusta o container do conteúdo para o novo layout
     .views-container {
         padding-left: 10px;
     }
@@ -396,7 +368,7 @@ ul {
             font-size: 0.9rem;
         }
         mat-card-subtitle {
-            font-size: 0.75rem; // Subtítulo menor
+            font-size: 0.75rem;
             display: flex;
             flex-direction: column;
             align-items: flex-start;
@@ -405,23 +377,21 @@ ul {
         p,
         li,
         strong {
-            font-size: 0.8rem; // Tamanho de fonte menor para o conteúdo principal
+            font-size: 0.8rem;
         }
     }
     .tech-list {
-        gap: 4px; // Reduz o espaçamento entre as tags
+        gap: 4px;
     }
     .tech-tag {
-        font-size: 0.7rem; // Letras menores nas tags
+        font-size: 0.7rem;
         padding: 2px 5px;
     }
-    // Ajustes para a visualização da jornada (Mermaid)
     .mermaid-journey-card {
         padding: 0.5rem;
     }
     .mermaid-journey-container {
-        // Adiciona rolagem horizontal se o diagrama for muito largo
         overflow-x: auto;
-        min-height: 300px; // Garante uma altura mínima para visualização
+        min-height: 300px;
     }
 }

@@ -1,9 +1,4 @@
-// Dimensões do sheet ficam em .certificate-sheet (styles.scss). Aqui o
-// certificado mantém a proporção A4 paisagem e encolhe para caber na altura
-// disponível, sem rolagem: em telas baixas (celular deitado, notebook pequeno)
-// ele é limitado pela altura; nas demais, pela largura.
 :host {
-    // Altura de tudo que não é o certificado: alça, cabeçalho, espaços e paddings
     --sheet-chrome: 8rem;
     --certificate-ratio: 1.414;
     display: block;
@@ -41,7 +36,6 @@ h2 {
     font-size: clamp(1.1rem, 2.6vw, 1.5rem);
     letter-spacing: -0.03em;
     line-height: 1.25;
-    // Nomes longos quebram em até duas linhas sem empurrar os botões
     display: -webkit-box;
     -webkit-line-clamp: 2;
     -webkit-box-orient: vertical;
@@ -113,7 +107,6 @@ iframe {
     }
 }
 
-// Celular deitado: menos respiro e sem alça para o certificado caber sem rolagem
 @media (max-height: 500px) {
     :host {
         --sheet-chrome: 6rem;

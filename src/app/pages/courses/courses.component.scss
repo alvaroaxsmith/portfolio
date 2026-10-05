@@ -64,8 +64,6 @@
     box-shadow: var(--color-shadow);
 }
 
-// Layout fixo: as larguras das colunas não dependem do conteúdo, então nada
-// se desloca ao passar o mouse, ordenar ou trocar de página
 table {
     width: 100%;
     table-layout: fixed;
@@ -121,8 +119,6 @@ table {
     display: none;
 }
 
-// Feedback de hover/foco na linha inteira (ela toda abre o certificado), sem
-// mudar peso de fonte nem dimensões
 .course-row {
     cursor: pointer;
     transition: background-color 0.15s ease-out;
@@ -173,7 +169,6 @@ mat-label {
     width: min(420px, 100%);
 }
 
-// Peso fixo: o sublinhado aparece só ao passar na linha, sem alterar a largura
 .dialog {
     font-weight: 500;
     color: var(--color-text);
@@ -264,7 +259,6 @@ mat-label {
         text-transform: uppercase;
         color: var(--color-text-muted);
     }
-    // A paginação dá lugar ao carregamento infinito
     .paginator {
         display: none;
     }

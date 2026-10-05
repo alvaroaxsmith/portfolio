@@ -6,7 +6,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { SkillChipComponent } from './components/chips/skill-chip.component';
 import { ProfessionalTimelineComponent } from './components/professional-timeline/professional-timeline.component';
-import { HighlightsComponent } from './components/highlights/highlights.component'; // Importe o novo componente
+import { HighlightsComponent } from './components/highlights/highlights.component';
 
 const routes: Routes = [
   { path: '', component: AboutMeComponent },
@@ -20,7 +20,7 @@ const routes: Routes = [
     RouterModule.forChild(routes),
     TranslateModule.forChild(),
     ProfessionalTimelineComponent,
-    HighlightsComponent // Adicione o componente standalone aos imports
+    HighlightsComponent
   ],
   exports: [
     AboutMeComponent,

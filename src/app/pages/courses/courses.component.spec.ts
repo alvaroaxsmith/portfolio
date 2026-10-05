@@ -30,7 +30,6 @@ describe('CoursesComponent', () => {
       declarations: [CoursesComponent],
       imports: [MaterialModule, SkeletonModule, NoopAnimationsModule, TranslateModule.forRoot()],
       providers: [
-        // of() emite de forma síncrona, como o cache do CourseService ao voltar à página
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MatBottomSheet, useValue: { open: () => null } },
         { provide: MatSnackBar, useValue: { openFromComponent: () => null } },

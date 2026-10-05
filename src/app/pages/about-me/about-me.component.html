@@ -30,7 +30,6 @@
                     <app-professional-timeline></app-professional-timeline>
                 </mat-action-row>
             </mat-expansion-panel>
-            <!-- A entrada da linha do tempo só começa com o painel já aberto -->
             <mat-expansion-panel (afterExpand)="highlights.start()" (afterCollapse)="highlights.stop()">
                 <mat-expansion-panel-header>
                     <mat-panel-title>

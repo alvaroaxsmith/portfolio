@@ -17,7 +17,6 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import mermaid from 'mermaid';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
-// Interface for professional experience
 export interface Experiencia {
   id: number;
   cargo: string;
@@ -33,7 +32,6 @@ export interface Experiencia {
   competencias: string[];
 }
 
-// Interface for the generated timeline definitions
 interface TimelineDefinition {
   id: number;
   definition: string;
@@ -53,7 +51,6 @@ interface TimelineDefinition {
     styleUrls: ['./professional-timeline.component.scss']
 })
 export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
-  // Using ViewChildren to get all mermaid containers in the journey view
   @ViewChildren('mermaidJourneyContainer')
   mermaidJourneyContainers!: QueryList<ElementRef>;
 
@@ -248,13 +245,11 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
     },
   ];
 
-  // State properties
   timelineDefinitions: TimelineDefinition[] = [];
-  currentIndex = 0; // For experience carousel
-  journeyCurrentIndex = 0; // For journey view carousel
+  currentIndex = 0;
+  journeyCurrentIndex = 0;
   isJourneyVisible = false;
 
-  // Mesmo breakpoint do layout vertical no SCSS
   private readonly mobileQuery = window.matchMedia('(max-width: 480px)');
   isMobile = this.mobileQuery.matches;
 
@@ -271,7 +266,6 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
       securityLevel: 'loose',
     });
 
-    // Ao virar para celular com a jornada aberta, volta para os cards
     this.mobileQuery.addEventListener('change', (event) => {
       this.isMobile = event.matches;
       if (this.isMobile) {
@@ -282,12 +276,10 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    // Render diagrams when the list of containers changes (e.g., after entering journey view)
     this.mermaidJourneyContainers.changes.subscribe(() => {
       this.renderAllMermaidDiagrams();
     });
 
-    // A lógica de arrastar só deve funcionar em telas de celular
     if (window.innerWidth <= 480) {
       this.cardContents.forEach((contentRef) => {
         this.setupDragScroll(contentRef.nativeElement);
@@ -295,15 +287,10 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
     }
   }
 
-  /** Navigates the main experience carousel. */
   goTo(index: number): void {
     this.currentIndex = index;
   }
 
-  /**
-   * Switches to the journey view, generating all timelines.
-   * @param experiencia The starting experience.
-   */
   selecionarExperiencia(experiencia: Experiencia): void {
     if (this.isMobile) {
       return;
@@ -316,18 +303,12 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
 
     this.generateAllMermaidTimelines();
     this.isJourneyVisible = true;
-    // Rendering is now triggered by ngAfterViewInit/changes
   }
 
-  /** Returns to the main experience carousel view. */
   voltarParaTimeline(): void {
     this.isJourneyVisible = false;
   }
 
-  /**
-   * Handles icon clicks within the journey view to slide between timeline cards.
-   * @param clickedExperience The experience of the clicked icon.
-   */
   handleIconClickInJourneyView(clickedExperience: Experiencia): void {
     const newIndex = this.experiencias.findIndex(
       (exp) => exp.id === clickedExperience.id
@@ -342,7 +323,6 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
     }
   }
 
-  /** Generates all possible timeline definitions from the experiences array. */
   generateAllMermaidTimelines(): void {
     this.timelineDefinitions = this.experiencias.map((startExp) => {
       let mermaidText = `timeline\n \n`;
@@ -350,7 +330,6 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
       const startIndex = this.experiencias.findIndex(
         (exp) => exp.id === startExp.id
       );
-      // LÓGICA AJUSTADA: Com o array já invertido, removemos o .reverse() para manter a ordem cronológica correta
       const experienciasParaTimeline = this.experiencias.slice(startIndex);
 
       experienciasParaTimeline.forEach((exp) => {
@@ -363,7 +342,6 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
     });
   }
 
-  /** Renders each generated timeline into its respective container. */
   async renderAllMermaidDiagrams(): Promise<void> {
     if (!this.isJourneyVisible || !this.mermaidJourneyContainers) {
       return;
@@ -379,7 +357,6 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
 
       if (timelineDef && container) {
         try {
-          // Ensure the container is empty before rendering
           container.innerHTML = '';
           const uniqueId = `mermaid-graph-${experienceId}-${Date.now()}`;
           const { svg } = await mermaid.render(
@@ -422,17 +399,15 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
       if (e instanceof MouseEvent) e.preventDefault();
       const pageY = e instanceof MouseEvent ? e.pageY : e.touches[0].pageY;
       const y = pageY - element.offsetTop;
-      const walk = (y - startY) * 2; // O multiplicador aumenta a velocidade da rolagem
+      const walk = (y - startY) * 2;
       element.scrollTop = scrollTop - walk;
     };
 
-    // Eventos do Mouse
     this.renderer.listen(element, 'mousedown', start);
     this.renderer.listen(element, 'mouseleave', end);
     this.renderer.listen(element, 'mouseup', end);
     this.renderer.listen(element, 'mousemove', move);
 
-    // Eventos de Toque
     this.renderer.listen(element, 'touchstart', start);
     this.renderer.listen(element, 'touchend', end);
     this.renderer.listen(element, 'touchmove', move);

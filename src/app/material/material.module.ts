@@ -37,7 +37,7 @@ import { MatBottomSheetModule } from '@angular/material/bottom-sheet';
     MatSortModule,
     MatSnackBarModule,
     MatTooltipModule,
-    MatSelectModule, // Exportar MatSelectModule
+    MatSelectModule,
     MatBottomSheetModule,
   ]
 })

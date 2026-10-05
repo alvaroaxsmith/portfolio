@@ -1,6 +1,3 @@
-// Entrada do conteúdo ao fim da splash: cross-fade com o fade-out da splash.
-// Fill-mode "backwards" garante que nenhum transform fique aplicado depois
-// (transform no <main> quebraria elementos position: fixed como a navbar)
 main {
   animation: main-content-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }

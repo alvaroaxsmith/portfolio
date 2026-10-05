@@ -61,7 +61,6 @@ export function httpTranslateLoader(http: HttpClient) {
 export function appInitializerFactory(translate: TranslateService) {
   return () => {
     translate.addLangs(SUPPORTED_LANGS);
-    // Padrão como fallback de chaves ausentes; em uso, o idioma salvo da última visita
     translate.setDefaultLang(DEFAULT_LANG);
     return translate.use(getInitialLang()).toPromise();
   };

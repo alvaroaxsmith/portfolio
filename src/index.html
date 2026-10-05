@@ -22,15 +22,10 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 
     <style>
-        /* Splash: o canvas da grade nasce aqui, antes do JavaScript do app. O
-           Angular (SplashScreenComponent) adota a grade, põe o texto traduzido e
-           comanda a saída. O fundo é transparente: ao fim da dissolução o que
-           sobra é o próprio fundo do body */
         #splash {
             position: fixed;
             inset: 0;
             z-index: 10000;
-            /* Até o primeiro quadro do canvas */
             background: #52525b;
         }
 
@@ -38,7 +33,6 @@
             background: transparent;
         }
 
-        /* Sem barra de rolagem enquanto a splash cobre a tela */
         html.splash-active,
         html.splash-active body {
             overflow: hidden !important;
@@ -53,16 +47,11 @@
 </head>
 
 <body>
-    <!-- Splash: grade em canvas, adotada depois pelo SplashScreenComponent -->
     <div id="splash" aria-hidden="true"><canvas id="splash-canvas"></canvas></div>
 
     <app-root></app-root>
 
     <script>
-        // Motor da splash. Desenha a grade de 24px do fundo do site em canvas:
-        // cada quadrado cintila num tom ardósia próprio e a paleta inteira clareia
-        // com o tempo. O Angular chama window.__splash.finish() para a saída, em
-        // que os quadrados se dissolvem em ordem aleatória e revelam o fundo do site.
         (function () {
             var root = document.getElementById("splash");
             document.documentElement.classList.add("splash-active");
@@ -71,25 +60,15 @@
             var reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
             var CELL = 24;
-            // Clareamento: vai a 70% em 3s e segura ali até o app ficar pronto
             var LIGHT_TARGET = 0.7;
             var LIGHT_DURATION = 3000;
             var EXIT_MS = 500;
-            // Na saída, cada quadrado some em 150ms, começando num instante
-            // aleatório dentro da janela da saída
             var CELL_FADE_MS = 150;
-            // Se o app nunca chamar finish (falha de carregamento), sai sozinha
             var SAFETY_MS = 8000;
 
-            // Cinzas neutros (família zinc), sem o tom azulado da ardósia, até o
-            // fundo do site (#f3f6fb) para a saída terminar na cor da página.
-            // Interpolada em 48 degraus para o cintilar não andar aos saltos
             var STOPS = ["#18181b", "#27272a", "#3f3f46", "#52525b", "#71717a", "#a1a1aa", "#d4d4d8", "#e4e4e7", "#f3f6fb"];
             var TONES = 48;
-            // Largura da faixa de tons em que os quadrados cintilam
             var WINDOW = 18;
-            // Tom mais escuro que um quadrado pode ter: a grade nunca chega perto
-            // do tom do texto "Carregando" (#0f172a), reservado só para ele
             var MIN_TONE = 16;
             var palette = buildPalette();
 
@@ -148,7 +127,6 @@
             function draw(now) {
                 var elapsed = now - startedAt;
                 var light = reducedMotion ? 0 : lightAt(elapsed);
-                // Faixa de tons sobe com o clareamento, sempre acima de MIN_TONE
                 var base = MIN_TONE + light * (TONES - 1 - WINDOW - MIN_TONE);
                 var exitElapsed = finishStart ? now - finishStart : 0;
 
@@ -178,8 +156,6 @@
 
                         var tone = base + cell.tone;
                         var px = x * CELL, py = y * CELL;
-                        // Linha da grade (1px no topo e à esquerda, como no body) um
-                        // degrau mais escura que o quadrado
                         ctx.fillStyle = color(tone - 6, alpha);
                         ctx.fillRect(px, py, CELL, CELL);
                         ctx.fillStyle = color(tone, alpha);
@@ -198,7 +174,6 @@
                     if (finishResolve) finishResolve();
                     return;
                 }
-                // Com movimento reduzido a grade é estática: só redesenha na saída
                 if (!reducedMotion || finishStart) requestAnimationFrame(draw);
             }
 
@@ -223,7 +198,6 @@
             }
 
             resize();
-            // Primeiro quadro síncrono: a grade já aparece no primeiro paint
             draw(performance.now());
             window.addEventListener("resize", onResize);
             setTimeout(finish, SAFETY_MS);

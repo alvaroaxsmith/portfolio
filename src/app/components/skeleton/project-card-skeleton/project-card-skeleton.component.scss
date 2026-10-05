@@ -1,4 +1,3 @@
-// Mesma moldura e espaçamentos do .project-card (portfolio.component.scss)
 :host {
   display: flex;
   flex-direction: column;
@@ -21,7 +20,6 @@
   margin-top: 0.5rem;
 }
 
-// Larguras relativas ao card: no grid ele é estreito, na lista ocupa a página
 .title { width: 62%; }
 .tech { width: 28%; }
 .date { width: 44%; }

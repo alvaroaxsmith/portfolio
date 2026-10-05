@@ -1,10 +1,5 @@
 import { Component, ChangeDetectionStrategy, Input, HostBinding } from '@angular/core';
 
-/**
- * Placeholder com a mesma estrutura do card de projeto da página de portfólio.
- * No layout de lista o card é largo e baixo: textos mais curtos em proporção
- * e uma linha a menos de descrição.
- */
 @Component({
     selector: 'app-project-card-skeleton',
     templateUrl: './project-card-skeleton.component.html',

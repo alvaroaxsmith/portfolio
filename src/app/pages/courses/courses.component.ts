@@ -11,8 +11,6 @@ import { SnackBarComponent } from './snack-bar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CoursesStateService } from './services/courses-state.service';
 
-// Carregamento infinito da lista de cards no celular: lote de cards e tempo
-// de exibição dos skeletons a cada lote (os dados já estão em memória)
 const MOBILE_BATCH_SIZE = 5;
 const MOBILE_LOAD_DELAY_MS = 600;
 @Component({
@@ -26,7 +24,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
   showNoDataMessage = false;
-
 
   expandedRow: any = null;
 
@@ -52,7 +49,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.dataSource.filter ? this.dataSource.filteredData : this.dataSource.data;
   }
 
-  // Celular: só os primeiros cards; o resto chega em lotes ao rolar
   mobileLoadingMore = false;
   private mobileLoadTimer?: ReturnType<typeof setTimeout>;
   private mobileObserver?: IntersectionObserver;
@@ -66,14 +62,10 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     return this.state.mobileCount < this.visibleCourses.length;
   }
 
-  /** Skeletons do próximo lote: exatamente os cards que vão chegar. */
   get mobileSkeletonCount(): number {
     return Math.min(MOBILE_BATCH_SIZE, this.visibleCourses.length - this.state.mobileCount);
   }
 
-  // O gatilho só existe enquanto há mais cursos; o setter acompanha ele
-  // entrando e saindo do DOM. Na tela grande a lista fica com display: none,
-  // então o gatilho nunca intersecta e nada carrega
   @ViewChild('mobileLoadTrigger') set mobileLoadTrigger(ref: ElementRef<HTMLElement> | undefined) {
     if (this.mobileTriggerEl) {
       this.mobileObserver?.unobserve(this.mobileTriggerEl);
@@ -89,8 +81,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  // static: true para estarem disponíveis no ngOnInit: com os cursos em cache a
-  // tabela é preenchida já na primeira renderização, sem piscar o skeleton
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
 
@@ -111,8 +101,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    // Restaura ordenação e página salvos da última visita. O filtro e a ligação
-    // com o dataSource só acontecem com os dados carregados (ver loadData)
     this.sort.active = this.state.sortActive;
     this.sort.direction = this.state.sortDirection;
     this.paginator.pageSize = this.state.pageSize;
@@ -146,7 +134,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
     this.state.hintShown = true;
-    // O fechamento é controlado pelo relógio do próprio componente (5s)
     this.snackBar.openFromComponent(SnackBarComponent, {
       horizontalPosition: 'end',
       verticalPosition: 'top',
@@ -154,7 +141,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  /** Mostra os skeletons no fim da lista e, em seguida, o próximo lote. */
   loadMoreMobileCourses(): void {
     if (this.mobileLoadingMore || !this.hasMoreMobileCourses) {
       return;
@@ -166,8 +152,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
       this.state.mobileCount += MOBILE_BATCH_SIZE;
       this.mobileLoadingMore = false;
       this.cdr.detectChanges();
-      // Se o gatilho continuar visível (lote não preencheu a tela), observar
-      // de novo dispara a próxima leva sem depender de rolagem
       const trigger = this.mobileTriggerEl;
       if (trigger && this.mobileObserver) {
         this.mobileObserver.unobserve(trigger);
@@ -179,9 +163,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   loadData() {
     this.isLoading = true;
     this.courseService.getCourses().pipe(takeUntil(this.destroy$)).subscribe(courses => {
-      // A ordem importa: o MatTableDataSource ajusta o paginator (num microtask)
-      // ao tamanho dos dados filtrados. Ligado com a lista ainda vazia, ele
-      // recalcularia a página para 0 itens e perderia a página restaurada
       this.dataSource.data = courses;
       this.dataSource.filter = this.state.filter.trim().toLowerCase();
       this.dataSource.sort = this.sort;
@@ -194,11 +175,9 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     const filterValue = (event.target as HTMLInputElement).value;
     this.state.filter = filterValue;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-    // Novo filtro: a lista do celular recomeça do primeiro lote
     clearTimeout(this.mobileLoadTimer);
     this.mobileLoadingMore = false;
     this.state.mobileCount = MOBILE_BATCH_SIZE;
-    // firstPage() emite o evento page, que já atualiza o estado salvo
     this.dataSource.paginator?.firstPage();
   }
 

@@ -24,10 +24,8 @@ interface CachedProjects {
 export class ProjectsService {
   private readonly apiUrl =
     'https://api.github.com/users/alvaroaxsmith/repos?per_page=100&type=owner&sort=pushed';
-  // Only repositories tagged with this topic on GitHub are shown on the page
   private readonly portfolioTopic = 'portfolio-project';
   private readonly cacheKey = 'portfolio:github-projects';
-  // Unauthenticated GitHub API allows 60 requests/hour per IP, so responses are reused for an hour
   private readonly cacheTtlMs = 60 * 60 * 1000;
 
   constructor(private readonly http: HttpClient) {}
@@ -74,7 +72,6 @@ export class ProjectsService {
       const entry: CachedProjects = { savedAt: Date.now(), projects };
       localStorage.setItem(this.cacheKey, JSON.stringify(entry));
     } catch {
-      // Storage may be unavailable (private mode, quota); the page still works without cache
     }
   }
 }

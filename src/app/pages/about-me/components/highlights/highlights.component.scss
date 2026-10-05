@@ -30,18 +30,12 @@
     font-size: 0.98rem;
 }
 
-
-/* O container da linha do tempo */
-
 .timeline {
     position: relative;
     max-width: 1200px;
     margin: 0 auto;
     padding: 0.5rem 0;
 }
-
-
-/* A linha central da timeline */
 
 .timeline::after {
     content: '';
@@ -54,9 +48,6 @@
     margin-left: -2px;
 }
 
-
-/* Container para cada item da timeline */
-
 .timeline-item {
     padding: 10px 40px;
     position: relative;
@@ -64,9 +55,6 @@
     width: 50%;
     box-sizing: border-box;
 }
-
-
-/* O círculo na linha do tempo */
 
 .timeline-item::after {
     content: '';
@@ -81,24 +69,15 @@
     z-index: 1;
 }
 
-
-/* Itens à esquerda */
-
 .timeline-item:nth-child(odd) {
     left: 0;
     padding-right: 30px;
 }
 
-
-/* Itens à direita */
-
 .timeline-item:nth-child(even) {
     left: 50%;
     padding-left: 30px;
 }
-
-
-/* A seta (galho) para os itens da esquerda */
 
 .timeline-item:nth-child(odd)::before {
     content: " ";
@@ -113,9 +92,6 @@
     border-color: transparent transparent transparent rgba(255, 255, 255, 0.72);
 }
 
-
-/* A seta (galho) para os itens da direita */
-
 .timeline-item:nth-child(even)::before {
     content: " ";
     height: 0;
@@ -129,15 +105,9 @@
     border-color: transparent rgba(255, 255, 255, 0.72) transparent transparent;
 }
 
-
-/* Ajusta o círculo para os itens da direita */
-
 .timeline-item:nth-child(even)::after {
     left: -10px;
 }
-
-
-/* O card de conteúdo */
 
 .timeline-content {
     padding: 1rem 1.1rem;
@@ -169,20 +139,12 @@
     }
 }
 
-
-/* Parallax na rolagem: o componente marca cada item com .is-visible ao entrar
-   na tela e atualiza --track (linha cinza), --fill (trecho percorrido) e
-   --depth (parallax). Sem JS ou com movimento reduzido nada disso é ativado
-   e a linha do tempo aparece estática */
-
 .timeline.is-parallax {
-    /* A linha cinza cresce junto com os itens já exibidos */
     &::after {
         bottom: auto;
         height: var(--track, 0px);
         transition: height 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
     }
-    /* Trecho da linha já percorrido */
     &::before {
         content: '';
         position: absolute;
@@ -197,7 +159,6 @@
     }
     .timeline-item {
         --depth: 0;
-        /* Distância lateral de entrada e intensidade do parallax por coluna */
         --slide: -2.5rem;
         --parallax: 18px;
         &:nth-child(even) {
@@ -205,9 +166,6 @@
             --parallax: 36px;
         }
     }
-    /* O card e a seta se movem juntos; o ponto fica preso à linha.
-       translate (parallax) segue a rolagem sem transição; transform e opacity
-       (entrada) animam uma vez quando o item aparece */
     .timeline-item::before,
     .timeline-content,
     .timeline-item::after {
@@ -241,28 +199,21 @@
     }
 }
 
-
-/* Media queries - Layout responsivo para telas menores */
-
 @media screen and (max-width: 768px) {
-    /* Move a linha para a esquerda */
     .timeline::after {
         left: 25px;
     }
-    /* Todos os itens ficam à direita da linha */
     .timeline-item {
         width: 100%;
         padding-left: 60px;
         padding-right: 15px;
     }
-    /* nth-child repetido para vencer a especificidade das regras de coluna */
     .timeline-item:nth-child(odd),
     .timeline-item:nth-child(even) {
         left: 0;
         padding-left: 60px;
         padding-right: 15px;
     }
-    /* Todas as setas apontam para a esquerda */
     .timeline-item:nth-child(odd)::before,
     .timeline-item:nth-child(even)::before {
         left: 50px;
@@ -271,12 +222,10 @@
         border-width: 10px 10px 10px 0;
         border-color: transparent rgba(255, 255, 255, 0.72) transparent transparent;
     }
-    /* Posiciona os círculos na linha */
     .timeline-item:nth-child(odd)::after,
     .timeline-item:nth-child(even)::after {
         left: 15px;
     }
-    /* Uma coluna só: todos entram pela direita, com parallax mais suave */
     .timeline.is-parallax {
         &::before {
             left: 25px;

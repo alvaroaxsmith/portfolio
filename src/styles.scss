@@ -25,7 +25,6 @@
     --radius-md: 1.25rem;
     --radius-lg: 2rem;
     --navbar-height: 5rem;
-    /* Skeletons: ardósia neutra, um tom mais sóbrio que o quadriculado do fundo */
     --skeleton-base: rgba(100, 116, 139, 0.12);
     --skeleton-line: rgba(255, 255, 255, 0.5);
     --mat-option-selected-state-label-text-color: black;
@@ -46,13 +45,8 @@ body {
     min-height: 100%;
 }
 
-/* Barra de rolagem personalizada só em telas com mouse. Em toque (celular,
-   tablet) fica a barra nativa sobreposta, que só aparece enquanto o dedo
-   rola a página e some em seguida */
 @media (hover: hover) and (pointer: fine) {
     body {
-        /* Reserva o espaço da barra para o layout não pular entre páginas
-           curtas e longas */
         overflow-y: scroll;
     }
     ::-webkit-scrollbar {
@@ -153,9 +147,6 @@ h6 {
     box-shadow: 0 -12px 40px rgba(15, 23, 42, 0.12);
 }
 
-/* Certificados: tela cheia em largura no celular, painel centralizado e largo
-   no tablet/desktop. --sheet-max-height é usado pelo componente para encaixar
-   o certificado na altura disponível */
 .certificate-sheet {
     --sheet-max-height: 92dvh;
     .mat-bottom-sheet-container {
@@ -181,7 +172,6 @@ h6 {
     }
 }
 
-/* Telas baixas (celular deitado): o certificado ocupa quase toda a altura */
 @media (max-height: 500px) {
     .certificate-sheet {
         --sheet-max-height: 100dvh;
@@ -192,9 +182,6 @@ h6 {
     }
 }
 
-/* Notificação de dica dos cursos: o Material só posiciona; a aparência fica
-   toda no componente, então a superfície padrão some. Fica no canto superior
-   direito, logo abaixo da navbar fixa */
 .mat-mdc-snack-bar-container.course-hint {
     width: min(380px, calc(100vw - 2rem));
     margin: calc(var(--navbar-height) + 0.75rem) 1rem 0 0;
@@ -211,7 +198,6 @@ h6 {
     }
 }
 
-/* No celular o Material ocupa a largura toda: centraliza com respiro lateral */
 @media (max-width: 599px) {
     .mat-mdc-snack-bar-container.course-hint {
         width: calc(100vw - 2rem);
@@ -241,7 +227,7 @@ p {
 }
 
 .mdc-text-field--filled .mdc-line-ripple::after {
-    border-bottom-color: black !important; // Garante que seja preto
+    border-bottom-color: black !important;
 }
 
 .mdc-text-field .mdc-text-field__input {
@@ -264,7 +250,7 @@ p {
 }
 
 .mat-mdc-form-field.mat-focused.mat-primary .mat-mdc-select-arrow {
-    color: black !important; // Alterado de rgba(0,0,0,0.6) para black e adicionado !important se necessário
+    color: black !important;
 }
 
 .mat-mdc-progress-spinner {
@@ -273,19 +259,16 @@ p {
 
 .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label,
 .mdc-text-field--filled:not(.mdc-text-field--disabled).mdc-text-field--focused .mdc-floating-label--float-above {
-    color: black !important; // Alterado de #444 para black e adicionado !important se necessário
+    color: black !important;
 }
 
 .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mdc-list-item__primary-text {
-    color: black !important; // Garante que seja preto
+    color: black !important;
 }
 
 h1 {
     font-size: clamp(2.4rem, 6vw, 4.8rem);
 }
-
-
-/* Make media elements fluid by default */
 
 img,
 video,
@@ -294,19 +277,13 @@ iframe {
     height: auto;
 }
 
-
-/* Adicionar estas regras para a cor do "check" da opção selecionada */
-
 .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mat-pseudo-checkbox,
 .mat-mdc-option.mat-mdc-option-active.mdc-list-item--selected .mat-pseudo-checkbox {
-    // background-color: black;
     border-color: black;
-    /* Para a borda do checkbox não selecionado, se visível */
 }
 
 .mat-mdc-option.mdc-list-item--selected:not(.mdc-list-item--disabled) .mat-pseudo-checkbox::after {
     color: black;
-    /* Cor do V dentro do checkbox - geralmente branco sobre fundo escuro */
 }
 
 ::selection {
