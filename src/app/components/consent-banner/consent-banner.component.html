@@ -1,0 +1,10 @@
+@if (visible()) {
+<section class="consent" role="dialog" aria-live="polite" aria-labelledby="consent-title" aria-describedby="consent-text">
+    <span id="consent-title" class="consent-label">{{ 'consent.label' | translate }}</span>
+    <p id="consent-text">{{ 'consent.text' | translate }}</p>
+    <div class="consent-actions">
+        <button mat-stroked-button type="button" (click)="choose('denied')">{{ 'consent.reject' | translate }}</button>
+        <button mat-flat-button type="button" (click)="choose('granted')">{{ 'consent.accept' | translate }}</button>
+    </div>
+</section>
+}

@@ -6,14 +6,14 @@
     </header>
 
     <div class="contact-list" role="list">
-        <a class="contact-card" role="listitem" href="tel:+5511951013956">
+        <a class="contact-card" role="listitem" href="tel:+5511951013956" (click)="trackContact('phone')">
             <fa-icon [icon]="faPhone" aria-hidden="true"></fa-icon>
             <div>
                 <strong>{{ 'contact.labels.phone' | translate }}</strong>
                 <span>{{ 'contact.phone' | translate }}</span>
             </div>
         </a>
-        <a class="contact-card" role="listitem" href="mailto:alvaromachadoferreira@hotmail.com">
+        <a class="contact-card" role="listitem" href="mailto:alvaromachadoferreira@hotmail.com" (click)="trackContact('email')">
             <fa-icon [icon]="faEnvelope" aria-hidden="true"></fa-icon>
             <div>
                 <strong>{{ 'contact.labels.email' | translate }}</strong>
@@ -27,14 +27,14 @@
                 <span>{{ 'contact.location' | translate }}</span>
             </div>
         </div>
-        <a class="contact-card" role="listitem" href="https://github.com/alvaroaxsmith" target="_blank" rel="noopener noreferrer">
+        <a class="contact-card" role="listitem" href="https://github.com/alvaroaxsmith" (click)="trackContact('github')" target="_blank" rel="noopener noreferrer">
             <fa-icon [icon]="faGithub" aria-hidden="true"></fa-icon>
             <div>
                 <strong>{{ 'contact.labels.github' | translate }}</strong>
                 <span>{{ 'contact.github' | translate }}</span>
             </div>
         </a>
-        <a class="contact-card" role="listitem" href="https://www.linkedin.com/in/alvaromachadoferreira/" target="_blank" rel="noopener noreferrer">
+        <a class="contact-card" role="listitem" href="https://www.linkedin.com/in/alvaromachadoferreira/" (click)="trackContact('linkedin')" target="_blank" rel="noopener noreferrer">
             <fa-icon [icon]="faLinkedin" aria-hidden="true"></fa-icon>
             <div>
                 <strong>{{ 'contact.labels.linkedin' | translate }}</strong>

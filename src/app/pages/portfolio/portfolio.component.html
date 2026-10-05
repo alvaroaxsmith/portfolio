@@ -56,7 +56,7 @@
                     <mat-card-subtitle class="project-date">
                         {{ "Last updated" | translate }}: {{ project.date | date : "dd/MM/yyyy" }}
                     </mat-card-subtitle>
-                    <a mat-stroked-button href="{{ project.repo }}" target="_blank" rel="noopener noreferrer">{{ "Repository" | translate }}</a>
+                    <a mat-stroked-button href="{{ project.repo }}" target="_blank" rel="noopener noreferrer" (click)="trackRepo(project)">{{ "Repository" | translate }}</a>
                 </mat-card-title-group>
                 @if (descriptionFor(project); as description) {
                 <mat-card-content>

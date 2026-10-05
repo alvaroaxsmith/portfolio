@@ -43,3 +43,14 @@ a {
         padding: 0 0 1.5rem;
     }
 }
+.privacy-link {
+    margin-top: 0.35rem;
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+}

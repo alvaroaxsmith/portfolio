@@ -10,6 +10,7 @@
     <meta name="description" content="Portfólio de Alvaro Ferreira, engenheiro de software com foco em frontend, aplicações full stack, acessibilidade, performance e experiências digitais responsivas." />
     <meta name="keywords" content="Alvaro Ferreira, engenheiro de software, desenvolvedor frontend, desenvolvedor full stack, Angular, React, acessibilidade, SEO, portfólio" />
     <meta name="author" content="Alvaro Ferreira" />
+    <meta name="google-site-verification" content="2b-c_LLjMCVKBTDrLM7gjKSTo1SdxeaYHCK4v78Mlyw" />
     <meta property="og:type" content="website" />
     <meta property="og:title" content="Alvaro Ferreira | Engenheiro de Software" />
     <meta property="og:description" content="Projetos, trajetória profissional e formas de contato em um portfólio com foco em produto, frontend e experiências digitais acessíveis." />
@@ -18,6 +19,46 @@
     <meta name="twitter:title" content="Alvaro Ferreira | Engenheiro de Software" />
     <meta name="twitter:description" content="Portfólio com foco em frontend, full stack, acessibilidade, SEO e design responsivo." />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <script>
+        (function () {
+            var GTM_ID = "GTM-PCV39BS2";
+            var PRODUCTION_HOST = "alvaromachadoferreira.vercel.app";
+
+            window.dataLayer = window.dataLayer || [];
+            window.gtag = function () { window.dataLayer.push(arguments); };
+
+            window.gtag("consent", "default", {
+                ad_storage: "denied",
+                ad_user_data: "denied",
+                ad_personalization: "denied",
+                analytics_storage: "denied",
+                functionality_storage: "granted",
+                security_storage: "granted",
+                wait_for_update: 500
+            });
+
+            var optOut = false;
+            try {
+                var flag = new URLSearchParams(location.search).get("analytics");
+                if (flag === "off") localStorage.setItem("portfolio:analytics-off", "1");
+                if (flag === "on") localStorage.removeItem("portfolio:analytics-off");
+                optOut = localStorage.getItem("portfolio:analytics-off") === "1";
+                if (localStorage.getItem("portfolio:consent") === "granted") {
+                    window.gtag("consent", "update", { analytics_storage: "granted" });
+                }
+            } catch (e) {}
+
+            var enabled = !!GTM_ID && location.hostname === PRODUCTION_HOST && !optOut;
+            window.__analytics = { enabled: enabled };
+            if (!enabled) return;
+
+            window.dataLayer.push({ "gtm.start": Date.now(), event: "gtm.js" });
+            var script = document.createElement("script");
+            script.async = true;
+            script.src = "https://www.googletagmanager.com/gtm.js?id=" + GTM_ID;
+            document.head.appendChild(script);
+        })();
+    </script>
     <link rel="preconnect" href="https://fonts.gstatic.com" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 

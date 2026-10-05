@@ -20,6 +20,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ProjectsService } from './pages/portfolio/services/projects.service';
 import { DialogComponent } from './pages/courses/dialog/dialog.component';
 import { SkeletonModule } from './components/skeleton/skeleton.module';
+import { ConsentBannerComponent } from './components/consent-banner/consent-banner.component';
 import { DEFAULT_LANG, SUPPORTED_LANGS, getInitialLang } from './services/language-storage';
 
 @NgModule({ declarations: [
@@ -36,6 +37,7 @@ import { DEFAULT_LANG, SUPPORTED_LANGS, getInitialLang } from './services/langua
         MaterialModule,
         MatDialogModule,
         SkeletonModule,
+        ConsentBannerComponent,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,

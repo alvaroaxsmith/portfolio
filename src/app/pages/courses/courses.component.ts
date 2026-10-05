@@ -10,6 +10,7 @@ import { DialogComponent } from './dialog/dialog.component';
 import { SnackBarComponent } from './snack-bar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CoursesStateService } from './services/courses-state.service';
+import { AnalyticsService } from '../../services/analytics.service';
 
 const MOBILE_BATCH_SIZE = 5;
 const MOBILE_LOAD_DELAY_MS = 600;
@@ -89,10 +90,12 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     private bottomSheet: MatBottomSheet,
     private snackBar: MatSnackBar,
     private cdr: ChangeDetectorRef,
+    private analytics: AnalyticsService,
     readonly state: CoursesStateService
   ) { }
 
   openDialog = (rowData: Course): void => {
+    this.analytics.track('certificate_open', { course: rowData.name, school: rowData.school });
     this.bottomSheet.open(DialogComponent, {
       data: rowData,
       panelClass: 'certificate-sheet',
