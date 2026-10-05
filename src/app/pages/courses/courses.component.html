@@ -8,7 +8,7 @@
     <div class="mat-field-container">
         <mat-form-field class="form-field">
             <mat-label class="label">{{ "Filter" | translate }}</mat-label>
-            <input class="form-field" matInput (keyup)="applyFilter($event)" [placeholder]="'courses.filterPlaceholder' | translate" #input />
+            <input class="form-field" matInput [value]="state.filter" (input)="applyFilter($event)" [placeholder]="'courses.filterPlaceholder' | translate" #input />
             <mat-icon matSuffix>search</mat-icon>
         </mat-form-field>
     </div>
@@ -59,7 +59,7 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns" (click)="openDialog(row)"></tr>
+            <tr mat-row class="course-row" *matRowDef="let row; columns: displayedColumns" tabindex="0" (click)="openDialog(row)" (keydown.enter)="openDialog(row)" (keydown.space)="$event.preventDefault(); openDialog(row)"></tr>
 
             <!-- Row shown when there is no matching data. -->
             <tr class="mat-row" *matNoDataRow>
@@ -70,27 +70,58 @@
                 }
             </tr>
         </table>
-        @if (dataSource.data.length === 0) {
-        <mat-progress-spinner mode="indeterminate"></mat-progress-spinner>
+        @if (isLoading) {
+        <div role="status">
+            <span class="cdk-visually-hidden">{{ 'loading.courses' | translate }}</span>
+            <app-courses-skeleton layout="table"></app-courses-skeleton>
+        </div>
         }
     </div>
 
-    <div class="mobile-course-list" role="list">
-        @if (!isLoading) { @for (course of visibleCourses; track course.name) {
-        <button type="button" class="course-card" role="listitem" (click)="openDialog(course)">
-          <span class="course-field">{{ course.field }}</span>
-          <strong>{{ course.name }}</strong>
-          <p>{{ course.school }}</p>
-          <div class="course-meta">
-            <span>{{ course.time }}</span>
-            <span>{{ course.date }}</span>
-          </div>
-        </button> } @if (visibleCourses.length === 0) {
+    @if (isLoading) {
+    <div class="mobile-course-skeleton" role="status">
+        <span class="cdk-visually-hidden">{{ 'loading.courses' | translate }}</span>
+        <app-courses-skeleton layout="cards" [count]="3"></app-courses-skeleton>
+    </div>
+    }
+
+    <div class="mobile-course-list">
+        @if (!isLoading) {
+        <div class="mobile-course-items" role="list">
+            @for (course of mobileCourses; track course.name) {
+            <button type="button" class="course-card" role="listitem" (click)="openDialog(course)">
+              <span class="course-field">{{ course.field }}</span>
+              <strong>{{ course.name }}</strong>
+              <p>{{ course.school }}</p>
+              <div class="course-meta">
+                <span>{{ course.time }}</span>
+                <span>{{ course.date }}</span>
+              </div>
+            </button>
+            }
+        </div>
+        @if (mobileLoadingMore) {
+        <app-courses-skeleton layout="cards" [count]="mobileSkeletonCount"></app-courses-skeleton>
+        }
+        <!-- Região sempre presente para o leitor de tela anunciar cada carregamento -->
+        <span class="cdk-visually-hidden" role="status">
+            @if (mobileLoadingMore) {
+            {{ 'loading.moreCourses' | translate }}
+            }
+        </span>
+        @if (hasMoreMobileCourses) {
+        <div #mobileLoadTrigger class="mobile-load-trigger" aria-hidden="true"></div>
+        } @else if (visibleCourses.length > 0) {
+        <p class="end-of-list">{{ 'courses.allLoaded' | translate }}</p>
+        }
+        @if (visibleCourses.length === 0) {
         <p class="empty-state">{{ 'courses.emptyState' | translate }}</p>
-        } }
+        }
+        }
     </div>
 
+    <!-- No celular a paginação dá lugar ao carregamento infinito -->
     <div class="paginator">
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="5" [length]="dataSource.data.length" aria-label="Select page of courses"></mat-paginator>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="state.pageSize" [length]="dataSource.data.length" aria-label="Select page of courses"></mat-paginator>
     </div>
 </section>

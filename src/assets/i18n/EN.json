@@ -9,13 +9,25 @@
     "PROJECTS": "PROJECTS",
     "Made by": "Made by",
     "courseCertificateMessage": "Click on the course name to view the certificate.",
+    "splash": {
+        "loading": "Loading"
+    },
+    "courseHint": {
+        "label": "Tip",
+        "close": "Close tip"
+    },
+    "certificate": {
+        "close": "Close certificate",
+        "openNewTab": "Open in a new tab",
+        "loading": "Loading certificate…"
+    },
     "Technologies Used": "Technologies Used",
     "Welcome to my website": "Welcome to my website",
     "Hi, I’m": "Hi, I’m",
     "home": {
         "eyebrow": "Welcome!",
         "title": "Software Engineer | GenAI | Full Cycle",
-        "description": "I've been building systems since 2022, focusing on scalable architectures and using Generative AI to make engineering faster and more reliable.",
+        "description": "Since 2022, I've been building systems that scale with the business, using Generative AI to help teams ship faster and with more confidence.",
         "rolePrefix": "focus:",
         "photoAlt": "Portrait of Alvaro Ferreira",
         "cta": {
@@ -99,6 +111,7 @@
     "COURSES": "COURSES",
     "Courses": "Courses",
     "courses": {
+        "allLoaded": "You've seen all courses",
         "title": "Always learning",
         "intro": "Specializations and courses that strengthen my foundation in software engineering and emerging technologies.",
         "filterPlaceholder": "Ex.: Architecture, Java, GenAI",
@@ -113,7 +126,15 @@
     "DATE": "DATE",
     "Select page of courses": "Select page of courses",
     "Projects": "Projects",
+    "loading": {
+        "photo": "Loading photo",
+        "courses": "Loading courses",
+        "projects": "Loading projects",
+        "moreProjects": "Loading more projects",
+        "moreCourses": "Loading more courses"
+    },
     "portfolio": {
+        "allLoaded": "You've seen all projects",
         "title": "Open source",
         "intro": "Personal projects published on my GitHub, where I explore new technologies and architecture patterns.",
         "error": "Couldn't load the projects right now. See them all on my GitHub:"

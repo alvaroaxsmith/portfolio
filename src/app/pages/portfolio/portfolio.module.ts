@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { PortfolioComponent } from './portfolio.component';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { SkeletonModule } from 'src/app/components/skeleton/skeleton.module';
 
 const routes: Routes = [
   { path: '', component: PortfolioComponent },
@@ -13,6 +14,6 @@ const routes: Routes = [
   declarations: [
     PortfolioComponent
   ],
-  imports: [CommonModule, MaterialModule, RouterModule.forChild(routes), TranslateModule.forChild()],
+  imports: [CommonModule, MaterialModule, SkeletonModule, RouterModule.forChild(routes), TranslateModule.forChild()],
 })
 export class PortfolioModule { }

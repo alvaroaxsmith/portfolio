@@ -196,7 +196,9 @@ mat-card-header {
     border-radius: 1rem;
     transition: all 0.3s ease;
     padding: 1.5rem;
-    cursor: pointer;
+    &.is-interactive {
+        cursor: pointer;
+    }
     mat-card-content {
         padding: 0;
     }

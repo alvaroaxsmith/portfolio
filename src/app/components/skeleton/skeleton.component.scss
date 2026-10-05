@@ -1,0 +1,22 @@
+// Quadriculado de 12px (metade do passo de 24px do body) preso à viewport com
+// background-attachment: fixed, para que os quadrados de todos os skeletons
+// fiquem alinhados entre si e com as linhas do fundo da página.
+// Camadas, de cima para baixo: linhas da grade, quadradinhos que mudam de tom
+// aleatoriamente (--skeleton-noise, gerado em skeleton-noise.ts) e o tom base.
+// O ladrilho da textura tem múltiplos de 12px, então os quadradinhos caem
+// exatamente entre as linhas.
+:host {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 1rem;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background-color: var(--skeleton-base);
+  background-image:
+    linear-gradient(var(--skeleton-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--skeleton-line) 1px, transparent 1px),
+    var(--skeleton-noise, none);
+  background-size: 12px 12px, 12px 12px, var(--skeleton-noise-size, auto);
+  background-attachment: fixed;
+}

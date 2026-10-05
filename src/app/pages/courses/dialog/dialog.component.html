@@ -1,16 +1,41 @@
-<mat-dialog-actions align="end" style="cursor: pointer;">
-  <button mat-icon-button mat-dialog-close>
-    <mat-icon>close</mat-icon>
-  </button>
-</mat-dialog-actions>
+<section class="sheet" aria-labelledby="certificate-title">
+  <span class="handle" aria-hidden="true"></span>
 
-<mat-card>
-  <mat-card-header>
-    <mat-card-title>{{ rowData.name }}</mat-card-title>
-  </mat-card-header>
-  <mat-card-content class="mat-dialog-container">
-    @if (safeUrl) {
-      <iframe [src]="safeUrl" allow="autoplay"></iframe>
+  <header class="sheet-header">
+    <div class="heading">
+      <h2 id="certificate-title">{{ rowData.name }}</h2>
+      @if (rowData.school || rowData.date) {
+        <p class="meta">
+          {{ rowData.school }}
+          @if (rowData.school && rowData.date) { <span aria-hidden="true">·</span> }
+          {{ rowData.date }}
+        </p>
+      }
+    </div>
+
+    <div class="actions">
+      @if (externalUrl) {
+        <a mat-icon-button [href]="externalUrl" target="_blank" rel="noopener noreferrer"
+          [attr.aria-label]="'certificate.openNewTab' | translate"
+          [title]="'certificate.openNewTab' | translate">
+          <mat-icon>open_in_new</mat-icon>
+        </a>
+      }
+      <button mat-icon-button type="button" (click)="dismiss()"
+        [attr.aria-label]="'certificate.close' | translate"
+        [title]="'certificate.close' | translate">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </header>
+
+  <div class="frame" [class.is-loaded]="isFrameLoaded">
+    @if (!isFrameLoaded) {
+      <app-skeleton class="frame-placeholder" radius="0"></app-skeleton>
+      <span class="sr-only" role="status">{{ 'certificate.loading' | translate }}</span>
     }
-  </mat-card-content>
-</mat-card>
+    @if (safeUrl) {
+      <iframe [src]="safeUrl" [title]="rowData.name" allow="autoplay" (load)="onFrameLoad()"></iframe>
+    }
+  </div>
+</section>

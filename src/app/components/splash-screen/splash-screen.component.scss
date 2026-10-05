@@ -1,245 +1,128 @@
-// :host aplica estilos ao próprio elemento <app-splash-screen>
+// Só o texto: a grade é o canvas #splash do index.html, logo abaixo desta
+// camada. O texto usa o tom do texto do site (#0f172a), reservado só para ele:
+// os quadrados da grade nunca ficam tão escuros (MIN_TONE no index.html).
 :host {
-  position: fixed;
-  top: 0;
-  left: 0;
-  /* Fallback */
-  width: 100vw;
-  height: 100vh;
-  /* Modern viewport units for mobile browsers */
-  width: 100dvw;
-  height: 100dvh;
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(20px) saturate(180%);
-  -webkit-backdrop-filter: blur(20px) saturate(180%);
-  z-index: 9999;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  opacity: 1;
-  transition: opacity 0.3s ease-out;
-  will-change: opacity;
-  transform: translateZ(0);
-
-  // Efeito de vidro com overlay sutil
-  &::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: linear-gradient(
-      135deg,
-      rgba(255, 255, 255, 0.1) 0%,
-      rgba(255, 255, 255, 0.05) 25%,
-      rgba(0, 0, 0, 0.1) 50%,
-      rgba(255, 255, 255, 0.02) 75%,
-      rgba(0, 0, 0, 0.05) 100%
-    );
+    --ink: var(--color-text, #0f172a);
+    position: fixed;
+    inset: 0;
+    z-index: 10001;
+    display: grid;
+    place-items: center;
+    padding: 1rem;
     pointer-events: none;
-  }
+    transition: opacity 0.2s ease-out;
+}
 
-  // Quando a classe 'hide' é adicionada, o componente desaparece instantaneamente
-  &.hide {
+:host(.is-leaving) {
     opacity: 0;
-    pointer-events: none;
-  }
 }
 
-.grid-container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  /* Fallback */
-  width: 100vw;
-  height: 100vh;
-  /* Modern viewport units */
-  width: 100dvw;
-  height: 100dvh;
-  display: grid;
-  grid-template-columns: repeat(20, 1fr);
-  grid-template-rows: repeat(10, 1fr);
-  gap: 1px;
-  padding: 5px;
-  will-change: transform;
-  transform: translateZ(0);
+:host(.is-done) {
+    display: none;
 }
 
-// Estilos para os itens da grade - iluminação vetorial triangular retangular
-:host ::ng-deep .grid-item {
-  position: relative;
-  border-radius: 2px;
-  transition: background-color 0.2s ease-out;
-  will-change: background-color;
-  backface-visibility: hidden;
-  opacity: 0;
-  overflow: hidden;
-  --light-color: rgba(180, 180, 180, 0.4);
-
-  // Aparecem imediatamente quando fade-in é aplicado
-  &.fade-in {
-    opacity: 1;
-  }
-
-  // Triângulo superior esquerdo - metade do quadrado
-  &.light-top-left {
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 50%;
-      height: 50%;
-      background: var(--light-color, rgba(180, 180, 180, 0.4));
-      clip-path: polygon(0 0, 100% 0, 0 100%);
-      opacity: 1;
-      transition: opacity 1s ease-out;
-    }
-  }
-
-  // Triângulo superior direito - metade do quadrado
-  &.light-top-right {
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 50%;
-      height: 50%;
-      background: var(--light-color, rgba(180, 180, 180, 0.4));
-      clip-path: polygon(0 0, 100% 0, 100% 100%);
-      opacity: 1;
-      transition: opacity 1s ease-out;
-    }
-  }
-
-  // Triângulo inferior esquerdo - metade do quadrado
-  &.light-bottom-left {
-    &::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 50%;
-      height: 50%;
-      background: var(--light-color, rgba(180, 180, 180, 0.4));
-      clip-path: polygon(0 0, 0 100%, 100% 100%);
-      opacity: 1;
-      transition: opacity 1s ease-out;
-    }
-  }
-
-  // Triângulo inferior direito - metade do quadrado
-  &.light-bottom-right {
-    &::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      right: 0;
-      width: 50%;
-      height: 50%;
-      background: var(--light-color, rgba(180, 180, 180, 0.4));
-      clip-path: polygon(0 100%, 100% 0, 100% 100%);
-      opacity: 1;
-      transition: opacity 1s ease-out;
-    }
-  }
-
-  // Retângulo central horizontal - metade do quadrado
-  &.light-center {
-    &::before {
-      content: "";
-      position: absolute;
-      top: 25%;
-      left: 0;
-      width: 100%;
-      height: 50%;
-      background: var(--light-color, rgba(200, 200, 200, 0.4));
-      opacity: 1;
-      transition: opacity 1s ease-out;
-    }
-  }
-
-  // Retângulo superior - metade superior do quadrado
-  &.light-top {
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 50%;
-      background: var(--light-color, rgba(190, 190, 190, 0.4));
-      opacity: 1;
-      transition: opacity 1s ease-out;
-    }
-  }
-
-  // Retângulo inferior - metade inferior do quadrado
-  &.light-bottom {
-    &::before {
-      content: "";
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      width: 100%;
-      height: 50%;
-      background: var(--light-color, rgba(190, 190, 190, 0.4));
-      opacity: 1;
-      transition: opacity 1s ease-out;
-    }
-  }
-
-  // Retângulo esquerdo - metade esquerda do quadrado
-  &.light-left {
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 50%;
-      height: 100%;
-      background: var(--light-color, rgba(190, 190, 190, 0.4));
-      opacity: 1;
-      transition: opacity 1s ease-out;
-    }
-  }
-
-  // Retângulo direito - metade direita do quadrado
-  &.light-right {
-    &::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      right: 0;
-      width: 50%;
-      height: 100%;
-      background: var(--light-color, rgba(190, 190, 190, 0.4));
-      opacity: 1;
-      transition: opacity 1s ease-out;
-    }
-  }
+.loading {
+    display: flex;
+    align-items: baseline;
+    gap: 0.4em;
+    margin: 0;
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: clamp(1.05rem, 3.8vw, 1.6rem);
+    font-weight: 600;
+    -webkit-font-smoothing: antialiased;
+    letter-spacing: 0.32em;
+    text-transform: uppercase;
 }
 
-.splash-logo {
-  color: #e4e4e7;
-  font-size: 2rem;
-  font-weight: 200;
-  letter-spacing: 6px;
-  text-transform: uppercase;
-  opacity: 0;
-  transition: opacity 0.3s ease-out;
-  z-index: 10000;
-  will-change: opacity;
+.word {
+    display: inline-flex;
+}
 
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.1), 0 2px 4px rgba(0, 0, 0, 0.5);
+// Cada letra sobe de dentro do próprio "quadradinho" (a caixa recorta) e
+// depois uma onda percorre a palavra em loop, erguendo as letras em sequência.
+// Só posição, nunca opacidade, para o texto se manter nítido o tempo todo
+.letter {
+    display: inline-block;
+    overflow: hidden;
+    line-height: 1.2;
 
-  &.show {
-    opacity: 1;
-  }
+    span {
+        display: inline-block;
+        animation:
+            letter-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) calc(var(--i) * 45ms) both,
+            letter-lift 1.4s ease-in-out calc(0.6s + var(--i) * 90ms) infinite;
+    }
+}
 
-  &.hide {
-    opacity: 0;
-  }
+.dots {
+    display: inline-flex;
+    gap: 0.28em;
+    // Entra depois da última letra
+    animation: letter-in 0.4s ease-out calc(var(--n) * 45ms) both;
+
+    i {
+        width: 0.42em;
+        height: 0.42em;
+        background: var(--ink);
+        border-radius: 1px;
+        opacity: 0.25;
+        animation: 1.6s step-end infinite;
+    }
+
+    // ●○○ → ●●○ → ●●● → ○○○
+    i:nth-child(1) { animation-name: dot-1; }
+    i:nth-child(2) { animation-name: dot-2; }
+    i:nth-child(3) { animation-name: dot-3; }
+}
+
+@keyframes letter-in {
+    from {
+        opacity: 0;
+        transform: translateY(110%);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes letter-lift {
+    0%,
+    40%,
+    100% {
+        transform: none;
+    }
+    20% {
+        transform: translateY(-0.18em);
+    }
+}
+
+@keyframes dot-1 {
+    0% { opacity: 1; }
+    75% { opacity: 0.25; }
+}
+
+@keyframes dot-2 {
+    0% { opacity: 0.25; }
+    25% { opacity: 1; }
+    75% { opacity: 0.25; }
+}
+
+@keyframes dot-3 {
+    0% { opacity: 0.25; }
+    50% { opacity: 1; }
+    75% { opacity: 0.25; }
+}
+
+// Movimento reduzido: texto e reticências estáticos e totalmente visíveis
+@media (prefers-reduced-motion: reduce) {
+    .letter span,
+    .dots {
+        animation: none;
+    }
+    .dots i {
+        animation: none;
+        opacity: 1;
+    }
 }

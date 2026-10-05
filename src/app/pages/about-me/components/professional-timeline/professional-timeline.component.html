@@ -30,7 +30,8 @@
                     @for (experiencia of experiencias; track experiencia) {
                     <div class="carousel-item">
                         <!-- Card de Experiência Individual -->
-                        <mat-card class="timeline-content" (click)="selecionarExperiencia(experiencia)" (keydown)="handleActionKey($event, () => selecionarExperiencia(experiencia))" tabindex="0">
+                        <!-- No celular o card é só leitura: o clique não abre a jornada -->
+                        <mat-card class="timeline-content" [class.is-interactive]="!isMobile" (click)="selecionarExperiencia(experiencia)" (keydown)="handleActionKey($event, () => selecionarExperiencia(experiencia))" [attr.tabindex]="isMobile ? null : 0">
                             <mat-card-header>
                                 <mat-card-title>{{ experiencia.cargo | translate }}
                                 </mat-card-title>

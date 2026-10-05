@@ -4,6 +4,7 @@ import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Subject, filter, takeUntil } from 'rxjs';
 import { SeoService } from './services/seo.service';
+import { DEFAULT_LANG, SUPPORTED_LANGS, getInitialLang, storeLang } from './services/language-storage';
 
 @Component({
     selector: 'app-root',
@@ -45,22 +46,17 @@ export class AppComponent implements OnInit, OnDestroy {
     this.translate.onLangChange
       .pipe(takeUntil(this.destroy$))
       .subscribe((event: LangChangeEvent) => {
+        // Salva a escolha venha de onde vier (navbar, menu mobile, rodapé...)
+        storeLang(event.lang);
         this.updateDocumentLanguage(event.lang);
         this.updateSeo();
       });
   }
 
   initializeAppLanguage() {
-    const supportedLangs = ['EN', 'PT-BR'];
-    this.translate.addLangs(supportedLangs);
-    const defaultAppLanguage = 'PT-BR';
-    let langToUse = defaultAppLanguage;
-    if (!supportedLangs.includes(langToUse)) {
-      langToUse = supportedLangs[0] || 'PT-BR';
-    }
-
-    this.translate.setDefaultLang(langToUse);
-    this.translate.use(langToUse).subscribe();
+    this.translate.addLangs(SUPPORTED_LANGS);
+    this.translate.setDefaultLang(DEFAULT_LANG);
+    this.translate.use(getInitialLang()).subscribe();
   }
 
   ngOnDestroy() {

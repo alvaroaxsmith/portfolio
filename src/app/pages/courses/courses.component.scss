@@ -12,9 +12,15 @@
 }
 
 .eyebrow {
-    font-size: 0.88rem;
-    font-weight: 800;
-    letter-spacing: 0.12em;
+    width: fit-content;
+    padding: 0.45rem 0.7rem;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.72);
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--color-text-muted);
 }
@@ -58,26 +64,87 @@
     box-shadow: var(--color-shadow);
 }
 
-.mat-table {
+// Layout fixo: as larguras das colunas não dependem do conteúdo, então nada
+// se desloca ao passar o mouse, ordenar ou trocar de página
+table {
     width: 100%;
+    table-layout: fixed;
 }
 
-.mat-header-cell,
-.mat-cell {
+.mat-column-field {
+    width: 18%;
+}
+
+.mat-column-name {
+    width: 36%;
+}
+
+.mat-column-time {
+    width: 10%;
+}
+
+.mat-column-school {
+    width: 22%;
+}
+
+.mat-column-date {
+    width: 14%;
+}
+
+.mat-mdc-header-cell,
+.mat-mdc-cell {
     padding: 14px 16px;
     text-align: left;
-    overflow-wrap: break-word;
-    word-wrap: break-word;
+    overflow-wrap: anywhere;
     hyphens: auto;
-    max-width: 200px;
+}
+
+.mat-mdc-header-cell {
+    font-family: var(--font-mono);
+    font-size: 0.74rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    color: var(--color-text-muted);
+}
+
+.mat-mdc-cell {
+    font-size: 0.92rem;
+    color: var(--color-text-muted);
+}
+
+.mat-column-time,
+.mat-column-date {
+    font-variant-numeric: tabular-nums;
 }
 
 .hidden {
     display: none;
 }
 
-table {
-    width: 100%;
+// Feedback de hover/foco na linha inteira (ela toda abre o certificado), sem
+// mudar peso de fonte nem dimensões
+.course-row {
+    cursor: pointer;
+    transition: background-color 0.15s ease-out;
+
+    &:hover,
+    &:focus-visible {
+        background-color: rgba(15, 23, 42, 0.035);
+    }
+
+    &:hover .dialog,
+    &:focus-visible .dialog {
+        text-decoration-color: currentColor;
+    }
+
+    &:focus-visible {
+        outline: 2px solid var(--color-accent);
+        outline-offset: -2px;
+    }
+
+    &:last-child .mat-mdc-cell {
+        border-bottom: none;
+    }
 }
 
 .mat-form-field {
@@ -96,10 +163,6 @@ mat-icon {
     cursor: pointer;
 }
 
-mat-progress-spinner {
-    margin: 0 auto;
-}
-
 mat-label {
     font-size: 16px;
     color: #444;
@@ -110,17 +173,18 @@ mat-label {
     width: min(420px, 100%);
 }
 
+// Peso fixo: o sublinhado aparece só ao passar na linha, sem alterar a largura
 .dialog {
     font-weight: 500;
-    color: #444;
-    cursor: pointer;
+    color: var(--color-text);
+    text-decoration: underline;
+    text-decoration-color: transparent;
+    text-underline-offset: 3px;
+    transition: text-decoration-color 0.15s ease-out;
 }
 
-.dialog:hover {
-    font-weight: 600;
-}
-
-.mobile-course-list {
+.mobile-course-list,
+.mobile-course-skeleton {
     display: none;
 }
 
@@ -184,8 +248,28 @@ mat-label {
         gap: 0.85rem;
         margin-bottom: 1.25rem;
     }
-}
-
-tr {
-    cursor: pointer;
+    .mobile-course-items {
+        display: grid;
+        gap: 0.85rem;
+    }
+    .mobile-load-trigger {
+        height: 1px;
+    }
+    .end-of-list {
+        margin-top: 1rem;
+        text-align: center;
+        font-family: var(--font-mono);
+        font-size: 0.78rem;
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        color: var(--color-text-muted);
+    }
+    // A paginação dá lugar ao carregamento infinito
+    .paginator {
+        display: none;
+    }
+    .mobile-course-skeleton {
+        display: block;
+        margin-bottom: 1.25rem;
+    }
 }

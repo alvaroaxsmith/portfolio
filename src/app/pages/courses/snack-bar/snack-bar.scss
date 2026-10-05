@@ -1,22 +1,149 @@
-/* Adicione este trecho de código ao seu arquivo de estilo CSS */
-.custom-button {
-  background-color: #7e7e7e;
-  color: #ffffff;
-  border: none;
-  border-radius: 4px;
-  padding: 8px 16px;
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  transition: background-color 0.3s;
-  display: flex;
-  margin: auto;
+// Moldura e quadriculado seguem o skeleton e os cards: superfície branca
+// translúcida com a grade de 12px presa à viewport, alinhada ao fundo
+:host {
+    --hint-duration: 5s;
+    display: block;
+    // Invisível até o conteúdo chegar à região aria-live (ver is-ready no componente)
+    opacity: 0;
 }
 
-.custom-button:hover {
-  background-color: #6b6b6b;
+:host(.is-ready) {
+    opacity: 1;
+    animation: hint-in 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
 }
 
-.mdc-snackbar__surface {
-  filter: opacity(0.1);
+:host(.is-leaving) {
+    animation: hint-out 0.28s cubic-bezier(0.4, 0, 1, 1) forwards;
+}
+
+.hint {
+    position: relative;
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 0.85rem;
+    padding: 0.85rem 0.5rem 0.85rem 0.95rem;
+    border: 1px solid var(--color-border);
+    border-radius: 1rem;
+    overflow: hidden;
+    color: var(--color-text);
+    background-color: rgba(255, 255, 255, 0.86);
+    background-image:
+        linear-gradient(rgba(148, 163, 184, 0.14) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(148, 163, 184, 0.14) 1px, transparent 1px);
+    background-size: 12px 12px;
+    background-attachment: fixed;
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.14);
+}
+
+.hint-text {
+    display: grid;
+    gap: 0.15rem;
+    p {
+        margin: 0;
+        font-family: var(--font-sans);
+        font-size: 0.92rem;
+        line-height: 1.45;
+        color: var(--color-text);
+    }
+}
+
+.hint-label {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+.hint-close {
+    color: var(--color-text-muted);
+}
+
+// Relógio: o anel se esvazia enquanto o ponteiro dá uma volta completa
+.timer {
+    width: 2.25rem;
+    height: 2.25rem;
+    overflow: visible;
+}
+
+.timer-track {
+    fill: rgba(255, 255, 255, 0.9);
+    stroke: rgba(15, 23, 42, 0.1);
+    stroke-width: 2.5;
+}
+
+.timer-progress {
+    fill: none;
+    stroke: var(--color-accent);
+    stroke-width: 2.5;
+    stroke-linecap: round;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 0;
+    // Começa às 12 horas, como o ponteiro
+    transform: rotate(-90deg);
+    transform-origin: 16px 16px;
+}
+
+.timer-hand {
+    stroke: var(--color-accent);
+    stroke-width: 2;
+    stroke-linecap: round;
+    transform-origin: 16px 16px;
+}
+
+// O relógio só corre depois que a notificação está pronta
+:host(.is-ready) {
+    .timer-progress {
+        animation: timer-drain var(--hint-duration) linear forwards;
+    }
+    .timer-hand {
+        animation: timer-spin var(--hint-duration) linear forwards;
+    }
+}
+
+.timer-pin {
+    fill: var(--color-accent);
+}
+
+// Mouse em cima ou foco pausa o relógio e, com ele, o fechamento
+:host(.is-paused) {
+    .timer-progress,
+    .timer-hand {
+        animation-play-state: paused;
+    }
+}
+
+@keyframes hint-in {
+    from {
+        opacity: 0;
+        transform: translate3d(calc(100% + 1.5rem), 0, 0);
+    }
+    to {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes hint-out {
+    to {
+        opacity: 0;
+        transform: translate3d(calc(100% + 1.5rem), 0, 0);
+    }
+}
+
+// Offset negativo: o trecho vazio cresce atrás do ponteiro, no sentido horário
+@keyframes timer-drain {
+    to {
+        stroke-dashoffset: -100;
+    }
+}
+
+@keyframes timer-spin {
+    to {
+        transform: rotate(360deg);
+    }
 }

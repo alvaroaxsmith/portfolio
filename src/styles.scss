@@ -25,6 +25,9 @@
     --radius-md: 1.25rem;
     --radius-lg: 2rem;
     --navbar-height: 5rem;
+    /* Skeletons: ardósia neutra, um tom mais sóbrio que o quadriculado do fundo */
+    --skeleton-base: rgba(100, 116, 139, 0.12);
+    --skeleton-line: rgba(255, 255, 255, 0.5);
     --mat-option-selected-state-label-text-color: black;
     --mat-form-field-outlined-focus-outline-color: black;
     --mat-form-field-filled-container-color: transparent;
@@ -41,27 +44,29 @@
 html,
 body {
     min-height: 100%;
-     ::-webkit-scrollbar {
+}
+
+/* Barra de rolagem personalizada só em telas com mouse. Em toque (celular,
+   tablet) fica a barra nativa sobreposta, que só aparece enquanto o dedo
+   rola a página e some em seguida */
+@media (hover: hover) and (pointer: fine) {
+    body {
+        /* Reserva o espaço da barra para o layout não pular entre páginas
+           curtas e longas */
+        overflow-y: scroll;
+    }
+    ::-webkit-scrollbar {
         width: 8px;
         background-color: transparent;
-        transition: width 0.9s ease-in-out;
     }
-     ::-webkit-scrollbar-thumb {
+    ::-webkit-scrollbar-thumb {
         background-color: #444;
-        scrollbar-color: #444;
-        transition: background-color 0.9s ease-in-out;
     }
-     ::-webkit-scrollbar-thumb:hover {
+    ::-webkit-scrollbar-thumb:hover {
         background-color: black;
     }
-     ::-webkit-scrollbar-track {
-        -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
-        scrollbar-width: thin;
-        scrollbar-color: #f5f5f5 #444;
-    }
-     ::-webkit-scrollbar-thumb:hover {
-        background-color: black;
-        scrollbar-color: black #444;
+    ::-webkit-scrollbar-track {
+        box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.1);
     }
 }
 
@@ -74,7 +79,6 @@ body {
     color: var(--color-text);
     background: linear-gradient(rgba(148, 163, 184, 0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(148, 163, 184, 0.08) 1px, transparent 1px), radial-gradient(circle at top, rgba(255, 255, 255, 0.94), rgba(243, 246, 251, 0.9) 36%, #eef2f7 100%);
     background-size: 24px 24px, 24px 24px, auto;
-    overflow-y: scroll;
     overflow-x: hidden;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -147,6 +151,73 @@ h6 {
     -webkit-backdrop-filter: blur(18px);
     border: 1px solid rgba(15, 23, 42, 0.08);
     box-shadow: 0 -12px 40px rgba(15, 23, 42, 0.12);
+}
+
+/* Certificados: tela cheia em largura no celular, painel centralizado e largo
+   no tablet/desktop. --sheet-max-height é usado pelo componente para encaixar
+   o certificado na altura disponível */
+.certificate-sheet {
+    --sheet-max-height: 92dvh;
+    .mat-bottom-sheet-container {
+        width: 100vw;
+        min-width: 0;
+        max-width: 100vw;
+        max-height: var(--sheet-max-height);
+        padding: 0;
+        border-top-left-radius: 1.5rem;
+        border-top-right-radius: 1.5rem;
+        background: rgba(255, 255, 255, 0.96);
+        backdrop-filter: blur(18px);
+        -webkit-backdrop-filter: blur(18px);
+        border: 1px solid rgba(15, 23, 42, 0.08);
+        border-bottom: 0;
+        box-shadow: 0 -12px 40px rgba(15, 23, 42, 0.14);
+    }
+}
+
+@media (min-width: 600px) {
+    .certificate-sheet .mat-bottom-sheet-container {
+        width: min(calc(100vw - 3rem), 1040px);
+    }
+}
+
+/* Telas baixas (celular deitado): o certificado ocupa quase toda a altura */
+@media (max-height: 500px) {
+    .certificate-sheet {
+        --sheet-max-height: 100dvh;
+        .mat-bottom-sheet-container {
+            border-top-left-radius: 1rem;
+            border-top-right-radius: 1rem;
+        }
+    }
+}
+
+/* Notificação de dica dos cursos: o Material só posiciona; a aparência fica
+   toda no componente, então a superfície padrão some. Fica no canto superior
+   direito, logo abaixo da navbar fixa */
+.mat-mdc-snack-bar-container.course-hint {
+    width: min(380px, calc(100vw - 2rem));
+    margin: calc(var(--navbar-height) + 0.75rem) 1rem 0 0;
+    .mat-mdc-snackbar-surface {
+        min-width: 0;
+        max-width: none;
+        width: 100%;
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+    .mdc-snackbar__label {
+        padding: 0;
+    }
+}
+
+/* No celular o Material ocupa a largura toda: centraliza com respiro lateral */
+@media (max-width: 599px) {
+    .mat-mdc-snack-bar-container.course-hint {
+        width: calc(100vw - 2rem);
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
 }
 
 p {

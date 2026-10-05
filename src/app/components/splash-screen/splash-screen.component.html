@@ -1,6 +1,11 @@
-<div class="splash-logo" [class.hide]="!showLogo" [class.show]="showLogo">
-  Loading...
-</div>
-
-<!-- O TypeScript vai popular este container com os quadrados da grade -->
-<div #gridContainer class="grid-container"></div>
+<p class="loading" role="status" [attr.aria-label]="text">
+    <span class="word" aria-hidden="true">
+        @for (letter of letters; track $index; let i = $index) {
+        <span class="letter" [style.--i]="i"><span>{{ letter }}</span></span>
+        }
+    </span>
+    <!-- Reticências: três quadradinhos da grade que acendem em sequência -->
+    <span class="dots" aria-hidden="true" [style.--n]="letters.length">
+        <i></i><i></i><i></i>
+    </span>
+</p>

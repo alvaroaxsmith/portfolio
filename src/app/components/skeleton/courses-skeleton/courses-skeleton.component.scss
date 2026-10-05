@@ -1,0 +1,40 @@
+:host {
+  display: grid;
+}
+
+// Mesma ordem e larguras das colunas da tabela: área, nome, horas, escola, data
+.table-row {
+  display: grid;
+  grid-template-columns: 18fr 36fr 10fr 22fr 14fr;
+  align-items: center;
+  gap: 16px;
+  min-height: 52px;
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--color-border);
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
+
+// Mesma moldura do .course-card (courses.component.scss)
+:host(.cards) {
+  gap: 0.85rem;
+}
+
+.course-card {
+  display: grid;
+  gap: 0.6rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 1.25rem;
+  background: rgba(255, 253, 248, 0.76);
+  box-shadow: var(--color-shadow);
+}
+
+.course-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding-top: 0.15rem;
+}

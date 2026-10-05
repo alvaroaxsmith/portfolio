@@ -19,6 +19,8 @@ import { HttpClient, provideHttpClient, withInterceptorsFromDi, withXhr } from '
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { ProjectsService } from './pages/portfolio/services/projects.service';
 import { DialogComponent } from './pages/courses/dialog/dialog.component';
+import { SkeletonModule } from './components/skeleton/skeleton.module';
+import { DEFAULT_LANG, SUPPORTED_LANGS, getInitialLang } from './services/language-storage';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -33,6 +35,7 @@ import { DialogComponent } from './pages/courses/dialog/dialog.component';
         BrowserAnimationsModule,
         MaterialModule,
         MatDialogModule,
+        SkeletonModule,
         TranslateModule.forRoot({
             loader: {
                 provide: TranslateLoader,
@@ -57,14 +60,9 @@ export function httpTranslateLoader(http: HttpClient) {
 
 export function appInitializerFactory(translate: TranslateService) {
   return () => {
-    const supportedLangs = ['EN', 'PT-BR'];
-    translate.addLangs(supportedLangs);
-    const defaultAppLanguage = 'PT-BR';
-    let langToUse = defaultAppLanguage;
-    if (!supportedLangs.includes(langToUse)) {
-      langToUse = supportedLangs[0] || 'PT-BR';
-    }
-    translate.setDefaultLang(langToUse);
-    return translate.use(langToUse).toPromise();
+    translate.addLangs(SUPPORTED_LANGS);
+    // Padrão como fallback de chaves ausentes; em uso, o idioma salvo da última visita
+    translate.setDefaultLang(DEFAULT_LANG);
+    return translate.use(getInitialLang()).toPromise();
   };
 }

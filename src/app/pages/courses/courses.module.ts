@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { CoursesComponent } from './courses.component';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { SkeletonModule } from 'src/app/components/skeleton/skeleton.module';
 
 const routes: Routes = [
   { path: '', component: CoursesComponent },
@@ -11,7 +12,7 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [CoursesComponent],
-  imports: [CommonModule, MaterialModule, RouterModule.forChild(routes), TranslateModule.forChild()],
+  imports: [CommonModule, MaterialModule, SkeletonModule, RouterModule.forChild(routes), TranslateModule.forChild()],
   exports: [
     CoursesComponent,
   ],

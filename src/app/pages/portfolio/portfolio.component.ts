@@ -1,8 +1,19 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core'; // Importar ChangeDetectorRef, ViewChild, ElementRef, OnDestroy
+import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { ProjectsService } from './services/projects.service';
 import { Project } from './Project';
 import { TranslateService } from '@ngx-translate/core';
+
+// Largura mínima do card no grid: precisa acompanhar o minmax do
+// portfolio.component.scss para o cálculo de colunas bater com a tela
+const GRID_MIN_CARD_WIDTH = 300;
+// Lotes pequenos para o carregamento infinito ser percebido: a cada lote o
+// fim da lista mostra os skeletons no layout atual antes dos cards chegarem
+const GRID_ROWS_PER_PAGE = 2;
+const LIST_ITEMS_PER_PAGE = 4;
+// Tempo de exibição do skeleton a cada lote: os dados já estão em memória,
+// sem ele os placeholders nem chegariam a aparecer
+const LOAD_MORE_DELAY_MS = 600;
 
 @Component({
     selector: 'app-portfolio',
@@ -12,13 +23,8 @@ import { TranslateService } from '@ngx-translate/core';
         trigger('fadeInLeft', [
             transition(':enter', [
                 style({ opacity: 0, transform: 'translateX(-20px)' }),
-                animate('{{ delay }}ms ease-in-out', style({ opacity: 1, transform: 'translateX(0)' })),
+                animate('300ms {{ delay }}ms ease-out', style({ opacity: 1, transform: 'translateX(0)' })),
             ], { params: { delay: 0 } }),
-            // A transição :leave pode ser removida se não for mais necessária com o scroll infinito
-            // transition(':leave', [
-            //   style({ opacity: 1, transform: 'translateX(0)' }),
-            //   animate('{{ delay }}ms ease-in-out', style({ opacity: 0, transform: 'translateX(20px)' })),
-            // ], { params: { delay: 0 } }),
         ]),
     ],
     changeDetection: ChangeDetectionStrategy.Eager,
@@ -33,8 +39,13 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   loadError = false;
   loadingMore: boolean = false;
   allProjectsLoaded: boolean = false;
+  // Recalculado conforme a tela e a visualização (ver updatePageSize)
   pageSize = 6;
-  currentPage = 1;
+  // Colunas do grid na largura atual (1 na lista)
+  columns = 1;
+  // Índice do primeiro item do último lote, para escalonar só a animação dele
+  private batchStart = 0;
+  private loadMoreTimer?: ReturnType<typeof setTimeout>;
 
   viewportWidth: number = window.innerWidth;
   currentView: 'list' | 'grid' = 'list';
@@ -45,12 +56,14 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   projectListAnimationState: 'initial' | 'viewToggle' | 'stable' = 'initial';
 
-  @ViewChild('loadMoreTrigger', { static: false }) loadMoreTrigger!: ElementRef;
+  @ViewChild('page', { static: true }) pageRef!: ElementRef<HTMLElement>;
+  @ViewChild('loadMoreTrigger', { static: false }) loadMoreTrigger?: ElementRef<HTMLElement>;
   private observer: IntersectionObserver | undefined;
 
-  @HostListener('window:resize', ['$event'])
-  onResize(event: any) {
-    this.viewportWidth = event.target.innerWidth;
+  @HostListener('window:resize')
+  onResize() {
+    this.viewportWidth = window.innerWidth;
+    this.updatePageSize();
   }
 
   constructor(
@@ -59,7 +72,30 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     private translate: TranslateService
   ) { }
 
+  /** Quantidade de skeletons ao carregar mais: exatamente o que vai chegar. */
+  get loadingMoreCount(): number {
+    return Math.min(this.nextBatchSize(), this.processedProjects.length - this.projects.length);
+  }
+
+  /** Tamanho do próximo lote, completando a última linha do grid se as colunas mudaram. */
+  private nextBatchSize(): number {
+    if (this.projects.length === 0) {
+      return this.pageSize;
+    }
+    const missingInRow = (this.columns - (this.projects.length % this.columns)) % this.columns;
+    return this.pageSize + missingInRow;
+  }
+
+  get initialSkeletons(): number[] {
+    return Array.from({ length: this.pageSize }, (_, i) => i);
+  }
+
+  get loadingMoreSkeletons(): number[] {
+    return Array.from({ length: this.loadingMoreCount }, (_, i) => i);
+  }
+
   ngOnInit(): void {
+    this.updatePageSize();
     this.initialLoading = true;
     this.projectListAnimationState = 'initial';
     this.projectsService.getProjects().subscribe(
@@ -73,19 +109,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
           this.selectedTech = null;
         }
 
-        this.applyFiltersAndSorting(); // Processa e carrega a primeira página via loadNextPage
-
         this.initialLoading = false;
-        this.cdr.detectChanges(); // Crucial: atualiza o DOM ANTES de configurar o observer
-
-        // Configura o observer apenas se houver projetos processados e nem todos foram carregados na primeira chamada
-        if (this.processedProjects.length > 0 && !this.allProjectsLoaded) {
-          // Usar setTimeout para garantir que loadMoreTrigger esteja no DOM após detectChanges
-          setTimeout(() => this.setupIntersectionObserver(), 0);
-        } else if (this.processedProjects.length === 0) {
-          this.allProjectsLoaded = true; // Garante que se não há projetos, é marcado como carregado
-          this.cdr.detectChanges();
-        }
+        this.applyFiltersAndSorting();
       },
       () => {
         this.loadError = true;
@@ -101,29 +126,41 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.observer) {
-      this.observer.disconnect();
+    clearTimeout(this.loadMoreTimer);
+    this.observer?.disconnect();
+  }
+
+  /**
+   * Ajusta o lote ao layout: no grid, linhas completas com as colunas que
+   * cabem na largura; na lista, uma quantidade fixa de itens.
+   */
+  updatePageSize(): void {
+    if (this.currentView === 'grid') {
+      const width = this.pageRef?.nativeElement.clientWidth || window.innerWidth;
+      // Mesmo gap do SCSS: clamp(0.75rem, 1.5vw, 1rem)
+      const gap = Math.min(16, Math.max(12, window.innerWidth * 0.015));
+      this.columns = Math.max(1, Math.floor((width + gap) / (GRID_MIN_CARD_WIDTH + gap)));
+      this.pageSize = this.columns * GRID_ROWS_PER_PAGE;
+    } else {
+      this.columns = 1;
+      this.pageSize = LIST_ITEMS_PER_PAGE;
     }
   }
 
-  setupIntersectionObserver(): void {
-    if (!this.loadMoreTrigger?.nativeElement) {
-      // Se o elemento gatilho não estiver no DOM (ex: todos os itens carregados na primeira página), não há o que observar.
+  private setupIntersectionObserver(): void {
+    this.observer?.disconnect();
+    this.observer = undefined;
+    if (!this.loadMoreTrigger?.nativeElement || this.allProjectsLoaded) {
       return;
     }
-    const options = {
-      root: null,
-      rootMargin: '0px',
-      threshold: 0.1
-    };
 
+    // Dispara só quando o fim da lista entra na tela, para os skeletons do
+    // próximo lote aparecerem à vista do usuário
     this.observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !this.loadingMore && !this.allProjectsLoaded) { // initialLoading não é mais verificado aqui
-          this.loadNextPage();
-        }
-      });
-    }, options);
+      if (entries.some(entry => entry.isIntersecting)) {
+        this.loadMore();
+      }
+    });
 
     this.observer.observe(this.loadMoreTrigger.nativeElement);
   }
@@ -136,7 +173,6 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       result = result.filter(p => p.tech === this.selectedTech);
     }
 
-    // A ordenação permanece a mesma
     result.sort((a, b) => {
       const timeA = new Date(a.date).getTime();
       const timeB = new Date(b.date).getTime();
@@ -151,65 +187,47 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       return this.currentSortOrder === 'recent' ? timeB - timeA : timeA - timeB;
     });
 
+    clearTimeout(this.loadMoreTimer);
+    this.loadingMore = false;
     this.processedProjects = result;
-    this.currentPage = 1;
-    this.projects = []; // Limpa os projetos atualmente exibidos
-    this.allProjectsLoaded = false; // Reseta o status de carregamento
+    this.projects = [];
+    this.batchStart = 0;
+    this.allProjectsLoaded = result.length === 0;
 
-    // Desconecta e limpa completamente o observer antigo antes de recarregar os dados
-    if (this.observer) {
-      this.observer.disconnect();
-      this.observer = undefined; // Define como undefined para permitir a recriação
-    }
-
-    if (this.processedProjects.length > 0) {
-      this.loadNextPage(); // Carrega a primeira página dos projetos processados e ordenados
-    } else {
-      this.allProjectsLoaded = true; // Nenhum projeto para carregar
-    }
-
-    this.cdr.detectChanges(); // Garante que o DOM (incluindo #loadMoreTrigger) seja atualizado
-
-    // Reconfigura o IntersectionObserver APÓS o DOM ser atualizado e a primeira página carregada,
-    // e somente se houver mais projetos para carregar.
-    if (!this.allProjectsLoaded && this.processedProjects.length > 0) {
-      // Usar setTimeout para garantir que #loadMoreTrigger esteja no DOM,
-      // especialmente se sua renderização for condicional.
-      setTimeout(() => {
-        // setupIntersectionObserver já verifica se loadMoreTrigger.nativeElement existe
-        this.setupIntersectionObserver();
-      }, 0);
-    }
+    // A primeira página entra na hora (os dados já chegaram); as próximas
+    // passam pelo skeleton em loadMore
+    this.appendNextPage();
   }
 
-  loadNextPage(): void {
-    // Removida a verificação de 'this.initialLoading'
+  /** Mostra o skeleton e, em seguida, acrescenta a próxima página. */
+  loadMore(): void {
     if (this.loadingMore || this.allProjectsLoaded) {
       return;
     }
-
     this.loadingMore = true;
-    const startIndex = (this.currentPage - 1) * this.pageSize;
-    const endIndex = startIndex + this.pageSize;
-    const newProjects = this.processedProjects.slice(startIndex, endIndex);
+    this.cdr.detectChanges();
 
-    if (newProjects.length > 0) {
-      this.projects = [...this.projects, ...newProjects];
-      this.currentPage++;
-    }
+    this.loadMoreTimer = setTimeout(() => {
+      this.loadingMore = false;
+      this.appendNextPage();
+    }, LOAD_MORE_DELAY_MS);
+  }
 
+  private appendNextPage(): void {
+    const next = this.processedProjects.slice(this.projects.length, this.projects.length + this.nextBatchSize());
+
+    this.batchStart = this.projects.length;
+    this.projects = [...this.projects, ...next];
     this.allProjectsLoaded = this.projects.length >= this.processedProjects.length;
-    this.loadingMore = false;
-
-    if (this.allProjectsLoaded) {
-      if (this.observer && this.loadMoreTrigger?.nativeElement) {
-        this.observer.unobserve(this.loadMoreTrigger.nativeElement);
-      }
-      if (this.projectListAnimationState === 'initial') {
-        this.projectListAnimationState = 'stable';
-      }
+    if (this.allProjectsLoaded && this.projectListAnimationState === 'initial') {
+      this.projectListAnimationState = 'stable';
     }
     this.cdr.detectChanges();
+
+    // Recria o observer depois de renderizar: se o gatilho continuar visível
+    // (tela alta ou lote pequeno), o observer novo dispara de imediato e
+    // carrega mais até preencher a tela
+    this.setupIntersectionObserver();
   }
 
   // Uses the optional `repo.<name>` translation when present, otherwise the GitHub description
@@ -229,17 +247,13 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.applyFiltersAndSorting();
   }
 
-  getAnimationParams(indexInProjectsArray: number) {
+  getAnimationParams(index: number) {
     let delay = 0;
-    if (this.projectListAnimationState === 'initial' || this.projectListAnimationState === 'viewToggle') {
-      if (this.projectListAnimationState === 'initial' && (this.currentPage - 1) === 1) {
-        delay = indexInProjectsArray * 100;
-      } else if (this.projectListAnimationState === 'viewToggle') {
-        delay = indexInProjectsArray * 100;
-      }
-      else if (this.projectListAnimationState === 'initial' && (this.currentPage - 1) > 1) {
-        delay = (indexInProjectsArray % this.pageSize) * 100;
-      }
+    if (this.projectListAnimationState === 'viewToggle') {
+      delay = Math.min(index, 8) * 60;
+    } else if (index >= this.batchStart) {
+      // Só o lote recém-chegado entra escalonado
+      delay = Math.min(index - this.batchStart, 8) * 70;
     }
     return { value: 'in', params: { delay: delay.toString() } };
   }
@@ -247,7 +261,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   toggleView(): void {
     this.currentView = this.currentView === 'list' ? 'grid' : 'list';
     this.projectListAnimationState = 'viewToggle';
+    this.updatePageSize();
     this.cdr.detectChanges();
-    // setTimeout(() => this.projectListAnimationState = 'stable', this.projects.length * 100 + 500);
   }
 }

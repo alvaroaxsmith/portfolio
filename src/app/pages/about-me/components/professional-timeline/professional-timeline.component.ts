@@ -254,6 +254,10 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
   journeyCurrentIndex = 0; // For journey view carousel
   isJourneyVisible = false;
 
+  // Mesmo breakpoint do layout vertical no SCSS
+  private readonly mobileQuery = window.matchMedia('(max-width: 480px)');
+  isMobile = this.mobileQuery.matches;
+
   constructor(
     private readonly cdr: ChangeDetectorRef,
     public translate: TranslateService,
@@ -265,6 +269,15 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
       startOnLoad: false,
       theme: 'neutral',
       securityLevel: 'loose',
+    });
+
+    // Ao virar para celular com a jornada aberta, volta para os cards
+    this.mobileQuery.addEventListener('change', (event) => {
+      this.isMobile = event.matches;
+      if (this.isMobile) {
+        this.isJourneyVisible = false;
+      }
+      this.cdr.markForCheck();
     });
   }
 
@@ -292,6 +305,9 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
    * @param experiencia The starting experience.
    */
   selecionarExperiencia(experiencia: Experiencia): void {
+    if (this.isMobile) {
+      return;
+    }
     const selectedIndex = this.experiencias.findIndex(
       (exp) => exp.id === experiencia.id
     );
