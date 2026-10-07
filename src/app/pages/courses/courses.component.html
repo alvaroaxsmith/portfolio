@@ -56,7 +56,7 @@
             <tr mat-row class="course-row" *matRowDef="let row; columns: displayedColumns" tabindex="0" (click)="openDialog(row)" (keydown.enter)="openDialog(row)" (keydown.space)="$event.preventDefault(); openDialog(row)"></tr>
 
             <tr class="mat-row" *matNoDataRow>
-                @if (showNoDataMessage) {
+                @if (!isLoading) {
                 <td class="mat-cell" [attr.colspan]="displayedColumns.length">
                     {{ 'courses.noData' | translate }} "{{ input.value }}"
                 </td>
