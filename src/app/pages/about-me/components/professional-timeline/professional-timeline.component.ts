@@ -6,6 +6,7 @@ import {
   ViewChildren,
   QueryList,
   AfterViewInit,
+  OnDestroy,
   Renderer2,
   ChangeDetectionStrategy
 } from '@angular/core';
@@ -50,7 +51,7 @@ interface TimelineDefinition {
     changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['./professional-timeline.component.scss']
 })
-export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
+export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChildren('mermaidJourneyContainer')
   mermaidJourneyContainers!: QueryList<ElementRef>;
 
@@ -263,17 +264,23 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit {
     mermaid.initialize({
       startOnLoad: false,
       theme: 'neutral',
-      securityLevel: 'loose',
+      securityLevel: 'strict',
     });
 
-    this.mobileQuery.addEventListener('change', (event) => {
-      this.isMobile = event.matches;
-      if (this.isMobile) {
-        this.isJourneyVisible = false;
-      }
-      this.cdr.markForCheck();
-    });
+    this.mobileQuery.addEventListener('change', this.onScreenChange);
   }
+
+  ngOnDestroy(): void {
+    this.mobileQuery.removeEventListener('change', this.onScreenChange);
+  }
+
+  private readonly onScreenChange = (event: MediaQueryListEvent): void => {
+    this.isMobile = event.matches;
+    if (this.isMobile) {
+      this.isJourneyVisible = false;
+    }
+    this.cdr.markForCheck();
+  };
 
   ngAfterViewInit(): void {
     this.mermaidJourneyContainers.changes.subscribe(() => {

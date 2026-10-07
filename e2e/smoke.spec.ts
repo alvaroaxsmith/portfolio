@@ -49,6 +49,17 @@ test('switching to English translates the page and is remembered after a reload'
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Who am I?');
 });
 
+test('about me draws the career journey diagram when an experience is opened', async ({ page }) => {
+  const errors: string[] = [];
+  page.on('pageerror', (error) => errors.push(error.message));
+  await open(page, '/about-me');
+
+  await page.locator('mat-card.timeline-content').first().click();
+
+  await expect(page.locator('[data-experience-id="1"] svg')).toBeVisible();
+  expect(errors).toEqual([]);
+});
+
 test.describe('courses', () => {
   test('lists, filters and opens a certificate', async ({ page }) => {
     await open(page, '/courses');
