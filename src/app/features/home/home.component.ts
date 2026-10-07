@@ -1,12 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
-import { ImageService } from '../home/services/image.service';
-import { AnalyticsService } from '../../services/analytics.service';
+import { ImageService } from './services/image.service';
+import { AnalyticsService } from '../../core/analytics/analytics.service';
 import { environment } from '../../../environments/environment';
 import { TextComponent } from './text/text.component';
 import { MatButton } from '@angular/material/button';
-import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
-import { FooterComponent } from '../../components/footer/footer.component';
+import { SkeletonComponent } from '../../shared/skeleton/skeleton.component';
+import { FooterComponent } from '../../core/layout/footer/footer.component';
 
 /** Served by github.com rather than the API, so it keeps working when the API is rate limited. */
 const FALLBACK_IMAGE_URL = `https://github.com/${environment.githubUser}.png`;

@@ -3,8 +3,8 @@ import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
-import { AnalyticsService } from './services/analytics.service';
-import { provideAppLanguage } from './services/language-storage';
+import { AnalyticsService } from './core/analytics/analytics.service';
+import { provideAppLanguage } from './core/i18n/language-storage';
 
 @Component({ template: '', standalone: true })
 class StubPageComponent {}

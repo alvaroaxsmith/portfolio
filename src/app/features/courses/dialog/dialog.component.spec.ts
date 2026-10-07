@@ -4,7 +4,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
-import { AnalyticsService } from '../../../services/analytics.service';
+import { AnalyticsService } from '../../../core/analytics/analytics.service';
 import { Course } from '../interfaces/courses.interface';
 import { CourseService } from '../services/courses.service';
 import { DialogComponent } from './dialog.component';

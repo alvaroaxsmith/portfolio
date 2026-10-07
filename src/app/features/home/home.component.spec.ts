@@ -4,7 +4,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { AnalyticsService } from '../../services/analytics.service';
+import { AnalyticsService } from '../../core/analytics/analytics.service';
 import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {

@@ -3,12 +3,12 @@ import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Inject } from '@
 import { NavigationEnd, Router, ActivatedRoute, RouterOutlet } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Subject, filter, takeUntil } from 'rxjs';
-import { SeoService } from './services/seo.service';
-import { AnalyticsService } from './services/analytics.service';
-import { storeLang } from './services/language-storage';
-import { SplashScreenComponent } from './components/splash-screen/splash-screen.component';
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { ConsentBannerComponent } from './components/consent-banner/consent-banner.component';
+import { SeoService } from './core/seo/seo.service';
+import { AnalyticsService } from './core/analytics/analytics.service';
+import { storeLang } from './core/i18n/language-storage';
+import { SplashScreenComponent } from './core/layout/splash-screen/splash-screen.component';
+import { NavbarComponent } from './core/layout/navbar/navbar.component';
+import { ConsentBannerComponent } from './core/layout/consent-banner/consent-banner.component';
 
 @Component({
     selector: 'app-root',

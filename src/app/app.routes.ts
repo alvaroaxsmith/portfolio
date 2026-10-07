@@ -9,7 +9,7 @@ export const routes: Routes = [
         descriptionKey: 'seo.home.description'
       }
     },
-    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
+    loadComponent: () => import('./features/home/home.component').then(m => m.HomeComponent)
   },
   {
     path: 'about-me',
@@ -19,7 +19,7 @@ export const routes: Routes = [
         descriptionKey: 'seo.about.description'
       }
     },
-    loadComponent: () => import('./pages/about-me/about-me.component').then(m => m.AboutMeComponent)
+    loadComponent: () => import('./features/about-me/about-me.component').then(m => m.AboutMeComponent)
   },
   {
     path: 'courses',
@@ -29,7 +29,7 @@ export const routes: Routes = [
         descriptionKey: 'seo.courses.description'
       }
     },
-    loadComponent: () => import('./pages/courses/courses.component').then(m => m.CoursesComponent)
+    loadComponent: () => import('./features/courses/courses.component').then(m => m.CoursesComponent)
   },
   {
     path: 'portfolio',
@@ -39,11 +39,11 @@ export const routes: Routes = [
         descriptionKey: 'seo.portfolio.description'
       }
     },
-    loadComponent: () => import('./pages/portfolio/portfolio.component').then(m => m.PortfolioComponent)
+    loadComponent: () => import('./features/portfolio/portfolio.component').then(m => m.PortfolioComponent)
   },
   {
     path: 'contact',
-    loadComponent: () => import('./pages/contact/contact.component').then(m => m.ContactComponent),
+    loadComponent: () => import('./features/contact/contact.component').then(m => m.ContactComponent),
     data: {
       seo: {
         titleKey: 'seo.contact.title',

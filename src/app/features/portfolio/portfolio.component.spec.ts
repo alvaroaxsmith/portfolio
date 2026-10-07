@@ -3,7 +3,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable, Subject, of, throwError } from 'rxjs';
-import { AnalyticsService } from '../../services/analytics.service';
+import { AnalyticsService } from '../../core/analytics/analytics.service';
 import { Project } from './Project';
 import { PortfolioComponent } from './portfolio.component';
 import { ProjectsService } from './services/projects.service';

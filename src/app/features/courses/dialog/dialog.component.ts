@@ -4,10 +4,10 @@ import { CourseService } from '../services/courses.service';
 import { Course } from '../interfaces/courses.interface';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { tap } from 'rxjs/operators';
-import { AnalyticsService } from '../../../services/analytics.service';
+import { AnalyticsService } from '../../../core/analytics/analytics.service';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { SkeletonComponent } from '../../../components/skeleton/skeleton.component';
+import { SkeletonComponent } from '../../../shared/skeleton/skeleton.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({

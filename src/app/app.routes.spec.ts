@@ -6,11 +6,11 @@ import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { routes } from './app.routes';
-import { ContactComponent } from './pages/contact/contact.component';
-import { HomeComponent } from './pages/home/home.component';
-import { AboutMeComponent } from './pages/about-me/about-me.component';
-import { CoursesComponent } from './pages/courses/courses.component';
-import { PortfolioComponent } from './pages/portfolio/portfolio.component';
+import { ContactComponent } from './features/contact/contact.component';
+import { HomeComponent } from './features/home/home.component';
+import { AboutMeComponent } from './features/about-me/about-me.component';
+import { CoursesComponent } from './features/courses/courses.component';
+import { PortfolioComponent } from './features/portfolio/portfolio.component';
 
 describe('App routing', () => {
   let harness: RouterTestingHarness;

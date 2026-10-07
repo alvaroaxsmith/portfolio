@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
-import { AnalyticsService, ConsentChoice } from '../../services/analytics.service';
+import { AnalyticsService, ConsentChoice } from '../../analytics/analytics.service';
 
 @Component({
     selector: 'app-consent-banner',

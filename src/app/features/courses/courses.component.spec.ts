@@ -9,7 +9,7 @@ import { CoursesComponent } from './courses.component';
 import { CourseService } from './services/courses.service';
 import { CoursesStateService } from './services/courses-state.service';
 import { Course } from './interfaces/courses.interface';
-import { AnalyticsService } from '../../services/analytics.service';
+import { AnalyticsService } from '../../core/analytics/analytics.service';
 import { DialogComponent } from './dialog/dialog.component';
 import { SnackBarComponent } from './snack-bar/snackbar.component';
 

@@ -4,7 +4,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProjectsService } from './services/projects.service';
 import { Project } from './Project';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
-import { AnalyticsService } from '../../services/analytics.service';
+import { AnalyticsService } from '../../core/analytics/analytics.service';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatIconButton, MatButton } from '@angular/material/button';
@@ -12,7 +12,7 @@ import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
 import { NgClass, DatePipe } from '@angular/common';
 import { MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
-import { ProjectCardSkeletonComponent } from '../../components/skeleton/project-card-skeleton/project-card-skeleton.component';
+import { ProjectCardSkeletonComponent } from '../../shared/skeleton/project-card-skeleton/project-card-skeleton.component';
 
 const GRID_MIN_CARD_WIDTH = 300;
 const GRID_ROWS_PER_PAGE = 2;

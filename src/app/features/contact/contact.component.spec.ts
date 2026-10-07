@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { AnalyticsService } from '../../services/analytics.service';
+import { AnalyticsService } from '../../core/analytics/analytics.service';
 import { ContactComponent } from './contact.component';
 
 describe('ContactComponent', () => {

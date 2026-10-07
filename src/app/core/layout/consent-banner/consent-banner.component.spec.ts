@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
 import { TranslateModule } from '@ngx-translate/core';
-import { AnalyticsService } from '../../services/analytics.service';
+import { AnalyticsService } from '../../analytics/analytics.service';
 import { ConsentBannerComponent } from './consent-banner.component';
 
 describe('ConsentBannerComponent', () => {
