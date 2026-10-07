@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing';
 import { AnalyticsService } from './analytics.service';
 
 type TestWindow = Window & {
-  dataLayer?: Array<Record<string, unknown>>;
+  dataLayer?: Record<string, unknown>[];
   gtag?: jasmine.Spy;
   __analytics?: { enabled: boolean };
 };
@@ -21,7 +21,7 @@ describe('AnalyticsService', () => {
     return TestBed.inject(AnalyticsService);
   }
 
-  function pushedEvents(): Array<Record<string, unknown>> {
+  function pushedEvents(): Record<string, unknown>[] {
     return (win.dataLayer ?? []).map((entry) =>
       Object.fromEntries(Object.entries(entry).filter(([, value]) => value !== undefined))
     );

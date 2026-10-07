@@ -29,8 +29,24 @@ module.exports = function (config) {
       subdir: '.',
       reporters: [
         { type: 'html' },
+        { type: 'lcovonly' },
         { type: 'text-summary' }
-      ]
+      ],
+      // Coverage floor: the build fails if coverage drops below it. Raise it as tests are added; never lower it.
+      check: {
+        global: {
+          statements: 93,
+          branches: 75,
+          functions: 89,
+          lines: 94
+        }
+      }
+    },
+    customLaunchers: {
+      ChromeHeadlessCI: {
+        base: 'ChromeHeadless',
+        flags: ['--no-sandbox']
+      }
     },
     reporters: ['progress', 'kjhtml'],
     port: 9876,
