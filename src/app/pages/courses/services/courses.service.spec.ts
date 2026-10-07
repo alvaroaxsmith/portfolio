@@ -50,4 +50,24 @@ describe('CourseService', () => {
 
     expect(count).toBe(1);
   });
+
+  it('drops courses the API sends with missing or wrong fields', () => {
+    let names: string[] = [];
+    service.getCourses().subscribe((courses) => (names = courses.map((c) => c.name)));
+
+    http.expectOne(API).flush({
+      courses: [course, null, { ...course, name: 42 }, { ...course, link: undefined }, 'Angular', { ...course, name: 'Scrum' }]
+    });
+
+    expect(names).toEqual(['Java Full Stack', 'Scrum']);
+  });
+
+  it('treats an answer without a course list as no courses', () => {
+    let count = -1;
+    service.getCourses().subscribe((courses) => (count = courses.length));
+
+    http.expectOne(API).flush({ message: 'unexpected' });
+
+    expect(count).toBe(0);
+  });
 });

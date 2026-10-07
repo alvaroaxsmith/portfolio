@@ -52,6 +52,31 @@ describe('ProjectsService', () => {
     ]);
   });
 
+  it('drops repositories GitHub sends with missing or wrong fields', () => {
+    let names: string[] = [];
+    service.getProjects().subscribe((projects) => (names = projects.map((p) => p.name)));
+
+    http.expectOne(API).flush([
+      repos[0],
+      null,
+      { ...repos[2], id: 'three' },
+      { ...repos[2], html_url: undefined },
+      { ...repos[2], topics: 'portfolio-project' },
+      { ...repos[2], name: 'valid-crawler' }
+    ]);
+
+    expect(names).toEqual(['app-gym', 'valid-crawler']);
+  });
+
+  it('treats an answer that is not a list as no projects', () => {
+    let count = -1;
+    service.getProjects().subscribe((projects) => (count = projects.length));
+
+    http.expectOne(API).flush({ message: 'Not Found' });
+
+    expect(count).toBe(0);
+  });
+
   it('caches the response for one hour to respect the GitHub rate limit', () => {
     service.getProjects().subscribe();
     http.expectOne(API).flush(repos);
