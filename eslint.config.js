@@ -28,7 +28,6 @@ module.exports = defineConfig([
 
       // Ratchet: rules the codebase does not meet yet. Each one becomes "error"
       // once the task that fixes it lands, so new violations never get in.
-      "@angular-eslint/prefer-standalone": "warn", // T-3.3 standalone migration
       "@angular-eslint/prefer-inject": "warn", // T-4.1 inject() migration
       "@angular-eslint/prefer-on-push-component-change-detection": "warn", // T-4.3 signals + OnPush
       "@angular-eslint/component-selector": [

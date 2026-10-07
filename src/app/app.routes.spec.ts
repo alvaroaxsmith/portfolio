@@ -5,7 +5,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { routes } from './app-routing.module';
+import { routes } from './app.routes';
 import { ContactComponent } from './pages/contact/contact.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AboutMeComponent } from './pages/about-me/about-me.component';
