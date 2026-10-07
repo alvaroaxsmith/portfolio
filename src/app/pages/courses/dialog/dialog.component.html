@@ -35,7 +35,7 @@
       <span class="sr-only" role="status">{{ 'certificate.loading' | translate }}</span>
     }
     @if (safeUrl) {
-      <iframe [src]="safeUrl" [title]="rowData.name" allow="autoplay" (load)="onFrameLoad()"></iframe>
+      <iframe [src]="safeUrl" [title]="rowData.name" allow="autoplay" (load)="onFrameLoad($event)"></iframe>
     }
   </div>
 </section>

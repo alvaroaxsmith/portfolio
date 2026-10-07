@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { TranslateModule } from '@ngx-translate/core';
+import { MaterialModule } from '../../material/material.module';
 import { ContactComponent } from './contact.component';
 
 describe('ContactComponent', () => {
@@ -8,12 +9,10 @@ describe('ContactComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ ContactComponent ]
-    })
-    .compileComponents();
-  });
+      declarations: [ContactComponent],
+      imports: [TranslateModule.forRoot(), MaterialModule]
+    }).compileComponents();
 
-  beforeEach(() => {
     fixture = TestBed.createComponent(ContactComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

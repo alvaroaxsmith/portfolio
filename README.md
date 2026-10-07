@@ -28,7 +28,7 @@ Este README descreve as especificações técnicas do projeto e as regras que to
 npm install
 npm start       # servidor de desenvolvimento em http://localhost:4200
 npm run build   # build de produção em dist/portfolio_resume
-npm test        # testes unitários
+npm test        # testes unitários (Karma + Jasmine, Chrome headless: ng test --watch=false --browsers=ChromeHeadless)
 ```
 
 ## Estrutura
@@ -54,6 +54,7 @@ src/
 - **Splash:** um canvas no `index.html` desenha a grade de 24px do fundo do site antes de o JavaScript carregar. Os quadrados cintilam em tons de cinza que clareiam com o tempo. O `SplashScreenComponent` adota essa grade, mostra o "Carregando" traduzido e, após no mínimo 3s, dispara a saída (os quadrados se dissolvem e revelam o fundo do site). Se o app não chamar a saída, ela acontece sozinha em 8s. A página não tem barra de rolagem enquanto a splash está visível.
 - **Skeletons:** todo carregamento usa o `SkeletonModule` (`app-skeleton`, `app-project-card-skeleton`, `app-courses-skeleton`). Os quadradinhos dos skeletons mudam de tom de forma aleatória, por uma textura SVG animada gerada uma vez por carregamento.
 - **Carregamento infinito:** na página de projetos (grid e lista) e na lista de cursos no celular, os itens chegam em lotes ao rolar, com skeletons do próximo lote no fim da lista.
+- **Recuperação após deploy:** as páginas com lazy loading ficam em arquivos com hash no nome, e cada deploy remove os arquivos da versão anterior. Uma aba aberta antes do deploy não consegue mais carregá-los (a Vercel responde com o HTML do site). O `ChunkLoadRecoveryService` detecta essa falha no `NavigationError` e recarrega a página de destino, que já vem com a versão nova. Recarrega no máximo uma vez a cada 10s (`sessionStorage`) para não entrar em loop.
 - **Estado entre rotas:** o `CoursesStateService` guarda filtro, ordenação, página, itens já carregados no celular e se a dica de cursos já foi exibida. Fica só em memória: recarregar a página reinicia esse estado.
 
 ## Fontes de dados
@@ -146,6 +147,7 @@ Regras: valores sempre em minúsculas e com hífen, nomes estáveis ao longo do 
 15. Acesso a `localStorage` sempre dentro de `try/catch`, e a página precisa funcionar sem ele.
 16. O código em `src/` não tem comentários. Explicações de decisões ficam neste README e nas mensagens de commit.
 17. Animações respeitam `prefers-reduced-motion`: sem movimento contínuo, só transições curtas.
+18. A suíte de testes precisa passar inteira antes de cada release. O `app-routing.spec.ts` garante que todas as rotas abrem a página certa; toda rota nova entra nele.
 
 ### Valores acoplados
 Estes valores aparecem em mais de um arquivo e precisam mudar juntos:
@@ -161,6 +163,11 @@ Estes valores aparecem em mais de um arquivo e precisam mudar juntos:
 | Cor do texto da splash | `--color-text` (`#0f172a`) e `MIN_TONE` da splash no `index.html`, que impede os quadrados de ficarem tão escuros quanto o texto |
 
 ## Histórico de versões
+
+### v2.2.2 (hotfix)
+- **Navegação depois de um deploy:** Sobre mim, Cursos e Projetos deixavam de abrir em abas carregadas antes de um deploy. O app agora recarrega a página de destino quando o arquivo da página não existe mais.
+- **Certificados:** o skeleton sumia antes de o certificado carregar, porque o primeiro evento `load` do iframe (ainda sem `src`) era tratado como carregamento.
+- **Testes:** `ng test` voltou a rodar; testes de navegação de todas as rotas e da recuperação; testes antigos corrigidos (30 passando).
 
 ### v2.2.1
 - **Menu mobile:** corrigido o bloco branco que aparecia ao fechar o menu (bottom sheet) depois de escolher uma página. O visual do menu estava no painel fixo do overlay, e não no container que desliza.

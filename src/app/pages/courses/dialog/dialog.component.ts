@@ -56,7 +56,10 @@ export class DialogComponent implements OnInit {
     return this.domSanitizer.bypassSecurityTrustResourceUrl(url);
   }
 
-  onFrameLoad(): void {
+  onFrameLoad(event: Event): void {
+    if (!(event.target as HTMLIFrameElement).getAttribute('src')) {
+      return;
+    }
     this.isFrameLoaded = true;
   }
 
