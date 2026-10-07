@@ -1,5 +1,6 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProjectsService } from './services/projects.service';
 import { Project } from './Project';
 import { TranslateService } from '@ngx-translate/core';
@@ -62,7 +63,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     private projectsService: ProjectsService,
     private cdr: ChangeDetectorRef,
     private translate: TranslateService,
-    private analytics: AnalyticsService
+    private analytics: AnalyticsService,
+    private destroyRef: DestroyRef
   ) { }
 
   trackRepo(project: Project): void {
@@ -93,8 +95,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.updatePageSize();
     this.initialLoading = true;
     this.projectListAnimationState = 'initial';
-    this.projectsService.getProjects().subscribe(
-      (fetchedProjects) => {
+    this.projectsService.getProjects().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
+      next: (fetchedProjects) => {
         this.allProjects = fetchedProjects;
         this.availableTechs = [...new Set(this.allProjects.map(p => p.tech).filter(t => t))].sort();
 
@@ -105,7 +107,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
         this.initialLoading = false;
         this.applyFiltersAndSorting();
       },
-      () => {
+      error: () => {
         this.loadError = true;
         this.allProjects = [];
         this.availableTechs = [];
@@ -115,7 +117,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
         this.allProjectsLoaded = true;
         this.cdr.detectChanges();
       }
-    );
+    });
   }
 
   ngOnDestroy(): void {
