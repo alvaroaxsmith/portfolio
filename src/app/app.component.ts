@@ -2,10 +2,9 @@ import { DOCUMENT } from '@angular/common';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Inject } from '@angular/core';
 import { NavigationEnd, Router, ActivatedRoute } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
-import { Subject, Subscription, filter, takeUntil } from 'rxjs';
+import { Subject, filter, takeUntil } from 'rxjs';
 import { SeoService } from './services/seo.service';
 import { AnalyticsService } from './services/analytics.service';
-import { ChunkLoadRecoveryService } from './services/chunk-load-recovery.service';
 import { DEFAULT_LANG, SUPPORTED_LANGS, getInitialLang, storeLang } from './services/language-storage';
 
 @Component({
@@ -19,7 +18,6 @@ export class AppComponent implements OnInit, OnDestroy {
   title = 'portfolio';
   showMainContent = false;
   private readonly destroy$ = new Subject<void>();
-  private chunkLoadSubscription?: Subscription;
 
   constructor(
     private translate: TranslateService,
@@ -27,7 +25,6 @@ export class AppComponent implements OnInit, OnDestroy {
     private activatedRoute: ActivatedRoute,
     private seoService: SeoService,
     private analytics: AnalyticsService,
-    private chunkLoadRecovery: ChunkLoadRecoveryService,
     @Inject(DOCUMENT) private document: Document
   ) {
     this.initializeAppLanguage();
@@ -38,7 +35,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.chunkLoadSubscription = this.chunkLoadRecovery.watch();
     this.updateDocumentLanguage(this.translate.currentLang || this.translate.defaultLang);
     this.updateSeo();
     let currentLang = this.translate.currentLang || this.translate.defaultLang;
@@ -73,7 +69,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.chunkLoadSubscription?.unsubscribe();
     this.destroy$.next();
     this.destroy$.complete();
   }

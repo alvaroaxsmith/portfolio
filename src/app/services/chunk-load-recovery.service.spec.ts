@@ -1,10 +1,14 @@
-import { Component } from '@angular/core';
+import { ApplicationInitStatus, Component, EnvironmentProviders, Provider } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { MatSnackBar, MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
 import { Router, Routes, provideRouter } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { Subject } from 'rxjs';
 import {
   ChunkLoadRecoveryService,
   PAGE_RELOAD,
-  isChunkLoadError
+  isChunkLoadError,
+  provideChunkLoadRecovery
 } from './chunk-load-recovery.service';
 
 @Component({ template: 'ok', standalone: true })
@@ -20,6 +24,10 @@ describe('isChunkLoadError', () => {
     expect(isChunkLoadError({ name: 'ChunkLoadError', message: 'Loading chunk 7 failed.' })).toBeTrue();
   });
 
+  it('recognizes Safari rejecting an HTML page served in place of a missing chunk', () => {
+    expect(isChunkLoadError(new TypeError("'text/html' is not a valid JavaScript MIME type."))).toBeTrue();
+  });
+
   it('ignores unrelated errors', () => {
     expect(isChunkLoadError(new Error('Cannot match any routes. URL Segment: x'))).toBeFalse();
     expect(isChunkLoadError(new TypeError('Cannot read properties of undefined'))).toBeFalse();
@@ -30,11 +38,22 @@ describe('isChunkLoadError', () => {
 
 describe('ChunkLoadRecoveryService', () => {
   let reload: jasmine.Spy<(url: string) => void>;
+  let snackBar: jasmine.SpyObj<MatSnackBar>;
+  let reloadClicked: Subject<void>;
 
-  function setup(routes: Routes = [{ path: '', component: StubPageComponent }]) {
+  function setup(routes: Routes = [{ path: '', component: StubPageComponent }], providers: (Provider | EnvironmentProviders)[] = []) {
     reload = jasmine.createSpy('reload');
+    reloadClicked = new Subject<void>();
+    snackBar = jasmine.createSpyObj<MatSnackBar>('MatSnackBar', ['open']);
+    snackBar.open.and.returnValue({ onAction: () => reloadClicked } as unknown as MatSnackBarRef<TextOnlySnackBar>);
     TestBed.configureTestingModule({
-      providers: [provideRouter(routes), { provide: PAGE_RELOAD, useValue: reload }]
+      imports: [TranslateModule.forRoot()],
+      providers: [
+        provideRouter(routes),
+        { provide: PAGE_RELOAD, useValue: reload },
+        { provide: MatSnackBar, useValue: snackBar },
+        ...providers
+      ]
     });
     return TestBed.inject(ChunkLoadRecoveryService);
   }
@@ -70,6 +89,7 @@ describe('ChunkLoadRecoveryService', () => {
 
   it('reloads only once within the retry window to avoid reload loops', () => {
     const service = setup();
+    spyOn(console, 'error');
 
     expect(service.recover('/courses')).toBeTrue();
     expect(service.recover('/courses')).toBeFalse();
@@ -84,12 +104,55 @@ describe('ChunkLoadRecoveryService', () => {
     expect(reload).toHaveBeenCalledOnceWith('/portfolio');
   });
 
-  it('still recovers when sessionStorage is unavailable', () => {
+  it('does not reload by itself when it cannot remember the attempt, so it can never loop', () => {
     const service = setup();
+    spyOn(console, 'error');
     spyOn(sessionStorage, 'getItem').and.throwError('blocked');
     spyOn(sessionStorage, 'setItem').and.throwError('blocked');
 
-    expect(service.recover('/about-me')).toBeTrue();
-    expect(reload).toHaveBeenCalledOnceWith('/about-me');
+    expect(service.recover('/about-me')).toBeFalse();
+    expect(reload).not.toHaveBeenCalled();
+  });
+
+  describe('when it gives up on reloading by itself', () => {
+    function giveUp() {
+      const service = setup();
+      spyOn(console, 'error');
+      service.recover('/courses');
+      service.recover('/courses');
+      reload.calls.reset();
+    }
+
+    it('tells the user the page could not be loaded and offers to reload it', () => {
+      giveUp();
+
+      expect(snackBar.open).toHaveBeenCalledOnceWith('chunkLoad.failed', 'chunkLoad.reload');
+      expect(reload).not.toHaveBeenCalled();
+
+      reloadClicked.next();
+
+      expect(reload).toHaveBeenCalledOnceWith('/courses');
+    });
+
+    it('logs the failure', () => {
+      giveUp();
+
+      expect(console.error).toHaveBeenCalled();
+    });
+  });
+
+  it('starts watching navigations as soon as the app starts', async () => {
+    setup(
+      [
+        { path: '', component: StubPageComponent },
+        { path: 'portfolio', loadChildren: () => Promise.reject(CHROME_ERROR) }
+      ],
+      [provideChunkLoadRecovery()]
+    );
+    await TestBed.inject(ApplicationInitStatus).donePromise;
+
+    await TestBed.inject(Router).navigateByUrl('/portfolio').catch(() => false);
+
+    expect(reload).toHaveBeenCalledOnceWith('/portfolio');
   });
 });
