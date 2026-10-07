@@ -5,7 +5,6 @@ import { By } from '@angular/platform-browser';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { TranslateModule } from '@ngx-translate/core';
 import { AboutMeComponent } from './about-me.component';
-import { AboutMeModule } from './about-me.module';
 import { HighlightsComponent } from './components/highlights/highlights.component';
 
 describe('AboutMeComponent', () => {
@@ -14,7 +13,7 @@ describe('AboutMeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AboutMeModule, TranslateModule.forRoot(), NoopAnimationsModule],
+      imports: [AboutMeComponent, TranslateModule.forRoot(), NoopAnimationsModule],
       providers: [provideRouter([])]
     }).compileComponents();
 

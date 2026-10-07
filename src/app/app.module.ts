@@ -14,28 +14,27 @@ import { SplashScreenComponent } from './components/splash-screen/splash-screen.
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
-import { SkeletonModule } from './components/skeleton/skeleton.module';
+
 import { ConsentBannerComponent } from './components/consent-banner/consent-banner.component';
 import { provideAppLanguage } from './services/language-storage';
 import { provideChunkLoadRecovery } from './services/chunk-load-recovery.service';
 
 @NgModule({ declarations: [AppComponent], bootstrap: [AppComponent], imports: [BrowserModule,
-        AppRoutingModule,
-        MatButtonModule,
-        MatIconModule,
-        MatMenuModule,
-        MatTooltipModule,
-        SkeletonModule,
-        ConsentBannerComponent,
-        TranslateModule.forRoot({
-            loader: {
-                provide: TranslateLoader,
-                useFactory: httpTranslateLoader,
-                deps: [HttpClient],
-            },
-        }), Dialog,
-        NavbarComponent,
-        SplashScreenComponent], providers: [
+    AppRoutingModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatTooltipModule,
+    ConsentBannerComponent,
+    TranslateModule.forRoot({
+        loader: {
+            provide: TranslateLoader,
+            useFactory: httpTranslateLoader,
+            deps: [HttpClient],
+        },
+    }), Dialog,
+    NavbarComponent,
+    SplashScreenComponent], providers: [
         provideAnimationsAsync(),
         provideAppLanguage(),
         provideHttpClient(withInterceptorsFromDi()),

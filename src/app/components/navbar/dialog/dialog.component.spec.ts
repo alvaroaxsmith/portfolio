@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { MaterialModule } from '../../../material/material.module';
 import { Dialog } from './dialog.component';
 
 describe('Mobile navigation menu', () => {
@@ -13,7 +12,7 @@ describe('Mobile navigation menu', () => {
   beforeEach(async () => {
     sheetRef = jasmine.createSpyObj<MatBottomSheetRef<Dialog>>('MatBottomSheetRef', ['dismiss']);
     await TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), MaterialModule, RouterModule.forRoot([{ path: '**', children: [] }]), Dialog],
+    imports: [TranslateModule.forRoot(), RouterModule.forRoot([{ path: '**', children: [] }]), Dialog],
     providers: [{ provide: MatBottomSheetRef, useValue: sheetRef }]
 }).compileComponents();
     translate = TestBed.inject(TranslateService);

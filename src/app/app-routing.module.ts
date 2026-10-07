@@ -10,7 +10,7 @@ export const routes: Routes = [
         descriptionKey: 'seo.home.description'
       }
     },
-    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
+    loadComponent: () => import('./pages/home/home.component').then(m => m.HomeComponent)
   },
   {
     path: 'about-me',
@@ -20,7 +20,7 @@ export const routes: Routes = [
         descriptionKey: 'seo.about.description'
       }
     },
-    loadChildren: () => import('./pages/about-me/about-me.module').then(m => m.AboutMeModule)
+    loadComponent: () => import('./pages/about-me/about-me.component').then(m => m.AboutMeComponent)
   },
   {
     path: 'courses',
@@ -30,7 +30,7 @@ export const routes: Routes = [
         descriptionKey: 'seo.courses.description'
       }
     },
-    loadChildren: () => import('./pages/courses/courses.module').then(m => m.CoursesModule)
+    loadComponent: () => import('./pages/courses/courses.component').then(m => m.CoursesComponent)
   },
   {
     path: 'portfolio',
@@ -40,7 +40,7 @@ export const routes: Routes = [
         descriptionKey: 'seo.portfolio.description'
       }
     },
-    loadChildren: () => import('./pages/portfolio/portfolio.module').then(m => m.PortfolioModule)
+    loadComponent: () => import('./pages/portfolio/portfolio.component').then(m => m.PortfolioComponent)
   },
   {
     path: 'contact',

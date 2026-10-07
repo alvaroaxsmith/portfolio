@@ -3,8 +3,6 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { TranslateModule } from '@ngx-translate/core';
-import { MaterialModule } from '../../../material/material.module';
-import { SkeletonModule } from '../../../components/skeleton/skeleton.module';
 import { of } from 'rxjs';
 import { AnalyticsService } from '../../../services/analytics.service';
 import { Course } from '../interfaces/courses.interface';
@@ -27,7 +25,7 @@ describe('DialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), MaterialModule, SkeletonModule, DialogComponent],
+    imports: [TranslateModule.forRoot(), DialogComponent],
     providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -86,7 +84,7 @@ describe('DialogComponent', () => {
     function openCertificate(link: string) {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), MaterialModule, SkeletonModule, DialogComponent],
+    imports: [TranslateModule.forRoot(), DialogComponent],
     providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -156,7 +154,7 @@ describe('DialogComponent', () => {
     function openWith(data: Partial<Course>, courses: Course[]) {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), MaterialModule, SkeletonModule, DialogComponent],
+    imports: [TranslateModule.forRoot(), DialogComponent],
     providers: [
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MAT_BOTTOM_SHEET_DATA, useValue: data },

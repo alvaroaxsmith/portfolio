@@ -6,7 +6,6 @@ import { Observable, Subject, of, throwError } from 'rxjs';
 import { AnalyticsService } from '../../services/analytics.service';
 import { Project } from './Project';
 import { PortfolioComponent } from './portfolio.component';
-import { PortfolioModule } from './portfolio.module';
 import { ProjectsService } from './services/projects.service';
 
 function makeProjects(count: number): Project[] {
@@ -28,7 +27,7 @@ describe('PortfolioComponent', () => {
   function render(projects$: Observable<Project[]>) {
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track']);
     TestBed.configureTestingModule({
-      imports: [PortfolioModule, TranslateModule.forRoot(), NoopAnimationsModule],
+      imports: [PortfolioComponent, TranslateModule.forRoot(), NoopAnimationsModule],
       providers: [
         provideRouter([]),
         { provide: ProjectsService, useValue: { getProjects: () => projects$ } },

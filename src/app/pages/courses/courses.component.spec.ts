@@ -9,8 +9,6 @@ import { CoursesComponent } from './courses.component';
 import { CourseService } from './services/courses.service';
 import { CoursesStateService } from './services/courses-state.service';
 import { Course } from './interfaces/courses.interface';
-import { MaterialModule } from '../../material/material.module';
-import { SkeletonModule } from '../../components/skeleton/skeleton.module';
 import { AnalyticsService } from '../../services/analytics.service';
 import { DialogComponent } from './dialog/dialog.component';
 import { SnackBarComponent } from './snack-bar/snackbar.component';
@@ -30,7 +28,7 @@ describe('CoursesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [MaterialModule, SkeletonModule, NoopAnimationsModule, TranslateModule.forRoot(), CoursesComponent],
+    imports: [NoopAnimationsModule, TranslateModule.forRoot(), CoursesComponent],
     providers: [
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MatBottomSheet, useValue: { open: () => null } },
@@ -126,7 +124,7 @@ describe('CoursesComponent behavior', () => {
     snackBar = jasmine.createSpyObj<MatSnackBar>('MatSnackBar', ['openFromComponent']);
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track']);
     await TestBed.configureTestingModule({
-    imports: [MaterialModule, SkeletonModule, NoopAnimationsModule, TranslateModule.forRoot(), CoursesComponent],
+    imports: [NoopAnimationsModule, TranslateModule.forRoot(), CoursesComponent],
     providers: [
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MatBottomSheet, useValue: bottomSheet },
