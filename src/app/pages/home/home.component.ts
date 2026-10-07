@@ -2,9 +2,10 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ImageService } from '../home/services/image.service';
 import { AnalyticsService } from '../../services/analytics.service';
+import { environment } from '../../../environments/environment';
 
 /** Served by github.com rather than the API, so it keeps working when the API is rate limited. */
-const FALLBACK_IMAGE_URL = 'https://github.com/alvaroaxsmith.png';
+const FALLBACK_IMAGE_URL = `https://github.com/${environment.githubUser}.png`;
 
 @Component({
     selector: 'app-home',

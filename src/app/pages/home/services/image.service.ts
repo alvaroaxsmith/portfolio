@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 interface GitHubUserResponse {
   avatar_url: string;
@@ -14,8 +15,9 @@ export class ImageService {
 
   async getImage(): Promise<string> {
     try {
-      const username = 'alvaroaxsmith';
-      const response = await lastValueFrom(this.http.get<GitHubUserResponse>(`https://api.github.com/users/${username}`));
+      const response = await lastValueFrom(
+        this.http.get<GitHubUserResponse>(`${environment.githubApiUrl}/users/${environment.githubUser}`)
+      );
       const url = response.avatar_url;
 
       if (url) {
