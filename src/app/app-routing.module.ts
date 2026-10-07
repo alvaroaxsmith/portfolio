@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes, NoPreloading } from '@angular/router';
 import { ContactComponent } from './pages/contact/contact.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   {
     path: '',
     data: {
