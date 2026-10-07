@@ -42,7 +42,6 @@ module.exports = defineConfig([
       "@typescript-eslint/no-inferrable-types": "warn", // T-2.1 cleanup
       "@typescript-eslint/consistent-generic-constructors": "warn", // T-2.1 cleanup
       "@typescript-eslint/consistent-type-definitions": "warn", // T-2.1 cleanup
-      "preserve-caught-error": "warn", // T-1.3 home image error handling
     },
   },
   {

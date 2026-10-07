@@ -25,7 +25,7 @@ export class ImageService {
       }
     } catch (error) {
       console.error('Error loading image:', error);
-      throw new Error('Failed to load image');
+      throw new Error('Failed to load image', { cause: error });
     }
   }
 }
