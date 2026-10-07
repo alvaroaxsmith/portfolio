@@ -20,7 +20,7 @@ import { MatIcon } from '@angular/material/icon';
     templateUrl: './navbar.component.html',
     styleUrls: ['./navbar.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    imports: [RouterLinkActive, MatButton, RouterLink, MatMenu, MatMenuItem, MatIconButton, MatTooltip, MatMenuTrigger, MatIcon, Dialog, TranslateModule]
+    imports: [RouterLinkActive, MatButton, RouterLink, MatMenu, MatMenuItem, MatIconButton, MatTooltip, MatMenuTrigger, MatIcon, TranslateModule]
 })
 export class NavbarComponent implements OnInit {
   private lastScrollY = 0;
