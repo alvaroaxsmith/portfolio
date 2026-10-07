@@ -162,6 +162,9 @@ Estes valores aparecem em mais de um arquivo e precisam mudar juntos:
 
 ## Histórico de versões
 
+### v2.2.1
+- **Menu mobile:** corrigido o bloco branco que aparecia ao fechar o menu (bottom sheet) depois de escolher uma página. O visual do menu estava no painel fixo do overlay, e não no container que desliza.
+
 ### v2.2.0
 - **Analytics:** GA4 carregado pelo Google Tag Manager, só no domínio de produção, com Consent Mode v2 começando com tudo negado.
 - **Banner de consentimento (LGPD)** depois da splash e link "Preferências de cookies" no rodapé.

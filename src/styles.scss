@@ -137,13 +137,14 @@ h6 {
     line-height: 1.1;
 }
 
-.mobile-nav-sheet {
+.mobile-nav-sheet .mat-bottom-sheet-container {
     border-top-left-radius: 1.5rem;
     border-top-right-radius: 1.5rem;
     background: rgba(255, 255, 255, 0.94);
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     border: 1px solid rgba(15, 23, 42, 0.08);
+    border-bottom: 0;
     box-shadow: 0 -12px 40px rgba(15, 23, 42, 0.12);
 }
 
