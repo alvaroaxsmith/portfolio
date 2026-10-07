@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-about-me',
@@ -8,46 +7,4 @@ import { TranslateService } from '@ngx-translate/core';
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
-export class AboutMeComponent {
-
-  constructor(
-    public translate: TranslateService
-  ) {}
-
-  switchLang(lang: string) {
-    this.translate.use(lang);
-  }
-
-  step = 0;
-
-  setStep(index: number) {
-    this.step = index;
-  }
-
-  nextStep() {
-    this.step++;
-  }
-
-  prevStep() {
-    this.step--;
-  }
-
-  skills: string[] = [
-    'Angular',
-    'Typescript',
-    'Javascript/ Typescript',
-    'React',
-    'NodeJS',
-    'Docker',
-    'Git',
-    'AWS',
-    'Java/ Spring Boot',
-    'MySQL',
-    'MongoDB',
-    'HTML/ CSS',
-    'Python FastAPI',
-    'CI/CD Jenkins',
-
-  ];
-
-}
+export class AboutMeComponent {}

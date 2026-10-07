@@ -31,10 +31,10 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   projects: Project[] = [];
   processedProjects: Project[] = [];
 
-  initialLoading: boolean = true;
+  initialLoading = true;
   loadError = false;
-  loadingMore: boolean = false;
-  allProjectsLoaded: boolean = false;
+  loadingMore = false;
+  allProjectsLoaded = false;
   pageSize = 6;
   columns = 1;
   private batchStart = 0;

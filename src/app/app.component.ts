@@ -15,7 +15,6 @@ import { DEFAULT_LANG, SUPPORTED_LANGS, getInitialLang, storeLang } from './serv
     standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'portfolio';
   showMainContent = false;
   private readonly destroy$ = new Subject<void>();
 

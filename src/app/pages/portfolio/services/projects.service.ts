@@ -46,7 +46,6 @@ export class ProjectsService {
             tech: repo.language?.trim() ?? '',
             description: repo.description?.trim() ?? '',
             repo: repo.html_url,
-            pushed_at: repo.pushed_at,
             date: repo.pushed_at,
           }))
       ),

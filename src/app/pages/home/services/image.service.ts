@@ -12,7 +12,7 @@ interface GitHubUserResponse {
 export class ImageService {
   constructor(private http: HttpClient) { }
 
-  async getImage(index: number): Promise<string> {
+  async getImage(): Promise<string> {
     try {
       const username = 'alvaroaxsmith';
       const response = await lastValueFrom(this.http.get<GitHubUserResponse>(`https://api.github.com/users/${username}`));
@@ -24,7 +24,6 @@ export class ImageService {
         throw new Error('Image URL not found');
       }
     } catch (error) {
-      console.error('Error loading image:', error);
       throw new Error('Failed to load image', { cause: error });
     }
   }

@@ -59,14 +59,4 @@ describe('AboutMeComponent', () => {
     expect(link.target).toBe('_blank');
     expect(link.rel).toContain('noopener');
   });
-
-  it('moves between steps', () => {
-    component.setStep(2);
-    component.nextStep();
-    expect(component.step).toBe(3);
-
-    component.prevStep();
-    component.prevStep();
-    expect(component.step).toBe(1);
-  });
 });

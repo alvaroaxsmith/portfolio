@@ -47,8 +47,8 @@ describe('ProjectsService', () => {
     http.expectOne(API).flush(repos);
 
     expect(result).toEqual([
-      { id: 1, name: 'app-gym', tech: 'Dart', description: 'Gym app', repo: 'https://github.com/a/app-gym', pushed_at: '2026-01-17T00:00:00Z', date: '2026-01-17T00:00:00Z' },
-      { id: 3, name: 'crawler', tech: '', description: '', repo: 'https://github.com/a/crawler', pushed_at: '2026-05-28T00:00:00Z', date: '2026-05-28T00:00:00Z' }
+      { id: 1, name: 'app-gym', tech: 'Dart', description: 'Gym app', repo: 'https://github.com/a/app-gym', date: '2026-01-17T00:00:00Z' },
+      { id: 3, name: 'crawler', tech: '', description: '', repo: 'https://github.com/a/crawler', date: '2026-05-28T00:00:00Z' }
     ]);
   });
 

@@ -29,10 +29,6 @@ export class NavbarComponent implements OnInit {
     private cdr: ChangeDetectorRef
   ) {}
 
-  switchLang(lang: string) {
-    this.translate.use(lang);
-  }
-
   ngOnInit(): void {
     this.cdr.detectChanges();
   }

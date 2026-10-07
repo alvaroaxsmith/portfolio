@@ -16,7 +16,6 @@ function makeProjects(count: number): Project[] {
     tech: ['TypeScript', 'Java', 'Python'][i % 3],
     description: `Description ${i + 1}`,
     repo: `https://github.com/a/project-${i + 1}`,
-    pushed_at: new Date(2026, 0, i + 1).toISOString(),
     date: new Date(2026, 0, i + 1).toISOString()
   }));
 }

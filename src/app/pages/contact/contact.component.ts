@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { AnalyticsService } from '../../services/analytics.service';
@@ -9,7 +9,7 @@ import { AnalyticsService } from '../../services/analytics.service';
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
-export class ContactComponent implements OnInit {
+export class ContactComponent {
 
   faGithub = faGithub;
   faLinkedin = faLinkedin;
@@ -21,9 +21,6 @@ export class ContactComponent implements OnInit {
 
   trackContact(channel: string): void {
     this.analytics.track('contact_click', { channel });
-  }
-
-  ngOnInit(): void {
   }
 
 }

@@ -1,7 +1,6 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { ImageService } from '../home/services/image.service';
-import { Subscription } from 'rxjs';
 import { AnalyticsService } from '../../services/analytics.service';
 
 /** Served by github.com rather than the API, so it keeps working when the API is rate limited. */
@@ -14,8 +13,7 @@ const FALLBACK_IMAGE_URL = 'https://github.com/alvaroaxsmith.png';
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
-export class HomeComponent implements OnInit, OnDestroy {
-  private imageSubscription: Subscription | undefined;
+export class HomeComponent implements OnInit {
   isLoadingImage = true;
   imageUrl: string | undefined;
 
@@ -34,7 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.imageService.getImage(0)
+    this.imageService.getImage()
       .then(url => {
         this.isLoadingImage = false;
         this.imageUrl = url;
@@ -44,11 +42,5 @@ export class HomeComponent implements OnInit, OnDestroy {
         this.imageUrl = FALLBACK_IMAGE_URL;
         this.isLoadingImage = false;
       });
-  }
-
-  ngOnDestroy(): void {
-    if (this.imageSubscription) {
-      this.imageSubscription.unsubscribe();
-    }
   }
 }

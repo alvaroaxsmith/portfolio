@@ -35,13 +35,6 @@ module.exports = defineConfig([
         "warn", // T-6.1 rename snack-bar selector
         { type: "element", prefix: "app", style: "kebab-case" },
       ],
-      "@angular-eslint/no-empty-lifecycle-method": "warn", // T-2.1 dead code
-      "@typescript-eslint/no-empty-function": "warn", // T-2.1 dead code
-      "@typescript-eslint/no-explicit-any": "warn", // T-2.1 dead code
-      "@typescript-eslint/no-unused-vars": "warn", // T-2.1 dead code
-      "@typescript-eslint/no-inferrable-types": "warn", // T-2.1 cleanup
-      "@typescript-eslint/consistent-generic-constructors": "warn", // T-2.1 cleanup
-      "@typescript-eslint/consistent-type-definitions": "warn", // T-2.1 cleanup
     },
   },
   {
