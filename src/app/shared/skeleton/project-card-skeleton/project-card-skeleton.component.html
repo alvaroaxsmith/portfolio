@@ -6,7 +6,7 @@
 </div>
 <div class="card-body">
     <app-skeleton height="0.85rem" />
-    @if (layout === 'grid') {
+    @if (layout() === 'grid') {
     <app-skeleton height="0.85rem" />
     }
     <app-skeleton class="last-line" height="0.85rem" />

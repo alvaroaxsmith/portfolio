@@ -25,6 +25,7 @@ module.exports = defineConfig([
       ],
       // Storage access is wrapped in try/catch and failures are deliberately ignored.
       "no-empty": ["error", { allowEmptyCatch: true }],
+      "@angular-eslint/prefer-signals": "error",
 
       // Ratchet: rules the codebase does not meet yet. Each one becomes "error"
       // once the task that fixes it lands, so new violations never get in.

@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectorRef, ElementRef, OnDestroy, ChangeDetectionStrategy, DestroyRef, inject, viewChild } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProjectsService } from './services/projects.service';
@@ -63,8 +63,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   projectListAnimationState: 'initial' | 'viewToggle' | 'stable' = 'initial';
 
-  @ViewChild('page', { static: true }) pageRef!: ElementRef<HTMLElement>;
-  @ViewChild('loadMoreTrigger', { static: false }) loadMoreTrigger?: ElementRef<HTMLElement>;
+  readonly pageRef = viewChild.required<ElementRef<HTMLElement>>('page');
+  readonly loadMoreTrigger = viewChild<ElementRef<HTMLElement>>('loadMoreTrigger');
   private observer: IntersectionObserver | undefined;
 
   @HostListener('window:resize')
@@ -133,7 +133,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   updatePageSize(): void {
     if (this.currentView === 'grid') {
-      const width = this.pageRef?.nativeElement.clientWidth || window.innerWidth;
+      const width = this.pageRef()?.nativeElement.clientWidth || window.innerWidth;
       const gap = Math.min(16, Math.max(12, window.innerWidth * 0.015));
       this.columns = Math.max(1, Math.floor((width + gap) / (GRID_MIN_CARD_WIDTH + gap)));
       this.pageSize = this.columns * GRID_ROWS_PER_PAGE;
@@ -146,7 +146,8 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   private setupIntersectionObserver(): void {
     this.observer?.disconnect();
     this.observer = undefined;
-    if (!this.loadMoreTrigger?.nativeElement || this.allProjectsLoaded) {
+    const loadMoreTrigger = this.loadMoreTrigger();
+    if (!loadMoreTrigger?.nativeElement || this.allProjectsLoaded) {
       return;
     }
 
@@ -156,7 +157,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       }
     });
 
-    this.observer.observe(this.loadMoreTrigger.nativeElement);
+    this.observer.observe(loadMoreTrigger.nativeElement);
   }
 
   applyFiltersAndSorting(): void {

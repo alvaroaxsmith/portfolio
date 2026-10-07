@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Output, EventEmitter, HostBinding, ChangeDetectionStrategy, ChangeDetectorRef, NgZone, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostBinding, ChangeDetectionStrategy, ChangeDetectorRef, NgZone, inject, output } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 interface SplashEngine {
@@ -21,7 +21,7 @@ export class SplashScreenComponent implements OnInit, OnDestroy {
   private readonly cdr = inject(ChangeDetectorRef);
   private readonly zone = inject(NgZone);
 
-  @Output() animationFinished = new EventEmitter<void>();
+  readonly animationFinished = output<void>();
 
   @HostBinding('class.is-leaving') leaving = false;
   @HostBinding('class.is-done') done = false;

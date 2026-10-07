@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, HostBinding } from '@angular/core';
+import { Component, ChangeDetectionStrategy, HostBinding, input } from '@angular/core';
 import { SkeletonComponent } from '../skeleton.component';
 
 @Component({
@@ -10,9 +10,9 @@ import { SkeletonComponent } from '../skeleton.component';
     imports: [SkeletonComponent]
 })
 export class ProjectCardSkeletonComponent {
-  @Input() layout: 'grid' | 'list' = 'grid';
+  readonly layout = input<'grid' | 'list'>('grid');
 
   @HostBinding('class.is-list') get isList(): boolean {
-    return this.layout === 'list';
+    return this.layout() === 'list';
   }
 }

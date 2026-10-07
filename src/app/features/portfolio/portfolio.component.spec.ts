@@ -112,7 +112,7 @@ describe('PortfolioComponent', () => {
 
   describe('grid view', () => {
     function useGridWith(width: number) {
-      spyOnProperty(component.pageRef.nativeElement, 'clientWidth').and.returnValue(width);
+      spyOnProperty(component.pageRef().nativeElement, 'clientWidth').and.returnValue(width);
       component.toggleView();
       fixture.detectChanges();
     }

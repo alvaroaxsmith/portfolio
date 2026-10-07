@@ -1,5 +1,5 @@
-@if (layout === 'table') {
-@for (item of items; track item) {
+@if (layout() === 'table') {
+@for (item of items(); track item) {
 <div class="table-row">
     <app-skeleton width="70%" />
     <app-skeleton [width]="nameWidth(item)" />
@@ -9,7 +9,7 @@
 </div>
 }
 } @else {
-@for (item of items; track item) {
+@for (item of items(); track item) {
 <div class="course-card">
     <app-skeleton width="30%" height="0.75rem" />
     <app-skeleton [width]="nameWidth(item)" height="1.1rem" />

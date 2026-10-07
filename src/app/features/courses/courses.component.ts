@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, inject } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, effect, inject, viewChild } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -61,11 +61,17 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     return Math.min(MOBILE_BATCH_SIZE, this.visibleCourses.length - this.state.mobileCount);
   }
 
-  @ViewChild('mobileLoadTrigger') set mobileLoadTrigger(ref: ElementRef<HTMLElement> | undefined) {
+  private readonly mobileLoadTrigger = viewChild<ElementRef<HTMLElement>>('mobileLoadTrigger');
+
+  constructor() {
+    effect(() => this.observeMobileTrigger(this.mobileLoadTrigger()?.nativeElement));
+  }
+
+  private observeMobileTrigger(trigger: HTMLElement | undefined): void {
     if (this.mobileTriggerEl) {
       this.mobileObserver?.unobserve(this.mobileTriggerEl);
     }
-    this.mobileTriggerEl = ref?.nativeElement;
+    this.mobileTriggerEl = trigger;
     if (this.mobileTriggerEl) {
       this.mobileObserver ??= new IntersectionObserver((entries) => {
         if (entries.some(entry => entry.isIntersecting)) {
@@ -76,8 +82,8 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
+  readonly paginator = viewChild.required(MatPaginator);
+  readonly sort = viewChild.required(MatSort);
 
   openDialog = (rowData: Course): void => {
     this.analytics.track('certificate_open', { course: rowData.name, school: rowData.school });
@@ -89,16 +95,18 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sort.active = this.state.sortActive;
-    this.sort.direction = this.state.sortDirection;
-    this.paginator.pageSize = this.state.pageSize;
-    this.paginator.pageIndex = this.state.pageIndex;
+    const sort = this.sort();
+    const paginator = this.paginator();
+    sort.active = this.state.sortActive;
+    sort.direction = this.state.sortDirection;
+    paginator.pageSize = this.state.pageSize;
+    paginator.pageIndex = this.state.pageIndex;
 
-    this.sort.sortChange.pipe(takeUntil(this.destroy$)).subscribe(({ active, direction }) => {
+    sort.sortChange.pipe(takeUntil(this.destroy$)).subscribe(({ active, direction }) => {
       this.state.sortActive = active;
       this.state.sortDirection = direction;
     });
-    this.paginator.page.pipe(takeUntil(this.destroy$)).subscribe(({ pageIndex, pageSize }) => {
+    paginator.page.pipe(takeUntil(this.destroy$)).subscribe(({ pageIndex, pageSize }) => {
       this.state.pageIndex = pageIndex;
       this.state.pageSize = pageSize;
     });
@@ -153,8 +161,8 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.courseService.getCourses().pipe(takeUntil(this.destroy$)).subscribe(courses => {
       this.dataSource.data = courses;
       this.dataSource.filter = this.state.filter.trim().toLowerCase();
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort();
+      this.dataSource.paginator = this.paginator();
       this.isLoading = false;
     });
   }

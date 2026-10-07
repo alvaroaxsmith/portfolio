@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ElementRef, ViewChildren, QueryList, AfterViewInit, OnDestroy, Renderer2, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ElementRef, AfterViewInit, OnDestroy, Renderer2, ChangeDetectionStrategy, effect, inject, untracked, viewChildren } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -45,12 +45,17 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
   translate = inject(TranslateService);
   private readonly renderer = inject(Renderer2);
 
-  @ViewChildren('mermaidJourneyContainer')
-  mermaidJourneyContainers!: QueryList<ElementRef>;
+  readonly mermaidJourneyContainers = viewChildren<ElementRef<HTMLElement>>('mermaidJourneyContainer');
 
-  @ViewChildren('cardContent') cardContents!: QueryList<
-    ElementRef<HTMLElement>
-  >;
+  constructor() {
+    // Draws the journey diagrams whenever their containers appear, i.e. when the journey opens.
+    effect(() => {
+      this.mermaidJourneyContainers();
+      untracked(() => this.renderAllMermaidDiagrams());
+    });
+  }
+
+  readonly cardContents = viewChildren<ElementRef<HTMLElement>>('cardContent');
 
   experiencias: Experiencia[] = [
     {
@@ -270,12 +275,8 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
   };
 
   ngAfterViewInit(): void {
-    this.mermaidJourneyContainers.changes.subscribe(() => {
-      this.renderAllMermaidDiagrams();
-    });
-
     if (window.innerWidth <= 480) {
-      this.cardContents.forEach((contentRef) => {
+      this.cardContents().forEach((contentRef) => {
         this.setupDragScroll(contentRef.nativeElement);
       });
     }
@@ -337,14 +338,14 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
   }
 
   async renderAllMermaidDiagrams(): Promise<void> {
-    if (!this.isJourneyVisible || !this.mermaidJourneyContainers) {
+    if (!this.isJourneyVisible) {
       return;
     }
 
-    const containers = this.mermaidJourneyContainers.toArray();
+    const containers = this.mermaidJourneyContainers();
     for (const mermaidContainer of containers) {
       const container = mermaidContainer.nativeElement;
-      const experienceId = container.dataset.experienceId;
+      const experienceId = container.dataset['experienceId'];
       const timelineDef = this.timelineDefinitions.find(
         (def) => def.id.toString() === experienceId
       );
