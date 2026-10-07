@@ -5,8 +5,7 @@ import { ProjectCardSkeletonComponent } from './project-card-skeleton/project-ca
 import { CoursesSkeletonComponent } from './courses-skeleton/courses-skeleton.component';
 
 @NgModule({
-  declarations: [SkeletonComponent, ProjectCardSkeletonComponent, CoursesSkeletonComponent],
-  imports: [CommonModule],
-  exports: [SkeletonComponent, ProjectCardSkeletonComponent, CoursesSkeletonComponent],
+    imports: [CommonModule, SkeletonComponent, ProjectCardSkeletonComponent, CoursesSkeletonComponent],
+    exports: [SkeletonComponent, ProjectCardSkeletonComponent, CoursesSkeletonComponent],
 })
 export class SkeletonModule { }

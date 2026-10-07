@@ -5,13 +5,17 @@ import { Course } from '../interfaces/courses.interface';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { tap } from 'rxjs/operators';
 import { AnalyticsService } from '../../../services/analytics.service';
+import { MatIconButton } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
+import { SkeletonComponent } from '../../../components/skeleton/skeleton.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-dialog',
     templateUrl: './dialog.component.html',
     styleUrls: ['./dialog.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [MatIconButton, MatIcon, SkeletonComponent, TranslateModule]
 })
 export class DialogComponent implements OnInit {
   safeUrl: SafeResourceUrl | null = null;

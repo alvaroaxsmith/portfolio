@@ -11,9 +11,6 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    PortfolioComponent
-  ],
-  imports: [CommonModule, MaterialModule, SkeletonModule, RouterModule.forChild(routes), TranslateModule.forChild()],
+    imports: [CommonModule, MaterialModule, SkeletonModule, RouterModule.forChild(routes), TranslateModule.forChild(), PortfolioComponent],
 })
 export class PortfolioModule { }

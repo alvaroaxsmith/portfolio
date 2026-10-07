@@ -13,10 +13,9 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [HomeComponent, TextComponent, FooterComponent],
-  imports: [CommonModule, MaterialModule, SkeletonModule, RouterModule.forChild(routes), TranslateModule.forChild(),],
-  exports: [
-    HomeComponent,
-  ],
+    imports: [CommonModule, MaterialModule, SkeletonModule, RouterModule.forChild(routes), TranslateModule.forChild(), HomeComponent, TextComponent, FooterComponent,],
+    exports: [
+        HomeComponent,
+    ],
 })
 export class HomeModule { }

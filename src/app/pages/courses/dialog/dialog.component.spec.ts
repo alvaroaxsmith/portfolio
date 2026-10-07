@@ -27,15 +27,14 @@ describe('DialogComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [DialogComponent],
-      imports: [TranslateModule.forRoot(), MaterialModule, SkeletonModule],
-      providers: [
+    imports: [TranslateModule.forRoot(), MaterialModule, SkeletonModule, DialogComponent],
+    providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: MAT_BOTTOM_SHEET_DATA, useValue: course },
         { provide: MatBottomSheetRef, useValue: sheetRef }
-      ]
-    }).compileComponents();
+    ]
+}).compileComponents();
 
     fixture = TestBed.createComponent(DialogComponent);
     component = fixture.componentInstance;
@@ -87,15 +86,14 @@ describe('DialogComponent', () => {
     function openCertificate(link: string) {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        declarations: [DialogComponent],
-        imports: [TranslateModule.forRoot(), MaterialModule, SkeletonModule],
-        providers: [
-          provideHttpClient(),
-          provideHttpClientTesting(),
-          { provide: MAT_BOTTOM_SHEET_DATA, useValue: { ...course, link } },
-          { provide: MatBottomSheetRef, useValue: sheetRef }
-        ]
-      });
+    imports: [TranslateModule.forRoot(), MaterialModule, SkeletonModule, DialogComponent],
+    providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: MAT_BOTTOM_SHEET_DATA, useValue: { ...course, link } },
+        { provide: MatBottomSheetRef, useValue: sheetRef }
+    ]
+});
       fixture = TestBed.createComponent(DialogComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
@@ -158,14 +156,13 @@ describe('DialogComponent', () => {
     function openWith(data: Partial<Course>, courses: Course[]) {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-        declarations: [DialogComponent],
-        imports: [TranslateModule.forRoot(), MaterialModule, SkeletonModule],
-        providers: [
-          { provide: CourseService, useValue: { getCourses: () => of(courses) } },
-          { provide: MAT_BOTTOM_SHEET_DATA, useValue: data },
-          { provide: MatBottomSheetRef, useValue: sheetRef }
-        ]
-      });
+    imports: [TranslateModule.forRoot(), MaterialModule, SkeletonModule, DialogComponent],
+    providers: [
+        { provide: CourseService, useValue: { getCourses: () => of(courses) } },
+        { provide: MAT_BOTTOM_SHEET_DATA, useValue: data },
+        { provide: MatBottomSheetRef, useValue: sheetRef }
+    ]
+});
       fixture = TestBed.createComponent(DialogComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();

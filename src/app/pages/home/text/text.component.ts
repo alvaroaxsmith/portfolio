@@ -1,6 +1,6 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-text',
@@ -18,7 +18,7 @@ import { TranslateService } from '@ngx-translate/core';
         ]),
     ],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [TranslateModule]
 })
 export class TextComponent implements OnInit, OnDestroy {
   palavras: string[] = ['Full Cycle Development', 'GenAI'];

@@ -1,8 +1,12 @@
 import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { ImageService } from '../home/services/image.service';
 import { AnalyticsService } from '../../services/analytics.service';
 import { environment } from '../../../environments/environment';
+import { TextComponent } from './text/text.component';
+import { MatButton } from '@angular/material/button';
+import { SkeletonComponent } from '../../components/skeleton/skeleton.component';
+import { FooterComponent } from '../../components/footer/footer.component';
 
 /** Served by github.com rather than the API, so it keeps working when the API is rate limited. */
 const FALLBACK_IMAGE_URL = `https://github.com/${environment.githubUser}.png`;
@@ -12,7 +16,7 @@ const FALLBACK_IMAGE_URL = `https://github.com/${environment.githubUser}.png`;
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [TextComponent, MatButton, SkeletonComponent, FooterComponent, TranslateModule]
 })
 export class HomeComponent implements OnInit {
   isLoadingImage = true;

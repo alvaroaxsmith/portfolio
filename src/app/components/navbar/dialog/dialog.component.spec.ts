@@ -13,10 +13,9 @@ describe('Mobile navigation menu', () => {
   beforeEach(async () => {
     sheetRef = jasmine.createSpyObj<MatBottomSheetRef<Dialog>>('MatBottomSheetRef', ['dismiss']);
     await TestBed.configureTestingModule({
-      declarations: [Dialog],
-      imports: [TranslateModule.forRoot(), MaterialModule, RouterModule.forRoot([{ path: '**', children: [] }])],
-      providers: [{ provide: MatBottomSheetRef, useValue: sheetRef }]
-    }).compileComponents();
+    imports: [TranslateModule.forRoot(), MaterialModule, RouterModule.forRoot([{ path: '**', children: [] }]), Dialog],
+    providers: [{ provide: MatBottomSheetRef, useValue: sheetRef }]
+}).compileComponents();
     translate = TestBed.inject(TranslateService);
     translate.addLangs(['EN', 'PT-BR']);
     fixture = TestBed.createComponent(Dialog);

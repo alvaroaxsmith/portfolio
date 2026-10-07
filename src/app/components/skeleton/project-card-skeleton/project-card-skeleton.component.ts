@@ -1,12 +1,13 @@
 import { Component, ChangeDetectionStrategy, Input, HostBinding } from '@angular/core';
+import { SkeletonComponent } from '../skeleton.component';
 
 @Component({
     selector: 'app-project-card-skeleton',
     templateUrl: './project-card-skeleton.component.html',
     styleUrls: ['./project-card-skeleton.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false,
-    host: { 'aria-hidden': 'true' }
+    host: { 'aria-hidden': 'true' },
+    imports: [SkeletonComponent]
 })
 export class ProjectCardSkeletonComponent {
   @Input() layout: 'grid' | 'list' = 'grid';

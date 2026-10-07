@@ -6,7 +6,6 @@ import { applySkeletonNoise } from './skeleton-noise';
     template: '',
     styleUrls: ['./skeleton.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false,
     host: { 'aria-hidden': 'true' }
 })
 export class SkeletonComponent {

@@ -11,9 +11,8 @@ describe('NavbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [NavbarComponent],
-      imports: [TranslateModule.forRoot(), MaterialModule, NoopAnimationsModule, RouterModule.forRoot([])]
-    }).compileComponents();
+    imports: [TranslateModule.forRoot(), MaterialModule, NoopAnimationsModule, RouterModule.forRoot([]), NavbarComponent]
+}).compileComponents();
 
     fixture = TestBed.createComponent(NavbarComponent);
     component = fixture.componentInstance;

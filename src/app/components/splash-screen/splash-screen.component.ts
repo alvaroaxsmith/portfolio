@@ -10,6 +10,7 @@ import {
   NgZone
 } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
+import { Dialog } from '../navbar/dialog/dialog.component';
 
 interface SplashEngine {
   startedAt: number;
@@ -24,8 +25,8 @@ const FALLBACK_TEXT = 'Carregando';
     templateUrl: './splash-screen.component.html',
     styleUrls: ['./splash-screen.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false,
-    host: { 'aria-busy': 'true' }
+    host: { 'aria-busy': 'true' },
+    imports: [Dialog]
 })
 export class SplashScreenComponent implements OnInit, OnDestroy {
   @Output() animationFinished = new EventEmitter<void>();

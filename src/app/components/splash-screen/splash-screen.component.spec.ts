@@ -11,9 +11,8 @@ describe('SplashScreenComponent', () => {
 
   function setup(translations: Record<string, unknown>, engineStartedMsAgo: number | null) {
     TestBed.configureTestingModule({
-      declarations: [SplashScreenComponent],
-      imports: [TranslateModule.forRoot()]
-    });
+    imports: [TranslateModule.forRoot(), SplashScreenComponent]
+});
     const translate = TestBed.inject(TranslateService);
     translate.setTranslation('PT-BR', translations);
     translate.use('PT-BR');

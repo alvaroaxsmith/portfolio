@@ -1,12 +1,13 @@
 import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { SkeletonComponent } from '../skeleton.component';
 
 @Component({
     selector: 'app-courses-skeleton',
     templateUrl: './courses-skeleton.component.html',
     styleUrls: ['./courses-skeleton.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: false,
-    host: { 'aria-hidden': 'true', '[class.cards]': "layout === 'cards'" }
+    host: { 'aria-hidden': 'true', '[class.cards]': "layout === 'cards'" },
+    imports: [SkeletonComponent]
 })
 export class CoursesSkeletonComponent {
   @Input() layout: 'table' | 'cards' = 'table';

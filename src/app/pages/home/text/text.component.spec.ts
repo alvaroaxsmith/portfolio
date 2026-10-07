@@ -9,9 +9,8 @@ describe('TextComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [TextComponent],
-      imports: [TranslateModule.forRoot(), NoopAnimationsModule]
-    }).compileComponents();
+    imports: [TranslateModule.forRoot(), NoopAnimationsModule, TextComponent]
+}).compileComponents();
 
     fixture = TestBed.createComponent(TextComponent);
     component = fixture.componentInstance;

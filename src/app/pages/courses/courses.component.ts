@@ -1,8 +1,8 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
+import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatNoDataRow } from '@angular/material/table';
 import { CourseService } from '../courses/services/courses.service';
 import { Course } from '../courses/interfaces/courses.interface';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -11,6 +11,11 @@ import { SnackBarComponent } from './snack-bar/snackbar.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CoursesStateService } from './services/courses-state.service';
 import { AnalyticsService } from '../../services/analytics.service';
+import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatIcon } from '@angular/material/icon';
+import { CoursesSkeletonComponent } from '../../components/skeleton/courses-skeleton/courses-skeleton.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 const MOBILE_BATCH_SIZE = 5;
 const MOBILE_LOAD_DELAY_MS = 600;
@@ -19,7 +24,7 @@ const MOBILE_LOAD_DELAY_MS = 600;
     templateUrl: './courses.component.html',
     styleUrls: ['./courses.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [MatFormField, MatLabel, MatInput, MatIcon, MatSuffix, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatSortHeader, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatNoDataRow, CoursesSkeletonComponent, MatPaginator, TranslateModule]
 })
 export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();

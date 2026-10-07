@@ -12,17 +12,17 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AboutMeComponent],
-  imports: [
-    CommonModule,
-    MaterialModule,
-    RouterModule.forChild(routes),
-    TranslateModule.forChild(),
-    ProfessionalTimelineComponent,
-    HighlightsComponent
-  ],
-  exports: [
-    AboutMeComponent,
-  ],
+    imports: [
+        CommonModule,
+        MaterialModule,
+        RouterModule.forChild(routes),
+        TranslateModule.forChild(),
+        ProfessionalTimelineComponent,
+        HighlightsComponent,
+        AboutMeComponent
+    ],
+    exports: [
+        AboutMeComponent,
+    ],
 })
 export class AboutMeModule { }

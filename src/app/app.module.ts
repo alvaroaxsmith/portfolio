@@ -19,13 +19,7 @@ import { ConsentBannerComponent } from './components/consent-banner/consent-bann
 import { provideAppLanguage } from './services/language-storage';
 import { provideChunkLoadRecovery } from './services/chunk-load-recovery.service';
 
-@NgModule({ declarations: [
-        AppComponent,
-        Dialog,
-        NavbarComponent,
-        SplashScreenComponent,
-    ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+@NgModule({ declarations: [AppComponent], bootstrap: [AppComponent], imports: [BrowserModule,
         AppRoutingModule,
         MatButtonModule,
         MatIconModule,
@@ -39,7 +33,9 @@ import { provideChunkLoadRecovery } from './services/chunk-load-recovery.service
                 useFactory: httpTranslateLoader,
                 deps: [HttpClient],
             },
-        })], providers: [
+        }), Dialog,
+        NavbarComponent,
+        SplashScreenComponent], providers: [
         provideAnimationsAsync(),
         provideAppLanguage(),
         provideHttpClient(withInterceptorsFromDi()),

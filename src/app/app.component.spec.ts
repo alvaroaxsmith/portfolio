@@ -16,15 +16,15 @@ describe('AppComponent', () => {
     localStorage.removeItem('portfolio:lang');
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track', 'pageView']);
     await TestBed.configureTestingModule({
-      declarations: [AppComponent],
-      imports: [TranslateModule.forRoot()],
-      providers: [
+    declarations: [AppComponent],
+    imports: [TranslateModule.forRoot()],
+    providers: [
         provideRouter([{ path: '**', component: StubPageComponent }]),
         { provide: AnalyticsService, useValue: analytics },
         provideAppLanguage()
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
+}).compileComponents();
   });
 
   afterEach(() => localStorage.removeItem('portfolio:lang'));

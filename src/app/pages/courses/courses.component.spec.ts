@@ -30,14 +30,13 @@ describe('CoursesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [CoursesComponent],
-      imports: [MaterialModule, SkeletonModule, NoopAnimationsModule, TranslateModule.forRoot()],
-      providers: [
+    imports: [MaterialModule, SkeletonModule, NoopAnimationsModule, TranslateModule.forRoot(), CoursesComponent],
+    providers: [
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MatBottomSheet, useValue: { open: () => null } },
         { provide: MatSnackBar, useValue: { openFromComponent: () => null } },
-      ],
-    }).compileComponents();
+    ],
+}).compileComponents();
 
     state = TestBed.inject(CoursesStateService);
   });
@@ -127,15 +126,14 @@ describe('CoursesComponent behavior', () => {
     snackBar = jasmine.createSpyObj<MatSnackBar>('MatSnackBar', ['openFromComponent']);
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track']);
     await TestBed.configureTestingModule({
-      declarations: [CoursesComponent],
-      imports: [MaterialModule, SkeletonModule, NoopAnimationsModule, TranslateModule.forRoot()],
-      providers: [
+    imports: [MaterialModule, SkeletonModule, NoopAnimationsModule, TranslateModule.forRoot(), CoursesComponent],
+    providers: [
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MatBottomSheet, useValue: bottomSheet },
         { provide: MatSnackBar, useValue: snackBar },
         { provide: AnalyticsService, useValue: analytics }
-      ]
-    }).compileComponents();
+    ]
+}).compileComponents();
     state = TestBed.inject(CoursesStateService);
   });
 
