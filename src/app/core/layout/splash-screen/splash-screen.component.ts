@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, HostBinding, ChangeDetectionStrategy, ChangeDetectorRef, NgZone, inject, output } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, NgZone, inject, output, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 interface SplashEngine {
@@ -14,17 +14,20 @@ const FALLBACK_TEXT = 'Carregando';
     templateUrl: './splash-screen.component.html',
     styleUrls: ['./splash-screen.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    host: { 'aria-busy': 'true' }
+    host: {
+        'aria-busy': 'true',
+        '[class.is-leaving]': 'leaving()',
+        '[class.is-done]': 'done()'
+    }
 })
 export class SplashScreenComponent implements OnInit, OnDestroy {
   private readonly translate = inject(TranslateService);
-  private readonly cdr = inject(ChangeDetectorRef);
   private readonly zone = inject(NgZone);
 
   readonly animationFinished = output<void>();
 
-  @HostBinding('class.is-leaving') leaving = false;
-  @HostBinding('class.is-done') done = false;
+  readonly leaving = signal(false);
+  readonly done = signal(false);
 
   text = FALLBACK_TEXT;
   letters: string[] = [];
@@ -46,13 +49,11 @@ export class SplashScreenComponent implements OnInit, OnDestroy {
   }
 
   private exit(engine?: SplashEngine): void {
-    this.leaving = true;
-    this.cdr.markForCheck();
+    this.leaving.set(true);
 
     const finished = engine ? engine.finish() : Promise.resolve();
     void finished.then(() => this.zone.run(() => {
-      this.done = true;
-      this.cdr.markForCheck();
+      this.done.set(true);
       this.animationFinished.emit();
     }));
   }
