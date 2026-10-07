@@ -1,6 +1,6 @@
 <app-splash-screen (animationFinished)="onSplashAnimationFinished()" />
 
-@if (showMainContent) {
+@if (showMainContent()) {
 <a class="skip-link" href="#main-content">Pular para o conteúdo principal</a>
 <main id="main-content">
     <app-navbar />

@@ -20,7 +20,7 @@ interface Highlight {
     MatIconModule
 ],
     templateUrl: './highlights.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['./highlights.component.scss']
 })
 export class HighlightsComponent implements AfterViewInit, OnDestroy {

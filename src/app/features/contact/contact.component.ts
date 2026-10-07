@@ -8,7 +8,7 @@ import { AnalyticsService } from '../../core/analytics/analytics.service';
     selector: 'app-contact',
     templateUrl: './contact.component.html',
     styleUrls: ['./contact.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [FontAwesomeModule, TranslateModule]
 })
 export class ContactComponent {

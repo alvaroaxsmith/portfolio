@@ -56,14 +56,14 @@
             <tr mat-row class="course-row" *matRowDef="let row; columns: displayedColumns" tabindex="0" (click)="openDialog(row)" (keydown.enter)="openDialog(row)" (keydown.space)="$event.preventDefault(); openDialog(row)"></tr>
 
             <tr class="mat-row" *matNoDataRow>
-                @if (!isLoading) {
+                @if (!isLoading()) {
                 <td class="mat-cell" [attr.colspan]="displayedColumns.length">
                     {{ 'courses.noData' | translate }} "{{ input.value }}"
                 </td>
                 }
             </tr>
         </table>
-        @if (isLoading) {
+        @if (isLoading()) {
         <div role="status">
             <span class="cdk-visually-hidden">{{ 'loading.courses' | translate }}</span>
             <app-courses-skeleton layout="table" />
@@ -71,7 +71,7 @@
         }
     </div>
 
-    @if (isLoading) {
+    @if (isLoading()) {
     <div class="mobile-course-skeleton" role="status">
         <span class="cdk-visually-hidden">{{ 'loading.courses' | translate }}</span>
         <app-courses-skeleton layout="cards" [count]="3" />
@@ -79,7 +79,7 @@
     }
 
     <div class="mobile-course-list">
-        @if (!isLoading) {
+        @if (!isLoading()) {
         <div class="mobile-course-items" role="list">
             @for (course of mobileCourses; track course.name) {
             <button type="button" class="course-card" role="listitem" (click)="openDialog(course)">
@@ -93,11 +93,11 @@
             </button>
             }
         </div>
-        @if (mobileLoadingMore) {
+        @if (mobileLoadingMore()) {
         <app-courses-skeleton layout="cards" [count]="mobileSkeletonCount" />
         }
         <span class="cdk-visually-hidden" role="status">
-            @if (mobileLoadingMore) {
+            @if (mobileLoadingMore()) {
             {{ 'loading.moreCourses' | translate }}
             }
         </span>

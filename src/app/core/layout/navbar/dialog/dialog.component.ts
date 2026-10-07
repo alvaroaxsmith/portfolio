@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
     selector: 'app-dialog',
     templateUrl: './dialog.component.html',
     styleUrls: ['./dialog.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatIconButton, MatIcon, MatButton, RouterLink, TranslateModule]
 })
 export class Dialog {

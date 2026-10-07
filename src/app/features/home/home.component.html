@@ -17,7 +17,7 @@
         </ul>
     </div>
 
-    @if (isLoadingImage) {
+    @if (isLoadingImage()) {
     <figure class="hero-media" role="status">
         <span class="cdk-visually-hidden">{{ 'loading.photo' | translate }}</span>
         <app-skeleton class="sleeve-skeleton" radius="1.5rem" />
@@ -28,7 +28,7 @@
             <div class="metrics" aria-hidden="true">
                 <span>Alvaro Machado Ferreira</span>
             </div>
-            <img [src]="imageUrl" [alt]="'home.photoAlt' | translate" loading="lazy">
+            <img [src]="imageUrl()" [alt]="'home.photoAlt' | translate" loading="lazy">
         </div>
     </figure>
     }

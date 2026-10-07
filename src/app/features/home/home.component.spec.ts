@@ -68,8 +68,8 @@ describe('HomeComponent', () => {
     http.expectOne('https://api.github.com/users/alvaroaxsmith').flush({ avatar_url: 'https://avatars/me.png' });
     await new Promise((resolve) => setTimeout(resolve));
 
-    expect(component.isLoadingImage).toBeFalse();
-    expect(component.imageUrl).toBe('https://avatars/me.png');
+    expect(component.isLoadingImage()).toBeFalse();
+    expect(component.imageUrl()).toBe('https://avatars/me.png');
   });
 
   it('falls back to the public GitHub profile picture when the API fails, instead of loading forever', async () => {
@@ -79,7 +79,7 @@ describe('HomeComponent', () => {
     await new Promise((resolve) => setTimeout(resolve));
     fixture.detectChanges();
 
-    expect(component.isLoadingImage).toBeFalse();
+    expect(component.isLoadingImage()).toBeFalse();
     expect(fixture.nativeElement.querySelector('.hero-media img').getAttribute('src')).toBe('https://github.com/alvaroaxsmith.png');
   });
 });

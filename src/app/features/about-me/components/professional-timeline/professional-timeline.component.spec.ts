@@ -14,7 +14,7 @@ describe('ProfessionalTimelineComponent', () => {
     });
     fixture = TestBed.createComponent(ProfessionalTimelineComponent);
     component = fixture.componentInstance;
-    component.isMobile = mobile;
+    component.isMobile.set(mobile);
     spyOn(component, 'renderAllMermaidDiagrams').and.resolveTo();
     fixture.detectChanges();
   }
@@ -24,8 +24,8 @@ describe('ProfessionalTimelineComponent', () => {
   it('starts on the first experience, with the carousel visible', () => {
     render(false);
 
-    expect(component.currentIndex).toBe(0);
-    expect(component.isJourneyVisible).toBeFalse();
+    expect(component.currentIndex()).toBe(0);
+    expect(component.isJourneyVisible()).toBeFalse();
   });
 
   it('moves the carousel when a number of the timeline is chosen', () => {
@@ -33,7 +33,7 @@ describe('ProfessionalTimelineComponent', () => {
 
     component.goTo(3);
 
-    expect(component.currentIndex).toBe(3);
+    expect(component.currentIndex()).toBe(3);
   });
 
   describe('on desktop and tablet', () => {
@@ -42,10 +42,10 @@ describe('ProfessionalTimelineComponent', () => {
 
       component.selecionarExperiencia(component.experiencias[2]);
 
-      expect(component.isJourneyVisible).toBeTrue();
-      expect(component.currentIndex).toBe(2);
-      expect(component.journeyCurrentIndex).toBe(2);
-      expect(component.timelineDefinitions.length).toBe(component.experiencias.length);
+      expect(component.isJourneyVisible()).toBeTrue();
+      expect(component.currentIndex()).toBe(2);
+      expect(component.journeyCurrentIndex()).toBe(2);
+      expect(component.timelineDefinitions().length).toBe(component.experiencias.length);
     });
 
     it('cards are focusable and show a pointer', () => {
@@ -60,7 +60,7 @@ describe('ProfessionalTimelineComponent', () => {
 
       firstCard().dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
 
-      expect(component.isJourneyVisible).toBeTrue();
+      expect(component.isJourneyVisible()).toBeTrue();
     });
 
     it('clicking the journey goes back to the cards', () => {
@@ -69,7 +69,7 @@ describe('ProfessionalTimelineComponent', () => {
 
       component.voltarParaTimeline();
 
-      expect(component.isJourneyVisible).toBeFalse();
+      expect(component.isJourneyVisible()).toBeFalse();
     });
   });
 
@@ -79,7 +79,7 @@ describe('ProfessionalTimelineComponent', () => {
 
       firstCard().click();
 
-      expect(component.isJourneyVisible).toBeFalse();
+      expect(component.isJourneyVisible()).toBeFalse();
     });
 
     it('cards are read-only: not focusable and without pointer', () => {
@@ -96,8 +96,8 @@ describe('ProfessionalTimelineComponent', () => {
 
     component.handleIconClickInJourneyView(component.experiencias[4]);
 
-    expect(component.journeyCurrentIndex).toBe(4);
-    expect(component.currentIndex).toBe(0);
+    expect(component.journeyCurrentIndex()).toBe(4);
+    expect(component.currentIndex()).toBe(0);
   });
 
   it('opens the journey with Space too, and ignores other keys', () => {
@@ -117,7 +117,7 @@ describe('ProfessionalTimelineComponent', () => {
     component.generateAllMermaidTimelines();
 
     const last = component.experiencias[component.experiencias.length - 1];
-    const fromLast = component.timelineDefinitions[component.timelineDefinitions.length - 1].definition;
+    const fromLast = component.timelineDefinitions()[component.timelineDefinitions().length - 1].definition;
     expect(fromLast.startsWith('timeline')).toBeTrue();
     expect(fromLast).toContain(`${last.periodo} : ${last.cargo} @ ${last.empresa}`);
   });
@@ -152,7 +152,7 @@ describe('ProfessionalTimelineComponent', () => {
       fixture.destroy();
       notifyChange({ matches: true });
 
-      expect(component.isMobile).toBeFalse();
+      expect(component.isMobile()).toBeFalse();
     });
 
     it('closes the journey when the screen becomes a phone', () => {
@@ -161,8 +161,8 @@ describe('ProfessionalTimelineComponent', () => {
 
       notifyChange({ matches: true });
 
-      expect(component.isMobile).toBeTrue();
-      expect(component.isJourneyVisible).toBeFalse();
+      expect(component.isMobile()).toBeTrue();
+      expect(component.isJourneyVisible()).toBeFalse();
     });
 
     it('keeps the journey open when the screen grows back to desktop', () => {
@@ -171,8 +171,8 @@ describe('ProfessionalTimelineComponent', () => {
 
       notifyChange({ matches: false });
 
-      expect(component.isMobile).toBeFalse();
-      expect(component.isJourneyVisible).toBeTrue();
+      expect(component.isMobile()).toBeFalse();
+      expect(component.isJourneyVisible()).toBeTrue();
     });
   });
 
@@ -219,7 +219,7 @@ describe('ProfessionalTimelineComponent', () => {
       });
       fixture = TestBed.createComponent(ProfessionalTimelineComponent);
       component = fixture.componentInstance;
-      component.isMobile = false;
+      component.isMobile.set(false);
       fixture.detectChanges();
     }
 
@@ -275,7 +275,7 @@ describe('ProfessionalTimelineComponent', () => {
 
     component.generateAllMermaidTimelines();
 
-    const fromSecond = component.timelineDefinitions[1].definition;
+    const fromSecond = component.timelineDefinitions()[1].definition;
     expect(fromSecond).not.toContain(component.experiencias[0].empresa);
     expect(fromSecond).toContain(component.experiencias[component.experiencias.length - 1].empresa);
   });

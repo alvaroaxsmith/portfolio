@@ -11,7 +11,7 @@
                 <mat-label>{{ "Filter by Technology" | translate }}</mat-label>
                 <mat-select (selectionChange)="filterByTech($event.value)" [(value)]="selectedTech">
                     <mat-option [value]="null">{{ "All Technologies" | translate }}</mat-option>
-                    @for (tech of availableTechs; track tech) {
+                    @for (tech of availableTechs(); track tech) {
                     <mat-option [value]="tech">
                         {{ tech }}
                     </mat-option>
@@ -33,19 +33,19 @@
 
     <div class="view-controls">
         <button mat-icon-button type="button" (click)="toggleView()" [matTooltip]="
-        (currentView === 'list' ? 'Switch to Grid View' : 'Switch to List View')
+        (currentView() === 'list' ? 'Switch to Grid View' : 'Switch to List View')
           | translate
       ">
-      <mat-icon>{{ currentView === "list" ? "grid_on" : "view_list" }}</mat-icon>
+      <mat-icon>{{ currentView() === "list" ? "grid_on" : "view_list" }}</mat-icon>
     </button>
     </div>
 
-    @if (!initialLoading) { @if (projects.length > 0 || loadingMore) {
+    @if (!initialLoading()) { @if (projects().length > 0 || loadingMore()) {
     <div class="portfolio-cards-area" [ngClass]="{
-          'list-view': currentView === 'list',
-          'grid-view': currentView === 'grid'
+          'list-view': currentView() === 'list',
+          'grid-view': currentView() === 'grid'
         }">
-        @for (project of projects; track project.id; let i = $index) {
+        @for (project of projects(); track project.id; let i = $index) {
         <article class="project-wrapper" [@fadeInLeft]="getAnimationParams(i)">
             <mat-card class="project-card">
                 <mat-card-title-group>
@@ -53,9 +53,11 @@
                     @if (project.tech) {
                     <mat-card-subtitle class="project-tech">{{ project.tech }}</mat-card-subtitle>
                     }
+                    @if (validDate(project.date); as updated) {
                     <mat-card-subtitle class="project-date">
-                        {{ "Last updated" | translate }}: {{ project.date | date : "dd/MM/yyyy" }}
+                        {{ "Last updated" | translate }}: {{ updated | date : "dd/MM/yyyy" }}
                     </mat-card-subtitle>
+                    }
                     <a mat-stroked-button href="{{ project.repo }}" target="_blank" rel="noopener noreferrer" (click)="trackRepo(project)">{{ "Repository" | translate }}</a>
                 </mat-card-title-group>
                 @if (descriptionFor(project); as description) {
@@ -65,41 +67,41 @@
                 }
             </mat-card>
         </article>
-        } @if (loadingMore) {
+        } @if (loadingMore()) {
         @for (placeholder of loadingMoreSkeletons; track placeholder) {
         <div class="project-wrapper">
-            <app-project-card-skeleton [layout]="currentView" />
+            <app-project-card-skeleton [layout]="currentView()" />
         </div>
         } }
     </div>
     <span class="cdk-visually-hidden" role="status">
-        @if (loadingMore) {
+        @if (loadingMore()) {
         {{ "loading.moreProjects" | translate }}
         }
     </span>
-    @if (allProjectsLoaded && projects.length > 0) {
+    @if (allProjectsLoaded() && projects().length > 0) {
     <p class="end-of-list">{{ "portfolio.allLoaded" | translate }}</p>
     }
-    } @else { @if (!initialLoading && !loadingMore && projects.length === 0) {
+    } @else { @if (!initialLoading() && !loadingMore() && projects().length === 0) {
     <p class="no-projects-message">
-        @if (loadError) {
+        @if (loadError()) {
         {{ "portfolio.error" | translate }}
         <a href="https://github.com/alvaroaxsmith" target="_blank" rel="noopener noreferrer">github.com/alvaroaxsmith</a>
         } @else {
         {{ "No projects found." | translate }}
         }
     </p>
-    } } @if (!allProjectsLoaded && processedProjects.length > 0) {
+    } } @if (!allProjectsLoaded() && processedProjects().length > 0) {
     <div #loadMoreTrigger class="load-more-trigger" aria-hidden="true"></div>
     } } @else {
     <div class="portfolio-cards-area" role="status" [ngClass]="{
-          'list-view': currentView === 'list',
-          'grid-view': currentView === 'grid'
+          'list-view': currentView() === 'list',
+          'grid-view': currentView() === 'grid'
         }">
         <span class="cdk-visually-hidden">{{ "loading.projects" | translate }}</span>
         @for (placeholder of initialSkeletons; track placeholder) {
         <div class="project-wrapper">
-            <app-project-card-skeleton [layout]="currentView" />
+            <app-project-card-skeleton [layout]="currentView()" />
         </div>
         }
     </div>

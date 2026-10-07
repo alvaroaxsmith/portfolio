@@ -3,19 +3,19 @@
 
   <header class="sheet-header">
     <div class="heading">
-      <h2 id="certificate-title">{{ rowData.name }}</h2>
-      @if (rowData.school || rowData.date) {
+      <h2 id="certificate-title">{{ rowData().name }}</h2>
+      @if (rowData().school || rowData().date) {
         <p class="meta">
-          {{ rowData.school }}
-          @if (rowData.school && rowData.date) { <span aria-hidden="true">·</span> }
-          {{ rowData.date }}
+          {{ rowData().school }}
+          @if (rowData().school && rowData().date) { <span aria-hidden="true">·</span> }
+          {{ rowData().date }}
         </p>
       }
     </div>
 
     <div class="actions">
-      @if (externalUrl) {
-        <a mat-icon-button [href]="externalUrl" target="_blank" rel="noopener noreferrer" (click)="trackOpenNewTab()"
+      @if (externalUrl()) {
+        <a mat-icon-button [href]="externalUrl()" target="_blank" rel="noopener noreferrer" (click)="trackOpenNewTab()"
           [attr.aria-label]="'certificate.openNewTab' | translate"
           [title]="'certificate.openNewTab' | translate">
           <mat-icon>open_in_new</mat-icon>
@@ -29,13 +29,13 @@
     </div>
   </header>
 
-  <div class="frame" [class.is-loaded]="isFrameLoaded">
-    @if (!isFrameLoaded) {
+  <div class="frame" [class.is-loaded]="isFrameLoaded()">
+    @if (!isFrameLoaded()) {
       <app-skeleton class="frame-placeholder" radius="0" />
       <span class="sr-only" role="status">{{ 'certificate.loading' | translate }}</span>
     }
-    @if (safeUrl) {
-      <iframe [src]="safeUrl" [title]="rowData.name" allow="autoplay" (load)="onFrameLoad($event)"></iframe>
+    @if (safeUrl()) {
+      <iframe [src]="safeUrl()" [title]="rowData().name" allow="autoplay" (load)="onFrameLoad($event)"></iframe>
     }
   </div>
 </section>

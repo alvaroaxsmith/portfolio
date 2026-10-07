@@ -48,7 +48,7 @@ describe('PortfolioComponent', () => {
     it('shows the first batch of 4 projects', () => {
       render(of(makeProjects(10)));
 
-      expect(component.currentView).toBe('list');
+      expect(component.currentView()).toBe('list');
       expect(cards()).toBe(4);
     });
 
@@ -63,7 +63,7 @@ describe('PortfolioComponent', () => {
 
       component.loadMore();
       fixture.detectChanges();
-      expect(component.loadingMore).toBeTrue();
+      expect(component.loadingMore()).toBeTrue();
       expect(skeletons()).toBe(4);
       expect(cards()).toBe(4);
 
@@ -93,7 +93,7 @@ describe('PortfolioComponent', () => {
       tick(600);
       fixture.detectChanges();
 
-      expect(component.allProjectsLoaded).toBeTrue();
+      expect(component.allProjectsLoaded()).toBeTrue();
       expect(fixture.nativeElement.querySelector('.end-of-list')).not.toBeNull();
       expect(fixture.nativeElement.querySelector('.load-more-trigger')).toBeNull();
     }));
@@ -122,8 +122,8 @@ describe('PortfolioComponent', () => {
 
       useGridWith(950);
 
-      expect(component.columns).toBe(3);
-      expect(component.pageSize).toBe(6);
+      expect(component.columns()).toBe(3);
+      expect(component.pageSize()).toBe(6);
     });
 
     it('uses a single column on narrow screens', () => {
@@ -131,8 +131,8 @@ describe('PortfolioComponent', () => {
 
       useGridWith(320);
 
-      expect(component.columns).toBe(1);
-      expect(component.pageSize).toBe(2);
+      expect(component.columns()).toBe(1);
+      expect(component.pageSize()).toBe(2);
     });
 
     it('completes the last row when switching from list to grid', () => {
@@ -140,7 +140,7 @@ describe('PortfolioComponent', () => {
 
       useGridWith(950);
 
-      expect(component.projects.length).toBe(4);
+      expect(component.projects().length).toBe(4);
       expect(component.loadingMoreCount).toBe(8);
     });
   });
@@ -152,15 +152,15 @@ describe('PortfolioComponent', () => {
       component.filterByTech('Java');
       fixture.detectChanges();
 
-      expect(component.processedProjects.every((p) => p.tech === 'Java')).toBeTrue();
-      expect(component.processedProjects.length).toBe(4);
+      expect(component.processedProjects().every((p) => p.tech === 'Java')).toBeTrue();
+      expect(component.processedProjects().length).toBe(4);
       expect(cards()).toBe(4);
     });
 
     it('lists the available technologies without duplicates, sorted', () => {
       render(of(makeProjects(12)));
 
-      expect(component.availableTechs).toEqual(['Java', 'Python', 'TypeScript']);
+      expect(component.availableTechs()).toEqual(['Java', 'Python', 'TypeScript']);
     });
 
     it('can show the oldest projects first', () => {
@@ -179,6 +179,16 @@ describe('PortfolioComponent', () => {
 
       expect(cardNames()[2]).toBe('project-3');
     });
+
+    it('hides the last-updated line of a project whose date is invalid', () => {
+      const projects = makeProjects(2);
+      projects[1].date = 'not-a-date';
+      render(of(projects));
+
+      const dates = fixture.nativeElement.querySelectorAll('.project-card .project-date');
+      expect(cardNames()).toEqual(['project-1', 'project-2']);
+      expect(dates.length).toBe(1);
+    });
   });
 
   describe('errors and empty states', () => {
@@ -186,7 +196,7 @@ describe('PortfolioComponent', () => {
       render(throwError(() => new Error('rate limited')));
 
       const message: HTMLElement = fixture.nativeElement.querySelector('.no-projects-message');
-      expect(component.loadError).toBeTrue();
+      expect(component.loadError()).toBeTrue();
       expect(message.querySelector('a')?.getAttribute('href')).toBe('https://github.com/alvaroaxsmith');
     });
 
@@ -202,7 +212,7 @@ describe('PortfolioComponent', () => {
     it('tracks repository clicks with the project, technology and view', () => {
       render(of(makeProjects(3)));
 
-      component.trackRepo(component.projects[0]);
+      component.trackRepo(component.projects()[0]);
 
       expect(analytics.track).toHaveBeenCalledWith('repo_click', { repo: 'project-3', tech: 'Python', view: 'list' });
     });
@@ -228,7 +238,7 @@ describe('PortfolioComponent', () => {
       fixture.destroy();
       response.next(makeProjects(3));
 
-      expect(component.allProjects).toEqual([]);
+      expect(component.allProjects()).toEqual([]);
     });
 
     it('ignores a failure that arrives later', () => {
@@ -238,7 +248,7 @@ describe('PortfolioComponent', () => {
       fixture.destroy();
       response.error(new Error('offline'));
 
-      expect(component.loadError).toBeFalse();
+      expect(component.loadError()).toBeFalse();
     });
   });
 });

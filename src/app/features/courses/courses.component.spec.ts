@@ -205,12 +205,12 @@ describe('CoursesComponent behavior', () => {
 
       component.loadMoreMobileCourses();
       fixture.detectChanges();
-      expect(component.mobileLoadingMore).toBeTrue();
+      expect(component.mobileLoadingMore()).toBeTrue();
       expect(fixture.nativeElement.querySelectorAll('.mobile-course-list app-courses-skeleton .course-card').length).toBe(5);
 
       tick(600);
       fixture.detectChanges();
-      expect(component.mobileLoadingMore).toBeFalse();
+      expect(component.mobileLoadingMore()).toBeFalse();
       expect(component.mobileCourses.length).toBe(10);
     }));
 

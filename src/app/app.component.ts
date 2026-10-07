@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, ActivatedRoute, RouterOutlet } from '@angular/router';
 import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Subject, filter, takeUntil } from 'rxjs';
@@ -14,7 +14,7 @@ import { ConsentBannerComponent } from './core/layout/consent-banner/consent-ban
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [SplashScreenComponent, NavbarComponent, RouterOutlet, ConsentBannerComponent]
 })
 export class AppComponent implements OnInit, OnDestroy {
@@ -25,11 +25,11 @@ export class AppComponent implements OnInit, OnDestroy {
   private analytics = inject(AnalyticsService);
   private document = inject<Document>(DOCUMENT);
 
-  showMainContent = false;
+  readonly showMainContent = signal(false);
   private readonly destroy$ = new Subject<void>();
 
   onSplashAnimationFinished() {
-    this.showMainContent = true;
+    this.showMainContent.set(true);
   }
 
   ngOnInit() {

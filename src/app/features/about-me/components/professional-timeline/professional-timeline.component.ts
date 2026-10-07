@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectorRef, ElementRef, AfterViewInit, OnDestroy, Renderer2, ChangeDetectionStrategy, effect, inject, untracked, viewChildren } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterViewInit, OnDestroy, Renderer2, ChangeDetectionStrategy, effect, inject, signal, untracked, viewChildren } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -37,11 +37,10 @@ interface TimelineDefinition {
     MatTooltipModule
 ],
     templateUrl: './professional-timeline.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['./professional-timeline.component.scss']
 })
 export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnDestroy {
-  private readonly cdr = inject(ChangeDetectorRef);
   translate = inject(TranslateService);
   private readonly renderer = inject(Renderer2);
 
@@ -244,13 +243,13 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
     },
   ];
 
-  timelineDefinitions: TimelineDefinition[] = [];
-  currentIndex = 0;
-  journeyCurrentIndex = 0;
-  isJourneyVisible = false;
+  readonly timelineDefinitions = signal<TimelineDefinition[]>([]);
+  readonly currentIndex = signal(0);
+  readonly journeyCurrentIndex = signal(0);
+  readonly isJourneyVisible = signal(false);
 
   private readonly mobileQuery = window.matchMedia('(max-width: 480px)');
-  isMobile = this.mobileQuery.matches;
+  readonly isMobile = signal(this.mobileQuery.matches);
 
   ngOnInit(): void {
     mermaid.initialize({
@@ -267,11 +266,10 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
   }
 
   private readonly onScreenChange = (event: MediaQueryListEvent): void => {
-    this.isMobile = event.matches;
-    if (this.isMobile) {
-      this.isJourneyVisible = false;
+    this.isMobile.set(event.matches);
+    if (this.isMobile()) {
+      this.isJourneyVisible.set(false);
     }
-    this.cdr.markForCheck();
   };
 
   ngAfterViewInit(): void {
@@ -283,32 +281,32 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
   }
 
   goTo(index: number): void {
-    this.currentIndex = index;
+    this.currentIndex.set(index);
   }
 
   selecionarExperiencia(experiencia: Experiencia): void {
-    if (this.isMobile) {
+    if (this.isMobile()) {
       return;
     }
     const selectedIndex = this.experiencias.findIndex(
       (exp) => exp.id === experiencia.id
     );
-    this.currentIndex = selectedIndex;
-    this.journeyCurrentIndex = selectedIndex;
+    this.currentIndex.set(selectedIndex);
+    this.journeyCurrentIndex.set(selectedIndex);
 
     this.generateAllMermaidTimelines();
-    this.isJourneyVisible = true;
+    this.isJourneyVisible.set(true);
   }
 
   voltarParaTimeline(): void {
-    this.isJourneyVisible = false;
+    this.isJourneyVisible.set(false);
   }
 
   handleIconClickInJourneyView(clickedExperience: Experiencia): void {
     const newIndex = this.experiencias.findIndex(
       (exp) => exp.id === clickedExperience.id
     );
-    this.journeyCurrentIndex = newIndex;
+    this.journeyCurrentIndex.set(newIndex);
   }
 
   handleActionKey(event: KeyboardEvent, action: () => void): void {
@@ -319,7 +317,7 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
   }
 
   generateAllMermaidTimelines(): void {
-    this.timelineDefinitions = this.experiencias.map((startExp) => {
+    this.timelineDefinitions.set(this.experiencias.map((startExp) => {
       let mermaidText = `timeline\n \n`;
 
       const startIndex = this.experiencias.findIndex(
@@ -334,11 +332,11 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
       });
 
       return { id: startExp.id, definition: mermaidText };
-    });
+    }));
   }
 
   async renderAllMermaidDiagrams(): Promise<void> {
-    if (!this.isJourneyVisible) {
+    if (!this.isJourneyVisible()) {
       return;
     }
 
@@ -346,7 +344,7 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
     for (const mermaidContainer of containers) {
       const container = mermaidContainer.nativeElement;
       const experienceId = container.dataset['experienceId'];
-      const timelineDef = this.timelineDefinitions.find(
+      const timelineDef = this.timelineDefinitions().find(
         (def) => def.id.toString() === experienceId
       );
 
@@ -367,7 +365,6 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
         }
       }
     }
-    this.cdr.detectChanges();
   }
 
   private setupDragScroll(element: HTMLElement): void {

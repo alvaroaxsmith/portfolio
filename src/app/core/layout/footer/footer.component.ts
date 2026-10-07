@@ -9,7 +9,7 @@ import { TranslateModule } from '@ngx-translate/core';
     selector: 'app-footer',
     templateUrl: './footer.component.html',
     styleUrls: ['./footer.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatTooltip, FontAwesomeModule, TranslateModule]
 })
 export class FooterComponent {

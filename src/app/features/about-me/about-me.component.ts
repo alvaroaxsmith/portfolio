@@ -8,7 +8,7 @@ import { TranslateModule } from '@ngx-translate/core';
     selector: 'app-about-me',
     templateUrl: './about-me.component.html',
     styleUrls: ['./about-me.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelActionRow, ProfessionalTimelineComponent, HighlightsComponent, TranslateModule]
 })
 export class AboutMeComponent {}

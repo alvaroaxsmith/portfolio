@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -17,15 +17,15 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
             ]),
         ]),
     ],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [TranslateModule]
 })
 export class TextComponent implements OnInit, OnDestroy {
   private readonly translate = inject(TranslateService);
 
   palavras: string[] = ['Full Cycle Development', 'GenAI'];
-  estadoAnimacao = 'inicial';
-  indiceAtual = 0;
+  readonly estadoAnimacao = signal('inicial');
+  readonly indiceAtual = signal(0);
   private timer?: ReturnType<typeof setTimeout>;
   private frame?: number;
 
@@ -43,14 +43,14 @@ export class TextComponent implements OnInit, OnDestroy {
   }
 
   trocarPalavras() {
-    this.estadoAnimacao = 'inicial';
+    this.estadoAnimacao.set('inicial');
     this.timer = setTimeout(() => {
-      this.indiceAtual = (this.indiceAtual + 1) % this.palavras.length;
-      this.estadoAnimacao = 'mostrar';
+      this.indiceAtual.set((this.indiceAtual() + 1) % this.palavras.length);
+      this.estadoAnimacao.set('mostrar');
 
       this.frame = requestAnimationFrame(() => {
         this.timer = setTimeout(() => {
-          this.estadoAnimacao = 'inicial';
+          this.estadoAnimacao.set('inicial');
           this.trocarPalavras();
         }, 4000);
       });
