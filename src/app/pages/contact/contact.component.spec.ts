@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { MaterialModule } from '../../material/material.module';
 import { AnalyticsService } from '../../services/analytics.service';
 import { ContactComponent } from './contact.component';
 
@@ -13,8 +12,7 @@ describe('ContactComponent', () => {
   beforeEach(async () => {
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track']);
     await TestBed.configureTestingModule({
-      declarations: [ContactComponent],
-      imports: [TranslateModule.forRoot(), MaterialModule],
+      imports: [ContactComponent, TranslateModule.forRoot()],
       providers: [{ provide: AnalyticsService, useValue: analytics }]
     }).compileComponents();
 

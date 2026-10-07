@@ -6,7 +6,6 @@ import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
 import { routes } from './app-routing.module';
-import { MaterialModule } from './material/material.module';
 import { ContactComponent } from './pages/contact/contact.component';
 import { HomeComponent } from './pages/home/home.component';
 import { AboutMeComponent } from './pages/about-me/about-me.component';
@@ -19,8 +18,7 @@ describe('App routing', () => {
   beforeEach(async () => {
     localStorage.removeItem('portfolio:github-projects');
     TestBed.configureTestingModule({
-      declarations: [ContactComponent],
-      imports: [TranslateModule.forRoot(), MaterialModule, NoopAnimationsModule],
+      imports: [TranslateModule.forRoot(), NoopAnimationsModule],
       providers: [provideRouter(routes), provideHttpClient(), provideHttpClientTesting()]
     });
     harness = await RouterTestingHarness.create();

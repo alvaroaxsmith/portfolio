@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes, NoPreloading } from '@angular/router';
-import { ContactComponent } from './pages/contact/contact.component';
 
 export const routes: Routes = [
   {
@@ -45,7 +44,7 @@ export const routes: Routes = [
   },
   {
     path: 'contact',
-    component: ContactComponent,
+    loadComponent: () => import('./pages/contact/contact.component').then(m => m.ContactComponent),
     data: {
       seo: {
         titleKey: 'seo.contact.title',

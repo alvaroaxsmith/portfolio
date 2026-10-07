@@ -1,13 +1,15 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { TranslateModule } from '@ngx-translate/core';
 import { AnalyticsService } from '../../services/analytics.service';
 @Component({
     selector: 'app-contact',
     templateUrl: './contact.component.html',
     styleUrls: ['./contact.component.scss'],
     changeDetection: ChangeDetectionStrategy.Eager,
-    standalone: false
+    imports: [FontAwesomeModule, TranslateModule]
 })
 export class ContactComponent {
 
