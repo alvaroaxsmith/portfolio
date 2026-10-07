@@ -9,7 +9,9 @@
     "test": "ng test",
     "lint": "ng lint",
     "test:ci": "ng test --watch=false --code-coverage --browsers=ChromeHeadlessCI",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "verify": "ng lint && npm run test:ci && ng build && playwright test",
+    "prepare": "git config core.hooksPath .githooks || true"
   },
   "private": true,
   "dependencies": {

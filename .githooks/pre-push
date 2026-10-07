@@ -1,0 +1,6 @@
+#!/bin/sh
+# Local quality gate: the same checks as .github/workflows/quality-gate.yml.
+# Runs before every push; a failure aborts the push.
+set -e
+echo "pre-push: running the quality gate (lint, unit, build, e2e)..."
+npm run -s verify
