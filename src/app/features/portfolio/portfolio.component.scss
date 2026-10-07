@@ -173,3 +173,20 @@ a {
         }
     }
 }
+
+.fade-in-left {
+    animation: fade-in-left 300ms ease-out both;
+}
+
+@keyframes fade-in-left {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .fade-in-left {
+        animation: none;
+    }
+}

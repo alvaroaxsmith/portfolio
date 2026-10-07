@@ -46,7 +46,7 @@
           'grid-view': currentView() === 'grid'
         }">
         @for (project of projects(); track project.id; let i = $index) {
-        <article class="project-wrapper" [@fadeInLeft]="getAnimationParams(i)">
+        <article class="project-wrapper" animate.enter="fade-in-left" [style.animation-delay.ms]="enterDelay(i)">
             <mat-card class="project-card">
                 <mat-card-title-group>
                     <mat-card-title>{{ project.name }}</mat-card-title>

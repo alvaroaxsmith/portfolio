@@ -1,22 +1,26 @@
-import { trigger, state, style, transition, animate } from '@angular/animations';
 import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-text',
     templateUrl: './text.component.html',
-    animations: [
-        trigger('trocar-palavras', [
-            state('inicial', style({ opacity: 0, transform: 'translateX(-100px)' })),
-            transition('inicial => mostrar', [
-                animate('1500ms', style({ opacity: 1, transform: 'translateX(0px)' })),
-            ]),
-            transition('mostrar => inicial', [
-                style({ opacity: 0, transform: 'translateX(-100px)' }),
-                animate('1500ms', style({ opacity: 1, transform: 'translateX(0px)' })),
-            ]),
-        ]),
-    ],
+    // The word disappears at once, and the next one slides in from the left.
+    styles: `
+      .palavra-container {
+        opacity: 0;
+        transform: translateX(-100px);
+      }
+      .palavra-container.mostrar {
+        opacity: 1;
+        transform: none;
+        transition: opacity 1.5s, transform 1.5s;
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .palavra-container.mostrar {
+          transition: none;
+        }
+      }
+    `,
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [TranslateModule]
 })

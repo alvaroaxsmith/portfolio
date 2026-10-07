@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable, Subject, of, throwError } from 'rxjs';
@@ -27,7 +26,7 @@ describe('PortfolioComponent', () => {
   function render(projects$: Observable<Project[]>) {
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track']);
     TestBed.configureTestingModule({
-      imports: [PortfolioComponent, TranslateModule.forRoot(), NoopAnimationsModule],
+      imports: [PortfolioComponent, TranslateModule.forRoot()],
       providers: [
         provideRouter([]),
         { provide: ProjectsService, useValue: { getProjects: () => projects$ } },
@@ -188,6 +187,36 @@ describe('PortfolioComponent', () => {
       const dates = fixture.nativeElement.querySelectorAll('.project-card .project-date');
       expect(cardNames()).toEqual(['project-1', 'project-2']);
       expect(dates.length).toBe(1);
+    });
+  });
+
+  describe('entrance animation', () => {
+    const delays = () =>
+      Array.from(fixture.nativeElement.querySelectorAll('.project-wrapper') as NodeListOf<HTMLElement>).map((el) => el.style.animationDelay);
+
+    it('slides the cards of a batch in one after another', () => {
+      render(of(makeProjects(10)));
+
+      expect(delays()).toEqual(['0ms', '70ms', '140ms', '210ms']);
+    });
+
+    it('starts the stagger again for the cards of the next batch', fakeAsync(() => {
+      render(of(makeProjects(10)));
+
+      component.loadMore();
+      tick(600);
+      fixture.detectChanges();
+
+      expect(delays().slice(4)).toEqual(['0ms', '70ms', '140ms', '210ms']);
+    }));
+
+    it('staggers every card a little faster when switching view', () => {
+      render(of(makeProjects(3)));
+
+      component.toggleView();
+      fixture.detectChanges();
+
+      expect(delays().slice(0, 3)).toEqual(['0ms', '60ms', '120ms']);
     });
   });
 

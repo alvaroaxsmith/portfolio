@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
@@ -28,7 +27,7 @@ describe('CoursesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [NoopAnimationsModule, TranslateModule.forRoot(), CoursesComponent],
+    imports: [TranslateModule.forRoot(), CoursesComponent],
     providers: [
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MatBottomSheet, useValue: { open: () => null } },
@@ -124,7 +123,7 @@ describe('CoursesComponent behavior', () => {
     snackBar = jasmine.createSpyObj<MatSnackBar>('MatSnackBar', ['openFromComponent']);
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track']);
     await TestBed.configureTestingModule({
-    imports: [NoopAnimationsModule, TranslateModule.forRoot(), CoursesComponent],
+    imports: [TranslateModule.forRoot(), CoursesComponent],
     providers: [
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MatBottomSheet, useValue: bottomSheet },

@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { MatExpansionPanel } from '@angular/material/expansion';
@@ -13,7 +12,7 @@ describe('AboutMeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AboutMeComponent, TranslateModule.forRoot(), NoopAnimationsModule],
+      imports: [AboutMeComponent, TranslateModule.forRoot()],
       providers: [provideRouter([])]
     }).compileComponents();
 

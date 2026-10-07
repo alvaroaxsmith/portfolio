@@ -1,5 +1,4 @@
 import { Component, OnInit, ElementRef, OnDestroy, ChangeDetectionStrategy, DestroyRef, effect, inject, untracked, viewChild, signal } from '@angular/core';
-import { trigger, style, transition, animate } from '@angular/animations';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProjectsService } from './services/projects.service';
 import { Project } from './Project';
@@ -23,14 +22,6 @@ const LOAD_MORE_DELAY_MS = 600;
     selector: 'app-portfolio',
     templateUrl: './portfolio.component.html',
     styleUrls: ['./portfolio.component.scss'],
-    animations: [
-        trigger('fadeInLeft', [
-            transition(':enter', [
-                style({ opacity: 0, transform: 'translateX(-20px)' }),
-                animate('300ms {{ delay }}ms ease-out', style({ opacity: 1, transform: 'translateX(0)' })),
-            ], { params: { delay: 0 } }),
-        ]),
-    ],
     changeDetection: ChangeDetectionStrategy.OnPush,
     host: { '(window:resize)': 'updatePageSize()' },
     imports: [MatFormField, MatLabel, MatSelect, MatOption, MatIconButton, MatTooltip, MatIcon, NgClass, MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatButton, MatCardContent, ProjectCardSkeletonComponent, DatePipe, TranslateModule]
@@ -241,14 +232,12 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.applyFiltersAndSorting();
   }
 
-  getAnimationParams(index: number) {
-    let delay = 0;
+  /** Milliseconds before a card slides in, so each batch enters one card after another. */
+  enterDelay(index: number): number {
     if (this.projectListAnimationState() === 'viewToggle') {
-      delay = Math.min(index, 8) * 60;
-    } else if (index >= this.batchStart) {
-      delay = Math.min(index - this.batchStart, 8) * 70;
+      return Math.min(index, 8) * 60;
     }
-    return { value: 'in', params: { delay: delay.toString() } };
+    return index >= this.batchStart ? Math.min(index - this.batchStart, 8) * 70 : 0;
   }
 
   toggleView(): void {

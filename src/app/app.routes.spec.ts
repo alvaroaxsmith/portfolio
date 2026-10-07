@@ -1,7 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
@@ -18,7 +17,7 @@ describe('App routing', () => {
   beforeEach(async () => {
     localStorage.removeItem('portfolio:github-projects');
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), NoopAnimationsModule],
+      imports: [TranslateModule.forRoot()],
       providers: [provideRouter(routes), provideHttpClient(), provideHttpClientTesting()]
     });
     harness = await RouterTestingHarness.create();

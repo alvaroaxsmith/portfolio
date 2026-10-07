@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
 import { TextComponent } from './text.component';
 
@@ -9,7 +8,7 @@ describe('TextComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), NoopAnimationsModule, TextComponent]
+    imports: [TranslateModule.forRoot(), TextComponent]
 }).compileComponents();
 
     fixture = TestBed.createComponent(TextComponent);
@@ -68,6 +67,19 @@ describe('TextComponent', () => {
 
     tick(1100);
     expect(component.indiceAtual()).toBe(0);
+
+    spyOn(component, 'trocarPalavras');
+    tick(16 + 4000);
+  }));
+
+  it('shows the word only once it is time to slide it in', fakeAsync(() => {
+    fixture.detectChanges();
+    const word = () => fixture.nativeElement.querySelector('.palavra-container') as HTMLElement;
+    expect(word().classList).not.toContain('mostrar');
+
+    tick(1100);
+    fixture.detectChanges();
+    expect(word().classList).toContain('mostrar');
 
     spyOn(component, 'trocarPalavras');
     tick(16 + 4000);
