@@ -1,10 +1,10 @@
-<app-splash-screen (animationFinished)="onSplashAnimationFinished()"></app-splash-screen>
+<app-splash-screen (animationFinished)="onSplashAnimationFinished()" />
 
 @if (showMainContent) {
 <a class="skip-link" href="#main-content">Pular para o conteúdo principal</a>
 <main id="main-content">
-    <app-navbar></app-navbar>
-    <router-outlet></router-outlet>
+    <app-navbar />
+    <router-outlet />
 </main>
-<app-consent-banner></app-consent-banner>
+<app-consent-banner />
 }

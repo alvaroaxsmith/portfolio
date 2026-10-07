@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { CourseService } from '../services/courses.service';
 import { Course } from '../interfaces/courses.interface';
@@ -18,17 +18,15 @@ import { TranslateModule } from '@ngx-translate/core';
     imports: [MatIconButton, MatIcon, SkeletonComponent, TranslateModule]
 })
 export class DialogComponent implements OnInit {
+  rowData = inject<Course>(MAT_BOTTOM_SHEET_DATA);
+  private bottomSheetRef = inject<MatBottomSheetRef<DialogComponent>>(MatBottomSheetRef);
+  private courseService = inject(CourseService);
+  private domSanitizer = inject(DomSanitizer);
+  private analytics = inject(AnalyticsService);
+
   safeUrl: SafeResourceUrl | null = null;
   externalUrl: string | null = null;
   isFrameLoaded = false;
-
-  constructor(
-    @Inject(MAT_BOTTOM_SHEET_DATA) public rowData: Course,
-    private bottomSheetRef: MatBottomSheetRef<DialogComponent>,
-    private courseService: CourseService,
-    private domSanitizer: DomSanitizer,
-    private analytics: AnalyticsService
-  ) { }
 
   trackOpenNewTab(): void {
     this.analytics.track('certificate_open_new_tab', { course: this.rowData.name });

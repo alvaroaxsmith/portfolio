@@ -1,12 +1,5 @@
 import { Dialog } from './dialog/dialog.component';
-import {
-  Component,
-  ChangeDetectorRef,
-  HostBinding,
-  HostListener,
-  OnInit,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, ChangeDetectorRef, HostBinding, HostListener, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { RouterLinkActive, RouterLink } from '@angular/router';
@@ -23,16 +16,14 @@ import { MatIcon } from '@angular/material/icon';
     imports: [RouterLinkActive, MatButton, RouterLink, MatMenu, MatMenuItem, MatIconButton, MatTooltip, MatMenuTrigger, MatIcon, TranslateModule]
 })
 export class NavbarComponent implements OnInit {
+  bottomSheet = inject(MatBottomSheet);
+  translate = inject(TranslateService);
+  private cdr = inject(ChangeDetectorRef);
+
   private lastScrollY = 0;
 
   @HostBinding('class.navbar-fixed') navbarFixed = false;
   @HostBinding('class.navbar-hidden') navbarHidden = false;
-
-  constructor(
-    public bottomSheet: MatBottomSheet,
-    public translate: TranslateService,
-    private cdr: ChangeDetectorRef
-  ) {}
 
   ngOnInit(): void {
     this.cdr.detectChanges();

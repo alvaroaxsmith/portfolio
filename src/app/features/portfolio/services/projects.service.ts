@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, of, tap } from 'rxjs';
 import { Project } from '../Project';
@@ -23,13 +23,13 @@ interface CachedProjects {
   providedIn: 'root',
 })
 export class ProjectsService {
+  private readonly http = inject(HttpClient);
+
   private readonly apiUrl =
     `${environment.githubApiUrl}/users/${environment.githubUser}/repos?per_page=100&type=owner&sort=pushed`;
   private readonly portfolioTopic = 'portfolio-project';
   private readonly cacheKey = 'portfolio:github-projects';
   private readonly cacheTtlMs = 60 * 60 * 1000;
-
-  constructor(private readonly http: HttpClient) {}
 
   getProjects(): Observable<Project[]> {
     const cached = this.readCache();

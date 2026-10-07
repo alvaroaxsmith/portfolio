@@ -1,4 +1,4 @@
-import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy, DestroyRef } from '@angular/core';
+import { Component, OnInit, HostListener, ChangeDetectorRef, ViewChild, ElementRef, OnDestroy, ChangeDetectionStrategy, DestroyRef, inject } from '@angular/core';
 import { trigger, style, transition, animate } from '@angular/animations';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProjectsService } from './services/projects.service';
@@ -35,6 +35,12 @@ const LOAD_MORE_DELAY_MS = 600;
     imports: [MatFormField, MatLabel, MatSelect, MatOption, MatIconButton, MatTooltip, MatIcon, NgClass, MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatButton, MatCardContent, ProjectCardSkeletonComponent, DatePipe, TranslateModule]
 })
 export class PortfolioComponent implements OnInit, OnDestroy {
+  private projectsService = inject(ProjectsService);
+  private cdr = inject(ChangeDetectorRef);
+  private translate = inject(TranslateService);
+  private analytics = inject(AnalyticsService);
+  private destroyRef = inject(DestroyRef);
+
   allProjects: Project[] = [];
   projects: Project[] = [];
   processedProjects: Project[] = [];
@@ -66,14 +72,6 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.viewportWidth = window.innerWidth;
     this.updatePageSize();
   }
-
-  constructor(
-    private projectsService: ProjectsService,
-    private cdr: ChangeDetectorRef,
-    private translate: TranslateService,
-    private analytics: AnalyticsService,
-    private destroyRef: DestroyRef
-  ) { }
 
   trackRepo(project: Project): void {
     this.analytics.track('repo_click', { repo: project.name, tech: project.tech || 'none', view: this.currentView });

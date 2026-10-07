@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, HostBinding, HostListener, OnDestroy, AfterViewInit, ElementRef, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, HostBinding, HostListener, OnDestroy, AfterViewInit, ElementRef, signal, inject } from '@angular/core';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -34,6 +34,9 @@ const LEAVE_ANIMATION_MS = 280;
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SnackBarComponent implements AfterViewInit, OnDestroy {
+  private readonly snackBarRef = inject<MatSnackBarRef<SnackBarComponent>>(MatSnackBarRef);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
   private readonly ready = signal(false);
   private readonly leaving = signal(false);
   private readonly paused = signal(false);
@@ -52,11 +55,6 @@ export class SnackBarComponent implements AfterViewInit, OnDestroy {
   @HostBinding('class.is-paused') get isPaused(): boolean {
     return this.paused();
   }
-
-  constructor(
-    private readonly snackBarRef: MatSnackBarRef<SnackBarComponent>,
-    private readonly host: ElementRef<HTMLElement>
-  ) {}
 
   ngAfterViewInit(): void {
     this.readyDeadline = performance.now() + 500;

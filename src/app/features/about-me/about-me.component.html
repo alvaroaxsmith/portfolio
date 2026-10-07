@@ -27,7 +27,7 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <mat-action-row>
-                    <app-professional-timeline></app-professional-timeline>
+                    <app-professional-timeline />
                 </mat-action-row>
             </mat-expansion-panel>
             <mat-expansion-panel (afterExpand)="highlights.start()" (afterCollapse)="highlights.stop()">
@@ -37,7 +37,7 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <mat-action-row class="highlights">
-                    <app-highlights #highlights></app-highlights>
+                    <app-highlights #highlights />
                 </mat-action-row>
             </mat-expansion-panel>
 

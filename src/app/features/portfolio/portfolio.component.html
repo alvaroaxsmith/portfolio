@@ -68,7 +68,7 @@
         } @if (loadingMore) {
         @for (placeholder of loadingMoreSkeletons; track placeholder) {
         <div class="project-wrapper">
-            <app-project-card-skeleton [layout]="currentView"></app-project-card-skeleton>
+            <app-project-card-skeleton [layout]="currentView" />
         </div>
         } }
     </div>
@@ -99,7 +99,7 @@
         <span class="cdk-visually-hidden">{{ "loading.projects" | translate }}</span>
         @for (placeholder of initialSkeletons; track placeholder) {
         <div class="project-wrapper">
-            <app-project-card-skeleton [layout]="currentView"></app-project-card-skeleton>
+            <app-project-card-skeleton [layout]="currentView" />
         </div>
         }
     </div>

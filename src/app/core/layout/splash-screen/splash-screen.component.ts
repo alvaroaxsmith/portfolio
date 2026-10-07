@@ -1,14 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  Output,
-  EventEmitter,
-  HostBinding,
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  NgZone
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter, HostBinding, ChangeDetectionStrategy, ChangeDetectorRef, NgZone, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 interface SplashEngine {
@@ -27,6 +17,10 @@ const FALLBACK_TEXT = 'Carregando';
     host: { 'aria-busy': 'true' }
 })
 export class SplashScreenComponent implements OnInit, OnDestroy {
+  private readonly translate = inject(TranslateService);
+  private readonly cdr = inject(ChangeDetectorRef);
+  private readonly zone = inject(NgZone);
+
   @Output() animationFinished = new EventEmitter<void>();
 
   @HostBinding('class.is-leaving') leaving = false;
@@ -36,12 +30,6 @@ export class SplashScreenComponent implements OnInit, OnDestroy {
   letters: string[] = [];
 
   private exitTimer?: ReturnType<typeof setTimeout>;
-
-  constructor(
-    private readonly translate: TranslateService,
-    private readonly cdr: ChangeDetectorRef,
-    private readonly zone: NgZone
-  ) {}
 
   ngOnInit(): void {
     const translated = this.translate.instant('splash.loading');

@@ -1,5 +1,5 @@
 import { trigger, state, style, transition, animate } from '@angular/animations';
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 
 @Component({
@@ -21,13 +21,13 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
     imports: [TranslateModule]
 })
 export class TextComponent implements OnInit, OnDestroy {
+  private readonly translate = inject(TranslateService);
+
   palavras: string[] = ['Full Cycle Development', 'GenAI'];
   estadoAnimacao = 'inicial';
   indiceAtual = 0;
   private timer?: ReturnType<typeof setTimeout>;
   private frame?: number;
-
-  constructor(private readonly translate: TranslateService) { }
 
   ngOnInit() {
     this.timer = setTimeout(() => {

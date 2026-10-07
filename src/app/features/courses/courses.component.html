@@ -66,7 +66,7 @@
         @if (isLoading) {
         <div role="status">
             <span class="cdk-visually-hidden">{{ 'loading.courses' | translate }}</span>
-            <app-courses-skeleton layout="table"></app-courses-skeleton>
+            <app-courses-skeleton layout="table" />
         </div>
         }
     </div>
@@ -74,7 +74,7 @@
     @if (isLoading) {
     <div class="mobile-course-skeleton" role="status">
         <span class="cdk-visually-hidden">{{ 'loading.courses' | translate }}</span>
-        <app-courses-skeleton layout="cards" [count]="3"></app-courses-skeleton>
+        <app-courses-skeleton layout="cards" [count]="3" />
     </div>
     }
 
@@ -94,7 +94,7 @@
             }
         </div>
         @if (mobileLoadingMore) {
-        <app-courses-skeleton layout="cards" [count]="mobileSkeletonCount"></app-courses-skeleton>
+        <app-courses-skeleton layout="cards" [count]="mobileSkeletonCount" />
         }
         <span class="cdk-visually-hidden" role="status">
             @if (mobileLoadingMore) {
@@ -113,6 +113,6 @@
     </div>
 
     <div class="paginator">
-        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="state.pageSize" [length]="dataSource.data.length" aria-label="Select page of courses"></mat-paginator>
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="state.pageSize" [length]="dataSource.data.length" aria-label="Select page of courses" />
     </div>
 </section>

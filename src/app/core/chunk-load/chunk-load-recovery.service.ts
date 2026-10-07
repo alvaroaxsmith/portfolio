@@ -1,12 +1,4 @@
-import {
-  EnvironmentProviders,
-  Inject,
-  Injectable,
-  InjectionToken,
-  inject,
-  makeEnvironmentProviders,
-  provideAppInitializer
-} from '@angular/core';
+import { EnvironmentProviders, Injectable, InjectionToken, inject, makeEnvironmentProviders, provideAppInitializer } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { NavigationError, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
@@ -34,12 +26,11 @@ export function isChunkLoadError(error: unknown): boolean {
   providedIn: 'root'
 })
 export class ChunkLoadRecoveryService {
-  constructor(
-    private readonly router: Router,
-    private readonly snackBar: MatSnackBar,
-    private readonly translate: TranslateService,
-    @Inject(PAGE_RELOAD) private readonly reload: (url: string) => void
-  ) {}
+  private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly translate = inject(TranslateService);
+  private readonly reload = inject(PAGE_RELOAD);
+
 
   watch(): Subscription {
     return this.router.events

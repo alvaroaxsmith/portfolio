@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, map, shareReplay, throwError } from 'rxjs';
 import { Course, CourseList } from '../interfaces/courses.interface';
@@ -8,10 +8,10 @@ import { environment } from '../../../../environments/environment';
   providedIn: 'root'
 })
 export class CourseService {
+  private http = inject(HttpClient);
+
   private readonly apiUrl = environment.coursesApiUrl;
   private courses$?: Observable<Course[]>;
-
-  constructor(private http: HttpClient) { }
 
   getCourses(): Observable<Course[]> {
     if (!this.courses$) {

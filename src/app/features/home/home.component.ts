@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { ImageService } from './services/image.service';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
@@ -19,14 +19,12 @@ const FALLBACK_IMAGE_URL = `https://github.com/${environment.githubUser}.png`;
     imports: [TextComponent, MatButton, SkeletonComponent, FooterComponent, TranslateModule]
 })
 export class HomeComponent implements OnInit {
+  private translate = inject(TranslateService);
+  private imageService = inject(ImageService);
+  private analytics = inject(AnalyticsService);
+
   isLoadingImage = true;
   imageUrl: string | undefined;
-
-  constructor(
-    private translate: TranslateService,
-    private imageService: ImageService,
-    private analytics: AnalyticsService
-  ) {}
 
   trackCvDownload(): void {
     this.analytics.track('cv_download', { language: this.translate.currentLang });

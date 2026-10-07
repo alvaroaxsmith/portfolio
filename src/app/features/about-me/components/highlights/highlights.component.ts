@@ -1,14 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  AfterViewInit,
-  OnDestroy,
-  ElementRef,
-  NgZone,
-  ViewChild,
-  ViewChildren,
-  QueryList
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, AfterViewInit, OnDestroy, ElementRef, NgZone, ViewChild, ViewChildren, QueryList, inject } from '@angular/core';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card';
@@ -34,6 +24,9 @@ interface Highlight {
     styleUrls: ['./highlights.component.scss']
 })
 export class HighlightsComponent implements AfterViewInit, OnDestroy {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly zone = inject(NgZone);
+
   highlights: Highlight[] = [
     { date: '2014 to', dateRange: '2018', description: 'UNESP - Energy Engineering (incomplete)' },
     { date: 'August 2018 to', dateRange: 'June 2023', description: 'Univesp Oficial - Bachelor\'s degree, Production Engineering' },
@@ -59,11 +52,6 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
   private intersection?: IntersectionObserver;
   private resize?: ResizeObserver;
   private readonly onScroll = () => this.scheduleUpdate();
-
-  constructor(
-    private readonly host: ElementRef<HTMLElement>,
-    private readonly zone: NgZone
-  ) {}
 
   ngAfterViewInit(): void {
     if (this.reducedMotion) {

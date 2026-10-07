@@ -31,7 +31,7 @@
 
   <div class="frame" [class.is-loaded]="isFrameLoaded">
     @if (!isFrameLoaded) {
-      <app-skeleton class="frame-placeholder" radius="0"></app-skeleton>
+      <app-skeleton class="frame-placeholder" radius="0" />
       <span class="sr-only" role="status">{{ 'certificate.loading' | translate }}</span>
     }
     @if (safeUrl) {

@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef, inject } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -27,6 +27,13 @@ const MOBILE_LOAD_DELAY_MS = 600;
     imports: [MatFormField, MatLabel, MatInput, MatIcon, MatSuffix, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatSortHeader, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatNoDataRow, CoursesSkeletonComponent, MatPaginator, TranslateModule]
 })
 export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
+  private courseService = inject(CourseService);
+  private bottomSheet = inject(MatBottomSheet);
+  private snackBar = inject(MatSnackBar);
+  private cdr = inject(ChangeDetectorRef);
+  private analytics = inject(AnalyticsService);
+  readonly state = inject(CoursesStateService);
+
   private readonly destroy$ = new Subject<void>();
 
   displayedColumns: string[] = ['field', 'name', 'time', 'school', 'date'];
@@ -71,15 +78,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort!: MatSort;
-
-  constructor(
-    private courseService: CourseService,
-    private bottomSheet: MatBottomSheet,
-    private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef,
-    private analytics: AnalyticsService,
-    readonly state: CoursesStateService
-  ) { }
 
   openDialog = (rowData: Course): void => {
     this.analytics.track('certificate_open', { course: rowData.name, school: rowData.school });

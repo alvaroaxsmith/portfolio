@@ -1,15 +1,4 @@
-import {
-  Component,
-  OnInit,
-  ChangeDetectorRef,
-  ElementRef,
-  ViewChildren,
-  QueryList,
-  AfterViewInit,
-  OnDestroy,
-  Renderer2,
-  ChangeDetectionStrategy
-} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ElementRef, ViewChildren, QueryList, AfterViewInit, OnDestroy, Renderer2, ChangeDetectionStrategy, inject } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -52,6 +41,10 @@ interface TimelineDefinition {
     styleUrls: ['./professional-timeline.component.scss']
 })
 export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnDestroy {
+  private readonly cdr = inject(ChangeDetectorRef);
+  translate = inject(TranslateService);
+  private readonly renderer = inject(Renderer2);
+
   @ViewChildren('mermaidJourneyContainer')
   mermaidJourneyContainers!: QueryList<ElementRef>;
 
@@ -253,12 +246,6 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
 
   private readonly mobileQuery = window.matchMedia('(max-width: 480px)');
   isMobile = this.mobileQuery.matches;
-
-  constructor(
-    private readonly cdr: ChangeDetectorRef,
-    public translate: TranslateService,
-    private readonly renderer: Renderer2
-  ) {}
 
   ngOnInit(): void {
     mermaid.initialize({

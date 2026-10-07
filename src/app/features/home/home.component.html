@@ -5,7 +5,7 @@
         <p class="lead">{{ 'home.description' | translate }}</p>
         <div class="hero-role">
             <span>{{ 'home.rolePrefix' | translate }}</span>
-            <app-text></app-text>
+            <app-text />
         </div>
         <div class="hero-actions">
             <a mat-flat-button href="/assets/cv/alvaro-machado-ferreira-cv.txt" download="alvaro-machado-ferreira-cv.txt" (click)="trackCvDownload()">{{ 'home.cta.downloadCv' | translate }}</a>
@@ -20,7 +20,7 @@
     @if (isLoadingImage) {
     <figure class="hero-media" role="status">
         <span class="cdk-visually-hidden">{{ 'loading.photo' | translate }}</span>
-        <app-skeleton class="sleeve-skeleton" radius="1.5rem"></app-skeleton>
+        <app-skeleton class="sleeve-skeleton" radius="1.5rem" />
     </figure>
     } @else {
     <figure class="hero-media">
@@ -33,4 +33,4 @@
     </figure>
     }
 </section>
-<app-footer></app-footer>
+<app-footer />
