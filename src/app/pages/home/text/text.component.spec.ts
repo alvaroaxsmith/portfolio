@@ -43,6 +43,26 @@ describe('TextComponent', () => {
     expect(nextCycle).toHaveBeenCalledTimes(1);
   }));
 
+  it('stops rotating once removed from the page', fakeAsync(() => {
+    fixture.detectChanges();
+    tick(1100);
+    const swaps = spyOn(component, 'trocarPalavras').and.callThrough();
+
+    fixture.destroy();
+    tick(60_000);
+
+    expect(swaps).not.toHaveBeenCalled();
+  }));
+
+  it('never starts rotating when removed before the first swap', fakeAsync(() => {
+    fixture.detectChanges();
+
+    fixture.destroy();
+    tick(60_000);
+
+    expect(component.indiceAtual).toBe(0);
+  }));
+
   it('wraps back to the first word after the last one', fakeAsync(() => {
     component.indiceAtual = component.palavras.length - 1;
     fixture.detectChanges();
