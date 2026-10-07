@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -11,6 +11,9 @@ import { CoursesStateService } from './services/courses-state.service';
 import { Course } from './interfaces/courses.interface';
 import { MaterialModule } from '../../material/material.module';
 import { SkeletonModule } from '../../components/skeleton/skeleton.module';
+import { AnalyticsService } from '../../services/analytics.service';
+import { DialogComponent } from './dialog/dialog.component';
+import { SnackBarComponent } from './snack-bar/snackbar.component';
 
 const courses = Array.from({ length: 23 }, (_, i) => ({
   field: i % 2 ? 'Java' : 'Frontend',
@@ -96,5 +99,158 @@ describe('CoursesComponent', () => {
     component.paginator.nextPage();
 
     expect(state.pageIndex).toBe(1);
+  });
+});
+
+describe('CoursesComponent behavior', () => {
+  let fixture: ComponentFixture<CoursesComponent>;
+  let component: CoursesComponent;
+  let state: CoursesStateService;
+  let bottomSheet: jasmine.SpyObj<MatBottomSheet>;
+  let snackBar: jasmine.SpyObj<MatSnackBar>;
+  let analytics: jasmine.SpyObj<AnalyticsService>;
+
+  beforeEach(async () => {
+    bottomSheet = jasmine.createSpyObj<MatBottomSheet>('MatBottomSheet', ['open']);
+    snackBar = jasmine.createSpyObj<MatSnackBar>('MatSnackBar', ['openFromComponent']);
+    analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track']);
+    await TestBed.configureTestingModule({
+      declarations: [CoursesComponent],
+      imports: [MaterialModule, SkeletonModule, NoopAnimationsModule, TranslateModule.forRoot()],
+      providers: [
+        { provide: CourseService, useValue: { getCourses: () => of(courses) } },
+        { provide: MatBottomSheet, useValue: bottomSheet },
+        { provide: MatSnackBar, useValue: snackBar },
+        { provide: AnalyticsService, useValue: analytics }
+      ]
+    }).compileComponents();
+    state = TestBed.inject(CoursesStateService);
+  });
+
+  function render() {
+    fixture = TestBed.createComponent(CoursesComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  }
+
+  describe('certificates', () => {
+    it('opens the certificate of a course in a bottom sheet', () => {
+      render();
+
+      component.openDialog(courses[3]);
+
+      expect(bottomSheet.open as jasmine.Spy).toHaveBeenCalledOnceWith(DialogComponent, {
+        data: courses[3],
+        panelClass: 'certificate-sheet',
+        ariaLabel: courses[3].name
+      });
+    });
+
+    it('tracks which certificate was opened', () => {
+      render();
+
+      component.openDialog(courses[3]);
+
+      expect(analytics.track).toHaveBeenCalledWith('certificate_open', { course: 'Course 03', school: 'School' });
+    });
+  });
+
+  describe('hint notification', () => {
+    it('shows the hint in the top right corner on the first visit', () => {
+      render();
+
+      expect(snackBar.openFromComponent as jasmine.Spy).toHaveBeenCalledOnceWith(SnackBarComponent, {
+        horizontalPosition: 'end',
+        verticalPosition: 'top',
+        panelClass: 'course-hint'
+      });
+    });
+
+    it('does not show the hint again when coming back to the page in the same visit', () => {
+      render();
+      fixture.destroy();
+
+      render();
+
+      expect(snackBar.openFromComponent).toHaveBeenCalledTimes(1);
+    });
+
+    it('shows the hint again after a full reload (state lives only in memory)', () => {
+      state.hintShown = false;
+
+      render();
+
+      expect(snackBar.openFromComponent).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  describe('mobile infinite loading', () => {
+    it('starts with a first batch of 5 cards', () => {
+      render();
+
+      expect(component.mobileCourses.length).toBe(5);
+      expect(component.hasMoreMobileCourses).toBeTrue();
+    });
+
+    it('shows skeleton cards for the next batch, then the cards', fakeAsync(() => {
+      render();
+
+      component.loadMoreMobileCourses();
+      fixture.detectChanges();
+      expect(component.mobileLoadingMore).toBeTrue();
+      expect(fixture.nativeElement.querySelectorAll('.mobile-course-list app-courses-skeleton .course-card').length).toBe(5);
+
+      tick(600);
+      fixture.detectChanges();
+      expect(component.mobileLoadingMore).toBeFalse();
+      expect(component.mobileCourses.length).toBe(10);
+    }));
+
+    it('loads every course and then says the list is over', fakeAsync(() => {
+      render();
+
+      while (component.hasMoreMobileCourses) {
+        component.loadMoreMobileCourses();
+        tick(600);
+      }
+      fixture.detectChanges();
+
+      expect(component.mobileCourses.length).toBe(23);
+      expect(component.mobileSkeletonCount).toBeLessThanOrEqual(0);
+      expect(fixture.nativeElement.querySelector('.mobile-course-list .end-of-list')).not.toBeNull();
+    }));
+
+    it('only shows skeletons for the courses that are left', fakeAsync(() => {
+      state.mobileCount = 20;
+      render();
+
+      component.loadMoreMobileCourses();
+      fixture.detectChanges();
+
+      expect(component.mobileSkeletonCount).toBe(3);
+      tick(600);
+    }));
+
+    it('keeps the loaded cards when coming back to the page', () => {
+      state.mobileCount = 15;
+
+      render();
+
+      expect(component.mobileCourses.length).toBe(15);
+    });
+
+    it('starts over from the first batch when the search changes', fakeAsync(() => {
+      render();
+      component.loadMoreMobileCourses();
+      tick(600);
+
+      const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
+      input.value = 'java';
+      input.dispatchEvent(new Event('input'));
+      fixture.detectChanges();
+
+      expect(state.mobileCount).toBe(5);
+      expect(component.mobileCourses.every((c) => c.field === 'Java')).toBeTrue();
+    }));
   });
 });
