@@ -122,6 +122,11 @@ describe('CoursesComponent behavior', () => {
     bottomSheet = jasmine.createSpyObj<MatBottomSheet>('MatBottomSheet', ['open']);
     snackBar = jasmine.createSpyObj<MatSnackBar>('MatSnackBar', ['openFromComponent']);
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track']);
+    await startApp();
+  });
+
+  /** Configures a brand-new app: what a full page reload gives the visitor. */
+  async function startApp() {
     await TestBed.configureTestingModule({
     imports: [TranslateModule.forRoot(), CoursesComponent],
     providers: [
@@ -132,7 +137,7 @@ describe('CoursesComponent behavior', () => {
     ]
 }).compileComponents();
     state = TestBed.inject(CoursesStateService);
-  });
+  }
 
   function render() {
     fixture = TestBed.createComponent(CoursesComponent);
@@ -182,12 +187,15 @@ describe('CoursesComponent behavior', () => {
       expect(snackBar.openFromComponent).toHaveBeenCalledTimes(1);
     });
 
-    it('shows the hint again after a full reload (state lives only in memory)', () => {
-      state.hintShown = false;
+    it('shows the hint again after a full reload, since nothing is saved in the browser', async () => {
+      render();
+      fixture.destroy();
 
+      TestBed.resetTestingModule();
+      await startApp();
       render();
 
-      expect(snackBar.openFromComponent).toHaveBeenCalledTimes(1);
+      expect(snackBar.openFromComponent).toHaveBeenCalledTimes(2);
     });
   });
 

@@ -12,7 +12,19 @@ describe('SeoService', () => {
     meta = TestBed.inject(Meta);
   });
 
-  afterEach(() => document.head.querySelector('link[rel="canonical"]')?.remove());
+  const originalTitle = document.title;
+  const tagSelectors = ['meta[name="description"]', 'meta[property^="og:"]', 'meta[name^="twitter:"]', 'link[rel="canonical"]'];
+  const tagsBefore = new Set(tagSelectors.flatMap((selector) => Array.from(document.head.querySelectorAll(selector))));
+
+  // The service writes to the real <head>; undo it so later specs see the page as it was.
+  afterEach(() => {
+    document.title = originalTitle;
+    for (const tag of tagSelectors.flatMap((selector) => Array.from(document.head.querySelectorAll(selector)))) {
+      if (!tagsBefore.has(tag)) {
+        tag.remove();
+      }
+    }
+  });
 
   const canonical = () => document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.getAttribute('href');
 
