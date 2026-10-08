@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { fakeIntersectionObserver } from '../../testing/fake-intersection-observer';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
@@ -7,10 +8,10 @@ import { of } from 'rxjs';
 import { CoursesComponent } from './courses.component';
 import { CourseService } from './services/courses.service';
 import { CoursesStateService } from './services/courses-state.service';
-import { Course } from './interfaces/courses.interface';
+import { Course } from './course.model';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
-import { DialogComponent } from './dialog/dialog.component';
-import { SnackBarComponent } from './snack-bar/snackbar.component';
+import { CertificateSheetComponent } from './certificate-sheet/certificate-sheet.component';
+import { CourseHintComponent } from './course-hint/course-hint.component';
 
 const courses = Array.from({ length: 23 }, (_, i) => ({
   field: i % 2 ? 'Java' : 'Frontend',
@@ -151,7 +152,7 @@ describe('CoursesComponent behavior', () => {
 
       component.openDialog(courses[3]);
 
-      expect(bottomSheet.open as jasmine.Spy).toHaveBeenCalledOnceWith(DialogComponent, {
+      expect(bottomSheet.open as jasmine.Spy).toHaveBeenCalledOnceWith(CertificateSheetComponent, {
         data: courses[3],
         panelClass: 'certificate-sheet',
         ariaLabel: courses[3].name
@@ -171,7 +172,7 @@ describe('CoursesComponent behavior', () => {
     it('shows the hint in the top right corner on the first visit', () => {
       render();
 
-      expect(snackBar.openFromComponent as jasmine.Spy).toHaveBeenCalledOnceWith(SnackBarComponent, {
+      expect(snackBar.openFromComponent as jasmine.Spy).toHaveBeenCalledOnceWith(CourseHintComponent, {
         horizontalPosition: 'end',
         verticalPosition: 'top',
         panelClass: 'course-hint'
@@ -200,6 +201,17 @@ describe('CoursesComponent behavior', () => {
   });
 
   describe('mobile infinite loading', () => {
+    it('loads the next 5 cards when the end of the list comes into view', fakeAsync(() => {
+      const viewport = fakeIntersectionObserver();
+      render();
+      fixture.detectChanges();
+
+      viewport.report(true);
+      tick(600);
+
+      expect(component.mobileCourses.length).toBe(10);
+    }));
+
     it('starts with a first batch of 5 cards', () => {
       render();
 

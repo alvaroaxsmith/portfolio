@@ -1,4 +1,4 @@
-import { Dialog } from './dialog/dialog.component';
+import { NavMenuSheetComponent } from './nav-menu-sheet/nav-menu-sheet.component';
 import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
@@ -46,7 +46,7 @@ export class NavbarComponent {
   }
 
   openDialog() {
-    this.bottomSheet.open(Dialog, {
+    this.bottomSheet.open(NavMenuSheetComponent, {
       panelClass: 'mobile-nav-sheet',
       ariaLabel: 'Menu de navegação'
     });

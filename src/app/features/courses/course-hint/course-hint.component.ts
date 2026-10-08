@@ -8,7 +8,7 @@ export const COURSE_HINT_DURATION_MS = 5000;
 const LEAVE_ANIMATION_MS = 280;
 
 @Component({
-    selector: 'snack-bar',
+    selector: 'app-course-hint',
     imports: [MatButtonModule, MatIconModule, TranslateModule],
     template: `
     <div class="hint">
@@ -30,7 +30,7 @@ const LEAVE_ANIMATION_MS = 280;
       </button>
     </div>
   `,
-    styleUrls: ['./snack-bar.scss'],
+    styleUrls: ['./course-hint.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     host: {
         '[class.is-ready]': 'ready()',
@@ -42,8 +42,8 @@ const LEAVE_ANIMATION_MS = 280;
         '(focusout)': 'resume()'
     }
 })
-export class SnackBarComponent implements AfterViewInit, OnDestroy {
-  private readonly snackBarRef = inject<MatSnackBarRef<SnackBarComponent>>(MatSnackBarRef);
+export class CourseHintComponent implements AfterViewInit, OnDestroy {
+  private readonly snackBarRef = inject<MatSnackBarRef<CourseHintComponent>>(MatSnackBarRef);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   protected readonly ready = signal(false);

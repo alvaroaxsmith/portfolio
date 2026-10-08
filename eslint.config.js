@@ -30,7 +30,7 @@ module.exports = defineConfig([
       // Ratchet: rules the codebase does not meet yet. Each one becomes "error"
       // once the task that fixes it lands, so new violations never get in.
       "@angular-eslint/component-selector": [
-        "warn", // T-6.1 rename snack-bar selector
+        "error",
         { type: "element", prefix: "app", style: "kebab-case" },
       ],
     },

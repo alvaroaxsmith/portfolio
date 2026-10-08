@@ -1,7 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { CourseService } from '../services/courses.service';
-import { Course } from '../interfaces/courses.interface';
+import { Course } from '../course.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { tap } from 'rxjs/operators';
 import { AnalyticsService } from '../../../core/analytics/analytics.service';
@@ -11,15 +11,15 @@ import { SkeletonComponent } from '../../../shared/skeleton/skeleton.component';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-    selector: 'app-dialog',
-    templateUrl: './dialog.component.html',
-    styleUrls: ['./dialog.component.scss'],
+    selector: 'app-certificate-sheet',
+    templateUrl: './certificate-sheet.component.html',
+    styleUrls: ['./certificate-sheet.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatIconButton, MatIcon, SkeletonComponent, TranslateModule]
 })
-export class DialogComponent implements OnInit {
+export class CertificateSheetComponent implements OnInit {
   readonly rowData = signal(inject<Course>(MAT_BOTTOM_SHEET_DATA));
-  private bottomSheetRef = inject<MatBottomSheetRef<DialogComponent>>(MatBottomSheetRef);
+  private bottomSheetRef = inject<MatBottomSheetRef<CertificateSheetComponent>>(MatBottomSheetRef);
   private courseService = inject(CourseService);
   private domSanitizer = inject(DomSanitizer);
   private analytics = inject(AnalyticsService);

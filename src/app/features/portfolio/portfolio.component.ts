@@ -1,7 +1,7 @@
 import { Component, OnInit, ElementRef, OnDestroy, ChangeDetectionStrategy, DestroyRef, effect, inject, untracked, viewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProjectsService } from './services/projects.service';
-import { Project } from './Project';
+import { Project } from './project.model';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
