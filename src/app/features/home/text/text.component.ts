@@ -6,17 +6,17 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
     templateUrl: './text.component.html',
     // The word disappears at once, and the next one slides in from the left.
     styles: `
-      .palavra-container {
+      .rotating-word {
         opacity: 0;
         transform: translateX(-100px);
       }
-      .palavra-container.mostrar {
+      .rotating-word.shown {
         opacity: 1;
         transform: none;
         transition: opacity 1.5s, transform 1.5s;
       }
       @media (prefers-reduced-motion: reduce) {
-        .palavra-container.mostrar {
+        .rotating-word.shown {
           transition: none;
         }
       }
@@ -27,15 +27,15 @@ import { TranslateService, TranslateModule } from '@ngx-translate/core';
 export class TextComponent implements OnInit, OnDestroy {
   private readonly translate = inject(TranslateService);
 
-  palavras: string[] = ['Full Cycle Development', 'GenAI'];
-  readonly estadoAnimacao = signal('inicial');
-  readonly indiceAtual = signal(0);
+  words: string[] = ['Full Cycle Development', 'GenAI'];
+  readonly animationState = signal('hidden');
+  readonly currentIndex = signal(0);
   private timer?: ReturnType<typeof setTimeout>;
   private frame?: number;
 
   ngOnInit() {
     this.timer = setTimeout(() => {
-      this.trocarPalavras();
+      this.showNextWord();
     }, 1000);
   }
 
@@ -46,22 +46,19 @@ export class TextComponent implements OnInit, OnDestroy {
     }
   }
 
-  trocarPalavras() {
-    this.estadoAnimacao.set('inicial');
+  showNextWord() {
+    this.animationState.set('hidden');
     this.timer = setTimeout(() => {
-      this.indiceAtual.set((this.indiceAtual() + 1) % this.palavras.length);
-      this.estadoAnimacao.set('mostrar');
+      this.currentIndex.set((this.currentIndex() + 1) % this.words.length);
+      this.animationState.set('shown');
 
       this.frame = requestAnimationFrame(() => {
         this.timer = setTimeout(() => {
-          this.estadoAnimacao.set('inicial');
-          this.trocarPalavras();
+          this.animationState.set('hidden');
+          this.showNextWord();
         }, 4000);
       });
     }, 100);
   }
 
-  getTranslatedWord(word: string): string {
-    return this.translate.instant(word);
-  }
 }

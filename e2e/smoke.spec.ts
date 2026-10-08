@@ -51,7 +51,7 @@ test('switching to English translates the page and is remembered after a reload'
 
 test('entrance animations end with the content fully visible', async ({ page }) => {
   await open(page, '/');
-  await expect(page.locator('app-text .palavra-container.mostrar')).toHaveCSS('opacity', '1', { timeout: 5_000 });
+  await expect(page.locator('app-text .rotating-word.shown')).toHaveCSS('opacity', '1', { timeout: 5_000 });
 
   await page.getByRole('navigation', { name: 'Navegação principal' }).locator('a[href="/portfolio"]').click();
   const firstCard = page.locator('.project-wrapper').first();
