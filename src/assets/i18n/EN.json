@@ -262,5 +262,14 @@
     "chunkLoad": {
         "failed": "This page couldn't be loaded. Reload to get the latest version of the site.",
         "reload": "Reload"
-    }
+    },
+    "Análise de Dados": "Data Analysis",
+    "Análise de Processos": "Process Analysis",
+    "Arquitetura de Software": "Software Architecture",
+    "Boas Práticas": "Best Practices",
+    "Cronoanálise": "Time Study",
+    "Dados Operacionais": "Operational Data",
+    "Melhoria Contínua": "Continuous Improvement",
+    "Microserviços": "Microservices",
+    "Revisão de código": "Code Review"
 }

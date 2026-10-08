@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import mermaid from 'mermaid';
 import { ProfessionalTimelineComponent } from './professional-timeline.component';
 
@@ -267,6 +267,20 @@ describe('ProfessionalTimelineComponent', () => {
 
       expect(diagram(1).querySelector('p')?.textContent).toBe('timeline.mermaid.error');
     });
+  });
+
+  it('shows technologies and skills in the visitor\'s language', () => {
+    render(false);
+    const translate = TestBed.inject(TranslateService);
+    translate.setTranslation('EN', { 'Análise de Dados': 'Data Analysis', 'Melhoria Contínua': 'Continuous Improvement' });
+    translate.use('EN');
+    fixture.detectChanges();
+
+    const chips = Array.from(fixture.nativeElement.querySelectorAll('mat-card.timeline-content')[0].querySelectorAll('.tech-tag') as NodeListOf<HTMLElement>)
+      .map((chip) => chip.textContent?.trim());
+    expect(chips).toContain('Data Analysis');
+    expect(chips).toContain('Continuous Improvement');
+    expect(chips).not.toContain('Análise de Dados');
   });
 
   it('builds each journey from the chosen experience to the most recent one', () => {

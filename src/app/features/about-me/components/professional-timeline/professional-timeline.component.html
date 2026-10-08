@@ -49,7 +49,7 @@
                           @for (tech of experiencia.tecnologias; track tech) {
                             <span
                               class="tech-tag"
-                              >{{ tech }}</span
+                              >{{ tech | translate }}</span
                               >
                             }
                           </div>
@@ -58,7 +58,7 @@
                             @for (comp of experiencia.competencias; track comp) {
                               <span
                                 class="tech-tag skill-tag"
-                                >{{ comp }}</span
+                                >{{ comp | translate }}</span
                                 >
                               }
                             </div>

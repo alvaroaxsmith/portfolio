@@ -262,5 +262,14 @@
     "chunkLoad": {
         "failed": "Não foi possível carregar esta página. Recarregue para obter a versão mais recente do site.",
         "reload": "Recarregar"
-    }
+    },
+    "Análise de Dados": "Análise de Dados",
+    "Análise de Processos": "Análise de Processos",
+    "Arquitetura de Software": "Arquitetura de Software",
+    "Boas Práticas": "Boas Práticas",
+    "Cronoanálise": "Cronoanálise",
+    "Dados Operacionais": "Dados Operacionais",
+    "Melhoria Contínua": "Melhoria Contínua",
+    "Microserviços": "Microserviços",
+    "Revisão de código": "Revisão de código"
 }
