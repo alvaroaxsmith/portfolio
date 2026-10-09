@@ -258,5 +258,9 @@
             "title": "Contact | Alvaro Ferreira",
             "description": "Get in touch to discuss technical innovation, engineering leadership, and scalability."
         }
+    },
+    "chunkLoad": {
+        "failed": "This page couldn't be loaded. Reload to get the latest version of the site.",
+        "reload": "Reload"
     }
 }

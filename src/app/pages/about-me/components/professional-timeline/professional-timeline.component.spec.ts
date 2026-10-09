@@ -123,9 +123,12 @@ describe('ProfessionalTimelineComponent', () => {
   });
 
   describe('when the screen changes size', () => {
-    let notifyChange: (event: { matches: boolean }) => void;
+    type Listener = (event: { matches: boolean }) => void;
+    let listeners: Set<Listener>;
+    const notifyChange = (event: { matches: boolean }) => listeners.forEach((listener) => listener(event));
 
     beforeEach(() => {
+      listeners = new Set();
       const realMatchMedia = window.matchMedia.bind(window);
       spyOn(window, 'matchMedia').and.callFake((query: string) => {
         if (query !== '(max-width: 480px)') {
@@ -133,11 +136,23 @@ describe('ProfessionalTimelineComponent', () => {
         }
         const phoneQuery = realMatchMedia(query);
         spyOnProperty(phoneQuery, 'matches', 'get').and.returnValue(false);
-        spyOn(phoneQuery, 'addEventListener').and.callFake(((_type: string, listener: (event: { matches: boolean }) => void) => {
-          notifyChange = listener;
+        spyOn(phoneQuery, 'addEventListener').and.callFake(((_type: string, listener: Listener) => {
+          listeners.add(listener);
         }) as MediaQueryList['addEventListener']);
+        spyOn(phoneQuery, 'removeEventListener').and.callFake(((_type: string, listener: Listener) => {
+          listeners.delete(listener);
+        }) as MediaQueryList['removeEventListener']);
         return phoneQuery;
       });
+    });
+
+    it('stops reacting to screen size changes once removed from the page', () => {
+      render(false);
+
+      fixture.destroy();
+      notifyChange({ matches: true });
+
+      expect(component.isMobile).toBeFalse();
     });
 
     it('closes the journey when the screen becomes a phone', () => {
@@ -210,6 +225,14 @@ describe('ProfessionalTimelineComponent', () => {
 
     const diagram = (id: number) =>
       fixture.nativeElement.querySelector(`[data-experience-id="${id}"]`) as HTMLElement;
+
+    it('renders diagrams in strict mode, so diagram text can never run scripts', () => {
+      const initialize = spyOn(mermaid, 'initialize');
+
+      renderJourney();
+
+      expect(initialize).toHaveBeenCalledWith(jasmine.objectContaining({ securityLevel: 'strict' }));
+    });
 
     it('does nothing while the journey is closed', async () => {
       renderJourney();

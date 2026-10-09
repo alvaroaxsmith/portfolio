@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, Subject, of, throwError } from 'rxjs';
 import { AnalyticsService } from '../../services/analytics.service';
 import { Project } from './Project';
 import { PortfolioComponent } from './portfolio.component';
@@ -219,6 +219,28 @@ describe('PortfolioComponent', () => {
       expect(analytics.track).toHaveBeenCalledWith('projects_filter', { tech: 'all' });
       expect(analytics.track).toHaveBeenCalledWith('projects_sort', { sort: 'oldest' });
       expect(analytics.track).toHaveBeenCalledWith('projects_view_toggle', { view: 'grid' });
+    });
+  });
+
+  describe('when the page is left before the projects arrive', () => {
+    it('ignores the projects that arrive later', () => {
+      const response = new Subject<Project[]>();
+      render(response);
+
+      fixture.destroy();
+      response.next(makeProjects(3));
+
+      expect(component.allProjects).toEqual([]);
+    });
+
+    it('ignores a failure that arrives later', () => {
+      const response = new Subject<Project[]>();
+      render(response);
+
+      fixture.destroy();
+      response.error(new Error('offline'));
+
+      expect(component.loadError).toBeFalse();
     });
   });
 });

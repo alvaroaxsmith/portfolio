@@ -72,4 +72,15 @@ describe('HomeComponent', () => {
     expect(component.isLoadingImage).toBeFalse();
     expect(component.imageUrl).toBe('https://avatars/me.png');
   });
+
+  it('falls back to the public GitHub profile picture when the API fails, instead of loading forever', async () => {
+    spyOn(console, 'error');
+    const http = TestBed.inject(HttpTestingController);
+    http.expectOne('https://api.github.com/users/alvaroaxsmith').flush({ message: 'rate limited' }, { status: 403, statusText: 'Forbidden' });
+    await new Promise((resolve) => setTimeout(resolve));
+    fixture.detectChanges();
+
+    expect(component.isLoadingImage).toBeFalse();
+    expect(fixture.nativeElement.querySelector('.hero-media img').getAttribute('src')).toBe('https://github.com/alvaroaxsmith.png');
+  });
 });

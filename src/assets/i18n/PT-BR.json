@@ -258,5 +258,9 @@
             "title": "Contato | Alvaro Ferreira",
             "description": "Entre em contato para discutirmos inovação técnica, liderança em engenharia e escalabilidade."
         }
+    },
+    "chunkLoad": {
+        "failed": "Não foi possível carregar esta página. Recarregue para obter a versão mais recente do site.",
+        "reload": "Recarregar"
     }
 }

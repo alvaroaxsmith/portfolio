@@ -2,30 +2,24 @@ import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { Subscription } from 'rxjs';
 import { AppComponent } from './app.component';
 import { AnalyticsService } from './services/analytics.service';
-import { ChunkLoadRecoveryService } from './services/chunk-load-recovery.service';
 
 @Component({ template: '', standalone: true })
 class StubPageComponent {}
 
 describe('AppComponent', () => {
   let analytics: jasmine.SpyObj<AnalyticsService>;
-  let recovery: jasmine.SpyObj<ChunkLoadRecoveryService>;
 
   beforeEach(async () => {
     localStorage.removeItem('portfolio:lang');
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track', 'pageView']);
-    recovery = jasmine.createSpyObj<ChunkLoadRecoveryService>('ChunkLoadRecoveryService', ['watch']);
-    recovery.watch.and.returnValue(new Subscription());
     await TestBed.configureTestingModule({
       declarations: [AppComponent],
       imports: [TranslateModule.forRoot()],
       providers: [
         provideRouter([{ path: '**', component: StubPageComponent }]),
-        { provide: AnalyticsService, useValue: analytics },
-        { provide: ChunkLoadRecoveryService, useValue: recovery }
+        { provide: AnalyticsService, useValue: analytics }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
@@ -85,11 +79,5 @@ describe('AppComponent', () => {
     await TestBed.inject(Router).navigateByUrl('/portfolio?utm_source=linkedin');
 
     expect(analytics.pageView).toHaveBeenCalledWith('/portfolio', jasmine.any(String), jasmine.any(String));
-  });
-
-  it('starts watching for failed page downloads after a deploy', () => {
-    render();
-
-    expect(recovery.watch).toHaveBeenCalledTimes(1);
   });
 });

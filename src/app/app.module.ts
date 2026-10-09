@@ -22,6 +22,7 @@ import { DialogComponent } from './pages/courses/dialog/dialog.component';
 import { SkeletonModule } from './components/skeleton/skeleton.module';
 import { ConsentBannerComponent } from './components/consent-banner/consent-banner.component';
 import { DEFAULT_LANG, SUPPORTED_LANGS, getInitialLang } from './services/language-storage';
+import { provideChunkLoadRecovery } from './services/chunk-load-recovery.service';
 
 @NgModule({ declarations: [
         AppComponent,
@@ -53,6 +54,7 @@ import { DEFAULT_LANG, SUPPORTED_LANGS, getInitialLang } from './services/langua
             multi: true,
         },
         provideHttpClient(withXhr(), withInterceptorsFromDi()),
+        provideChunkLoadRecovery(),
     ] })
 export class AppModule {}
 

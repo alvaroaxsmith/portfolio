@@ -39,4 +39,12 @@ describe('ImageService', () => {
 
     await expectAsync(image).toBeRejectedWithError('Failed to load image');
   });
+
+  it('keeps the original failure as the cause of the rejection', async () => {
+    const image = service.getImage(0);
+    http.expectOne(profileUrl).flush({ message: 'rate limited' }, { status: 403, statusText: 'Forbidden' });
+
+    const error = await image.catch((e: Error) => e);
+    expect((error as Error).cause).toEqual(jasmine.objectContaining({ status: 403 }));
+  });
 });

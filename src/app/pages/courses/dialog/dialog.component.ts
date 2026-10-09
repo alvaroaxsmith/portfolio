@@ -57,7 +57,7 @@ export class DialogComponent implements OnInit {
   }
 
   onFrameLoad(event: Event): void {
-    if (!(event.target as HTMLIFrameElement).getAttribute('src')) {
+    if (showsBlankPage(event.target as HTMLIFrameElement)) {
       return;
     }
     this.isFrameLoaded = true;
@@ -68,7 +68,34 @@ export class DialogComponent implements OnInit {
   }
 
   private setUrls(link: string): void {
+    if (!isCertificateUrl(link)) {
+      return;
+    }
     this.safeUrl = this.getSafeUrl(link);
     this.externalUrl = link.replace('/preview', '/view');
+  }
+}
+
+const CERTIFICATE_HOST = 'drive.google.com';
+
+/** Links come from an external API and bypass Angular's sanitizer, so only Google Drive over HTTPS is trusted. */
+function isCertificateUrl(link: string): boolean {
+  try {
+    const url = new URL(link);
+    return url.protocol === 'https:' && url.hostname === CERTIFICATE_HOST;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * Browsers report a load for the iframe's initial blank page, sometimes only after the certificate address is set.
+ * Once the certificate is in, the frame is cross-origin and reading its location throws.
+ */
+function showsBlankPage(iframe: HTMLIFrameElement): boolean {
+  try {
+    return iframe.contentWindow?.location.href === 'about:blank';
+  } catch {
+    return false;
   }
 }
