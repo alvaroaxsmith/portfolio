@@ -94,6 +94,13 @@ test.describe('courses', () => {
 
       await expect(page.getByRole('heading', { level: 1 })).toHaveText('Aprendizado contínuo');
     });
+
+    test.fixme('stops loading and tells the visitor (#72)', async ({ page }) => {
+      await open(page, '/courses');
+
+      await expect(page.getByRole('alert')).toBeVisible();
+      await expect(page.locator('app-courses-skeleton')).toHaveCount(0);
+    });
   });
 });
 

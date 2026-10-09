@@ -1,3 +1,4 @@
+import { join } from 'node:path';
 import { test as base, expect, Page } from '@playwright/test';
 
 export const courses = [
@@ -29,7 +30,11 @@ export const repos = [
 export interface ApiOptions {
   githubFails?: boolean;
   coursesFail?: boolean;
+  /** Lets Google Fonts through, so screenshots show the real typography and Material icons. */
+  realFonts?: boolean;
 }
+
+const AVATAR_URL = 'https://avatars.githubusercontent.com/u/0';
 
 /** Fakes every third-party call so the suite never depends on GitHub, json-server, Google or GTM being up. */
 export async function mockApis(page: Page, options: ApiOptions = {}): Promise<void> {
@@ -37,10 +42,14 @@ export async function mockApis(page: Page, options: ApiOptions = {}): Promise<vo
     (url) => url.hostname !== 'localhost',
     (route) => route.fulfill({ status: 204, body: '' })
   );
+  if (options.realFonts) {
+    await page.route(/^https:\/\/fonts\.(googleapis|gstatic)\.com\//, (route) => route.continue());
+  }
+  await page.route(AVATAR_URL, (route) => route.fulfill({ path: join(__dirname, 'assets', 'avatar.png') }));
   await page.route('https://api.github.com/users/alvaroaxsmith', (route) =>
     options.githubFails
       ? route.fulfill({ status: 403, json: { message: 'rate limited' } })
-      : route.fulfill({ json: { avatar_url: 'http://localhost/assets/avatar.png' } })
+      : route.fulfill({ json: { avatar_url: AVATAR_URL } })
   );
   await page.route('https://api.github.com/users/alvaroaxsmith/repos**', (route) =>
     options.githubFails ? route.fulfill({ status: 403, json: { message: 'rate limited' } }) : route.fulfill({ json: repos })
@@ -54,6 +63,18 @@ export async function mockApis(page: Page, options: ApiOptions = {}): Promise<vo
 export async function open(page: Page, path: string): Promise<void> {
   await page.goto(path);
   await expect(page.locator('main#main-content')).toBeVisible({ timeout: 15_000 });
+}
+
+/** Waits for every running transition and finite animation, so visibility is judged on the final frame. */
+export async function settled(page: Page): Promise<void> {
+  await page.evaluate(() =>
+    Promise.all(
+      document
+        .getAnimations()
+        .filter((animation) => animation.effect?.getComputedTiming().iterations !== Infinity)
+        .map((animation) => animation.finished.catch(() => undefined))
+    )
+  );
 }
 
 export const test = base.extend<{ api: ApiOptions }>({
