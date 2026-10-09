@@ -4,6 +4,8 @@ Portfólio pessoal bilíngue (PT-BR/EN) em Angular: apresentação, trajetória 
 
 Este README descreve as especificações técnicas do projeto e as regras que toda mudança deve respeitar.
 
+> **Como o projeto é desenvolvido:** o fluxo com agentes (issue → agente → PR → gates no CI → preview → aprovação humana → merge → deploy), os gates de qualidade, as skills usadas e as regras do projeto estão na **[wiki](https://github.com/alvaroaxsmith/portfolio/wiki)**.
+
 ## Stack
 
 | Camada | Tecnologia |
