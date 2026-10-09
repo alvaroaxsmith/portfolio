@@ -1,0 +1,32 @@
+# One grouped pull request per ecosystem and week, instead of one per package, so each update runs the
+# quality gate once. Security fixes are grouped too and still open as soon as an alert appears.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+      day: monday
+    open-pull-requests-limit: 3
+    groups:
+      npm-security:
+        applies-to: security-updates
+        patterns: ['*']
+      npm-minor-and-patch:
+        applies-to: version-updates
+        update-types: [minor, patch]
+        patterns: ['*']
+    ignore:
+      # Major versions change APIs and rendering; they are planned as their own issues (see the milestone).
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
+      # Pinned on purpose: the visual references are rendered with this exact version (see CLAUDE.md).
+      - dependency-name: '@playwright/test'
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      actions:
+        patterns: ['*']
