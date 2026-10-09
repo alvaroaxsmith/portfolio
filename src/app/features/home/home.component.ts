@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { ImageService } from './services/image.service';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
@@ -15,18 +15,16 @@ const FALLBACK_IMAGE_URL = `https://github.com/${environment.githubUser}.png`;
     selector: 'app-home',
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [TextComponent, MatButton, SkeletonComponent, FooterComponent, TranslateModule]
 })
 export class HomeComponent implements OnInit {
-  isLoadingImage = true;
-  imageUrl: string | undefined;
+  private translate = inject(TranslateService);
+  private imageService = inject(ImageService);
+  private analytics = inject(AnalyticsService);
 
-  constructor(
-    private translate: TranslateService,
-    private imageService: ImageService,
-    private analytics: AnalyticsService
-  ) {}
+  readonly isLoadingImage = signal(true);
+  readonly imageUrl = signal<string | undefined>(undefined);
 
   trackCvDownload(): void {
     this.analytics.track('cv_download', { language: this.translate.currentLang });
@@ -39,13 +37,13 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.imageService.getImage()
       .then(url => {
-        this.isLoadingImage = false;
-        this.imageUrl = url;
+        this.isLoadingImage.set(false);
+        this.imageUrl.set(url);
       })
       .catch(error => {
         console.error('Error loading image:', error);
-        this.imageUrl = FALLBACK_IMAGE_URL;
-        this.isLoadingImage = false;
+        this.imageUrl.set(FALLBACK_IMAGE_URL);
+        this.isLoadingImage.set(false);
       });
   }
 }

@@ -1,7 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { provideRouter } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
@@ -16,7 +15,7 @@ describe('HomeComponent', () => {
   beforeEach(async () => {
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track', 'openConsentBanner'], { enabled: false });
     await TestBed.configureTestingModule({
-      imports: [HomeComponent, TranslateModule.forRoot(), NoopAnimationsModule],
+      imports: [HomeComponent, TranslateModule.forRoot()],
       providers: [
         provideRouter([]),
         provideHttpClient(),
@@ -68,8 +67,8 @@ describe('HomeComponent', () => {
     http.expectOne('https://api.github.com/users/alvaroaxsmith').flush({ avatar_url: 'https://avatars/me.png' });
     await new Promise((resolve) => setTimeout(resolve));
 
-    expect(component.isLoadingImage).toBeFalse();
-    expect(component.imageUrl).toBe('https://avatars/me.png');
+    expect(component.isLoadingImage()).toBeFalse();
+    expect(component.imageUrl()).toBe('https://avatars/me.png');
   });
 
   it('falls back to the public GitHub profile picture when the API fails, instead of loading forever', async () => {
@@ -79,7 +78,7 @@ describe('HomeComponent', () => {
     await new Promise((resolve) => setTimeout(resolve));
     fixture.detectChanges();
 
-    expect(component.isLoadingImage).toBeFalse();
+    expect(component.isLoadingImage()).toBeFalse();
     expect(fixture.nativeElement.querySelector('.hero-media img').getAttribute('src')).toBe('https://github.com/alvaroaxsmith.png');
   });
 });

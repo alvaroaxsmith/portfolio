@@ -8,9 +8,9 @@
         <div class="timeline-line"></div>
         <div class="timeline-icons">
             @for (exp of experiencias; track exp; let i = $index) {
-            <button type="button" class="icon-wrapper" [class.active]="!isJourneyVisible && i === currentIndex" [class.selected-for-journey]="
-          isJourneyVisible && i === journeyCurrentIndex
-          " (click)="isJourneyVisible ? handleIconClickInJourneyView(exp) : goTo(i)" [matTooltip]="exp.tooltip || exp.empresa">
+            <button type="button" class="icon-wrapper" [class.active]="!isJourneyVisible() && i === currentIndex()" [class.selected-for-journey]="
+          isJourneyVisible() && i === journeyCurrentIndex()
+          " (click)="isJourneyVisible() ? handleIconClickInJourneyView(exp) : goTo(i)" [matTooltip]="exp.tooltip || exp.empresa">
                 <div class="timeline-icon">
                     {{ i + 1 }}
                 </div>
@@ -18,13 +18,13 @@
         </div>
     </div>
 
-    <div class="views-container" [class.journey-view-active]="isJourneyVisible">
+    <div class="views-container" [class.journey-view-active]="isJourneyVisible()">
         <div class="timeline-carousel-section">
             <div class="carousel-wrapper">
-                <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex * 100 + '%)'">
+                <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'">
                     @for (experiencia of experiencias; track experiencia) {
                     <div class="carousel-item">
-                        <mat-card class="timeline-content" [class.is-interactive]="!isMobile" (click)="selecionarExperiencia(experiencia)" (keydown)="handleActionKey($event, () => selecionarExperiencia(experiencia))" [attr.tabindex]="isMobile ? null : 0">
+                        <mat-card class="timeline-content" [class.is-interactive]="!isMobile()" (click)="selecionarExperiencia(experiencia)" (keydown)="handleActionKey($event, () => selecionarExperiencia(experiencia))" [attr.tabindex]="isMobile() ? null : 0">
                             <mat-card-header>
                                 <mat-card-title>{{ experiencia.cargo | translate }}
                                 </mat-card-title>
@@ -74,9 +74,9 @@
                 <div class="mermaid-journey-wrapper">
                   <div
                     class="mermaid-journey-track"
-                    [style.transform]="'translateX(-' + journeyCurrentIndex * 100 + '%)'"
+                    [style.transform]="'translateX(-' + journeyCurrentIndex() * 100 + '%)'"
                     >
-                    @for (timeline of timelineDefinitions; track timeline) {
+                    @for (timeline of timelineDefinitions(); track timeline) {
                       <div
                         class="mermaid-journey-item"
                         >

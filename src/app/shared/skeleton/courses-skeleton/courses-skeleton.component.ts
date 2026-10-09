@@ -1,4 +1,4 @@
-import { Component, Input, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, computed, input } from '@angular/core';
 import { SkeletonComponent } from '../skeleton.component';
 
 @Component({
@@ -6,16 +6,13 @@ import { SkeletonComponent } from '../skeleton.component';
     templateUrl: './courses-skeleton.component.html',
     styleUrls: ['./courses-skeleton.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    host: { 'aria-hidden': 'true', '[class.cards]': "layout === 'cards'" },
+    host: { 'aria-hidden': 'true', '[class.cards]': "layout() === 'cards'" },
     imports: [SkeletonComponent]
 })
 export class CoursesSkeletonComponent {
-  @Input() layout: 'table' | 'cards' = 'table';
-  @Input() set count(value: number) {
-    this.items = Array.from({ length: value }, (_, i) => i);
-  }
-
-  items = Array.from({ length: 5 }, (_, i) => i);
+  readonly layout = input<'table' | 'cards'>('table');
+  readonly count = input(5);
+  readonly items = computed(() => Array.from({ length: this.count() }, (_, i) => i));
 
   nameWidth(index: number): string {
     return ['78%', '64%', '88%', '70%', '58%'][index % 5];

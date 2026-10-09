@@ -1,6 +1,5 @@
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { HttpClient, provideHttpClient } from '@angular/common/http';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideRouter } from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
@@ -18,7 +17,6 @@ export const appConfig: ApplicationConfig = {
     provideZoneChangeDetection(),
     provideRouter(routes),
     provideHttpClient(),
-    provideAnimationsAsync(),
     importProvidersFrom(
       TranslateModule.forRoot({
         loader: { provide: TranslateLoader, useFactory: httpTranslateLoader, deps: [HttpClient] }

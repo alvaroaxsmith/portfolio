@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { NavbarComponent } from './navbar.component';
@@ -10,7 +9,7 @@ describe('NavbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), NoopAnimationsModule, RouterModule.forRoot([]), NavbarComponent]
+    imports: [TranslateModule.forRoot(), RouterModule.forRoot([]), NavbarComponent]
 }).compileComponents();
 
     fixture = TestBed.createComponent(NavbarComponent);

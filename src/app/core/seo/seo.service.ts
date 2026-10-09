@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { Meta, Title } from '@angular/platform-browser';
 
@@ -14,11 +14,10 @@ interface SeoPayload {
   providedIn: 'root'
 })
 export class SeoService {
-  constructor(
-    private title: Title,
-    private meta: Meta,
-    @Inject(DOCUMENT) private document: Document
-  ) {}
+  private title = inject(Title);
+  private meta = inject(Meta);
+  private document = inject<Document>(DOCUMENT);
+
 
   update({ title, description, path }: SeoPayload) {
     const url = SITE_URL + (path === '/' ? '/' : path.replace(/\/$/, ''));

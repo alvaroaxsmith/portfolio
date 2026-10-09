@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
@@ -8,18 +8,18 @@ import { AnalyticsService } from '../../core/analytics/analytics.service';
     selector: 'app-contact',
     templateUrl: './contact.component.html',
     styleUrls: ['./contact.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [FontAwesomeModule, TranslateModule]
 })
 export class ContactComponent {
+  private analytics = inject(AnalyticsService);
+
 
   faGithub = faGithub;
   faLinkedin = faLinkedin;
   faEnvelope = faEnvelope;
   faLocation = faLocationDot;
   faPhone = faPhone;
-
-  constructor(private analytics: AnalyticsService) { }
 
   trackContact(channel: string): void {
     this.analytics.track('contact_click', { channel });

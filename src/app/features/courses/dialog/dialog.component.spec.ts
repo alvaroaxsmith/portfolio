@@ -57,7 +57,7 @@ describe('DialogComponent', () => {
   }
 
   it('keeps the skeleton until the certificate itself loads', () => {
-    expect(component.isFrameLoaded).toBeFalse();
+    expect(component.isFrameLoaded()).toBeFalse();
     expect(fixture.nativeElement.querySelector('app-skeleton')).not.toBeNull();
 
     const iframe: HTMLIFrameElement = fixture.nativeElement.querySelector('iframe');
@@ -65,7 +65,7 @@ describe('DialogComponent', () => {
     iframe.dispatchEvent(new Event('load'));
     fixture.detectChanges();
 
-    expect(component.isFrameLoaded).toBeTrue();
+    expect(component.isFrameLoaded()).toBeTrue();
     expect(fixture.nativeElement.querySelector('app-skeleton')).toBeNull();
   });
 
@@ -76,7 +76,7 @@ describe('DialogComponent', () => {
     iframe.dispatchEvent(new Event('load'));
     fixture.detectChanges();
 
-    expect(component.isFrameLoaded).toBeFalse();
+    expect(component.isFrameLoaded()).toBeFalse();
     expect(fixture.nativeElement.querySelector('app-skeleton')).not.toBeNull();
   });
 
@@ -114,7 +114,7 @@ describe('DialogComponent', () => {
   });
 
   it('opens the full Google Drive viewer in a new tab', () => {
-    expect(component.externalUrl).toBe('https://drive.google.com/file/d/abc/view?usp=sharing');
+    expect(component.externalUrl()).toBe('https://drive.google.com/file/d/abc/view?usp=sharing');
   });
 
   it('shows the course name, school and date in the header', () => {
@@ -169,14 +169,14 @@ describe('DialogComponent', () => {
     it('looks the course up and shows its certificate', () => {
       openWith({ name: '', link: 'Angular Avançado' }, [course, otherCourse]);
 
-      expect(component.rowData).toEqual(otherCourse);
-      expect(component.externalUrl).toBe('https://drive.google.com/file/d/xyz/view');
+      expect(component.rowData()).toEqual(otherCourse);
+      expect(component.externalUrl()).toBe('https://drive.google.com/file/d/xyz/view');
     });
 
     it('shows no certificate when the course is not found', () => {
       openWith({ name: '', link: 'Curso inexistente' }, [course]);
 
-      expect(component.safeUrl).toBeNull();
+      expect(component.safeUrl()).toBeNull();
       expect(fixture.nativeElement.querySelector('iframe')).toBeNull();
     });
   });

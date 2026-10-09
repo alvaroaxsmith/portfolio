@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment';
@@ -11,7 +11,8 @@ interface GitHubUserResponse {
   providedIn: 'root'
 })
 export class ImageService {
-  constructor(private http: HttpClient) { }
+  private http = inject(HttpClient);
+
 
   async getImage(): Promise<string> {
     try {

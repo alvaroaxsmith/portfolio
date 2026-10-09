@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatIconButton, MatButton } from '@angular/material/button';
@@ -9,14 +9,13 @@ import { RouterLink } from '@angular/router';
     selector: 'app-dialog',
     templateUrl: './dialog.component.html',
     styleUrls: ['./dialog.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatIconButton, MatIcon, MatButton, RouterLink, TranslateModule]
 })
 export class Dialog {
-  constructor(
-    public translate: TranslateService,
-    private bottomSheetRef: MatBottomSheetRef<Dialog>
-  ) {}
+  translate = inject(TranslateService);
+  private bottomSheetRef = inject<MatBottomSheetRef<Dialog>>(MatBottomSheetRef);
+
 
   switchLang(lang: string) {
     this.translate.use(lang);

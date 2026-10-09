@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { CourseService } from '../services/courses.service';
 import { Course } from '../interfaces/courses.interface';
@@ -14,24 +14,22 @@ import { TranslateModule } from '@ngx-translate/core';
     selector: 'app-dialog',
     templateUrl: './dialog.component.html',
     styleUrls: ['./dialog.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatIconButton, MatIcon, SkeletonComponent, TranslateModule]
 })
 export class DialogComponent implements OnInit {
-  safeUrl: SafeResourceUrl | null = null;
-  externalUrl: string | null = null;
-  isFrameLoaded = false;
+  readonly rowData = signal(inject<Course>(MAT_BOTTOM_SHEET_DATA));
+  private bottomSheetRef = inject<MatBottomSheetRef<DialogComponent>>(MatBottomSheetRef);
+  private courseService = inject(CourseService);
+  private domSanitizer = inject(DomSanitizer);
+  private analytics = inject(AnalyticsService);
 
-  constructor(
-    @Inject(MAT_BOTTOM_SHEET_DATA) public rowData: Course,
-    private bottomSheetRef: MatBottomSheetRef<DialogComponent>,
-    private courseService: CourseService,
-    private domSanitizer: DomSanitizer,
-    private analytics: AnalyticsService
-  ) { }
+  readonly safeUrl = signal<SafeResourceUrl | null>(null);
+  readonly externalUrl = signal<string | null>(null);
+  readonly isFrameLoaded = signal(false);
 
   trackOpenNewTab(): void {
-    this.analytics.track('certificate_open_new_tab', { course: this.rowData.name });
+    this.analytics.track('certificate_open_new_tab', { course: this.rowData().name });
   }
 
   ngOnInit(): void {
@@ -39,20 +37,20 @@ export class DialogComponent implements OnInit {
   }
 
   loadCourseData(): void {
-    if (this.rowData && !this.rowData.name) {
+    if (this.rowData() && !this.rowData().name) {
       this.courseService.getCourses()
         .pipe(
           tap(courses => {
-            const matchingCourse = courses.find(course => course.name === this.rowData.link);
+            const matchingCourse = courses.find(course => course.name === this.rowData().link);
             if (matchingCourse) {
-              this.rowData = matchingCourse;
+              this.rowData.set(matchingCourse);
               this.setUrls(matchingCourse.link);
             }
           })
         )
         .subscribe();
     } else {
-      this.setUrls(this.rowData.link);
+      this.setUrls(this.rowData().link);
     }
   }
 
@@ -64,7 +62,7 @@ export class DialogComponent implements OnInit {
     if (showsBlankPage(event.target as HTMLIFrameElement)) {
       return;
     }
-    this.isFrameLoaded = true;
+    this.isFrameLoaded.set(true);
   }
 
   dismiss(): void {
@@ -75,8 +73,8 @@ export class DialogComponent implements OnInit {
     if (!isCertificateUrl(link)) {
       return;
     }
-    this.safeUrl = this.getSafeUrl(link);
-    this.externalUrl = link.replace('/preview', '/view');
+    this.safeUrl.set(this.getSafeUrl(link));
+    this.externalUrl.set(link.replace('/preview', '/view'));
   }
 }
 

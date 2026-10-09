@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, HostBinding, HostListener, OnDestroy, AfterViewInit, ElementRef, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, OnDestroy, AfterViewInit, ElementRef, signal, inject } from '@angular/core';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -31,32 +31,27 @@ const LEAVE_ANIMATION_MS = 280;
     </div>
   `,
     styleUrls: ['./snack-bar.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    host: {
+        '[class.is-ready]': 'ready()',
+        '[class.is-leaving]': 'leaving()',
+        '[class.is-paused]': 'paused()',
+        '(mouseenter)': 'pause()',
+        '(focusin)': 'pause()',
+        '(mouseleave)': 'resume()',
+        '(focusout)': 'resume()'
+    }
 })
 export class SnackBarComponent implements AfterViewInit, OnDestroy {
-  private readonly ready = signal(false);
-  private readonly leaving = signal(false);
-  private readonly paused = signal(false);
+  private readonly snackBarRef = inject<MatSnackBarRef<SnackBarComponent>>(MatSnackBarRef);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  protected readonly ready = signal(false);
+  protected readonly leaving = signal(false);
+  protected readonly paused = signal(false);
   private fallbackTimer?: ReturnType<typeof setTimeout>;
   private readyFrame?: number;
   private readyDeadline = 0;
-
-  @HostBinding('class.is-ready') get isReady(): boolean {
-    return this.ready();
-  }
-
-  @HostBinding('class.is-leaving') get isLeaving(): boolean {
-    return this.leaving();
-  }
-
-  @HostBinding('class.is-paused') get isPaused(): boolean {
-    return this.paused();
-  }
-
-  constructor(
-    private readonly snackBarRef: MatSnackBarRef<SnackBarComponent>,
-    private readonly host: ElementRef<HTMLElement>
-  ) {}
 
   ngAfterViewInit(): void {
     this.readyDeadline = performance.now() + 500;
@@ -77,14 +72,10 @@ export class SnackBarComponent implements AfterViewInit, OnDestroy {
     }
   }
 
-  @HostListener('mouseenter')
-  @HostListener('focusin')
   pause(): void {
     this.paused.set(true);
   }
 
-  @HostListener('mouseleave')
-  @HostListener('focusout')
   resume(): void {
     this.paused.set(false);
   }

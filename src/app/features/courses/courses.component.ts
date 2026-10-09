@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef, ElementRef } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ElementRef, effect, inject, viewChild, signal } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -23,21 +23,27 @@ const MOBILE_LOAD_DELAY_MS = 600;
     selector: 'app-courses',
     templateUrl: './courses.component.html',
     styleUrls: ['./courses.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatFormField, MatLabel, MatInput, MatIcon, MatSuffix, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatSortHeader, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatNoDataRow, CoursesSkeletonComponent, MatPaginator, TranslateModule]
 })
 export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
+  private courseService = inject(CourseService);
+  private bottomSheet = inject(MatBottomSheet);
+  private snackBar = inject(MatSnackBar);
+  private analytics = inject(AnalyticsService);
+  readonly state = inject(CoursesStateService);
+
   private readonly destroy$ = new Subject<void>();
 
   displayedColumns: string[] = ['field', 'name', 'time', 'school', 'date'];
   dataSource = new MatTableDataSource<Course>();
-  isLoading = true;
+  readonly isLoading = signal(true);
 
   get visibleCourses(): Course[] {
     return this.dataSource.filter ? this.dataSource.filteredData : this.dataSource.data;
   }
 
-  mobileLoadingMore = false;
+  readonly mobileLoadingMore = signal(false);
   private mobileLoadTimer?: ReturnType<typeof setTimeout>;
   private mobileObserver?: IntersectionObserver;
   private mobileTriggerEl?: HTMLElement;
@@ -54,11 +60,17 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     return Math.min(MOBILE_BATCH_SIZE, this.visibleCourses.length - this.state.mobileCount);
   }
 
-  @ViewChild('mobileLoadTrigger') set mobileLoadTrigger(ref: ElementRef<HTMLElement> | undefined) {
+  private readonly mobileLoadTrigger = viewChild<ElementRef<HTMLElement>>('mobileLoadTrigger');
+
+  constructor() {
+    effect(() => this.observeMobileTrigger(this.mobileLoadTrigger()?.nativeElement));
+  }
+
+  private observeMobileTrigger(trigger: HTMLElement | undefined): void {
     if (this.mobileTriggerEl) {
       this.mobileObserver?.unobserve(this.mobileTriggerEl);
     }
-    this.mobileTriggerEl = ref?.nativeElement;
+    this.mobileTriggerEl = trigger;
     if (this.mobileTriggerEl) {
       this.mobileObserver ??= new IntersectionObserver((entries) => {
         if (entries.some(entry => entry.isIntersecting)) {
@@ -69,17 +81,8 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  @ViewChild(MatPaginator, { static: true }) paginator!: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort!: MatSort;
-
-  constructor(
-    private courseService: CourseService,
-    private bottomSheet: MatBottomSheet,
-    private snackBar: MatSnackBar,
-    private cdr: ChangeDetectorRef,
-    private analytics: AnalyticsService,
-    readonly state: CoursesStateService
-  ) { }
+  readonly paginator = viewChild.required(MatPaginator);
+  readonly sort = viewChild.required(MatSort);
 
   openDialog = (rowData: Course): void => {
     this.analytics.track('certificate_open', { course: rowData.name, school: rowData.school });
@@ -91,16 +94,18 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.sort.active = this.state.sortActive;
-    this.sort.direction = this.state.sortDirection;
-    this.paginator.pageSize = this.state.pageSize;
-    this.paginator.pageIndex = this.state.pageIndex;
+    const sort = this.sort();
+    const paginator = this.paginator();
+    sort.active = this.state.sortActive;
+    sort.direction = this.state.sortDirection;
+    paginator.pageSize = this.state.pageSize;
+    paginator.pageIndex = this.state.pageIndex;
 
-    this.sort.sortChange.pipe(takeUntil(this.destroy$)).subscribe(({ active, direction }) => {
+    sort.sortChange.pipe(takeUntil(this.destroy$)).subscribe(({ active, direction }) => {
       this.state.sortActive = active;
       this.state.sortDirection = direction;
     });
-    this.paginator.page.pipe(takeUntil(this.destroy$)).subscribe(({ pageIndex, pageSize }) => {
+    paginator.page.pipe(takeUntil(this.destroy$)).subscribe(({ pageIndex, pageSize }) => {
       this.state.pageIndex = pageIndex;
       this.state.pageSize = pageSize;
     });
@@ -132,16 +137,15 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   loadMoreMobileCourses(): void {
-    if (this.mobileLoadingMore || !this.hasMoreMobileCourses) {
+    if (this.mobileLoadingMore() || !this.hasMoreMobileCourses) {
       return;
     }
-    this.mobileLoadingMore = true;
-    this.cdr.detectChanges();
+    this.mobileLoadingMore.set(true);
 
     this.mobileLoadTimer = setTimeout(() => {
       this.state.mobileCount += MOBILE_BATCH_SIZE;
-      this.mobileLoadingMore = false;
-      this.cdr.detectChanges();
+      this.mobileLoadingMore.set(false);
+      // The observer reports on the next frame, after the new cards render, so it sees the trigger's new position.
       const trigger = this.mobileTriggerEl;
       if (trigger && this.mobileObserver) {
         this.mobileObserver.unobserve(trigger);
@@ -151,13 +155,13 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   loadData() {
-    this.isLoading = true;
+    this.isLoading.set(true);
     this.courseService.getCourses().pipe(takeUntil(this.destroy$)).subscribe(courses => {
       this.dataSource.data = courses;
       this.dataSource.filter = this.state.filter.trim().toLowerCase();
-      this.dataSource.sort = this.sort;
-      this.dataSource.paginator = this.paginator;
-      this.isLoading = false;
+      this.dataSource.sort = this.sort();
+      this.dataSource.paginator = this.paginator();
+      this.isLoading.set(false);
     });
   }
 
@@ -166,7 +170,7 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.state.filter = filterValue;
     this.dataSource.filter = filterValue.trim().toLowerCase();
     clearTimeout(this.mobileLoadTimer);
-    this.mobileLoadingMore = false;
+    this.mobileLoadingMore.set(false);
     this.state.mobileCount = MOBILE_BATCH_SIZE;
     this.dataSource.paginator?.firstPage();
   }

@@ -49,6 +49,16 @@ test('switching to English translates the page and is remembered after a reload'
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Who am I?');
 });
 
+test('entrance animations end with the content fully visible', async ({ page }) => {
+  await open(page, '/');
+  await expect(page.locator('app-text .palavra-container.mostrar')).toHaveCSS('opacity', '1', { timeout: 5_000 });
+
+  await page.getByRole('navigation', { name: 'Navegação principal' }).locator('a[href="/portfolio"]').click();
+  const firstCard = page.locator('.project-wrapper').first();
+  await expect(firstCard).toContainText('angular-portfolio');
+  await expect(firstCard).toHaveCSS('opacity', '1');
+});
+
 test('about me draws the career journey diagram when an experience is opened', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));

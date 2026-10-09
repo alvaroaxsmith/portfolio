@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { TranslateModule } from '@ngx-translate/core';
 import { AnalyticsService, ConsentChoice } from '../../analytics/analytics.service';
@@ -11,7 +11,8 @@ import { AnalyticsService, ConsentChoice } from '../../analytics/analytics.servi
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ConsentBannerComponent {
-  constructor(private readonly analytics: AnalyticsService) {}
+  private readonly analytics = inject(AnalyticsService);
+
 
   readonly visible = this.analytics.consentBannerVisible;
 

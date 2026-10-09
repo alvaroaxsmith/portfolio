@@ -1,5 +1,4 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
@@ -28,7 +27,7 @@ describe('CoursesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [NoopAnimationsModule, TranslateModule.forRoot(), CoursesComponent],
+    imports: [TranslateModule.forRoot(), CoursesComponent],
     providers: [
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MatBottomSheet, useValue: { open: () => null } },
@@ -58,7 +57,7 @@ describe('CoursesComponent', () => {
 
     await render();
 
-    expect(component.paginator.pageIndex).toBe(2);
+    expect(component.paginator().pageIndex).toBe(2);
     expect(component.dataSource.filteredData.length).toBe(23);
     const firstName = fixture.nativeElement.querySelector('td.mat-column-name').textContent.trim();
     expect(firstName).toBe('Course 10');
@@ -74,9 +73,9 @@ describe('CoursesComponent', () => {
     await render();
 
     expect(component.dataSource.filteredData.length).toBe(11);
-    expect(component.paginator.pageIndex).toBe(1);
-    expect(component.sort.active).toBe('name');
-    expect(component.sort.direction).toBe('desc');
+    expect(component.paginator().pageIndex).toBe(1);
+    expect(component.sort().active).toBe('name');
+    expect(component.sort().direction).toBe('desc');
     const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
     expect(input.value).toBe('java');
   });
@@ -87,7 +86,7 @@ describe('CoursesComponent', () => {
 
     await render();
 
-    expect(component.paginator.pageIndex).toBe(2);
+    expect(component.paginator().pageIndex).toBe(2);
   });
 
   it('tells the user when the search matches no course', async () => {
@@ -105,7 +104,7 @@ describe('CoursesComponent', () => {
   it('saves page changes into the state service', async () => {
     await render();
 
-    component.paginator.nextPage();
+    component.paginator().nextPage();
 
     expect(state.pageIndex).toBe(1);
   });
@@ -124,7 +123,7 @@ describe('CoursesComponent behavior', () => {
     snackBar = jasmine.createSpyObj<MatSnackBar>('MatSnackBar', ['openFromComponent']);
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track']);
     await TestBed.configureTestingModule({
-    imports: [NoopAnimationsModule, TranslateModule.forRoot(), CoursesComponent],
+    imports: [TranslateModule.forRoot(), CoursesComponent],
     providers: [
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MatBottomSheet, useValue: bottomSheet },
@@ -205,12 +204,12 @@ describe('CoursesComponent behavior', () => {
 
       component.loadMoreMobileCourses();
       fixture.detectChanges();
-      expect(component.mobileLoadingMore).toBeTrue();
+      expect(component.mobileLoadingMore()).toBeTrue();
       expect(fixture.nativeElement.querySelectorAll('.mobile-course-list app-courses-skeleton .course-card').length).toBe(5);
 
       tick(600);
       fixture.detectChanges();
-      expect(component.mobileLoadingMore).toBeFalse();
+      expect(component.mobileLoadingMore()).toBeFalse();
       expect(component.mobileCourses.length).toBe(10);
     }));
 

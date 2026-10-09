@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Input, HostBinding } from '@angular/core';
+import { Component, ChangeDetectionStrategy, input } from '@angular/core';
 import { SkeletonComponent } from '../skeleton.component';
 
 @Component({
@@ -6,13 +6,9 @@ import { SkeletonComponent } from '../skeleton.component';
     templateUrl: './project-card-skeleton.component.html',
     styleUrls: ['./project-card-skeleton.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    host: { 'aria-hidden': 'true' },
+    host: { 'aria-hidden': 'true', '[class.is-list]': "layout() === 'list'" },
     imports: [SkeletonComponent]
 })
 export class ProjectCardSkeletonComponent {
-  @Input() layout: 'grid' | 'list' = 'grid';
-
-  @HostBinding('class.is-list') get isList(): boolean {
-    return this.layout === 'list';
-  }
+  readonly layout = input<'grid' | 'list'>('grid');
 }

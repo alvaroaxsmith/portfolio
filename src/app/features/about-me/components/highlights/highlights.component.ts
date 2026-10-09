@@ -1,14 +1,4 @@
-import {
-  Component,
-  ChangeDetectionStrategy,
-  AfterViewInit,
-  OnDestroy,
-  ElementRef,
-  NgZone,
-  ViewChild,
-  ViewChildren,
-  QueryList
-} from '@angular/core';
+import { Component, ChangeDetectionStrategy, AfterViewInit, OnDestroy, ElementRef, NgZone, inject, viewChild, viewChildren } from '@angular/core';
 
 import { TranslateModule } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card';
@@ -30,10 +20,13 @@ interface Highlight {
     MatIconModule
 ],
     templateUrl: './highlights.component.html',
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['./highlights.component.scss']
 })
 export class HighlightsComponent implements AfterViewInit, OnDestroy {
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly zone = inject(NgZone);
+
   highlights: Highlight[] = [
     { date: '2014 to', dateRange: '2018', description: 'UNESP - Energy Engineering (incomplete)' },
     { date: 'August 2018 to', dateRange: 'June 2023', description: 'Univesp Oficial - Bachelor\'s degree, Production Engineering' },
@@ -44,8 +37,8 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
     { date: 'May 2025 to', dateRange: 'May 2027', description: 'Universidade Federal do ABC (UFABC) - Postgraduate, Information Technologies and Systems' }
   ];
 
-  @ViewChild('timeline') timelineRef!: ElementRef<HTMLElement>;
-  @ViewChildren('timelineItem') itemRefs!: QueryList<ElementRef<HTMLElement>>;
+  readonly timelineRef = viewChild.required<ElementRef<HTMLElement>>('timeline');
+  readonly itemRefs = viewChildren<ElementRef<HTMLElement>>('timelineItem');
 
   private frame: number | null = null;
   private active = false;
@@ -60,18 +53,13 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
   private resize?: ResizeObserver;
   private readonly onScroll = () => this.scheduleUpdate();
 
-  constructor(
-    private readonly host: ElementRef<HTMLElement>,
-    private readonly zone: NgZone
-  ) {}
-
   ngAfterViewInit(): void {
     if (this.reducedMotion) {
       return;
     }
 
     this.zone.runOutsideAngular(() => {
-      this.timelineRef.nativeElement.classList.add('is-parallax');
+      this.timelineRef().nativeElement.classList.add('is-parallax');
 
       this.intersection = new IntersectionObserver(([entry]) => {
         if (entry.isIntersecting) {
@@ -142,9 +130,9 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
   private update(): void {
     const viewport = window.innerHeight;
     const center = viewport / 2;
-    const timeline = this.timelineRef.nativeElement;
+    const timeline = this.timelineRef().nativeElement;
     const timelineRect = timeline.getBoundingClientRect();
-    const items = this.itemRefs.map(ref => ref.nativeElement);
+    const items = this.itemRefs().map(ref => ref.nativeElement);
 
     let batch = 0;
     let lastVisible = -1;
@@ -182,10 +170,10 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
   }
 
   private reset(): void {
-    const timeline = this.timelineRef.nativeElement;
+    const timeline = this.timelineRef().nativeElement;
     timeline.style.removeProperty('--track');
     timeline.style.removeProperty('--fill');
-    this.itemRefs.forEach(({ nativeElement: item }) => {
+    this.itemRefs().forEach(({ nativeElement: item }) => {
       item.classList.remove('is-visible', 'is-reached');
     });
   }

@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { faAngular, faNodeJs } from '@fortawesome/free-brands-svg-icons';
 import { AnalyticsService } from '../../analytics/analytics.service';
 import { MatTooltip } from '@angular/material/tooltip';
@@ -9,15 +9,15 @@ import { TranslateModule } from '@ngx-translate/core';
     selector: 'app-footer',
     templateUrl: './footer.component.html',
     styleUrls: ['./footer.component.scss'],
-    changeDetection: ChangeDetectionStrategy.Eager,
+    changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatTooltip, FontAwesomeModule, TranslateModule]
 })
 export class FooterComponent {
+  analytics = inject(AnalyticsService);
+
 
   anoAtual = new Date().getFullYear();
 
   faAngular = faAngular;
   faNodeJs = faNodeJs;
-
-  constructor(public analytics: AnalyticsService) {}
 }
