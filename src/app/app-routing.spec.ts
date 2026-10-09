@@ -30,7 +30,7 @@ describe('App routing', () => {
     TestBed.inject(HttpTestingController).match(() => true);
   });
 
-  const cases: Array<[string, unknown]> = [
+  const cases: [string, unknown][] = [
     ['/', HomeComponent],
     ['/about-me', AboutMeComponent],
     ['/courses', CoursesComponent],
