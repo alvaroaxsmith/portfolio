@@ -35,10 +35,10 @@ module.exports = function (config) {
       // Coverage floor: the build fails if coverage drops below it. Raise it as tests are added; never lower it.
       check: {
         global: {
-          statements: 95,
-          branches: 80,
-          functions: 94,
-          lines: 96
+          statements: 96,
+          branches: 82,
+          functions: 95,
+          lines: 97
         }
       }
     },

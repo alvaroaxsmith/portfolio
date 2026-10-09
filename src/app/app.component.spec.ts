@@ -29,7 +29,13 @@ describe('AppComponent', () => {
 }).compileComponents();
   });
 
-  afterEach(() => localStorage.removeItem('portfolio:lang'));
+  const originalLang = document.documentElement.lang;
+
+  afterEach(() => {
+    localStorage.removeItem('portfolio:lang');
+    // AppComponent writes <html lang>; put it back so later specs see the page as it was.
+    document.documentElement.lang = originalLang;
+  });
 
   function render() {
     const fixture = TestBed.createComponent(AppComponent);
