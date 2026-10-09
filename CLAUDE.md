@@ -19,8 +19,15 @@ Portfólio pessoal em produção na Vercel (a `main` é publicada a cada merge).
 - **Acessibilidade:** alvo WCAG 2.2 AA. Todo controle tem nome acessível traduzido; elemento escondido sai da ordem de foco (`inert`).
 - **Angular:** standalone, `OnPush`, signals (`input()`, `computed`, `viewChild()`), `inject()`, `afterRenderEffect` para DOM, control flow (`@if`/`@for` com `track` por id).
 
+## Gates de acessibilidade e visual
+
+- **axe** (`e2e/a11y.spec.ts`): violações ainda abertas ficam em `knownViolations`, cada uma com a issue que a corrige. Ao corrigir uma, remova a entrada; o teste falha se ela sobrar.
+- **Teclado** (`e2e/keyboard.spec.ts`): casos ainda abertos são `test.fixme(... (#N))`. A issue #N os transforma em `test`.
+- **Regressão visual** (`e2e/visual.spec.ts`, tolerância zero): as referências em `e2e/__screenshots__/` são geradas só na imagem Linux do Playwright, com `npm run test:visual` (comparar) e `npm run test:visual:update` (regenerar), ambos via Docker. O `npm run verify` roda a comparação quando o Docker está ligado e avisa quando não está; fora do container os testes são pulados e quem compara é o job `visual` do CI. Regenere só para uma exceção visual aprovada na issue, e mostre antes/depois no PR. Sem Docker (por exemplo no GitHub Actions), deixe a falha do job `visual` no PR e peça ao dono para regenerar; o artefato `visual-diff` traz as imagens esperada, atual e a diferença.
+
 ## Armadilhas conhecidas
 
 - **Cobertura instável:** callbacks assíncronos do `IntersectionObserver` fazem a cobertura variar entre execuções e derrubam o piso. Em specs, use `fakeIntersectionObserver()` de `src/app/testing/` e dispare a interseção explicitamente.
 - **Pastas locais:** `specs/` e `.agents/` são do ambiente local do dono; ficam fora de commits.
+- **Versão do Playwright em três lugares**: `@playwright/test` (exata, sem `^`) no `package.json`, a tag da imagem no script `test:visual` e no job `visual` do `quality-gate.yml`. Mudam juntas; uma versão diferente procura outro Chromium e renderiza outros pixels.
 - **Node 24** (campo `engines`). O E2E precisa do Chromium do Playwright (`npx playwright install chromium`).

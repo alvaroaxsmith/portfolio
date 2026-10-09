@@ -1,6 +1,6 @@
 name: Quality gate
 
-# Job ids are the required status checks on main (lint, unit, build, e2e). Renaming a job blocks every merge.
+# Job ids are the required status checks on main (lint, unit, build, e2e, visual). Renaming a job blocks every merge.
 on:
   pull_request:
     branches: [main]
@@ -78,10 +78,40 @@ jobs:
           name: dist
           path: dist/
       - run: npx playwright install --with-deps chromium
-      - run: npx playwright test
+      # Smoke, accessibility (axe) and keyboard specs.
+      - run: npx playwright test --project=chromium
       - uses: actions/upload-artifact@v4
         if: failure()
         with:
           name: playwright-report
           path: playwright-report/
+          retention-days: 14
+
+  visual:
+    needs: build
+    runs-on: ubuntu-latest
+    # Same image (and version) as `npm run test:visual`, so fonts render pixel for pixel like the references.
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --ipc=host
+    env:
+      VISUAL: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - run: npx playwright test --project=visual
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          # Holds expected, actual and diff images for every screen that changed.
+          name: visual-diff
+          path: test-results/
           retention-days: 14

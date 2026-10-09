@@ -13,7 +13,20 @@ export default defineConfig({
     trace: 'on-first-retry',
     viewport: { width: 1280, height: 800 }
   },
-  projects: [{ name: 'chromium', use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } } }],
+  projects: [
+    {
+      name: 'chromium',
+      testIgnore: 'visual.spec.ts',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } }
+    },
+    {
+      // References are rendered in the Playwright Linux image only, so the path carries no platform suffix.
+      name: 'visual',
+      testMatch: 'visual.spec.ts',
+      snapshotPathTemplate: '{testDir}/__screenshots__/{arg}{ext}',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 800 } }
+    }
+  ],
   webServer: {
     command: 'node e2e/serve.mjs',
     url: `http://localhost:${PORT}`,
