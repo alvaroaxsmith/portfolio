@@ -31,10 +31,7 @@ const moving = (page: import('@playwright/test').Page) => [
 
 for (const lang of ['PT-BR', 'EN'] as const) {
   test.describe(lang, () => {
-    // Every screen in Portuguese (the default); in English, the pages and the consent banner.
-    const covered = lang === 'PT-BR' ? screens : screens.filter((screen) => !screen.setup || screen.production);
-
-    for (const screen of covered) {
+    for (const screen of screens) {
       test(screen.name, async ({ page }) => {
         await page.clock.setFixedTime(FIXED_NOW);
         await openScreen(page, screen, lang);

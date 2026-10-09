@@ -3,15 +3,16 @@ import { expect, test } from './fixtures';
 import { openScreen, screens } from './screens';
 
 /**
- * Ratchet: violations the site still has, each tied to the issue that fixes it. A violation missing from this
- * list fails the build, and so does an entry whose violation is gone, so every fix removes its own line.
+ * Ratchet: violations the site still has, each tied to the issue that fixes it, with how many elements it hits.
+ * More elements than listed (or a rule not listed) fails the build; fewer fails too, so every fix lowers or
+ * removes its own entry and the list only ever shrinks.
  */
-const knownViolations: Record<string, Record<string, number>> = {
-  'desktop-portfolio': { 'button-name': 74 },
-  'desktop-contact': { 'aria-allowed-role': 74 },
-  'mobile-contact': { 'aria-allowed-role': 74 },
-  'mobile-courses': { 'aria-allowed-role': 74 },
-  'mobile-about-me': { 'scrollable-region-focusable': 73 }
+const knownViolations: Record<string, Record<string, { issue: number; nodes: number }>> = {
+  'desktop-portfolio': { 'button-name': { issue: 74, nodes: 1 } },
+  'desktop-contact': { 'aria-allowed-role': { issue: 74, nodes: 4 } },
+  'mobile-contact': { 'aria-allowed-role': { issue: 74, nodes: 4 } },
+  'mobile-courses': { 'aria-allowed-role': { issue: 74, nodes: 3 } },
+  'mobile-about-me': { 'scrollable-region-focusable': { issue: 73, nodes: 7 } }
 };
 
 const WCAG_AND_BEST_PRACTICES = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
@@ -20,9 +21,15 @@ const WCAG_AND_BEST_PRACTICES = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wc
 // icon button with a correct aria-label is reported. Not a real barrier.
 const IGNORED_RULES = ['label-content-name-mismatch'];
 
-for (const screen of screens) {
-  test(`${screen.name} has no accessibility violations beyond the known ones`, async ({ page }) => {
-    await openScreen(page, screen);
+// Every screen in Portuguese (the default); the consent banner also in English, since visitors abroad see it first.
+const audits = [
+  ...screens.map((screen) => ({ screen, lang: 'PT-BR' as const })),
+  ...screens.filter((screen) => screen.production).map((screen) => ({ screen, lang: 'EN' as const }))
+];
+
+for (const { screen, lang } of audits) {
+  test(`${screen.name} (${lang}) has no accessibility violations beyond the known ones`, async ({ page }) => {
+    await openScreen(page, screen, lang);
 
     const { violations } = await new AxeBuilder({ page })
       .withTags(WCAG_AND_BEST_PRACTICES)
@@ -36,10 +43,12 @@ for (const screen of screens) {
     }));
     const known = knownViolations[screen.name] ?? {};
 
-    const unexpected = found.filter(({ rule }) => !(rule in known));
-    const fixed = Object.keys(known).filter((rule) => !found.some((violation) => violation.rule === rule));
+    const unexpected = found.filter(({ rule, targets }) => targets.length > (known[rule]?.nodes ?? 0));
+    const improved = Object.entries(known)
+      .filter(([rule, { nodes }]) => (found.find((violation) => violation.rule === rule)?.targets.length ?? 0) < nodes)
+      .map(([rule]) => rule);
 
     expect(unexpected, 'new accessibility violations').toEqual([]);
-    expect(fixed, 'fixed violations still listed in knownViolations: remove them').toEqual([]);
+    expect(improved, 'fewer violations than knownViolations lists: lower or remove these entries').toEqual([]);
   });
 }

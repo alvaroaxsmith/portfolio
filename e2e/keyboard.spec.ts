@@ -30,6 +30,11 @@ function currentStop(page: Page): Promise<TabStop | null> {
         if (rect.right <= box.left || rect.left >= box.right || rect.bottom <= box.top || rect.top >= box.bottom) {
           invisible = true;
         }
+        // A clipped element that takes focus makes the browser scroll its non-scrollable container to show it,
+        // which pulls the content out of place (a carousel shows half a card). It was hidden until focused.
+        if (node.scrollLeft !== 0 || node.scrollTop !== 0) {
+          invisible = true;
+        }
       }
     }
     if (rect.bottom <= 0 || rect.top >= innerHeight || rect.right <= 0 || rect.left >= innerWidth) {
@@ -66,6 +71,12 @@ test.describe('tab order shows every stop', () => {
       expect(await invisibleTabStops(page)).toEqual([]);
     });
   }
+
+  test.fixme('about me shows every stop, before the journey is opened (#73)', async ({ page }) => {
+    await open(page, '/about-me');
+
+    expect(await invisibleTabStops(page)).toEqual([]);
+  });
 
   test.fixme('about me keeps closed journey cards out of the tab order (#73)', async ({ page }) => {
     await open(page, '/about-me');
