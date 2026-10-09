@@ -6,15 +6,15 @@ import { MatIcon } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
 @Component({
-    selector: 'app-dialog',
-    templateUrl: './dialog.component.html',
-    styleUrls: ['./dialog.component.scss'],
+    selector: 'app-nav-menu-sheet',
+    templateUrl: './nav-menu-sheet.component.html',
+    styleUrls: ['./nav-menu-sheet.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [MatIconButton, MatIcon, MatButton, RouterLink, TranslateModule]
 })
-export class Dialog {
+export class NavMenuSheetComponent {
   translate = inject(TranslateService);
-  private bottomSheetRef = inject<MatBottomSheetRef<Dialog>>(MatBottomSheetRef);
+  private bottomSheetRef = inject<MatBottomSheetRef<NavMenuSheetComponent>>(MatBottomSheetRef);
 
 
   switchLang(lang: string) {

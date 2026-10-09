@@ -4,10 +4,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatNoDataRow } from '@angular/material/table';
 import { CourseService } from './services/courses.service';
-import { Course } from './interfaces/courses.interface';
+import { Course } from './course.model';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { DialogComponent } from './dialog/dialog.component';
-import { SnackBarComponent } from './snack-bar/snackbar.component';
+import { CertificateSheetComponent } from './certificate-sheet/certificate-sheet.component';
+import { CourseHintComponent } from './course-hint/course-hint.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { CoursesStateService } from './services/courses-state.service';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
@@ -86,7 +86,7 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   openDialog = (rowData: Course): void => {
     this.analytics.track('certificate_open', { course: rowData.name, school: rowData.school });
-    this.bottomSheet.open(DialogComponent, {
+    this.bottomSheet.open(CertificateSheetComponent, {
       data: rowData,
       panelClass: 'certificate-sheet',
       ariaLabel: rowData.name
@@ -129,7 +129,7 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
     this.state.hintShown = true;
-    this.snackBar.openFromComponent(SnackBarComponent, {
+    this.snackBar.openFromComponent(CourseHintComponent, {
       horizontalPosition: 'end',
       verticalPosition: 'top',
       panelClass: 'course-hint',

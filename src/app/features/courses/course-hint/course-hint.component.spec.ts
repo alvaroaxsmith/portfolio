@@ -1,21 +1,21 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
-import { SnackBarComponent } from './snackbar.component';
+import { CourseHintComponent } from './course-hint.component';
 
-describe('SnackBarComponent (course hint)', () => {
-  let fixture: ComponentFixture<SnackBarComponent>;
+describe('CourseHintComponent (course hint)', () => {
+  let fixture: ComponentFixture<CourseHintComponent>;
   let host: HTMLElement;
-  let ref: jasmine.SpyObj<MatSnackBarRef<SnackBarComponent>>;
+  let ref: jasmine.SpyObj<MatSnackBarRef<CourseHintComponent>>;
   let liveRegion: HTMLElement;
 
   function render(insideLiveRegion: boolean) {
-    ref = jasmine.createSpyObj<MatSnackBarRef<SnackBarComponent>>('MatSnackBarRef', ['dismiss']);
+    ref = jasmine.createSpyObj<MatSnackBarRef<CourseHintComponent>>('MatSnackBarRef', ['dismiss']);
     TestBed.configureTestingModule({
-      imports: [SnackBarComponent, TranslateModule.forRoot()],
+      imports: [CourseHintComponent, TranslateModule.forRoot()],
       providers: [{ provide: MatSnackBarRef, useValue: ref }]
     });
-    fixture = TestBed.createComponent(SnackBarComponent);
+    fixture = TestBed.createComponent(CourseHintComponent);
     host = fixture.nativeElement;
     liveRegion = document.createElement('div');
     liveRegion.setAttribute('aria-live', 'polite');

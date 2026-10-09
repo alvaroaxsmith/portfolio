@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import mermaid from 'mermaid';
 import { ProfessionalTimelineComponent } from './professional-timeline.component';
 
@@ -39,12 +39,12 @@ describe('ProfessionalTimelineComponent', () => {
     it('clicking an experience card opens the journey from that experience', () => {
       render(false);
 
-      component.selecionarExperiencia(component.experiencias[2]);
+      component.openJourney(component.experiences[2]);
 
       expect(component.isJourneyVisible()).toBeTrue();
       expect(component.currentIndex()).toBe(2);
       expect(component.journeyCurrentIndex()).toBe(2);
-      expect(component.timelineDefinitions().length).toBe(component.experiencias.length);
+      expect(component.timelineDefinitions().length).toBe(component.experiences.length);
     });
 
     it('cards are focusable and show a pointer', () => {
@@ -64,9 +64,9 @@ describe('ProfessionalTimelineComponent', () => {
 
     it('clicking the journey goes back to the cards', () => {
       render(false);
-      component.selecionarExperiencia(component.experiencias[0]);
+      component.openJourney(component.experiences[0]);
 
-      component.voltarParaTimeline();
+      component.closeJourney();
 
       expect(component.isJourneyVisible()).toBeFalse();
     });
@@ -91,9 +91,9 @@ describe('ProfessionalTimelineComponent', () => {
 
   it('moves the journey when an experience icon is clicked inside it', () => {
     render(false);
-    component.selecionarExperiencia(component.experiencias[0]);
+    component.openJourney(component.experiences[0]);
 
-    component.handleIconClickInJourneyView(component.experiencias[4]);
+    component.handleIconClickInJourneyView(component.experiences[4]);
 
     expect(component.journeyCurrentIndex()).toBe(4);
     expect(component.currentIndex()).toBe(0);
@@ -115,10 +115,10 @@ describe('ProfessionalTimelineComponent', () => {
 
     component.generateAllMermaidTimelines();
 
-    const last = component.experiencias[component.experiencias.length - 1];
+    const last = component.experiences[component.experiences.length - 1];
     const fromLast = component.timelineDefinitions()[component.timelineDefinitions().length - 1].definition;
     expect(fromLast.startsWith('timeline')).toBeTrue();
-    expect(fromLast).toContain(`${last.periodo} : ${last.cargo} @ ${last.empresa}`);
+    expect(fromLast).toContain(`${last.period} : ${last.role} @ ${last.company}`);
   });
 
   describe('when the screen changes size', () => {
@@ -156,7 +156,7 @@ describe('ProfessionalTimelineComponent', () => {
 
     it('closes the journey when the screen becomes a phone', () => {
       render(false);
-      component.selecionarExperiencia(component.experiencias[0]);
+      component.openJourney(component.experiences[0]);
 
       notifyChange({ matches: true });
 
@@ -166,7 +166,7 @@ describe('ProfessionalTimelineComponent', () => {
 
     it('keeps the journey open when the screen grows back to desktop', () => {
       render(false);
-      component.selecionarExperiencia(component.experiencias[0]);
+      component.openJourney(component.experiences[0]);
 
       notifyChange({ matches: false });
 
@@ -248,11 +248,11 @@ describe('ProfessionalTimelineComponent', () => {
         ({ svg: `<svg data-test="${id}"></svg>` }) as Awaited<ReturnType<typeof mermaid.render>>
       );
 
-      component.selecionarExperiencia(component.experiencias[0]);
+      component.openJourney(component.experiences[0]);
       fixture.detectChanges();
       await fixture.whenStable();
 
-      expect(render).toHaveBeenCalledTimes(component.experiencias.length);
+      expect(render).toHaveBeenCalledTimes(component.experiences.length);
       expect(diagram(1).querySelector('svg')).not.toBeNull();
     });
 
@@ -261,12 +261,26 @@ describe('ProfessionalTimelineComponent', () => {
       spyOn(console, 'error');
       spyOn(mermaid, 'render').and.rejectWith(new Error('parse error'));
 
-      component.selecionarExperiencia(component.experiencias[0]);
+      component.openJourney(component.experiences[0]);
       fixture.detectChanges();
       await fixture.whenStable();
 
       expect(diagram(1).querySelector('p')?.textContent).toBe('timeline.mermaid.error');
     });
+  });
+
+  it('shows technologies and skills in the visitor\'s language', () => {
+    render(false);
+    const translate = TestBed.inject(TranslateService);
+    translate.setTranslation('EN', { 'Análise de Dados': 'Data Analysis', 'Melhoria Contínua': 'Continuous Improvement' });
+    translate.use('EN');
+    fixture.detectChanges();
+
+    const chips = Array.from(fixture.nativeElement.querySelectorAll('mat-card.timeline-content')[0].querySelectorAll('.tech-tag') as NodeListOf<HTMLElement>)
+      .map((chip) => chip.textContent?.trim());
+    expect(chips).toContain('Data Analysis');
+    expect(chips).toContain('Continuous Improvement');
+    expect(chips).not.toContain('Análise de Dados');
   });
 
   it('builds each journey from the chosen experience to the most recent one', () => {
@@ -275,7 +289,7 @@ describe('ProfessionalTimelineComponent', () => {
     component.generateAllMermaidTimelines();
 
     const fromSecond = component.timelineDefinitions()[1].definition;
-    expect(fromSecond).not.toContain(component.experiencias[0].empresa);
-    expect(fromSecond).toContain(component.experiencias[component.experiencias.length - 1].empresa);
+    expect(fromSecond).not.toContain(component.experiences[0].company);
+    expect(fromSecond).toContain(component.experiences[component.experiences.length - 1].company);
   });
 });

@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { fakeIntersectionObserver } from '../../../../testing/fake-intersection-observer';
 import { TranslateModule } from '@ngx-translate/core';
 import { HighlightsComponent } from './highlights.component';
 
@@ -22,6 +23,29 @@ describe('HighlightsComponent', () => {
   });
 
   afterEach(() => fixture.destroy());
+
+  describe('parallax while scrolling', () => {
+    let viewport: ReturnType<typeof fakeIntersectionObserver>;
+
+    beforeEach(() => {
+      fixture.destroy();
+      viewport = fakeIntersectionObserver();
+      fixture = TestBed.createComponent(HighlightsComponent);
+      component = fixture.componentInstance;
+      fixture.detectChanges();
+    });
+
+    it('follows the page scroll only while the timeline is on screen', () => {
+      const added = spyOn(window, 'addEventListener').and.callThrough();
+      const removed = spyOn(window, 'removeEventListener').and.callThrough();
+
+      viewport.report(true);
+      expect(added).toHaveBeenCalledWith('scroll', jasmine.any(Function), jasmine.objectContaining({ capture: true }));
+
+      viewport.report(false);
+      expect(removed).toHaveBeenCalledWith('scroll', jasmine.any(Function), jasmine.objectContaining({ capture: true }));
+    });
+  });
 
   it('lists every highlight in chronological order', () => {
     const titles = items().map((item) => item.querySelector('p')?.textContent?.trim());

@@ -1,9 +1,10 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { fakeIntersectionObserver } from '../../testing/fake-intersection-observer';
 import { provideRouter } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
-import { Project } from './Project';
+import { Project } from './project.model';
 import { PortfolioComponent } from './portfolio.component';
 import { ProjectsService } from './services/projects.service';
 
@@ -187,6 +188,39 @@ describe('PortfolioComponent', () => {
       const dates = fixture.nativeElement.querySelectorAll('.project-card .project-date');
       expect(cardNames()).toEqual(['project-1', 'project-2']);
       expect(dates.length).toBe(1);
+    });
+  });
+
+  describe('loading more on scroll', () => {
+    it('loads the next batch when the end of the list comes into view', fakeAsync(() => {
+      const viewport = fakeIntersectionObserver();
+      render(of(makeProjects(10)));
+
+      viewport.report(true);
+      fixture.detectChanges();
+      expect(skeletons()).toBe(4);
+
+      tick(600);
+      fixture.detectChanges();
+      expect(cards()).toBe(8);
+    }));
+
+    it('does nothing while the end of the list is out of view', fakeAsync(() => {
+      const viewport = fakeIntersectionObserver();
+      render(of(makeProjects(10)));
+
+      viewport.report(false);
+      tick(600);
+      fixture.detectChanges();
+
+      expect(cards()).toBe(4);
+    }));
+
+    it('stops watching once every project is shown', () => {
+      const viewport = fakeIntersectionObserver();
+      render(of(makeProjects(3)));
+
+      expect(viewport.observing).toBe(0);
     });
   });
 

@@ -16,7 +16,7 @@ export class FooterComponent {
   analytics = inject(AnalyticsService);
 
 
-  anoAtual = new Date().getFullYear();
+  currentYear = new Date().getFullYear();
 
   faAngular = faAngular;
   faNodeJs = faNodeJs;

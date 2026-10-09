@@ -7,19 +7,17 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import mermaid from 'mermaid';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
-export interface Experiencia {
+export interface Experience {
   id: number;
-  cargo: string;
-  empresa: string;
+  role: string;
+  company: string;
   tooltip?: string;
-  periodo: string;
-  duracao?: string;
-  local: string;
-  remoto: boolean;
-  descricao: string;
-  atividades: string[];
-  tecnologias: string[];
-  competencias: string[];
+  period: string;
+  duration?: string;
+  description: string;
+  activities: string[];
+  technologies: string[];
+  skills: string[];
 }
 
 interface TimelineDefinition {
@@ -56,37 +54,33 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
 
   readonly cardContents = viewChildren<ElementRef<HTMLElement>>('cardContent');
 
-  experiencias: Experiencia[] = [
+  experiences: Experience[] = [
     {
       id: 1,
-      cargo: 'Estagiário em Engenharia de Produção',
-      empresa: 'Metrô de São Paulo',
-      periodo: 'abr de 2019 - abr de 2021',
-      duracao: '2 anos e 1 mês',
-      local: 'São Paulo, Brasil',
-      remoto: false,
-      descricao: 'timeline.metro.description',
-      atividades: ['timeline.metro.activity1', 'timeline.metro.activity2'],
-      tecnologias: [
+      role: 'Estagiário em Engenharia de Produção',
+      company: 'Metrô de São Paulo',
+      period: 'abr de 2019 - abr de 2021',
+      duration: '2 anos e 1 mês',
+      description: 'timeline.metro.description',
+      activities: ['timeline.metro.activity1', 'timeline.metro.activity2'],
+      technologies: [
         'Power BI',
         'Excel',
         'SAP ERP',
         'Análise de Dados',
         'Cronoanálise',
       ],
-      competencias: ['Análise de Processos', 'Dados Operacionais', 'Melhoria Contínua'],
+      skills: ['Análise de Processos', 'Dados Operacionais', 'Melhoria Contínua'],
     },
     {
       id: 2,
-      cargo: 'Desenvolvedor Back-end',
-      empresa: 'Gama Academy',
-      periodo: 'ago de 2022 - set de 2022',
-      duracao: '2 meses',
-      local: 'São Paulo, Brasil',
-      remoto: true,
-      descricao: 'timeline.gama.description',
-      atividades: ['timeline.gama.activity1', 'timeline.gama.activity2'],
-      tecnologias: [
+      role: 'Desenvolvedor Back-end',
+      company: 'Gama Academy',
+      period: 'ago de 2022 - set de 2022',
+      duration: '2 meses',
+      description: 'timeline.gama.description',
+      activities: ['timeline.gama.activity1', 'timeline.gama.activity2'],
+      technologies: [
         'NestJS',
         'REST',
         'TypeScript',
@@ -97,23 +91,21 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
         'GitHub',
         'CI/CD',
       ],
-      competencias: ['Spec Driven Development', 'API Design', 'Clean Code', 'Scrum'],
+      skills: ['Spec Driven Development', 'API Design', 'Clean Code', 'Scrum'],
     },
     {
       id: 3,
-      cargo: 'Desenvolvedor Full Stack',
-      empresa: 'V.tal',
-      periodo: 'out de 2022 - out de 2023',
-      duracao: '1 ano e 1 mês',
-      local: 'São Paulo, São Paulo, Brasil',
-      remoto: false,
-      descricao: 'timeline.vtal.description',
-      atividades: [
+      role: 'Desenvolvedor Full Stack',
+      company: 'V.tal',
+      period: 'out de 2022 - out de 2023',
+      duration: '1 ano e 1 mês',
+      description: 'timeline.vtal.description',
+      activities: [
         'timeline.vtal.activity1',
         'timeline.vtal.activity2',
         'timeline.vtal.activity3',
       ],
-      tecnologias: [
+      technologies: [
         'Vue2',
         'Vuex',
         'React',
@@ -125,23 +117,21 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
         'MongoDB',
         'Azure DevOps',
       ],
-      competencias: ['CI/CD', 'TDD', 'Clean Architecture', 'SOLID', 'Jest'],
+      skills: ['CI/CD', 'TDD', 'Clean Architecture', 'SOLID', 'Jest'],
     },
     {
       id: 4,
-      cargo: 'Desenvolvedor Full Stack',
-      empresa: 'Xmart Solutions',
-      periodo: 'jan de 2024 - abr de 2024',
-      duracao: '4 meses',
-      local: 'São Paulo, Brasil',
-      remoto: false,
-      descricao: 'timeline.xmart.description',
-      atividades: [
+      role: 'Desenvolvedor Full Stack',
+      company: 'Xmart Solutions',
+      period: 'jan de 2024 - abr de 2024',
+      duration: '4 meses',
+      description: 'timeline.xmart.description',
+      activities: [
         'timeline.xmart.activity1',
         'timeline.xmart.activity2',
         'timeline.xmart.activity3',
       ],
-      tecnologias: [
+      technologies: [
         'React',
         'Shadcn/ui',
         'Tailwind',
@@ -155,7 +145,7 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
         'AWS Cloud',
         'Lambda',
       ],
-      competencias: [
+      skills: [
         'Clean Architecture',
         'TDD',
         'BFF',
@@ -166,19 +156,17 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
     },
     {
       id: 5,
-      cargo: 'Desenvolvedor Front-end',
-      empresa: 'Marttech Desenvolvimento de Software',
-      periodo: 'mai de 2024 - jun de 2024',
-      duracao: '2 meses',
-      local: 'São Paulo, Brasil',
-      remoto: true,
-      descricao: 'timeline.marttech.description',
-      atividades: [
+      role: 'Desenvolvedor Front-end',
+      company: 'Marttech Desenvolvimento de Software',
+      period: 'mai de 2024 - jun de 2024',
+      duration: '2 meses',
+      description: 'timeline.marttech.description',
+      activities: [
         'timeline.marttech.activity1',
         'timeline.marttech.activity2',
         'timeline.marttech.activity3',
       ],
-      tecnologias: [
+      technologies: [
         'TypeScript',
         'React',
         'Material UI',
@@ -186,19 +174,17 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
         'Context API',
         'Azure DevOps',
       ],
-      competencias: ['TDD', 'Clean Architecture', 'Revisão de código'],
+      skills: ['TDD', 'Clean Architecture', 'Revisão de código'],
     },
     {
       id: 6,
-      cargo: 'Desenvolvedor Full Stack',
-      empresa: 'Mutant',
-      periodo: 'jun de 2024 - out de 2025',
-      duracao: '1 ano e 5 meses',
-      local: 'São Paulo, São Paulo, Brasil',
-      remoto: true,
-      descricao: 'timeline.mutantFs.description',
-      atividades: ['timeline.mutantFs.activity1', 'timeline.mutantFs.activity2'],
-      tecnologias: [
+      role: 'Desenvolvedor Full Stack',
+      company: 'Mutant',
+      period: 'jun de 2024 - out de 2025',
+      duration: '1 ano e 5 meses',
+      description: 'timeline.mutantFs.description',
+      activities: ['timeline.mutantFs.activity1', 'timeline.mutantFs.activity2'],
+      technologies: [
         'Java',
         'Spring Boot',
         'Node.js',
@@ -211,24 +197,22 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
         'Redis',
         'MongoDB',
       ],
-      competencias: ['TDD', 'Jest', 'Cypress', 'Clean Code', 'Arquitetura de Software'],
+      skills: ['TDD', 'Jest', 'Cypress', 'Clean Code', 'Arquitetura de Software'],
     },
     {
       id: 7,
-      cargo: 'Tech Lead Cross',
-      empresa: 'Mutant (Alocado na Telefônica Vivo)',
+      role: 'Tech Lead Cross',
+      company: 'Mutant (Alocado na Telefônica Vivo)',
       tooltip: 'Mutant',
-      periodo: 'out de 2025 - o momento',
-      local: 'São Paulo, São Paulo, Brasil',
-      remoto: true,
-      descricao: 'timeline.mutantLead.description',
-      atividades: [
+      period: 'out de 2025 - o momento',
+      description: 'timeline.mutantLead.description',
+      activities: [
         'timeline.mutantLead.activity1',
         'timeline.mutantLead.activity2',
         'timeline.mutantLead.activity3',
         'timeline.mutantLead.activity4',
       ],
-      tecnologias: [
+      technologies: [
         'Node.js',
         'React',
         'Java',
@@ -239,7 +223,7 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
         'Prompt Engineering',
         'Azure DevOps',
       ],
-      competencias: ['Spec Driven Development', 'Arquitetura de Software', 'Boas Práticas', 'Code Review'],
+      skills: ['Spec Driven Development', 'Arquitetura de Software', 'Boas Práticas', 'Code Review'],
     },
   ];
 
@@ -284,12 +268,12 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
     this.currentIndex.set(index);
   }
 
-  selecionarExperiencia(experiencia: Experiencia): void {
+  openJourney(experience: Experience): void {
     if (this.isMobile()) {
       return;
     }
-    const selectedIndex = this.experiencias.findIndex(
-      (exp) => exp.id === experiencia.id
+    const selectedIndex = this.experiences.findIndex(
+      (exp) => exp.id === experience.id
     );
     this.currentIndex.set(selectedIndex);
     this.journeyCurrentIndex.set(selectedIndex);
@@ -298,12 +282,12 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
     this.isJourneyVisible.set(true);
   }
 
-  voltarParaTimeline(): void {
+  closeJourney(): void {
     this.isJourneyVisible.set(false);
   }
 
-  handleIconClickInJourneyView(clickedExperience: Experiencia): void {
-    const newIndex = this.experiencias.findIndex(
+  handleIconClickInJourneyView(clickedExperience: Experience): void {
+    const newIndex = this.experiences.findIndex(
       (exp) => exp.id === clickedExperience.id
     );
     this.journeyCurrentIndex.set(newIndex);
@@ -317,18 +301,18 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
   }
 
   generateAllMermaidTimelines(): void {
-    this.timelineDefinitions.set(this.experiencias.map((startExp) => {
+    this.timelineDefinitions.set(this.experiences.map((startExp) => {
       let mermaidText = `timeline\n \n`;
 
-      const startIndex = this.experiencias.findIndex(
+      const startIndex = this.experiences.findIndex(
         (exp) => exp.id === startExp.id
       );
-      const experienciasParaTimeline = this.experiencias.slice(startIndex);
+      const journeyExperiences = this.experiences.slice(startIndex);
 
-      experienciasParaTimeline.forEach((exp) => {
-        const periodo = this.translate.instant(exp.periodo) || exp.periodo;
-        const cargo = this.translate.instant(exp.cargo) || exp.cargo;
-        mermaidText += `  ${periodo} : ${cargo} @ ${exp.empresa}\n`;
+      journeyExperiences.forEach((exp) => {
+        const period = this.translate.instant(exp.period) || exp.period;
+        const role = this.translate.instant(exp.role) || exp.role;
+        mermaidText += `  ${period} : ${role} @ ${exp.company}\n`;
       });
 
       return { id: startExp.id, definition: mermaidText };

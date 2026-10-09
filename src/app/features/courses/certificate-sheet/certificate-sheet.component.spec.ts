@@ -5,9 +5,9 @@ import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bott
 import { TranslateModule } from '@ngx-translate/core';
 import { of } from 'rxjs';
 import { AnalyticsService } from '../../../core/analytics/analytics.service';
-import { Course } from '../interfaces/courses.interface';
+import { Course } from '../course.model';
 import { CourseService } from '../services/courses.service';
-import { DialogComponent } from './dialog.component';
+import { CertificateSheetComponent } from './certificate-sheet.component';
 
 const course: Course = {
   field: 'Tecnologia',
@@ -18,14 +18,14 @@ const course: Course = {
   date: '2022/05'
 };
 
-describe('DialogComponent', () => {
-  let component: DialogComponent;
-  let fixture: ComponentFixture<DialogComponent>;
+describe('CertificateSheetComponent', () => {
+  let component: CertificateSheetComponent;
+  let fixture: ComponentFixture<CertificateSheetComponent>;
   const sheetRef = { dismiss: jasmine.createSpy('dismiss') };
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), DialogComponent],
+    imports: [TranslateModule.forRoot(), CertificateSheetComponent],
     providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -34,7 +34,7 @@ describe('DialogComponent', () => {
     ]
 }).compileComponents();
 
-    fixture = TestBed.createComponent(DialogComponent);
+    fixture = TestBed.createComponent(CertificateSheetComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -84,7 +84,7 @@ describe('DialogComponent', () => {
     function openCertificate(link: string) {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), DialogComponent],
+    imports: [TranslateModule.forRoot(), CertificateSheetComponent],
     providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
@@ -92,7 +92,7 @@ describe('DialogComponent', () => {
         { provide: MatBottomSheetRef, useValue: sheetRef }
     ]
 });
-      fixture = TestBed.createComponent(DialogComponent);
+      fixture = TestBed.createComponent(CertificateSheetComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
     }
@@ -154,14 +154,14 @@ describe('DialogComponent', () => {
     function openWith(data: Partial<Course>, courses: Course[]) {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), DialogComponent],
+    imports: [TranslateModule.forRoot(), CertificateSheetComponent],
     providers: [
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MAT_BOTTOM_SHEET_DATA, useValue: data },
         { provide: MatBottomSheetRef, useValue: sheetRef }
     ]
 });
-      fixture = TestBed.createComponent(DialogComponent);
+      fixture = TestBed.createComponent(CertificateSheetComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();
     }

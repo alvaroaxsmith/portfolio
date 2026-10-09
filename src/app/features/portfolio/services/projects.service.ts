@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, of, tap } from 'rxjs';
-import { Project } from '../Project';
+import { Project } from '../project.model';
 import { environment } from '../../../../environments/environment';
 
 interface GithubRepo {

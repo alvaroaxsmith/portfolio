@@ -7,10 +7,10 @@
     <div class="timeline-background">
         <div class="timeline-line"></div>
         <div class="timeline-icons">
-            @for (exp of experiencias; track exp; let i = $index) {
+            @for (exp of experiences; track exp; let i = $index) {
             <button type="button" class="icon-wrapper" [class.active]="!isJourneyVisible() && i === currentIndex()" [class.selected-for-journey]="
           isJourneyVisible() && i === journeyCurrentIndex()
-          " (click)="isJourneyVisible() ? handleIconClickInJourneyView(exp) : goTo(i)" [matTooltip]="exp.tooltip || exp.empresa">
+          " (click)="isJourneyVisible() ? handleIconClickInJourneyView(exp) : goTo(i)" [matTooltip]="exp.tooltip || exp.company">
                 <div class="timeline-icon">
                     {{ i + 1 }}
                 </div>
@@ -22,43 +22,43 @@
         <div class="timeline-carousel-section">
             <div class="carousel-wrapper">
                 <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'">
-                    @for (experiencia of experiencias; track experiencia) {
+                    @for (experience of experiences; track experience) {
                     <div class="carousel-item">
-                        <mat-card class="timeline-content" [class.is-interactive]="!isMobile()" (click)="selecionarExperiencia(experiencia)" (keydown)="handleActionKey($event, () => selecionarExperiencia(experiencia))" [attr.tabindex]="isMobile() ? null : 0">
+                        <mat-card class="timeline-content" [class.is-interactive]="!isMobile()" (click)="openJourney(experience)" (keydown)="handleActionKey($event, () => openJourney(experience))" [attr.tabindex]="isMobile() ? null : 0">
                             <mat-card-header>
-                                <mat-card-title>{{ experiencia.cargo | translate }}
+                                <mat-card-title>{{ experience.role | translate }}
                                 </mat-card-title>
-                                <mat-card-subtitle>{{ experiencia.empresa | translate }} | {{ experiencia.periodo | translate }} @if (experiencia.duracao) {
-                                    <span>({{ experiencia.duracao | translate }})</span
+                                <mat-card-subtitle>{{ experience.company | translate }} | {{ experience.period | translate }} @if (experience.duration) {
+                                    <span>({{ experience.duration | translate }})</span
                         >
                         }</mat-card-subtitle
                         >
                       </mat-card-header>
                       <mat-card-content #cardContent>
-                        <p>{{ experiencia.descricao | translate }}</p>
+                        <p>{{ experience.description | translate }}</p>
                         <strong class="content-label">{{ "Main Activities" | translate }}</strong>
                         <ul>
-                          @for (atividade of experiencia.atividades; track atividade) {
+                          @for (activity of experience.activities; track activity) {
                             <li>
-                              {{ atividade | translate }}
+                              {{ activity | translate }}
                             </li>
                           }
                         </ul>
                         <strong class="content-label">{{ "timeline.technologies" | translate }}</strong>
                         <div class="tech-list">
-                          @for (tech of experiencia.tecnologias; track tech) {
+                          @for (tech of experience.technologies; track tech) {
                             <span
                               class="tech-tag"
-                              >{{ tech }}</span
+                              >{{ tech | translate }}</span
                               >
                             }
                           </div>
                           <strong class="content-label">{{ "timeline.skills" | translate }}</strong>
                           <div class="tech-list">
-                            @for (comp of experiencia.competencias; track comp) {
+                            @for (comp of experience.skills; track comp) {
                               <span
                                 class="tech-tag skill-tag"
-                                >{{ comp }}</span
+                                >{{ comp | translate }}</span
                                 >
                               }
                             </div>
@@ -82,8 +82,8 @@
                         >
                         <mat-card
                           class="mermaid-journey-card"
-                          (click)="voltarParaTimeline()"
-                          (keydown)="handleActionKey($event, () => voltarParaTimeline())"
+                          (click)="closeJourney()"
+                          (keydown)="handleActionKey($event, () => closeJourney())"
                           tabindex="0"
                           >
                           <div
