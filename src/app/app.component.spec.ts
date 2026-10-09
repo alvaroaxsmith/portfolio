@@ -1,10 +1,10 @@
-import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component, NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
-import { AnalyticsService } from './services/analytics.service';
-import { provideAppLanguage } from './services/language-storage';
+import { AnalyticsService } from './core/analytics/analytics.service';
+import { provideAppLanguage } from './core/i18n/language-storage';
 
 @Component({ template: '', standalone: true })
 class StubPageComponent {}
@@ -14,17 +14,19 @@ describe('AppComponent', () => {
 
   beforeEach(async () => {
     localStorage.removeItem('portfolio:lang');
-    analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track', 'pageView']);
+    analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track', 'pageView'], {
+      enabled: false,
+      consentBannerVisible: signal(false)
+    });
     await TestBed.configureTestingModule({
-      declarations: [AppComponent],
-      imports: [TranslateModule.forRoot()],
-      providers: [
+    imports: [TranslateModule.forRoot(), AppComponent],
+    providers: [
         provideRouter([{ path: '**', component: StubPageComponent }]),
         { provide: AnalyticsService, useValue: analytics },
         provideAppLanguage()
-      ],
-      schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents();
+    ],
+    schemas: [NO_ERRORS_SCHEMA]
+}).compileComponents();
   });
 
   afterEach(() => localStorage.removeItem('portfolio:lang'));
