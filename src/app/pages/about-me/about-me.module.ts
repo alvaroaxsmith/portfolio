@@ -4,7 +4,6 @@ import { CommonModule } from '@angular/common';
 import { AboutMeComponent } from './about-me.component';
 import { RouterModule, Routes } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
-import { SkillChipComponent } from './components/chips/skill-chip.component';
 import { ProfessionalTimelineComponent } from './components/professional-timeline/professional-timeline.component';
 import { HighlightsComponent } from './components/highlights/highlights.component';
 
@@ -13,7 +12,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [AboutMeComponent, SkillChipComponent],
+  declarations: [AboutMeComponent],
   imports: [
     CommonModule,
     MaterialModule,

@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { lastValueFrom } from 'rxjs';
+import { environment } from '../../../../environments/environment';
 
 interface GitHubUserResponse {
   avatar_url: string;
@@ -12,10 +13,11 @@ interface GitHubUserResponse {
 export class ImageService {
   constructor(private http: HttpClient) { }
 
-  async getImage(index: number): Promise<string> {
+  async getImage(): Promise<string> {
     try {
-      const username = 'alvaroaxsmith';
-      const response = await lastValueFrom(this.http.get<GitHubUserResponse>(`https://api.github.com/users/${username}`));
+      const response = await lastValueFrom(
+        this.http.get<GitHubUserResponse>(`${environment.githubApiUrl}/users/${environment.githubUser}`)
+      );
       const url = response.avatar_url;
 
       if (url) {
@@ -24,7 +26,6 @@ export class ImageService {
         throw new Error('Image URL not found');
       }
     } catch (error) {
-      console.error('Error loading image:', error);
       throw new Error('Failed to load image', { cause: error });
     }
   }

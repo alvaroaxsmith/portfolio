@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, map, of, tap } from 'rxjs';
 import { Project } from '../Project';
+import { environment } from '../../../../environments/environment';
 
 interface GithubRepo {
   id: number;
@@ -23,7 +24,7 @@ interface CachedProjects {
 })
 export class ProjectsService {
   private readonly apiUrl =
-    'https://api.github.com/users/alvaroaxsmith/repos?per_page=100&type=owner&sort=pushed';
+    `${environment.githubApiUrl}/users/${environment.githubUser}/repos?per_page=100&type=owner&sort=pushed`;
   private readonly portfolioTopic = 'portfolio-project';
   private readonly cacheKey = 'portfolio:github-projects';
   private readonly cacheTtlMs = 60 * 60 * 1000;
@@ -36,9 +37,9 @@ export class ProjectsService {
       return of(cached);
     }
 
-    return this.http.get<GithubRepo[]>(this.apiUrl).pipe(
+    return this.http.get<unknown>(this.apiUrl).pipe(
       map((repos) =>
-        repos
+        (Array.isArray(repos) ? repos.filter(isGithubRepo) : [])
           .filter((repo) => repo.topics?.includes(this.portfolioTopic))
           .map((repo) => ({
             id: repo.id,
@@ -46,7 +47,6 @@ export class ProjectsService {
             tech: repo.language?.trim() ?? '',
             description: repo.description?.trim() ?? '',
             repo: repo.html_url,
-            pushed_at: repo.pushed_at,
             date: repo.pushed_at,
           }))
       ),
@@ -74,4 +74,21 @@ export class ProjectsService {
     } catch {
     }
   }
+}
+
+/** GitHub's answer is external, so its shape is checked at runtime instead of trusted. */
+function isGithubRepo(value: unknown): value is GithubRepo {
+  const repo = value as Partial<Record<keyof GithubRepo, unknown>> | null;
+  const optionalText = (field: unknown) => field === undefined || field === null || typeof field === 'string';
+  return (
+    typeof repo === 'object' &&
+    repo !== null &&
+    typeof repo.id === 'number' &&
+    typeof repo.name === 'string' &&
+    typeof repo.html_url === 'string' &&
+    typeof repo.pushed_at === 'string' &&
+    optionalText(repo.language) &&
+    optionalText(repo.description) &&
+    (repo.topics === undefined || (Array.isArray(repo.topics) && repo.topics.every((topic) => typeof topic === 'string')))
+  );
 }

@@ -4,11 +4,11 @@ import { Meta, Title } from '@angular/platform-browser';
 
 export const SITE_URL = 'https://alvaromachadoferreira.vercel.app';
 
-type SeoPayload = {
+interface SeoPayload {
   title: string;
   description: string;
   path: string;
-};
+}
 
 @Injectable({
   providedIn: 'root'

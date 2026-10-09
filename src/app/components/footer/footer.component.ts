@@ -1,6 +1,5 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import { Component, ChangeDetectionStrategy } from '@angular/core';
 import { faAngular, faNodeJs } from '@fortawesome/free-brands-svg-icons';
-import { TranslateService } from '@ngx-translate/core';
 import { AnalyticsService } from '../../services/analytics.service';
 
 @Component({
@@ -10,25 +9,12 @@ import { AnalyticsService } from '../../services/analytics.service';
     changeDetection: ChangeDetectionStrategy.Eager,
     standalone: false
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
 
-  dataAtual = new Date();
-  anoAtual = this.dataAtual.getFullYear();
+  anoAtual = new Date().getFullYear();
 
   faAngular = faAngular;
   faNodeJs = faNodeJs;
 
-  constructor(
-    public translate: TranslateService,
-    public analytics: AnalyticsService
-  ) {
-  }
-
-  switchLang(lang: string) {
-    this.translate.use(lang);
-  }
-
-  ngOnInit(): void {
-  }
-
+  constructor(public analytics: AnalyticsService) {}
 }

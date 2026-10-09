@@ -24,27 +24,9 @@ const MOBILE_LOAD_DELAY_MS = 600;
 export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
 
-  showNoDataMessage = false;
-
-  expandedRow: any = null;
-
-  isRowExpanded(row: Course): boolean {
-    return this.expandedRow === row;
-  }
-
-  isExpanded = (row: any) => row === this.expandedRow;
-
-  onRowClick(row: any) {
-    this.expandedRow = this.expandedRow === row ? null : row;
-  }
-
-  toggleRow(row: Course): void {
-    this.expandedRow = this.isRowExpanded(row) ? null : row;
-  }
-
   displayedColumns: string[] = ['field', 'name', 'time', 'school', 'date'];
-  dataSource: MatTableDataSource<Course> = new MatTableDataSource();
-  isLoading: boolean = true;
+  dataSource = new MatTableDataSource<Course>();
+  isLoading = true;
 
   get visibleCourses(): Course[] {
     return this.dataSource.filter ? this.dataSource.filteredData : this.dataSource.data;

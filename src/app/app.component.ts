@@ -5,7 +5,7 @@ import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import { Subject, filter, takeUntil } from 'rxjs';
 import { SeoService } from './services/seo.service';
 import { AnalyticsService } from './services/analytics.service';
-import { DEFAULT_LANG, SUPPORTED_LANGS, getInitialLang, storeLang } from './services/language-storage';
+import { storeLang } from './services/language-storage';
 
 @Component({
     selector: 'app-root',
@@ -15,7 +15,6 @@ import { DEFAULT_LANG, SUPPORTED_LANGS, getInitialLang, storeLang } from './serv
     standalone: false
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'portfolio';
   showMainContent = false;
   private readonly destroy$ = new Subject<void>();
 
@@ -26,9 +25,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private seoService: SeoService,
     private analytics: AnalyticsService,
     @Inject(DOCUMENT) private document: Document
-  ) {
-    this.initializeAppLanguage();
-  }
+  ) {}
 
   onSplashAnimationFinished() {
     this.showMainContent = true;
@@ -60,12 +57,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.updateDocumentLanguage(event.lang);
         this.updateSeo();
       });
-  }
-
-  initializeAppLanguage() {
-    this.translate.addLangs(SUPPORTED_LANGS);
-    this.translate.setDefaultLang(DEFAULT_LANG);
-    this.translate.use(getInitialLang()).subscribe();
   }
 
   ngOnDestroy() {

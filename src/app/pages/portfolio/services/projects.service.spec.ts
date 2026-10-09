@@ -47,9 +47,34 @@ describe('ProjectsService', () => {
     http.expectOne(API).flush(repos);
 
     expect(result).toEqual([
-      { id: 1, name: 'app-gym', tech: 'Dart', description: 'Gym app', repo: 'https://github.com/a/app-gym', pushed_at: '2026-01-17T00:00:00Z', date: '2026-01-17T00:00:00Z' },
-      { id: 3, name: 'crawler', tech: '', description: '', repo: 'https://github.com/a/crawler', pushed_at: '2026-05-28T00:00:00Z', date: '2026-05-28T00:00:00Z' }
+      { id: 1, name: 'app-gym', tech: 'Dart', description: 'Gym app', repo: 'https://github.com/a/app-gym', date: '2026-01-17T00:00:00Z' },
+      { id: 3, name: 'crawler', tech: '', description: '', repo: 'https://github.com/a/crawler', date: '2026-05-28T00:00:00Z' }
     ]);
+  });
+
+  it('drops repositories GitHub sends with missing or wrong fields', () => {
+    let names: string[] = [];
+    service.getProjects().subscribe((projects) => (names = projects.map((p) => p.name)));
+
+    http.expectOne(API).flush([
+      repos[0],
+      null,
+      { ...repos[2], id: 'three' },
+      { ...repos[2], html_url: undefined },
+      { ...repos[2], topics: 'portfolio-project' },
+      { ...repos[2], name: 'valid-crawler' }
+    ]);
+
+    expect(names).toEqual(['app-gym', 'valid-crawler']);
+  });
+
+  it('treats an answer that is not a list as no projects', () => {
+    let count = -1;
+    service.getProjects().subscribe((projects) => (count = projects.length));
+
+    http.expectOne(API).flush({ message: 'Not Found' });
+
+    expect(count).toBe(0);
   });
 
   it('caches the response for one hour to respect the GitHub rate limit', () => {

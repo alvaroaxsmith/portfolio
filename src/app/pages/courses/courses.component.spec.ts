@@ -93,6 +93,18 @@ describe('CoursesComponent', () => {
     expect(component.paginator.pageIndex).toBe(2);
   });
 
+  it('tells the user when the search matches no course', async () => {
+    await render();
+    const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
+
+    input.value = 'quantum';
+    input.dispatchEvent(new Event('input'));
+    fixture.detectChanges();
+
+    const noData = fixture.nativeElement.querySelector('.desktop-table tr.mat-row:not(.course-row)') as HTMLElement;
+    expect(noData.textContent?.replace(/\s+/g, ' ').trim()).toBe('courses.noData "quantum"');
+  });
+
   it('saves page changes into the state service', async () => {
     await render();
 

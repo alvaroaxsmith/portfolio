@@ -4,6 +4,7 @@ import { Router, provideRouter } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
 import { AnalyticsService } from './services/analytics.service';
+import { provideAppLanguage } from './services/language-storage';
 
 @Component({ template: '', standalone: true })
 class StubPageComponent {}
@@ -19,7 +20,8 @@ describe('AppComponent', () => {
       imports: [TranslateModule.forRoot()],
       providers: [
         provideRouter([{ path: '**', component: StubPageComponent }]),
-        { provide: AnalyticsService, useValue: analytics }
+        { provide: AnalyticsService, useValue: analytics },
+        provideAppLanguage()
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
