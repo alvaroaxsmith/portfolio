@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.4.1](https://github.com/alvaroaxsmith/portfolio/compare/v2.4.0...v2.4.1) (2026-10-10)
+
+
+### Build and dependencies
+
+* **deps:** bump the npm-minor-and-patch group across 1 directory with 6 updates ([#103](https://github.com/alvaroaxsmith/portfolio/issues/103)) ([44a0f5c](https://github.com/alvaroaxsmith/portfolio/commit/44a0f5c53fbe2a5f59c2a8aa4942e796451a472c))
+
 ## [2.4.0](https://github.com/alvaroaxsmith/portfolio/compare/v2.3.0...v2.4.0) (2026-10-10)
 
 
