@@ -18,7 +18,7 @@
         <li class="language no-hover">
             <mat-menu #menu="matMenu">
                 @for (lang of translate.getLangs(); track lang) {
-                <button mat-menu-item role="menuitemradio" [attr.aria-checked]="lang === translate.currentLang" (click)="translate.use(lang)">
+                <button mat-menu-item role="menuitemradio" [attr.aria-checked]="lang === translate.currentLang()" (click)="translate.use(lang)">
             {{ lang }}
           </button> }
             </mat-menu>

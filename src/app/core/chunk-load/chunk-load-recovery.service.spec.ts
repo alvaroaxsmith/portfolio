@@ -2,7 +2,7 @@ import { ApplicationInitStatus, Component, EnvironmentProviders, Provider } from
 import { TestBed } from '@angular/core/testing';
 import { MatSnackBar, MatSnackBarRef, TextOnlySnackBar } from '@angular/material/snack-bar';
 import { Router, Routes, provideRouter } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { Subject } from 'rxjs';
 import {
   ChunkLoadRecoveryService,
@@ -47,8 +47,8 @@ describe('ChunkLoadRecoveryService', () => {
     snackBar = jasmine.createSpyObj<MatSnackBar>('MatSnackBar', ['open']);
     snackBar.open.and.returnValue({ onAction: () => reloadClicked } as unknown as MatSnackBarRef<TextOnlySnackBar>);
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
-      providers: [
+      imports: [],
+      providers: [provideTranslateService(), 
         provideRouter(routes),
         { provide: PAGE_RELOAD, useValue: reload },
         { provide: MatSnackBar, useValue: snackBar },

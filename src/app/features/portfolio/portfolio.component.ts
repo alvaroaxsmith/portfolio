@@ -1,9 +1,8 @@
 import { Component, OnInit, ElementRef, OnDestroy, ChangeDetectionStrategy, DestroyRef, afterRenderEffect, computed, inject, untracked, viewChild, signal } from '@angular/core';
-import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { map } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { ProjectsService } from './services/projects.service';
 import { Project } from './project.model';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
 import { onWindowEvent } from '../../core/window-events/window-events';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -33,7 +32,7 @@ interface ProjectCard {
     templateUrl: './portfolio.component.html',
     styleUrls: ['./portfolio.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatFormField, MatLabel, MatSelect, MatOption, MatIconButton, MatTooltip, MatIcon, MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatButton, MatCardContent, ProjectCardSkeletonComponent, DatePipe, TranslateModule]
+    imports: [MatFormField, MatLabel, MatSelect, MatOption, MatIconButton, MatTooltip, MatIcon, MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatButton, MatCardContent, ProjectCardSkeletonComponent, DatePipe, TranslatePipe]
 })
 export class PortfolioComponent implements OnInit, OnDestroy {
   private readonly projectsService = inject(ProjectsService);
@@ -69,9 +68,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   private observer: IntersectionObserver | undefined;
 
   /** The current language, so translated descriptions follow a language switch. */
-  private readonly lang = toSignal(this.translate.onLangChange.pipe(map((event) => event.lang)), {
-    initialValue: this.translate.currentLang
-  });
+  private readonly lang = this.translate.currentLang;
 
   readonly loadingMoreCount = computed(() =>
     Math.min(this.nextBatchSize(), this.processedProjects().length - this.projects().length)

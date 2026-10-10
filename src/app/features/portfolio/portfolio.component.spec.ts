@@ -2,7 +2,7 @@ import { NgZone } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { fakeIntersectionObserver } from '../../testing/fake-intersection-observer';
 import { provideRouter } from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
 import { Project } from './project.model';
@@ -28,8 +28,8 @@ describe('PortfolioComponent', () => {
   function render(projects$: Observable<Project[]>) {
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track']);
     TestBed.configureTestingModule({
-      imports: [PortfolioComponent, TranslateModule.forRoot()],
-      providers: [
+      imports: [PortfolioComponent],
+      providers: [provideTranslateService(), 
         provideRouter([]),
         { provide: ProjectsService, useValue: { getProjects: () => projects$ } },
         { provide: AnalyticsService, useValue: analytics }

@@ -5,7 +5,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import mermaid from 'mermaid';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export interface Experience {
@@ -32,7 +32,7 @@ interface TimelineDefinition {
     MatCardModule,
     MatButtonModule,
     MatIconModule,
-    TranslateModule,
+    TranslatePipe,
     MatTooltipModule
 ],
     templateUrl: './professional-timeline.component.html',

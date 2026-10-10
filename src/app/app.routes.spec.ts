@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { routes } from './app.routes';
 import { ContactComponent } from './features/contact/contact.component';
 import { HomeComponent } from './features/home/home.component';
@@ -18,8 +18,8 @@ describe('App routing', () => {
   beforeEach(async () => {
     localStorage.removeItem('portfolio:github-projects');
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
-      providers: [provideRouter(routes), provideHttpClient(), provideHttpClientTesting()]
+      imports: [],
+      providers: [provideTranslateService(), provideRouter(routes), provideHttpClient(), provideHttpClientTesting()]
     });
     harness = await RouterTestingHarness.create();
   });

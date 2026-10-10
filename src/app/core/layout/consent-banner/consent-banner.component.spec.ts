@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { signal } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { AnalyticsService } from '../../analytics/analytics.service';
 import { ConsentBannerComponent } from './consent-banner.component';
 
@@ -19,8 +19,8 @@ describe('ConsentBannerComponent', () => {
       setConsent: jasmine.createSpy('setConsent').and.callFake(() => analytics.consentBannerVisible.set(false))
     };
     TestBed.configureTestingModule({
-      imports: [ConsentBannerComponent, TranslateModule.forRoot()],
-      providers: [{ provide: AnalyticsService, useValue: analytics }]
+      imports: [ConsentBannerComponent],
+      providers: [provideTranslateService(), { provide: AnalyticsService, useValue: analytics }]
     });
     fixture = TestBed.createComponent(ConsentBannerComponent);
     // In the page, as in the app: focus only moves to elements in the document.

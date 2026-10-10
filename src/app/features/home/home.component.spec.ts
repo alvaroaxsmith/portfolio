@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { provideRouter } from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
 import { HomeComponent } from './home.component';
 
@@ -15,8 +15,8 @@ describe('HomeComponent', () => {
   beforeEach(async () => {
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track', 'openConsentBanner'], { enabled: false });
     await TestBed.configureTestingModule({
-      imports: [HomeComponent, TranslateModule.forRoot()],
-      providers: [
+      imports: [HomeComponent],
+      providers: [provideTranslateService(), 
         provideRouter([]),
         provideHttpClient(),
         provideHttpClientTesting(),

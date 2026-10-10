@@ -1,7 +1,7 @@
 import { NavMenuSheetComponent } from './nav-menu-sheet/nav-menu-sheet.component';
 import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { onWindowEvent } from '../../window-events/window-events';
 import { RouterLinkActive, RouterLink } from '@angular/router';
 import { MatButton, MatIconButton } from '@angular/material/button';
@@ -18,7 +18,7 @@ import { MatIcon } from '@angular/material/icon';
         '[class.navbar-fixed]': 'navbarFixed()',
         '[class.navbar-hidden]': 'navbarHidden()'
     },
-    imports: [RouterLinkActive, MatButton, RouterLink, MatMenu, MatMenuItem, MatIconButton, MatTooltip, MatMenuTrigger, MatIcon, TranslateModule]
+    imports: [RouterLinkActive, MatButton, RouterLink, MatMenu, MatMenuItem, MatIconButton, MatTooltip, MatMenuTrigger, MatIcon, TranslatePipe]
 })
 export class NavbarComponent {
   readonly bottomSheet = inject(MatBottomSheet);

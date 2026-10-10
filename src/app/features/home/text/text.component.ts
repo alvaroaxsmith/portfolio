@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, computed, signal } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-text',
@@ -72,7 +72,7 @@ import { TranslateModule } from '@ngx-translate/core';
         // A tap on the word toggles too: on touch screens the button only shows once the word is paused.
         '(click)': 'togglePause()'
     },
-    imports: [MatIcon, TranslateModule]
+    imports: [MatIcon, TranslatePipe]
 })
 export class TextComponent implements OnInit, OnDestroy {
   words: string[] = ['Full Cycle Development', 'GenAI'];

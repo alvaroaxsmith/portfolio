@@ -1,6 +1,6 @@
 import { Component, ChangeDetectionStrategy, AfterViewInit, OnDestroy, ElementRef, NgZone, inject, viewChild, viewChildren } from '@angular/core';
 
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -14,7 +14,7 @@ interface Highlight {
 @Component({
     selector: 'app-highlights',
     imports: [
-    TranslateModule,
+    TranslatePipe,
     MatCardModule,
     MatButtonModule,
     MatIconModule

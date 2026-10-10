@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { Router, RouterModule } from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { NavMenuSheetComponent } from './nav-menu-sheet.component';
 
 describe('Mobile navigation menu', () => {
@@ -12,8 +12,8 @@ describe('Mobile navigation menu', () => {
   beforeEach(async () => {
     sheetRef = jasmine.createSpyObj<MatBottomSheetRef<NavMenuSheetComponent>>('MatBottomSheetRef', ['dismiss']);
     await TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), RouterModule.forRoot([{ path: '**', children: [] }]), NavMenuSheetComponent],
-    providers: [{ provide: MatBottomSheetRef, useValue: sheetRef }]
+    imports: [RouterModule.forRoot([{ path: '**', children: [] }]), NavMenuSheetComponent],
+    providers: [provideTranslateService(), { provide: MatBottomSheetRef, useValue: sheetRef }]
 }).compileComponents();
     translate = TestBed.inject(TranslateService);
     translate.addLangs(['EN', 'PT-BR']);
@@ -39,7 +39,7 @@ describe('Mobile navigation menu', () => {
 
     buttons[0].click();
 
-    expect(translate.currentLang).toBe('EN');
+    expect(translate.getCurrentLang()).toBe('EN');
     expect(sheetRef.dismiss).toHaveBeenCalled();
   });
 

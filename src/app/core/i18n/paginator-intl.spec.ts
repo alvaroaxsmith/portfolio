@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { MatPaginatorIntl } from '@angular/material/paginator';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { providePaginatorIntl } from './paginator-intl';
 
 describe('translated paginator texts', () => {
@@ -9,8 +9,8 @@ describe('translated paginator texts', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
-      providers: [providePaginatorIntl()]
+      imports: [],
+      providers: [provideTranslateService(), providePaginatorIntl()]
     });
     translate = TestBed.inject(TranslateService);
     translate.setTranslation('EN', {

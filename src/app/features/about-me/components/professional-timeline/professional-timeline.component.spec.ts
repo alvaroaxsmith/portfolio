@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import mermaid from 'mermaid';
 import { ProfessionalTimelineComponent } from './professional-timeline.component';
 
@@ -9,7 +9,8 @@ describe('ProfessionalTimelineComponent', () => {
 
   function render(mobile: boolean) {
     TestBed.configureTestingModule({
-      imports: [ProfessionalTimelineComponent, TranslateModule.forRoot()]
+      imports: [ProfessionalTimelineComponent],
+      providers: [provideTranslateService()]
     });
     fixture = TestBed.createComponent(ProfessionalTimelineComponent);
     component = fixture.componentInstance;
@@ -330,7 +331,8 @@ describe('ProfessionalTimelineComponent', () => {
   describe('rendering the journey diagrams', () => {
     function renderJourney() {
       TestBed.configureTestingModule({
-        imports: [ProfessionalTimelineComponent, TranslateModule.forRoot()]
+        imports: [ProfessionalTimelineComponent],
+      providers: [provideTranslateService()]
       });
       fixture = TestBed.createComponent(ProfessionalTimelineComponent);
       component = fixture.componentInstance;
