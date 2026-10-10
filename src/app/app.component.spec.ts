@@ -4,6 +4,7 @@ import { Router, provideRouter } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
 import { AnalyticsService } from './core/analytics/analytics.service';
+import { SeoService } from './core/seo/seo.service';
 import { provideAppLanguage } from './core/i18n/language-storage';
 
 @Component({ template: '', standalone: true })
@@ -56,6 +57,48 @@ describe('AppComponent', () => {
 
     expect(fixture.nativeElement.querySelector('main')).not.toBeNull();
     expect(fixture.nativeElement.querySelector('app-consent-banner')).not.toBeNull();
+  });
+
+  describe('skip link', () => {
+    function shown() {
+      const fixture = render();
+      fixture.componentInstance.onSplashAnimationFinished();
+      fixture.detectChanges();
+      return fixture.nativeElement as HTMLElement;
+    }
+
+    it('keeps the navigation out of the main content it skips to', () => {
+      const page = shown();
+
+      expect(page.querySelector('main app-navbar')).toBeNull();
+      expect(page.querySelector('app-navbar')).not.toBeNull();
+    });
+
+    it('moves focus to the main content without following the link', () => {
+      const page = shown();
+      document.body.appendChild(page);
+      const skipLink = page.querySelector<HTMLAnchorElement>('.skip-link')!;
+      const click = new MouseEvent('click', { bubbles: true, cancelable: true });
+
+      skipLink.dispatchEvent(click);
+
+      expect(click.defaultPrevented).withContext('a fragment link would reload the site because of <base href>').toBeTrue();
+      expect(document.activeElement).toBe(page.querySelector('main'));
+      page.remove();
+    });
+  });
+
+  it('keeps a page out of search results when its route asks to', async () => {
+    const seo = TestBed.inject(SeoService);
+    const update = spyOn(seo, 'update');
+    TestBed.inject(Router).resetConfig([
+      { path: 'missing', component: StubPageComponent, data: { seo: { titleKey: 't', descriptionKey: 'd', noindex: true } } }
+    ]);
+    render();
+
+    await TestBed.inject(Router).navigateByUrl('/missing');
+
+    expect(update).toHaveBeenCalledWith(jasmine.objectContaining({ path: '/missing', noindex: true }));
   });
 
   it('starts in Portuguese for first-time visitors', () => {

@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import mermaid from 'mermaid';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 export interface Experience {
   id: number;
@@ -49,6 +50,14 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
     effect(() => {
       this.mermaidJourneyContainers();
       untracked(() => this.renderAllMermaidDiagrams());
+    });
+
+    // The diagram text is written once in the current language; rebuild it when the visitor switches language.
+    // New definitions recreate the containers, and the effect above draws them again.
+    this.translate.onLangChange.pipe(takeUntilDestroyed()).subscribe(() => {
+      if (this.isJourneyVisible()) {
+        this.generateAllMermaidTimelines();
+      }
     });
   }
 

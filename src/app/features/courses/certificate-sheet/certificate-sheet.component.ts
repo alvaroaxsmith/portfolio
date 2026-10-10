@@ -1,9 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { CourseService } from '../services/courses.service';
 import { Course } from '../course.model';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { tap } from 'rxjs/operators';
 import { AnalyticsService } from '../../../core/analytics/analytics.service';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
@@ -20,13 +18,14 @@ import { TranslateModule } from '@ngx-translate/core';
 export class CertificateSheetComponent implements OnInit {
   readonly rowData = signal(inject<Course>(MAT_BOTTOM_SHEET_DATA));
   private bottomSheetRef = inject<MatBottomSheetRef<CertificateSheetComponent>>(MatBottomSheetRef);
-  private courseService = inject(CourseService);
   private domSanitizer = inject(DomSanitizer);
   private analytics = inject(AnalyticsService);
 
   readonly safeUrl = signal<SafeResourceUrl | null>(null);
   readonly externalUrl = signal<string | null>(null);
   readonly isFrameLoaded = signal(false);
+  /** The link is not a certificate the site can embed, so there is nothing to wait for. */
+  readonly unavailable = signal(false);
 
   trackOpenNewTab(): void {
     this.analytics.track('certificate_open_new_tab', { course: this.rowData().name });
@@ -37,21 +36,7 @@ export class CertificateSheetComponent implements OnInit {
   }
 
   loadCourseData(): void {
-    if (this.rowData() && !this.rowData().name) {
-      this.courseService.getCourses()
-        .pipe(
-          tap(courses => {
-            const matchingCourse = courses.find(course => course.name === this.rowData().link);
-            if (matchingCourse) {
-              this.rowData.set(matchingCourse);
-              this.setUrls(matchingCourse.link);
-            }
-          })
-        )
-        .subscribe();
-    } else {
-      this.setUrls(this.rowData().link);
-    }
+    this.setUrls(this.rowData().link);
   }
 
   getSafeUrl(url: string): SafeResourceUrl {
@@ -71,6 +56,7 @@ export class CertificateSheetComponent implements OnInit {
 
   private setUrls(link: string): void {
     if (!isCertificateUrl(link)) {
+      this.unavailable.set(true);
       return;
     }
     this.safeUrl.set(this.getSafeUrl(link));

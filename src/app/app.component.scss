@@ -1,4 +1,4 @@
-main {
+.shell {
   animation: main-content-enter 0.8s cubic-bezier(0.22, 1, 0.36, 1) backwards;
 }
 
@@ -14,7 +14,7 @@ main {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  main {
+  .shell {
     animation-name: main-content-fade;
     animation-duration: 0.4s;
   }
@@ -24,6 +24,11 @@ main {
       opacity: 0;
     }
   }
+}
+
+// Focus target of the skip link: it receives focus programmatically, it is not a control to outline.
+main:focus {
+  outline: none;
 }
 
 router-outlet {

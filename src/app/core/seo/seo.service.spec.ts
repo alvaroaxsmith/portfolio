@@ -13,7 +13,7 @@ describe('SeoService', () => {
   });
 
   const originalTitle = document.title;
-  const tagSelectors = ['meta[name="description"]', 'meta[property^="og:"]', 'meta[name^="twitter:"]', 'link[rel="canonical"]'];
+  const tagSelectors = ['meta[name="robots"]', 'meta[name="description"]', 'meta[property^="og:"]', 'meta[name^="twitter:"]', 'link[rel="canonical"]'];
   const tagsBefore = new Set(tagSelectors.flatMap((selector) => Array.from(document.head.querySelectorAll(selector))));
 
   // The service writes to the real <head>; undo it so later specs see the page as it was.
@@ -58,5 +58,13 @@ describe('SeoService', () => {
     service.update({ title: 't', description: 'd', path: '/contact' });
 
     expect(document.head.querySelectorAll('link[rel="canonical"]').length).toBe(1);
+  });
+
+  it('keeps a page out of search results only while it asks to', () => {
+    service.update({ title: 't', description: 'd', path: '/missing', noindex: true });
+    expect(meta.getTag('name="robots"')?.content).toBe('noindex');
+
+    service.update({ title: 't', description: 'd', path: '/contact' });
+    expect(meta.getTag('name="robots"')).toBeNull();
   });
 });

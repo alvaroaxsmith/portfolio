@@ -1,0 +1,20 @@
+// Same page frame and header as the contact page, so the page reads as part of the site.
+.not-found-page {
+    width: var(--page-width-narrow);
+    margin: 0 auto;
+    padding: 1rem 0 4rem;
+    display: grid;
+    gap: 2rem;
+    justify-items: start;
+}
+
+header {
+    display: grid;
+    gap: 1rem;
+    max-width: 42rem;
+}
+
+header p:last-child {
+    max-width: 58ch;
+    font-size: 1rem;
+}

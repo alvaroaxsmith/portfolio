@@ -267,6 +267,43 @@ describe('ProfessionalTimelineComponent', () => {
 
       expect(diagram(1).querySelector('p')?.textContent).toBe('timeline.mermaid.error');
     });
+
+    function spyOnDraw() {
+      return spyOn(mermaid, 'render').and.callFake(async (id: string) =>
+        ({ svg: `<svg data-test="${id}"></svg>` }) as Awaited<ReturnType<typeof mermaid.render>>
+      );
+    }
+
+    async function switchToEnglish() {
+      const translate = TestBed.inject(TranslateService);
+      translate.setTranslation('EN', { 'abr de 2019 - abr de 2021': 'Apr 2019 - Apr 2021' });
+      translate.use('EN');
+      fixture.detectChanges();
+      await fixture.whenStable();
+    }
+
+    it('redraws the open journey in the new language', async () => {
+      renderJourney();
+      const draw = spyOnDraw();
+      component.openJourney(component.experiences[0]);
+      fixture.detectChanges();
+      await fixture.whenStable();
+      draw.calls.reset();
+
+      await switchToEnglish();
+
+      expect(draw).toHaveBeenCalledTimes(component.experiences.length);
+      expect(draw.calls.allArgs().some(([, definition]) => String(definition).includes('Apr 2019 - Apr 2021'))).toBeTrue();
+    });
+
+    it('draws nothing when the language changes with the journey closed', async () => {
+      renderJourney();
+      const draw = spyOnDraw();
+
+      await switchToEnglish();
+
+      expect(draw).not.toHaveBeenCalled();
+    });
   });
 
   it('shows technologies and skills in the visitor\'s language', () => {

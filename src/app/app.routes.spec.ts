@@ -10,6 +10,7 @@ import { HomeComponent } from './features/home/home.component';
 import { AboutMeComponent } from './features/about-me/about-me.component';
 import { CoursesComponent } from './features/courses/courses.component';
 import { PortfolioComponent } from './features/portfolio/portfolio.component';
+import { NotFoundComponent } from './features/not-found/not-found.component';
 
 describe('App routing', () => {
   let harness: RouterTestingHarness;
@@ -49,5 +50,12 @@ describe('App routing', () => {
       const page = await harness.navigateByUrl(url, component as never);
       expect(page).toBeInstanceOf(component as never);
     }
+  });
+
+  it('shows the not-found page for an unknown address, keeping the address', async () => {
+    const page = await harness.navigateByUrl('/this-page-does-not-exist', NotFoundComponent);
+
+    expect(page).toBeInstanceOf(NotFoundComponent);
+    expect(TestBed.inject(Router).url).toBe('/this-page-does-not-exist');
   });
 });

@@ -26,7 +26,8 @@
     "certificate": {
         "close": "Fechar certificado",
         "openNewTab": "Abrir em nova aba",
-        "loading": "Carregando certificado…"
+        "loading": "Carregando certificado…",
+        "unavailable": "Não foi possível exibir este certificado."
     },
     "Technologies Used": "Tecnologias Utilizadas",
     "Welcome to my website": "Seja bem-vindo",
@@ -123,7 +124,8 @@
         "intro": "Especializações e cursos que sustentam minha base em engenharia de software e tecnologias emergentes.",
         "filterPlaceholder": "Ex.: Arquitetura, Java, GenAI",
         "noData": "Nenhum curso encontrado para o filtro",
-        "emptyState": "Nenhum curso corresponde ao filtro atual."
+        "emptyState": "Nenhum curso corresponde ao filtro atual.",
+        "error": "Não foi possível carregar os cursos agora. Tente novamente mais tarde."
     },
     "Filter": "Buscar",
     "FIELD": "ÁREA",
@@ -257,6 +259,10 @@
         "contact": {
             "title": "Contato | Alvaro Ferreira",
             "description": "Entre em contato para discutirmos inovação técnica, liderança em engenharia e escalabilidade."
+        },
+        "notFound": {
+            "title": "Página não encontrada | Alvaro Ferreira",
+            "description": "O endereço que você abriu não existe ou mudou de lugar."
         }
     },
     "chunkLoad": {
@@ -271,5 +277,13 @@
     "Dados Operacionais": "Dados Operacionais",
     "Melhoria Contínua": "Melhoria Contínua",
     "Microserviços": "Microserviços",
-    "Revisão de código": "Revisão de código"
+    "Revisão de código": "Revisão de código",
+    "a11y": {
+        "skipToContent": "Pular para o conteúdo principal"
+    },
+    "notFound": {
+        "title": "Página não encontrada",
+        "description": "O endereço que você abriu não existe ou mudou de lugar.",
+        "back": "Voltar para o início"
+    }
 }

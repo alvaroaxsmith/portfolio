@@ -50,6 +50,16 @@ export const routes: Routes = [
         descriptionKey: 'seo.contact.description'
       }
     }
+  },
+  {
+    path: '**',
+    data: {
+      seo: {
+        titleKey: 'seo.notFound.title',
+        descriptionKey: 'seo.notFound.description',
+        noindex: true
+      }
+    },
+    loadComponent: () => import('./features/not-found/not-found.component').then(m => m.NotFoundComponent)
   }
-
 ];

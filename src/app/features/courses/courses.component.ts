@@ -38,6 +38,7 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = ['field', 'name', 'time', 'school', 'date'];
   dataSource = new MatTableDataSource<Course>();
   readonly isLoading = signal(true);
+  readonly loadError = signal(false);
 
   get visibleCourses(): Course[] {
     return this.dataSource.filter ? this.dataSource.filteredData : this.dataSource.data;
@@ -156,12 +157,19 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   loadData() {
     this.isLoading.set(true);
-    this.courseService.getCourses().pipe(takeUntil(this.destroy$)).subscribe(courses => {
-      this.dataSource.data = courses;
-      this.dataSource.filter = this.state.filter.trim().toLowerCase();
-      this.dataSource.sort = this.sort();
-      this.dataSource.paginator = this.paginator();
-      this.isLoading.set(false);
+    this.loadError.set(false);
+    this.courseService.getCourses().pipe(takeUntil(this.destroy$)).subscribe({
+      next: courses => {
+        this.dataSource.data = courses;
+        this.dataSource.filter = this.state.filter.trim().toLowerCase();
+        this.dataSource.sort = this.sort();
+        this.dataSource.paginator = this.paginator();
+        this.isLoading.set(false);
+      },
+      error: () => {
+        this.loadError.set(true);
+        this.isLoading.set(false);
+      }
     });
   }
 

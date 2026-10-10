@@ -3,7 +3,7 @@ import { fakeIntersectionObserver } from '../../testing/fake-intersection-observ
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { TranslateModule } from '@ngx-translate/core';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { CoursesComponent } from './courses.component';
 import { CourseService } from './services/courses.service';
@@ -50,6 +50,31 @@ describe('CoursesComponent', () => {
   it('should create', async () => {
     await render();
     expect(component).toBeTruthy();
+  });
+
+  describe('when the courses cannot be loaded', () => {
+    beforeEach(() => {
+      spyOn(TestBed.inject(CourseService), 'getCourses').and.returnValue(throwError(() => new Error('API down')));
+    });
+
+    it('stops loading instead of showing the placeholders forever', async () => {
+      await render();
+
+      expect(component.isLoading()).toBeFalse();
+      expect(fixture.nativeElement.querySelector('app-courses-skeleton')).toBeNull();
+    });
+
+    it('tells the visitor, in the table and in the mobile list', async () => {
+      await render();
+
+      const alerts = Array.from(fixture.nativeElement.querySelectorAll('[role="alert"]') as NodeListOf<HTMLElement>);
+      expect(alerts.length).toBe(2);
+      for (const alert of alerts) {
+        expect(alert.textContent).toContain('courses.error');
+      }
+      expect(fixture.nativeElement.textContent).not.toContain('courses.noData');
+      expect(fixture.nativeElement.textContent).not.toContain('courses.emptyState');
+    });
   });
 
   it('restores the saved page and page size', async () => {

@@ -1,6 +1,6 @@
 import { ApplicationConfig, importProvidersFrom, provideZoneChangeDetection } from '@angular/core';
 import { HttpClient, provideHttpClient } from '@angular/common/http';
-import { provideRouter } from '@angular/router';
+import { provideRouter, withInMemoryScrolling } from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
@@ -15,7 +15,8 @@ export const appConfig: ApplicationConfig = {
   providers: [
     // The app still relies on zone.js for change detection; going zoneless is a separate decision (Q-03).
     provideZoneChangeDetection(),
-    provideRouter(routes),
+    // A new page starts at the top (and Back restores where the visitor was), instead of keeping the old scroll.
+    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })),
     provideHttpClient(),
     importProvidersFrom(
       TranslateModule.forRoot({
