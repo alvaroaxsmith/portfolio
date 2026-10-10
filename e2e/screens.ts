@@ -95,6 +95,12 @@ export async function openScreen(page: Page, screen: Screen, lang: 'PT-BR' | 'EN
   // Interactions scroll to their target, so the layout must be final before them, not only before the capture.
   await page.evaluate(() => document.fonts.ready);
   await settled(page);
+  if (screen.path === '/courses') {
+    // The courses hint dismisses itself after a few seconds; capture the page without it, never halfway out.
+    const hint = page.locator('app-course-hint');
+    await hint.waitFor();
+    await expect(hint).toHaveCount(0, { timeout: 10_000 });
+  }
   await screen.setup?.(page);
   // Lets lazy content and entrance animations finish before anything is measured.
   await page.waitForLoadState('networkidle');
