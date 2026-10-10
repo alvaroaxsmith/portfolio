@@ -17,7 +17,7 @@ jobs:
     permissions:
       contents: write
       pull-requests: write
-      # Dispatches the quality gate on the release PR (see the last step).
+      # Approves the quality gate runs of the release PR (see the last step).
       actions: write
     steps:
       - id: release
@@ -25,12 +25,25 @@ jobs:
         with:
           config-file: release-please-config.json
           manifest-file: .release-please-manifest.json
-      # A PR opened with the workflow token does not trigger other workflows, so the required checks would
-      # never report on the release PR. Dispatching the gate on its branch is allowed and reports them.
+      # The release PR is opened by github-actions[bot], which GitHub treats as a first-time contributor: its
+      # pull_request runs wait in "action_required" and the required checks never report on the PR. Approve
+      # those runs (a gate dispatched by hand reports on the commit, not on the PR, so it does not unblock it).
       # The PR is parsed in the shell: step env is evaluated even when `if` is false, and fromJSON of the
       # empty `pr` output (no PR touched, e.g. right after a release) fails the job.
       - if: steps.release.outputs.prs_created == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
           PR: ${{ steps.release.outputs.pr }}
-        run: gh workflow run quality-gate.yml --repo "$GITHUB_REPOSITORY" --ref "$(jq -r .headBranchName <<< "$PR")"
+        run: |
+          branch=$(jq -r .headBranchName <<< "$PR")
+          for attempt in $(seq 1 12); do
+            runs=$(gh api "repos/$GITHUB_REPOSITORY/actions/runs?branch=$branch&event=pull_request&status=action_required" \
+              --jq '.workflow_runs[] | select(.path == ".github/workflows/quality-gate.yml") | .id')
+            [ -n "$runs" ] && break
+            sleep 5
+          done
+          [ -z "$runs" ] && { echo "No pull_request run waiting for approval on $branch"; exit 0; }
+          for id in $runs; do
+            gh api -X POST "repos/$GITHUB_REPOSITORY/actions/runs/$id/approve" \
+              || echo "::warning::Could not approve run $id; approve it in the release PR (Approve and run workflows)."
+          done
