@@ -155,6 +155,19 @@ describe('TextComponent', () => {
       expect([component.currentIndex(), component.animationState()]).toEqual([0, 'shown']);
     }));
 
+    it('toggles with a tap on the word itself, since the button only shows once paused', () => {
+      fixture.detectChanges();
+      const word = fixture.nativeElement.querySelector('.rotating-word') as HTMLElement;
+
+      word.click();
+      fixture.detectChanges();
+      expect(toggle().getAttribute('aria-pressed')).toBe('true');
+
+      word.click();
+      fixture.detectChanges();
+      expect(toggle().getAttribute('aria-pressed')).toBe('false');
+    });
+
     it('stays paused after a click or tap until pressed again', fakeAsync(() => {
       fixture.detectChanges();
       toggle().click();

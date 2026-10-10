@@ -5,23 +5,32 @@ import { TranslateModule } from '@ngx-translate/core';
 @Component({
     selector: 'app-text',
     templateUrl: './text.component.html',
-    // The word disappears at once, and the next one slides in from the left.
+    // The word disappears at once, and the next one slides in from the left, fully visible, inside its own window:
+    // the clip keeps it from passing over the text before it. The pause button sits after the word, out of the
+    // layout, and shows only on hover, keyboard focus, or while the visitor keeps the word paused.
     styles: `
       :host {
+        position: relative;
         display: inline-flex;
         align-items: center;
-        gap: 0.4rem;
+        cursor: pointer;
+      }
+      .word-window {
+        clip-path: inset(-0.5em -1em -0.5em 0);
       }
       .rotating-word {
         opacity: 0;
-        transform: translateX(-100px);
+        transform: translateX(-100%);
       }
       .rotating-word.shown {
         opacity: 1;
         transform: none;
-        transition: opacity 1.5s, transform 1.5s;
+        transition: transform 1.5s;
       }
       .rotation-toggle {
+        position: absolute;
+        top: 50%;
+        left: calc(100% + 0.4rem);
         display: inline-flex;
         align-items: center;
         justify-content: center;
@@ -33,6 +42,14 @@ import { TranslateModule } from '@ngx-translate/core';
         background: transparent;
         color: var(--color-text-muted);
         cursor: pointer;
+        opacity: 0;
+        transform: translateY(-50%);
+        transition: opacity 0.2s;
+      }
+      :host(:hover) .rotation-toggle,
+      .rotation-toggle:focus-visible,
+      .rotation-toggle[aria-pressed='true'] {
+        opacity: 1;
       }
       .rotation-toggle mat-icon {
         width: 1.1rem;
@@ -40,7 +57,8 @@ import { TranslateModule } from '@ngx-translate/core';
         font-size: 1.1rem;
       }
       @media (prefers-reduced-motion: reduce) {
-        .rotating-word.shown {
+        .rotating-word.shown,
+        .rotation-toggle {
           transition: none;
         }
       }
@@ -50,7 +68,9 @@ import { TranslateModule } from '@ngx-translate/core';
         '(pointerenter)': 'onPointer($event, true)',
         '(pointerleave)': 'onPointer($event, false)',
         '(focusin)': 'onFocusIn($event)',
-        '(focusout)': 'setFocused(false)'
+        '(focusout)': 'setFocused(false)',
+        // A tap on the word toggles too: on touch screens the button only shows once the word is paused.
+        '(click)': 'togglePause()'
     },
     imports: [MatIcon, TranslateModule]
 })
