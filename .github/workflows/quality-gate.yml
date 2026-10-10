@@ -1,11 +1,12 @@
 name: Quality gate
 
 # Job ids are the required status checks on main (lint, unit, build, e2e, visual). Renaming a job blocks every merge.
+# Runs on pull requests only: the run tests the PR merged into main, and main requires the PR to be up to date
+# before merging, so running again on the push to main would repeat the same work.
 on:
   pull_request:
     branches: [main]
-  push:
-    branches: [main]
+    types: [opened, synchronize, reopened, ready_for_review]
 
 permissions:
   contents: read
@@ -19,6 +20,9 @@ env:
 
 jobs:
   lint:
+    # Drafts are work in progress; the gate runs when the PR is marked ready. A skipped job counts as passed,
+    # and a draft cannot be merged anyway.
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -30,6 +34,7 @@ jobs:
       - run: npx ng lint
 
   unit:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -48,6 +53,7 @@ jobs:
           retention-days: 14
 
   build:
+    if: github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4

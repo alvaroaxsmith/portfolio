@@ -22,10 +22,9 @@ const screenshot = {
   maxDiffPixels: 0
 };
 
-/** Parts that change on their own: the rotating word, the timed hint, the certificate frame (a live iframe). */
+/** Parts that change on their own: the rotating word and the certificate frame (a live iframe). */
 const moving = (page: import('@playwright/test').Page) => [
   page.locator('app-text .rotating-word'),
-  page.locator('.mat-mdc-snack-bar-container'),
   page.locator('app-certificate-sheet .frame')
 ];
 

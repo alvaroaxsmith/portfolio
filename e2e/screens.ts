@@ -39,6 +39,12 @@ export const screens: Screen[] = [
     setup: async (page) => {
       await page.locator('mat-card.timeline-content').first().click();
       await expect(page.locator('[data-experience-id="1"] svg')).toBeVisible();
+      // A window capture depends on the scroll position and the navbar on the scroll direction: start from the top
+      // and always scroll down to the timeline, instead of wherever the click left the page.
+      await page.evaluate(() => window.scrollTo(0, 0));
+      await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
+      await settled(page);
+      await page.locator('.timeline-background').evaluate((el) => el.scrollIntoView({ block: 'start' }));
     }
   },
   {
@@ -86,8 +92,16 @@ export async function openScreen(page: Page, screen: Screen, lang: 'PT-BR' | 'EN
     { lang, production: !!screen.production }
   );
   await open(page, screen.path);
-  await screen.setup?.(page);
+  // Interactions scroll to their target, so the layout must be final before them, not only before the capture.
   await page.evaluate(() => document.fonts.ready);
+  await settled(page);
+  if (screen.path === '/courses') {
+    // The courses hint dismisses itself after a few seconds; capture the page without it, never halfway out.
+    const hint = page.locator('app-course-hint');
+    await hint.waitFor();
+    await expect(hint).toHaveCount(0, { timeout: 10_000 });
+  }
+  await screen.setup?.(page);
   // Lets lazy content and entrance animations finish before anything is measured.
   await page.waitForLoadState('networkidle');
   await settled(page);
