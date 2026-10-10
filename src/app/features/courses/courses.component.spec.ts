@@ -191,6 +191,40 @@ describe('CoursesComponent behavior', () => {
 
       expect(analytics.track).toHaveBeenCalledWith('certificate_open', { course: 'Course 03', school: 'School' });
     });
+
+    it('opens a certificate from a button on the course name; the row stays clickable but out of the tab order', async () => {
+      render();
+      await fixture.whenStable();
+      fixture.detectChanges();
+      const open = spyOn(component, 'openDialog');
+      const row = fixture.nativeElement.querySelector('tr.course-row') as HTMLElement;
+      const button = row.querySelector('td button.course-name') as HTMLButtonElement;
+
+      expect(row.hasAttribute('tabindex')).toBeFalse();
+      expect(button.textContent?.trim()).toBe(component.dataSource.filteredData[0].name);
+
+      button.click();
+      expect(open).toHaveBeenCalledTimes(1);
+
+      (row.querySelector('td') as HTMLElement).click();
+      expect(open).toHaveBeenCalledTimes(2);
+    });
+
+    it('lists the mobile cards as a real list', async () => {
+      render();
+      await fixture.whenStable();
+      fixture.detectChanges();
+      const list = fixture.nativeElement.querySelector('ul.mobile-course-items') as HTMLElement;
+
+      expect(list.querySelectorAll(':scope > li > button.course-card').length).toBe(component.mobileCourses.length);
+      expect(fixture.nativeElement.querySelector('.mobile-course-list [role="listitem"], .mobile-course-list [role="list"]')).toBeNull();
+    });
+
+    it('names the paginator in the visitor\'s language', () => {
+      render();
+
+      expect(fixture.nativeElement.querySelector('mat-paginator').getAttribute('aria-label')).toBe('a11y.coursesPaginator');
+    });
   });
 
   describe('hint notification', () => {

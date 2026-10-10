@@ -127,6 +127,14 @@ describe('AnalyticsService', () => {
       service.openConsentBanner();
 
       expect(service.consentBannerVisible()).toBeTrue();
+      expect(service.consentBannerReopened()).withContext('the banner takes focus only when the visitor asked for it').toBeTrue();
+
+      service.setConsent('denied');
+      expect(service.consentBannerReopened()).toBeFalse();
+    });
+
+    it('does not mark the first automatic showing as reopened', () => {
+      expect(createService(true).consentBannerReopened()).toBeFalse();
     });
 
     it('ignores invalid stored values', () => {

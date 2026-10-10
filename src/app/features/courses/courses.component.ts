@@ -1,5 +1,6 @@
 import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ElementRef, effect, inject, viewChild, signal } from '@angular/core';
 import { Subject, takeUntil } from 'rxjs';
+import { providePaginatorIntl } from '../../core/i18n/paginator-intl';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
 import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatNoDataRow } from '@angular/material/table';
@@ -24,7 +25,9 @@ const MOBILE_LOAD_DELAY_MS = 600;
     templateUrl: './courses.component.html',
     styleUrls: ['./courses.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatFormField, MatLabel, MatInput, MatIcon, MatSuffix, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatSortHeader, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatNoDataRow, CoursesSkeletonComponent, MatPaginator, TranslateModule]
+    imports: [MatFormField, MatLabel, MatInput, MatIcon, MatSuffix, MatTable, MatSort, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatSortHeader, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatNoDataRow, CoursesSkeletonComponent, MatPaginator, TranslateModule],
+    // Translated paginator texts, provided here so the paginator stays out of the initial bundle.
+    providers: [providePaginatorIntl()]
 })
 export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   private courseService = inject(CourseService);

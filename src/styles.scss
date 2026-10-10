@@ -125,6 +125,21 @@ main {
     outline-offset: 3px;
 }
 
+// A button that reads as the text around it: same font and color, no box. Used where a heading or a cell is the
+// keyboard way into something the whole card or row opens with the mouse.
+.text-button {
+    padding: 0;
+    border: 0;
+    background: none;
+    color: inherit;
+    font: inherit;
+    letter-spacing: inherit;
+    word-spacing: inherit;
+    text-transform: inherit;
+    text-align: left;
+    cursor: pointer;
+}
+
 // Page headings take focus after a page change only so screen readers announce the page; they are not controls.
 h1[tabindex='-1']:focus {
     outline: none;

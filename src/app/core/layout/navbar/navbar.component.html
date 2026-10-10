@@ -1,24 +1,24 @@
-<nav aria-label="Navegação principal">
+<nav [attr.aria-label]="'a11y.mainNavigation' | translate">
     <ul>
         <li routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
-            <a routerLink="/" mat-button>{{ "HOME" | translate }}</a>
+            <a routerLink="/" mat-button routerLinkActive [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">{{ "HOME" | translate }}</a>
         </li>
         <li routerLinkActive="active">
-            <a mat-button routerLink="/about-me">{{ "ABOUT ME" | translate }}</a>
+            <a mat-button routerLink="/about-me" routerLinkActive ariaCurrentWhenActive="page">{{ "ABOUT ME" | translate }}</a>
         </li>
         <li routerLinkActive="active">
-            <a mat-button routerLink="/courses">{{ "COURSES" | translate }}</a>
+            <a mat-button routerLink="/courses" routerLinkActive ariaCurrentWhenActive="page">{{ "COURSES" | translate }}</a>
         </li>
         <li routerLinkActive="active">
-            <a mat-button routerLink="/portfolio">{{ "PROJECTS" | translate }}</a>
+            <a mat-button routerLink="/portfolio" routerLinkActive ariaCurrentWhenActive="page">{{ "PROJECTS" | translate }}</a>
         </li>
         <li routerLinkActive="active">
-            <a mat-button routerLink="/contact">{{ "CONTACT" | translate }}</a>
+            <a mat-button routerLink="/contact" routerLinkActive ariaCurrentWhenActive="page">{{ "CONTACT" | translate }}</a>
         </li>
         <li class="language no-hover">
             <mat-menu #menu="matMenu">
                 @for (lang of translate.getLangs(); track lang) {
-                <button mat-menu-item (click)="translate.use(lang)">
+                <button mat-menu-item role="menuitemradio" [attr.aria-checked]="lang === translate.currentLang" (click)="translate.use(lang)">
             {{ lang }}
           </button> }
             </mat-menu>
@@ -28,7 +28,7 @@
       </button>
         </li>
         <li class="mobile-menu-trigger">
-            <button mat-stroked-button type="button" class="menu-button" (click)="openDialog()" aria-label="Abrir menu de navegação">
+            <button mat-stroked-button type="button" class="menu-button" (click)="openDialog()" [attr.aria-label]="'a11y.openMenu' | translate" aria-haspopup="dialog">
         Menu
       </button>
         </li>

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { RouterModule } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { Router, RouterModule } from '@angular/router';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NavbarComponent } from './navbar.component';
 
 describe('NavbarComponent', () => {
@@ -9,7 +9,7 @@ describe('NavbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), RouterModule.forRoot([]), NavbarComponent]
+    imports: [TranslateModule.forRoot(), RouterModule.forRoot([{ path: '**', children: [] }]), NavbarComponent]
 }).compileComponents();
 
     fixture = TestBed.createComponent(NavbarComponent);
@@ -83,5 +83,48 @@ describe('NavbarComponent', () => {
     fixture.nativeElement.querySelector('.menu-button').click();
 
     expect(open).toHaveBeenCalledWith(jasmine.any(Function), jasmine.objectContaining({ panelClass: 'mobile-nav-sheet' }));
+  });
+
+  describe('accessible names and state', () => {
+    it('names the navigation and the mobile menu button in the visitor\'s language', () => {
+      const page = fixture.nativeElement as HTMLElement;
+
+      expect(page.querySelector('nav')?.getAttribute('aria-label')).toBe('a11y.mainNavigation');
+      const menu = page.querySelector('.menu-button') as HTMLElement;
+      expect(menu.getAttribute('aria-label')).toBe('a11y.openMenu');
+      expect(menu.getAttribute('aria-haspopup')).toBe('dialog');
+    });
+
+    it('marks the link of the current page', async () => {
+      await TestBed.inject(Router).navigateByUrl('/courses');
+      fixture.detectChanges();
+
+      const current = Array.from(fixture.nativeElement.querySelectorAll('nav a[aria-current="page"]') as NodeListOf<HTMLAnchorElement>);
+      expect(current.map((a) => a.getAttribute('href'))).toEqual(['/courses']);
+    });
+
+    it('opens the mobile menu with a translated name', () => {
+      const open = spyOn(component.bottomSheet, 'open');
+
+      component.openDialog();
+
+      expect(open.calls.mostRecent().args[1]?.ariaLabel).toBe('a11y.mobileMenu');
+    });
+
+    it('shows which language is in use in the language menu', async () => {
+      const translate = TestBed.inject(TranslateService);
+      translate.addLangs(['EN', 'PT-BR']);
+      translate.use('EN');
+      fixture.detectChanges();
+      (fixture.nativeElement.querySelector('.language-form') as HTMLButtonElement).click();
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      const items = Array.from(document.querySelectorAll('.mat-mdc-menu-panel [role="menuitemradio"]')) as HTMLElement[];
+      expect(items.map((item) => [item.textContent?.trim(), item.getAttribute('aria-checked')])).toEqual([
+        ['EN', 'true'],
+        ['PT-BR', 'false']
+      ]);
+    });
   });
 });

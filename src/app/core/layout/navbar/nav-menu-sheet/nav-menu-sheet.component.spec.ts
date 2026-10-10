@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { NavMenuSheetComponent } from './nav-menu-sheet.component';
 
@@ -47,5 +47,23 @@ describe('Mobile navigation menu', () => {
     fixture.nativeElement.querySelector('.sheet-header button').click();
 
     expect(sheetRef.dismiss).toHaveBeenCalledTimes(1);
+  });
+
+  it('names the menu and its close button in the visitor\'s language, and marks the current language', () => {
+    translate.use('PT-BR');
+    fixture.detectChanges();
+    const sheet = fixture.nativeElement as HTMLElement;
+
+    expect(sheet.querySelector('.sheet')?.getAttribute('aria-label')).toBe('a11y.mobileMenu');
+    expect(sheet.querySelector('.sheet-header button')?.getAttribute('aria-label')).toBe('a11y.closeMenu');
+    const languages = Array.from(sheet.querySelectorAll('.language-buttons button')) as HTMLElement[];
+    expect(languages.map((button) => button.getAttribute('aria-pressed'))).toEqual(['false', 'true']);
+  });
+
+  it('marks the link of the current page', async () => {
+    await TestBed.inject(Router).navigateByUrl('/contact');
+    fixture.detectChanges();
+
+    expect(links().filter((a) => a.getAttribute('aria-current') === 'page').map((a) => a.getAttribute('href'))).toEqual(['/contact']);
   });
 });

@@ -19,6 +19,8 @@ export class AnalyticsService {
   private readonly win = window as AnalyticsWindow;
   private lastKeys: string[] = [];
   readonly consentBannerVisible = signal(false);
+  /** Shown because the visitor asked to change the choice, not by itself on the first visit; it then takes focus. */
+  readonly consentBannerReopened = signal(false);
 
   constructor() {
     this.consentBannerVisible.set(this.enabled && this.consent === null);
@@ -26,6 +28,7 @@ export class AnalyticsService {
 
   openConsentBanner(): void {
     if (this.enabled) {
+      this.consentBannerReopened.set(true);
       this.consentBannerVisible.set(true);
     }
   }
@@ -49,6 +52,7 @@ export class AnalyticsService {
     } catch {
     }
     this.consentBannerVisible.set(false);
+    this.consentBannerReopened.set(false);
     this.win.gtag?.('consent', 'update', { analytics_storage: choice });
     this.track('consent_update', { analytics_storage: choice });
   }

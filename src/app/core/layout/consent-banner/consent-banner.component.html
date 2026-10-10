@@ -1,5 +1,5 @@
 @if (visible()) {
-<section class="consent" role="dialog" aria-live="polite" aria-labelledby="consent-title" aria-describedby="consent-text">
+<section #banner class="consent" role="region" tabindex="-1" aria-labelledby="consent-title" aria-describedby="consent-text">
     <span id="consent-title" class="consent-label">{{ 'consent.label' | translate }}</span>
     <p id="consent-text">{{ 'consent.text' | translate }}</p>
     <div class="consent-actions">

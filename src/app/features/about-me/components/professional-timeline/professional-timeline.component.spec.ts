@@ -19,6 +19,8 @@ describe('ProfessionalTimelineComponent', () => {
   }
 
   const firstCard = () => fixture.nativeElement.querySelector('mat-card.timeline-content') as HTMLElement;
+  /** The button in the card title: the keyboard and screen reader way to open the journey. */
+  const cardAction = () => firstCard().querySelector('button.card-action') as HTMLButtonElement;
 
   it('starts on the first experience, with the carousel visible', () => {
     render(false);
@@ -47,19 +49,48 @@ describe('ProfessionalTimelineComponent', () => {
       expect(component.timelineDefinitions().length).toBe(component.experiences.length);
     });
 
-    it('cards are focusable and show a pointer', () => {
+    it('cards show a pointer, and their title is a button that keeps the card content readable', () => {
       render(false);
 
-      expect(firstCard().getAttribute('tabindex')).toBe('0');
       expect(firstCard().classList).toContain('is-interactive');
+      expect(firstCard().hasAttribute('tabindex')).toBeFalse();
+      expect(firstCard().hasAttribute('role')).toBeFalse();
+      expect(cardAction().textContent?.trim()).toBe(component.experiences[0].role);
+      const hint = fixture.nativeElement.querySelector(`#${cardAction().getAttribute('aria-describedby')}`) as HTMLElement;
+      expect(hint.textContent?.trim()).toBe('timeline.openJourney');
     });
 
-    it('opens the journey with Enter or Space for keyboard users', () => {
+    it('opens the journey from the title button, for keyboard users', () => {
       render(false);
 
-      firstCard().dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      cardAction().click();
 
       expect(component.isJourneyVisible()).toBeTrue();
+      expect(component.journeyCurrentIndex()).toBe(0);
+    });
+
+    it('names the journey card as the button that goes back to the cards', () => {
+      render(false);
+      component.openJourney(component.experiences[0]);
+      fixture.detectChanges();
+
+      const journey = fixture.nativeElement.querySelector('mat-card.mermaid-journey-card') as HTMLElement;
+      expect([journey.getAttribute('role'), journey.getAttribute('aria-label'), journey.getAttribute('tabindex')]).toEqual([
+        'button',
+        'timeline.closeJourney',
+        '0'
+      ]);
+    });
+
+    it('names each numbered step after its company and role, and marks the current one', () => {
+      render(false);
+      component.goTo(2);
+      fixture.detectChanges();
+
+      const steps = Array.from(fixture.nativeElement.querySelectorAll('.icon-wrapper') as NodeListOf<HTMLElement>);
+      const [first] = component.experiences;
+      expect(steps[0].getAttribute('aria-label')).toBe(`1. ${first.company}, ${first.role}`);
+      expect(steps.map((step) => step.getAttribute('aria-current'))).toEqual(component.experiences.map((_, i) => (i === 2 ? 'step' : null)));
     });
 
     it('clicking the journey goes back to the cards', () => {
@@ -85,6 +116,7 @@ describe('ProfessionalTimelineComponent', () => {
       render(true);
 
       expect(firstCard().hasAttribute('tabindex')).toBeFalse();
+      expect(cardAction()).toBeNull();
       expect(firstCard().classList).not.toContain('is-interactive');
     });
   });
@@ -98,9 +130,7 @@ describe('ProfessionalTimelineComponent', () => {
       fixture.detectChanges();
 
       expect(items('.carousel-item').map((item) => item.inert)).toEqual(component.experiences.map((_, i) => i !== 2));
-      expect(items('mat-card.timeline-content').map((card) => card.getAttribute('tabindex'))).toEqual(
-        component.experiences.map((_, i) => (i === 2 ? '0' : null))
-      );
+      expect(items('mat-card.timeline-content button.card-action').length).toBe(component.experiences.length);
     });
 
     it('keeps the hidden view out of the tab order', () => {
@@ -118,10 +148,10 @@ describe('ProfessionalTimelineComponent', () => {
 
     it('follows the view that opens, without scrolling the page', async () => {
       render(false);
-      firstCard().focus();
+      cardAction().focus();
       const focus = spyOn(HTMLElement.prototype, 'focus').and.callThrough();
 
-      firstCard().dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      cardAction().click();
       fixture.detectChanges();
       await fixture.whenStable();
 
@@ -132,7 +162,7 @@ describe('ProfessionalTimelineComponent', () => {
       fixture.detectChanges();
       await fixture.whenStable();
 
-      expect(document.activeElement).toBe(firstCard());
+      expect(document.activeElement).toBe(cardAction());
     });
 
     it('leaves focus alone when it was elsewhere on the page', async () => {

@@ -1,26 +1,26 @@
-<section class="sheet" aria-label="Menu mobile">
+<section class="sheet" [attr.aria-label]="'a11y.mobileMenu' | translate">
     <div class="sheet-header">
         <p>{{ "Navigation" | translate }}</p>
-        <button mat-icon-button type="button" (click)="dismiss()" aria-label="Fechar menu">
+        <button mat-icon-button type="button" (click)="dismiss()" [attr.aria-label]="'a11y.closeMenu' | translate">
       <mat-icon>close</mat-icon>
     </button>
     </div>
 
     <ul>
         <li>
-            <a routerLink="/" mat-button (click)="dismiss()">{{ "HOME" | translate }}</a>
+            <a routerLink="/" mat-button routerLinkActive [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page" (click)="dismiss()">{{ "HOME" | translate }}</a>
         </li>
         <li>
-            <a routerLink="/about-me" mat-button (click)="dismiss()">{{ "ABOUT ME" | translate }}</a>
+            <a routerLink="/about-me" mat-button routerLinkActive ariaCurrentWhenActive="page" (click)="dismiss()">{{ "ABOUT ME" | translate }}</a>
         </li>
         <li>
-            <a routerLink="/courses" mat-button (click)="dismiss()">{{ "COURSES" | translate }}</a>
+            <a routerLink="/courses" mat-button routerLinkActive ariaCurrentWhenActive="page" (click)="dismiss()">{{ "COURSES" | translate }}</a>
         </li>
         <li>
-            <a routerLink="/portfolio" mat-button (click)="dismiss()">{{ "PROJECTS" | translate }}</a>
+            <a routerLink="/portfolio" mat-button routerLinkActive ariaCurrentWhenActive="page" (click)="dismiss()">{{ "PROJECTS" | translate }}</a>
         </li>
         <li>
-            <a routerLink="/contact" mat-button (click)="dismiss()">{{ "CONTACT" | translate }}</a>
+            <a routerLink="/contact" mat-button routerLinkActive ariaCurrentWhenActive="page" (click)="dismiss()">{{ "CONTACT" | translate }}</a>
         </li>
     </ul>
 
@@ -28,7 +28,7 @@
         <span>{{ "Language" | translate }}</span>
         <div class="language-buttons">
             @for (lang of translate.getLangs(); track trackByLang($index, lang)) {
-            <button mat-stroked-button type="button" (click)="switchLang(lang)">
+            <button mat-stroked-button type="button" [attr.aria-pressed]="lang === translate.currentLang" (click)="switchLang(lang)">
           {{ lang }}
         </button> }
         </div>

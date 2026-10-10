@@ -32,10 +32,7 @@
     </div>
 
     <div class="view-controls">
-        <button mat-icon-button type="button" (click)="toggleView()" [matTooltip]="
-        (currentView() === 'list' ? 'Switch to Grid View' : 'Switch to List View')
-          | translate
-      ">
+        <button mat-icon-button type="button" (click)="toggleView()" [matTooltip]="(currentView() === 'list' ? 'Switch to Grid View' : 'Switch to List View') | translate" [attr.aria-label]="(currentView() === 'list' ? 'Switch to Grid View' : 'Switch to List View') | translate">
       <mat-icon>{{ currentView() === "list" ? "grid_on" : "view_list" }}</mat-icon>
     </button>
     </div>

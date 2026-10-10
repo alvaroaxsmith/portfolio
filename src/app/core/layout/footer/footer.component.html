@@ -13,8 +13,10 @@
     <div>
         {{'Technologies Used' | translate }}
         <div class="flex-icons">
-            <fa-icon [icon]="faAngular" alt="Angular" matTooltip="Angular" />
-            <fa-icon [icon]="faNodeJs" alt="NodeJs" matTooltip="NodeJs" />
+            <fa-icon [icon]="faAngular" aria-hidden="true" matTooltip="Angular" />
+            <span class="cdk-visually-hidden">Angular</span>
+            <fa-icon [icon]="faNodeJs" aria-hidden="true" matTooltip="NodeJs" />
+            <span class="cdk-visually-hidden">NodeJs</span>
         </div>
     </div>
 </div>

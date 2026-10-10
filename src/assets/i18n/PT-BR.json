@@ -240,7 +240,9 @@
             "description": "Apoio a operações de engenharia de manutenção com foco em análise de dados e melhoria contínua de processos no Metrô de São Paulo.",
             "activity1": "Criação de dashboards gerenciais e tratamento de dados operacionais com Power BI e Excel.",
             "activity2": "Apoio analítico à implantação do ERP SAP e execução de estudos de cronoanálise."
-        }
+        },
+        "openJourney": "Abre a jornada profissional a partir desta experiência",
+        "closeJourney": "Voltar aos cards de experiência"
     },
     "seo": {
         "home": {
@@ -282,11 +284,25 @@
     "Microserviços": "Microserviços",
     "Revisão de código": "Revisão de código",
     "a11y": {
-        "skipToContent": "Pular para o conteúdo principal"
+        "skipToContent": "Pular para o conteúdo principal",
+        "mainNavigation": "Navegação principal",
+        "openMenu": "Abrir menu de navegação",
+        "mobileMenu": "Menu de navegação",
+        "closeMenu": "Fechar menu",
+        "highlights": "Destaques profissionais",
+        "coursesPaginator": "Selecionar página de cursos"
     },
     "notFound": {
         "title": "Página não encontrada",
         "description": "O endereço que você abriu não existe ou mudou de lugar.",
         "back": "Voltar para o início"
+    },
+    "paginator": {
+        "itemsPerPage": "Itens por página:",
+        "nextPage": "Próxima página",
+        "previousPage": "Página anterior",
+        "firstPage": "Primeira página",
+        "lastPage": "Última página",
+        "of": "de"
     }
 }

@@ -56,7 +56,7 @@ describe('HighlightsComponent', () => {
   });
 
   it('shows the end of the date range next to the start', () => {
-    const firstHeading = items()[0].querySelector('h4')?.textContent?.replace(/\s+/g, ' ').trim();
+    const firstHeading = items()[0].querySelector('h3')?.textContent?.replace(/\s+/g, ' ').trim();
 
     expect(firstHeading).toBe('2014 to 2018');
   });
@@ -90,5 +90,10 @@ describe('HighlightsComponent', () => {
     fixture.destroy();
 
     expect(removed).toHaveBeenCalledWith('scroll', jasmine.any(Function), jasmine.objectContaining({ capture: true }));
+  });
+
+  it('titles each highlight with an h3, under the page h1', () => {
+    expect(fixture.nativeElement.querySelectorAll('.timeline-content h4').length).toBe(0);
+    expect(fixture.nativeElement.querySelectorAll('.timeline-content h3').length).toBe(items().length);
   });
 });

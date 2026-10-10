@@ -48,7 +48,7 @@ export class NavbarComponent {
   openDialog() {
     this.bottomSheet.open(NavMenuSheetComponent, {
       panelClass: 'mobile-nav-sheet',
-      ariaLabel: 'Menu de navegação'
+      ariaLabel: this.translate.instant('a11y.mobileMenu')
     });
   }
 }
