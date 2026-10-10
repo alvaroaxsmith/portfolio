@@ -1,0 +1,34 @@
+name: Release
+
+# On every merge to main, release-please opens or updates a release PR with the next version (package.json,
+# CHANGELOG.md). Merging that PR creates the tag and a draft GitHub Release; the owner publishes it after the
+# notes are rewritten for visitors. See CLAUDE.md for which commit types bump which part of the version.
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: release-please
+  cancel-in-progress: false
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      # Dispatches the quality gate on the release PR (see the last step).
+      actions: write
+    steps:
+      - id: release
+        uses: googleapis/release-please-action@v4
+        with:
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
+      # A PR opened with the workflow token does not trigger other workflows, so the required checks would
+      # never report on the release PR. Dispatching the gate on its branch is allowed and reports them.
+      - if: steps.release.outputs.prs_created == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BRANCH: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
+        run: gh workflow run quality-gate.yml --repo "$GITHUB_REPOSITORY" --ref "$BRANCH"

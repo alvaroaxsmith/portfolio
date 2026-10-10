@@ -6,6 +6,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
 import { provideAppLanguage } from './core/i18n/language-storage';
 import { provideChunkLoadRecovery } from './core/chunk-load/chunk-load-recovery.service';
+import { provideAppVersion } from './core/version/app-version';
 
 export function httpTranslateLoader(http: HttpClient) {
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -24,6 +25,7 @@ export const appConfig: ApplicationConfig = {
       })
     ),
     provideAppLanguage(),
-    provideChunkLoadRecovery()
+    provideChunkLoadRecovery(),
+    provideAppVersion()
   ]
 };

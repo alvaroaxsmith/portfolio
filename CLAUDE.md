@@ -19,6 +19,19 @@ Portfólio pessoal em produção na Vercel (a `main` é publicada a cada merge).
 - **Acessibilidade:** alvo WCAG 2.2 AA. Todo controle tem nome acessível traduzido; elemento escondido sai da ordem de foco (`inert`).
 - **Angular:** standalone, `OnPush`, signals (`input()`, `computed`, `viewChild()`), `inject()`, `afterRenderEffect` para DOM, control flow (`@if`/`@for` com `track` por id).
 
+## Commits e releases
+
+O prefixo do commit decide a próxima versão (release-please, em `release-please-config.json`). Escolha pelo efeito para quem visita o site:
+
+| Prefixo | Versão |
+|---|---|
+| `feat:` algo novo e visível (uma página, um controle) | minor |
+| `fix:`, `perf:`, `refactor:` em código do site, `build(deps):` | patch |
+| `test:`, `ci:`, `docs:`, `chore:` | nenhuma; entra na próxima release |
+| `feat!:` ou `fix!:` (redesenho) | major, só com aprovação do dono |
+
+A cada merge, o release-please atualiza um PR de release. Ao mergear esse PR, a tag e uma GitHub Release em **rascunho** são criadas; reescreva as notas em português, para visitantes, no estilo das releases anteriores, e o dono publica.
+
 ## Gates de acessibilidade e visual
 
 - **axe** (`e2e/a11y.spec.ts`): violações ainda abertas ficam em `knownViolations`, cada uma com a issue que a corrige. Ao corrigir uma, remova a entrada; o teste falha se ela sobrar.
