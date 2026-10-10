@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, AfterViewInit, OnDestroy, Renderer2, ChangeDetectionStrategy, effect, inject, signal, untracked, viewChildren } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterViewInit, OnDestroy, Renderer2, ChangeDetectionStrategy, Injector, afterNextRender, effect, inject, signal, untracked, viewChildren } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -42,6 +42,8 @@ interface TimelineDefinition {
 export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnDestroy {
   translate = inject(TranslateService);
   private readonly renderer = inject(Renderer2);
+  private readonly injector = inject(Injector);
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   readonly mermaidJourneyContainers = viewChildren<ElementRef<HTMLElement>>('mermaidJourneyContainer');
 
@@ -62,6 +64,8 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
   }
 
   readonly cardContents = viewChildren<ElementRef<HTMLElement>>('cardContent');
+  private readonly careerCards = viewChildren('careerCard', { read: ElementRef<HTMLElement> });
+  private readonly journeyCards = viewChildren('journeyCard', { read: ElementRef<HTMLElement> });
 
   experiences: Experience[] = [
     {
@@ -289,10 +293,23 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
 
     this.generateAllMermaidTimelines();
     this.isJourneyVisible.set(true);
+    this.keepFocusIn(this.journeyCards, selectedIndex);
   }
 
   closeJourney(): void {
     this.isJourneyVisible.set(false);
+    this.keepFocusIn(this.careerCards, this.currentIndex());
+  }
+
+  /**
+   * The view being left becomes inert, which would drop focus to the page. When focus was on the timeline, move it
+   * to the matching card of the view that opens; without scrolling, so the page stays where the visitor left it.
+   */
+  private keepFocusIn(cards: () => readonly ElementRef<HTMLElement>[], index: number): void {
+    if (!this.host.nativeElement.contains(document.activeElement)) {
+      return;
+    }
+    afterNextRender(() => cards()[index]?.nativeElement.focus({ preventScroll: true }), { injector: this.injector });
   }
 
   handleIconClickInJourneyView(clickedExperience: Experience): void {

@@ -85,7 +85,8 @@ li.active::after {
     background: rgba(255, 255, 255, 0.66);
 }
 
-:host(.navbar-hidden) {
+// Scrolling down hides the navbar, but never while it holds keyboard focus.
+:host(.navbar-hidden:not(:focus-within)) {
     top: -8rem;
     transform: scaleY(0);
 }

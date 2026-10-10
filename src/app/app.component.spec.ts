@@ -88,6 +88,49 @@ describe('AppComponent', () => {
     });
   });
 
+  describe('focus after changing page', () => {
+    @Component({ template: '<h1>Page title</h1>', standalone: true })
+    class TitledPageComponent {}
+
+    async function navigatedTo(fixture: ReturnType<typeof render>, url: string) {
+      await TestBed.inject(Router).navigateByUrl(url);
+      fixture.detectChanges();
+      await fixture.whenStable();
+    }
+
+    function shownWithTitledPages() {
+      TestBed.inject(Router).resetConfig([{ path: '**', component: TitledPageComponent }]);
+      const fixture = render();
+      fixture.componentInstance.onSplashAnimationFinished();
+      fixture.detectChanges();
+      document.body.appendChild(fixture.nativeElement);
+      return fixture;
+    }
+
+    it('moves focus to the new page heading, so screen readers announce the page', async () => {
+      const fixture = shownWithTitledPages();
+      await navigatedTo(fixture, '/');
+      const focus = spyOn(HTMLElement.prototype, 'focus').and.callThrough();
+
+      await navigatedTo(fixture, '/contact');
+
+      const heading = fixture.nativeElement.querySelector('main h1') as HTMLElement;
+      expect(document.activeElement).toBe(heading);
+      expect(heading.getAttribute('tabindex')).toBe('-1');
+      expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+      fixture.nativeElement.remove();
+    });
+
+    it('leaves focus alone on the first page of the visit', async () => {
+      const fixture = shownWithTitledPages();
+
+      await navigatedTo(fixture, '/');
+
+      expect(document.activeElement).not.toBe(fixture.nativeElement.querySelector('main h1'));
+      fixture.nativeElement.remove();
+    });
+  });
+
   it('keeps a page out of search results when its route asks to', async () => {
     const seo = TestBed.inject(SeoService);
     const update = spyOn(seo, 'update');

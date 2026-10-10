@@ -45,6 +45,9 @@
         "highlight": {
             "one": "Back-end to front-end: Java, Node.js, TypeScript and React across microservices, event-driven systems, BFFs and MFEs.",
             "two": "AI-assisted development, with Spec-Driven Development and coding agents built into the team's daily workflow."
+        },
+        "rotation": {
+            "pause": "Pause the rotating words"
         }
     },
     "Full Cycle Development": "Full Cycle Development",

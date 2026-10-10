@@ -1,3 +1,6 @@
+<button type="button" class="rotation-toggle" [attr.aria-label]="'home.rotation.pause' | translate" [attr.aria-pressed]="pinned()" (click)="togglePause()">
+  <mat-icon aria-hidden="true">{{ pinned() ? 'play_arrow' : 'pause' }}</mat-icon>
+</button>
 <div class="rotating-word" [class.shown]="animationState() === 'shown'">
   {{ words[currentIndex()] | translate }}
 </div>

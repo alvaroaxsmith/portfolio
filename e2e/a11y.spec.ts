@@ -11,8 +11,7 @@ const knownViolations: Record<string, Record<string, { issue: number; nodes: num
   'desktop-portfolio': { 'button-name': { issue: 74, nodes: 1 } },
   'desktop-contact': { 'aria-allowed-role': { issue: 74, nodes: 4 } },
   'mobile-contact': { 'aria-allowed-role': { issue: 74, nodes: 4 } },
-  'mobile-courses': { 'aria-allowed-role': { issue: 74, nodes: 3 } },
-  'mobile-about-me': { 'scrollable-region-focusable': { issue: 73, nodes: 7 } }
+  'mobile-courses': { 'aria-allowed-role': { issue: 74, nodes: 3 } }
 };
 
 const WCAG_AND_BEST_PRACTICES = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa', 'best-practice'];
