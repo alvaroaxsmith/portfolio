@@ -7,6 +7,8 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened, ready_for_review]
+  # Dispatched by the release workflow on its release PR, which the workflow token cannot trigger otherwise.
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -22,7 +24,7 @@ jobs:
   lint:
     # Drafts are work in progress; the gate runs when the PR is marked ready. A skipped job counts as passed,
     # and a draft cannot be merged anyway.
-    if: github.event.pull_request.draft == false
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -34,7 +36,7 @@ jobs:
       - run: npx ng lint
 
   unit:
-    if: github.event.pull_request.draft == false
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -53,7 +55,7 @@ jobs:
           retention-days: 14
 
   build:
-    if: github.event.pull_request.draft == false
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
