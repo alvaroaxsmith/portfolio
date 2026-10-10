@@ -123,10 +123,12 @@ mat-card-header {
     }
 }
 
+// The views and the cards slide by transform only. overflow: clip (not hidden) also forbids scrolling, which focus
+// would otherwise do to show a card still sliding in, leaving the cards shifted.
 .views-container {
     position: relative;
     width: 100%;
-    overflow: hidden;
+    overflow: clip;
     .timeline-carousel-section,
     .mermaid-section {
         width: 100%;
@@ -166,7 +168,7 @@ mat-card-header {
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
-    overflow: hidden;
+    overflow: clip;
 }
 
 .carousel-track {
@@ -200,7 +202,7 @@ mat-card-header {
     width: 100%;
     max-width: 800px;
     margin: 0 auto;
-    overflow: hidden;
+    overflow: clip;
 }
 
 .mermaid-journey-track {

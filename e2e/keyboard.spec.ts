@@ -89,6 +89,27 @@ test.describe('tab order shows every stop', () => {
     expect(await invisibleTabStops(page)).toEqual([]);
   });
 
+  test('about me never scrolls the sliding views out of place, even on a slow device (#74)', async ({ page }) => {
+    // On a slow CPU, focus can land on a card while it is still sliding in; an overflow: hidden container then
+    // scrolls to show it and the cards stay shifted. The slides only ever move by transform.
+    const cdp = await page.context().newCDPSession(page);
+    await cdp.send('Emulation.setCPUThrottlingRate', { rate: 8 });
+    await open(page, '/about-me');
+    await page.locator('mat-card.timeline-content').first().click();
+    await expect(page.locator('[data-experience-id="1"] svg')).toBeVisible();
+    await page.locator('mat-card.mermaid-journey-card').first().click();
+    await settled(page);
+    await page.locator('h1').click();
+    await invisibleTabStops(page, 20);
+
+    const scrolled = await page.evaluate(() =>
+      Array.from(document.querySelectorAll('.views-container, .carousel-wrapper, .mermaid-journey-wrapper'))
+        .filter((el) => el.scrollLeft !== 0 || el.scrollTop !== 0)
+        .map((el) => el.className)
+    );
+    expect(scrolled).toEqual([]);
+  });
+
   test('about me lets only the visible career card take focus (#73)', async ({ page }) => {
     await open(page, '/about-me');
 
