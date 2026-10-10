@@ -21,6 +21,11 @@ const WCAG_AND_BEST_PRACTICES = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wc
 // icon button with a correct aria-label is reported. Not a real barrier.
 const IGNORED_RULES = ['label-content-name-mismatch'];
 
+// Audits run with the reduced-motion preference: the site then drops its transitions, so axe never measures an
+// element halfway through a fade (the rotating word on the home page reads as low contrast mid-fade). The
+// animated path is still covered by the visual screenshots.
+test.use({ contextOptions: { reducedMotion: 'reduce' } });
+
 // Every screen in Portuguese (the default); the consent banner also in English, since visitors abroad see it first.
 const audits = [
   ...screens.map((screen) => ({ screen, lang: 'PT-BR' as const })),
