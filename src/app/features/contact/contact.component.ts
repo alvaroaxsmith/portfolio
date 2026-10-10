@@ -1,7 +1,7 @@
 import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { faGithub, faLinkedin } from '@fortawesome/free-brands-svg-icons';
 import { faEnvelope, faLocationDot, faPhone } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
 @Component({
@@ -9,7 +9,7 @@ import { AnalyticsService } from '../../core/analytics/analytics.service';
     templateUrl: './contact.component.html',
     styleUrls: ['./contact.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [FontAwesomeModule, TranslatePipe]
+    imports: [FaIconComponent, TranslatePipe]
 })
 export class ContactComponent {
   private readonly analytics = inject(AnalyticsService);
