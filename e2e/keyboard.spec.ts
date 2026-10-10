@@ -72,13 +72,13 @@ test.describe('tab order shows every stop', () => {
     });
   }
 
-  test.fixme('about me shows every stop, before the journey is opened (#73)', async ({ page }) => {
+  test('about me shows every stop, before the journey is opened (#73)', async ({ page }) => {
     await open(page, '/about-me');
 
     expect(await invisibleTabStops(page)).toEqual([]);
   });
 
-  test.fixme('about me keeps closed journey cards out of the tab order (#73)', async ({ page }) => {
+  test('about me keeps closed journey cards out of the tab order (#73)', async ({ page }) => {
     await open(page, '/about-me');
     await page.locator('mat-card.timeline-content').first().click();
     await expect(page.locator('[data-experience-id="1"] svg')).toBeVisible();
@@ -89,11 +89,23 @@ test.describe('tab order shows every stop', () => {
     expect(await invisibleTabStops(page)).toEqual([]);
   });
 
-  test.fixme('about me lets only the visible career card take focus (#73)', async ({ page }) => {
+  test('about me lets only the visible career card take focus (#73)', async ({ page }) => {
     await open(page, '/about-me');
 
     await expect(page.locator('.carousel-item mat-card[tabindex="0"]')).toHaveCount(1);
   });
+});
+
+test('Material buttons show the focus outline to keyboard users (#73)', async ({ page }) => {
+  await open(page, '/');
+  const button = page.locator('a.mat-mdc-button-base', { hasText: /cv/i });
+
+  for (let i = 0; i < 30 && !(await button.evaluate((el) => el === document.activeElement)); i++) {
+    await page.keyboard.press('Tab');
+  }
+
+  await expect(button).toBeFocused();
+  expect(await button.evaluate((el) => getComputedStyle(el).outlineStyle)).not.toBe('none');
 });
 
 test.describe('skip link', () => {
@@ -123,7 +135,7 @@ test.describe('skip link', () => {
 });
 
 test.describe('changing page', () => {
-  test.fixme('moves focus to the new page heading (#73)', async ({ page }) => {
+  test('moves focus to the new page heading (#73)', async ({ page }) => {
     await open(page, '/');
     await page.getByRole('navigation').locator('a[href="/contact"]').focus();
 
@@ -145,7 +157,7 @@ test.describe('changing page', () => {
     await expect.poll(() => page.evaluate(() => scrollY)).toBe(0);
   });
 
-  test.fixme('the navigation stays visible while it has keyboard focus (#73)', async ({ page }) => {
+  test('the navigation stays visible while it has keyboard focus (#73)', async ({ page }) => {
     await open(page, '/about-me');
     // Two downward steps: the navbar hides on a scroll that goes down past a fifth of the viewport.
     for (const y of [300, 900]) {

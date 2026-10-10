@@ -89,6 +89,82 @@ describe('ProfessionalTimelineComponent', () => {
     });
   });
 
+  describe('keyboard focus', () => {
+    const items = (selector: string) => Array.from(fixture.nativeElement.querySelectorAll(selector)) as HTMLElement[];
+
+    it('keeps the cards out of view out of the tab order', () => {
+      render(false);
+      component.goTo(2);
+      fixture.detectChanges();
+
+      expect(items('.carousel-item').map((item) => item.inert)).toEqual(component.experiences.map((_, i) => i !== 2));
+      expect(items('mat-card.timeline-content').map((card) => card.getAttribute('tabindex'))).toEqual(
+        component.experiences.map((_, i) => (i === 2 ? '0' : null))
+      );
+    });
+
+    it('keeps the hidden view out of the tab order', () => {
+      render(false);
+      const carousel = fixture.nativeElement.querySelector('.timeline-carousel-section') as HTMLElement;
+      const journey = fixture.nativeElement.querySelector('.mermaid-section') as HTMLElement;
+      expect([carousel.inert, journey.inert]).toEqual([false, true]);
+
+      component.openJourney(component.experiences[1]);
+      fixture.detectChanges();
+
+      expect([carousel.inert, journey.inert]).toEqual([true, false]);
+      expect(items('.mermaid-journey-item').map((item) => item.inert)).toEqual(component.experiences.map((_, i) => i !== 1));
+    });
+
+    it('follows the view that opens, without scrolling the page', async () => {
+      render(false);
+      firstCard().focus();
+      const focus = spyOn(HTMLElement.prototype, 'focus').and.callThrough();
+
+      firstCard().dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(document.activeElement?.classList).toContain('mermaid-journey-card');
+      expect(focus).toHaveBeenCalledWith({ preventScroll: true });
+
+      (document.activeElement as HTMLElement).dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter' }));
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(document.activeElement).toBe(firstCard());
+    });
+
+    it('leaves focus alone when it was elsewhere on the page', async () => {
+      render(false);
+      const focus = spyOn(HTMLElement.prototype, 'focus');
+
+      component.openJourney(component.experiences[0]);
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(focus).not.toHaveBeenCalled();
+    });
+
+    it('lets keyboard users scroll a long card on phones', () => {
+      render(true);
+
+      const content = fixture.nativeElement.querySelector('mat-card-content') as HTMLElement;
+
+      expect(content.getAttribute('tabindex')).toBe('0');
+      expect(content.getAttribute('role')).toBe('region');
+      expect(content.getAttribute('aria-label')).toBe(`${component.experiences[0].role}, ${component.experiences[0].company}`);
+    });
+
+    it('leaves the card content as plain content on desktop, where the card itself takes focus', () => {
+      render(false);
+
+      const content = fixture.nativeElement.querySelector('mat-card-content') as HTMLElement;
+
+      expect(['tabindex', 'role', 'aria-label'].some((name) => content.hasAttribute(name))).toBeFalse();
+    });
+  });
+
   it('moves the journey when an experience icon is clicked inside it', () => {
     render(false);
     component.openJourney(component.experiences[0]);

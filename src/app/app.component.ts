@@ -1,5 +1,5 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Injector, afterNextRender, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, ActivatedRoute, RouterOutlet } from '@angular/router';
 import { TranslateService, LangChangeEvent, TranslateModule } from '@ngx-translate/core';
 import { Subject, filter, takeUntil } from 'rxjs';
@@ -24,6 +24,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private seoService = inject(SeoService);
   private analytics = inject(AnalyticsService);
   private document = inject<Document>(DOCUMENT);
+  private injector = inject(Injector);
 
   readonly showMainContent = signal(false);
   private readonly destroy$ = new Subject<void>();
@@ -45,6 +46,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.updateDocumentLanguage(this.translate.currentLang || this.translate.defaultLang);
     this.updateSeo();
     let currentLang = this.translate.currentLang || this.translate.defaultLang;
+    let firstPage = true;
 
     this.router.events
       .pipe(
@@ -54,6 +56,10 @@ export class AppComponent implements OnInit, OnDestroy {
       .subscribe(() => {
         this.updateSeo();
         this.analytics.pageView(this.router.url.split(/[?#]/)[0], this.document.title, this.translate.currentLang);
+        if (!firstPage) {
+          this.focusPageHeading();
+        }
+        firstPage = false;
       });
 
     this.translate.onLangChange
@@ -72,6 +78,21 @@ export class AppComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+  }
+
+  /**
+   * After a page change focus would stay on the menu link, and screen readers would not announce the new page.
+   * Moving it to the page heading fixes both; the first page of the visit keeps the browser's own focus.
+   */
+  private focusPageHeading() {
+    afterNextRender(() => {
+      const heading = this.document.querySelector<HTMLElement>('main h1');
+      if (!heading) {
+        return;
+      }
+      heading.setAttribute('tabindex', '-1');
+      heading.focus({ preventScroll: true });
+    }, { injector: this.injector });
   }
 
   private updateSeo() {
