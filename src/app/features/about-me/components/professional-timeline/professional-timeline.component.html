@@ -7,7 +7,7 @@
     <div class="timeline-background">
         <div class="timeline-line"></div>
         <div class="timeline-icons">
-            @for (exp of experiences; track exp; let i = $index) {
+            @for (exp of experiences; track exp.id; let i = $index) {
             <button type="button" class="icon-wrapper" [class.active]="!isJourneyVisible() && i === currentIndex()" [class.selected-for-journey]="
           isJourneyVisible() && i === journeyCurrentIndex()
           " (click)="isJourneyVisible() ? handleIconClickInJourneyView(exp) : goTo(i)" [matTooltip]="exp.tooltip || exp.company" [attr.aria-label]="i + 1 + '. ' + (exp.company | translate) + ', ' + (exp.role | translate)" [attr.aria-current]="i === (isJourneyVisible() ? journeyCurrentIndex() : currentIndex()) ? 'step' : null">
@@ -24,7 +24,7 @@
         <div class="timeline-carousel-section" [inert]="isJourneyVisible()">
             <div class="carousel-wrapper">
                 <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'">
-                    @for (experience of experiences; track experience; let i = $index) {
+                    @for (experience of experiences; track experience.id; let i = $index) {
                     <div class="carousel-item" [inert]="i !== currentIndex()">
                         <mat-card class="timeline-content" [class.is-interactive]="!isMobile()" (click)="openJourney(experience)">
                             <mat-card-header>
@@ -80,7 +80,7 @@
                     class="mermaid-journey-track"
                     [style.transform]="'translateX(-' + journeyCurrentIndex() * 100 + '%)'"
                     >
-                    @for (timeline of timelineDefinitions(); track timeline; let i = $index) {
+                    @for (timeline of timelineDefinitions(); track timeline.id; let i = $index) {
                       <div
                         class="mermaid-journey-item"
                         [inert]="i !== journeyCurrentIndex()"

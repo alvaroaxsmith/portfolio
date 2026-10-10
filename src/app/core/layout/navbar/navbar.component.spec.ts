@@ -1,3 +1,4 @@
+import { NgZone } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -40,6 +41,25 @@ describe('NavbarComponent', () => {
     beforeEach(() => {
       scrollY = 0;
       spyOnProperty(window, 'scrollY', 'get').and.callFake(() => scrollY);
+    });
+
+    it('listens outside Angular and only enters it when the navbar changes, so scrolling does not re-render the app', () => {
+      const run = spyOn(TestBed.inject(NgZone), 'run').and.callThrough();
+      // Only the scroll events, without rendering in between, so every call to run comes from the listener.
+      const scrollOnly = (y: number) => {
+        scrollY = y;
+        window.dispatchEvent(new Event('scroll'));
+      };
+
+      scrollOnly(0);
+      expect(run).not.toHaveBeenCalled();
+
+      scrollOnly(10);
+      expect(run).toHaveBeenCalled();
+
+      run.calls.reset();
+      scrollOnly(20);
+      expect(run).not.toHaveBeenCalled();
     });
 
     it('stays transparent at the top of the page', () => {

@@ -281,6 +281,16 @@ describe('ProfessionalTimelineComponent', () => {
     });
   });
 
+  it('decides the phone drag-scroll with the same check as the rest of the timeline, not the window width', () => {
+    spyOnProperty(window, 'innerWidth', 'get').and.returnValue(1024);
+    render(true);
+    const el = fixture.nativeElement.querySelector('mat-card-content') as HTMLElement;
+
+    el.dispatchEvent(new MouseEvent('mousedown', { bubbles: true, cancelable: true, clientY: 100 }));
+
+    expect(el.classList).toContain('grabbing');
+  });
+
   describe('on narrow screens', () => {
     beforeEach(() => spyOnProperty(window, 'innerWidth', 'get').and.returnValue(400));
 
@@ -328,6 +338,16 @@ describe('ProfessionalTimelineComponent', () => {
       fixture.detectChanges();
     }
 
+    /** Renders and runs a full app tick, where the diagrams are drawn, then waits for the (async) drawing to end. */
+    async function settle() {
+      fixture.detectChanges();
+      TestBed.tick();
+      await fixture.whenStable();
+      for (let i = 0; i < 20; i++) {
+        await new Promise((resolve) => setTimeout(resolve));
+      }
+    }
+
     const diagram = (id: number) =>
       fixture.nativeElement.querySelector(`[data-experience-id="${id}"]`) as HTMLElement;
 
@@ -355,8 +375,7 @@ describe('ProfessionalTimelineComponent', () => {
       );
 
       component.openJourney(component.experiences[0]);
-      fixture.detectChanges();
-      await fixture.whenStable();
+      await settle();
 
       expect(render).toHaveBeenCalledTimes(component.experiences.length);
       expect(diagram(1).querySelector('svg')).not.toBeNull();
@@ -368,8 +387,7 @@ describe('ProfessionalTimelineComponent', () => {
       spyOn(mermaid, 'render').and.rejectWith(new Error('parse error'));
 
       component.openJourney(component.experiences[0]);
-      fixture.detectChanges();
-      await fixture.whenStable();
+      await settle();
 
       expect(diagram(1).querySelector('p')?.textContent).toBe('timeline.mermaid.error');
     });
@@ -384,16 +402,44 @@ describe('ProfessionalTimelineComponent', () => {
       const translate = TestBed.inject(TranslateService);
       translate.setTranslation('EN', { 'abr de 2019 - abr de 2021': 'Apr 2019 - Apr 2021' });
       translate.use('EN');
-      fixture.detectChanges();
-      await fixture.whenStable();
+      await settle();
     }
+
+    it('lets the newest drawing win when the text changes mid-draw, e.g. a language switch', async () => {
+      renderJourney();
+      // Each drawing waits until the test answers it; answering the newest first is the order in which an older,
+      // slower drawing would overwrite a newer one.
+      const pending: { call: number; answer: () => void }[] = [];
+      spyOn(mermaid, 'render').and.callFake(() => {
+        const call = pending.length + answered;
+        return new Promise((resolve) =>
+          pending.push({ call, answer: () => resolve({ svg: `<svg data-call="${call}"></svg>` } as Awaited<ReturnType<typeof mermaid.render>>) })
+        );
+      });
+      let answered = 0;
+      component.openJourney(component.experiences[0]);
+      fixture.detectChanges();
+
+      const first = component.renderAllMermaidDiagrams();
+      const second = component.renderAllMermaidDiagrams();
+      for (let round = 0; round < 50 && (pending.length > 0 || round < 2); round++) {
+        while (pending.length > 0) {
+          pending.pop()!.answer();
+          answered++;
+        }
+        await new Promise((resolve) => setTimeout(resolve));
+      }
+      await Promise.all([first, second]);
+
+      expect(fixture.nativeElement.querySelector('[data-call="0"]')).withContext('the first, outdated drawing').toBeNull();
+      expect(fixture.nativeElement.querySelectorAll('.mermaid-journey-container svg').length).toBe(component.experiences.length);
+    });
 
     it('redraws the open journey in the new language', async () => {
       renderJourney();
       const draw = spyOnDraw();
       component.openJourney(component.experiences[0]);
-      fixture.detectChanges();
-      await fixture.whenStable();
+      await settle();
       draw.calls.reset();
 
       await switchToEnglish();

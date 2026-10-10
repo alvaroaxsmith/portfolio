@@ -19,9 +19,9 @@ const FALLBACK_IMAGE_URL = `https://github.com/${environment.githubUser}.png`;
     imports: [TextComponent, MatButton, SkeletonComponent, FooterComponent, TranslateModule]
 })
 export class HomeComponent implements OnInit {
-  private translate = inject(TranslateService);
-  private imageService = inject(ImageService);
-  private analytics = inject(AnalyticsService);
+  private readonly translate = inject(TranslateService);
+  private readonly imageService = inject(ImageService);
+  private readonly analytics = inject(AnalyticsService);
 
   readonly isLoadingImage = signal(true);
   readonly imageUrl = signal<string | undefined>(undefined);

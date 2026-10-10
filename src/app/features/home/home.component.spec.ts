@@ -82,6 +82,17 @@ describe('HomeComponent', () => {
     expect(fixture.nativeElement.querySelector('.hero-media img').getAttribute('src')).toBe('https://github.com/alvaroaxsmith.png');
   });
 
+  it('loads the hero photo first: it is the largest thing on screen (LCP), so it is never lazy', async () => {
+    spyOn(console, 'error');
+    TestBed.inject(HttpTestingController).expectOne('https://api.github.com/users/alvaroaxsmith').flush({}, { status: 500, statusText: 'Error' });
+    await new Promise((resolve) => setTimeout(resolve));
+    fixture.detectChanges();
+
+    const photo = fixture.nativeElement.querySelector('.hero-media img') as HTMLImageElement;
+    expect(photo.getAttribute('loading')).not.toBe('lazy');
+    expect(photo.getAttribute('fetchpriority')).toBe('high');
+  });
+
   it('names the highlights list in the visitor\'s language', () => {
     expect(fixture.nativeElement.querySelector('.hero-highlights').getAttribute('aria-label')).toBe('a11y.highlights');
   });

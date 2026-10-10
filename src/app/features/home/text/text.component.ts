@@ -76,7 +76,7 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class TextComponent implements OnInit, OnDestroy {
   words: string[] = ['Full Cycle Development', 'GenAI'];
-  readonly animationState = signal('hidden');
+  readonly animationState = signal<'hidden' | 'shown'>('hidden');
   readonly currentIndex = signal(0);
 
   private readonly reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;

@@ -1,5 +1,5 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ElementRef, effect, inject, viewChild, signal } from '@angular/core';
-import { Subject, takeUntil } from 'rxjs';
+import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectionStrategy, DestroyRef, ElementRef, afterRenderEffect, computed, inject, viewChild, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { providePaginatorIntl } from '../../core/i18n/paginator-intl';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, MatSortHeader } from '@angular/material/sort';
@@ -30,44 +30,42 @@ const MOBILE_LOAD_DELAY_MS = 600;
     providers: [providePaginatorIntl()]
 })
 export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
-  private courseService = inject(CourseService);
-  private bottomSheet = inject(MatBottomSheet);
-  private snackBar = inject(MatSnackBar);
-  private analytics = inject(AnalyticsService);
-  readonly state = inject(CoursesStateService);
+  private readonly courseService = inject(CourseService);
+  private readonly bottomSheet = inject(MatBottomSheet);
+  private readonly snackBar = inject(MatSnackBar);
+  private readonly analytics = inject(AnalyticsService);
+  private readonly destroyRef = inject(DestroyRef);
+  protected readonly state = inject(CoursesStateService);
 
-  private readonly destroy$ = new Subject<void>();
-
-  displayedColumns: string[] = ['field', 'name', 'time', 'school', 'date'];
-  dataSource = new MatTableDataSource<Course>();
+  protected readonly displayedColumns = ['field', 'name', 'time', 'school', 'date'];
+  readonly dataSource = new MatTableDataSource<Course>();
   readonly isLoading = signal(true);
   readonly loadError = signal(false);
 
-  get visibleCourses(): Course[] {
-    return this.dataSource.filter ? this.dataSource.filteredData : this.dataSource.data;
-  }
+  /** The table filters through the data source; the mobile list reads the same courses and filter as signals. */
+  private readonly courses = signal<Course[]>([]);
+  private readonly filter = signal(normalizeFilter(this.state.filter));
+  /** How many cards the mobile list shows; kept in the state service too, so it survives leaving the page. */
+  private readonly mobileCount = signal(this.state.mobileCount);
+
+  protected readonly visibleCourses = computed(() => {
+    const filter = this.filter();
+    const courses = this.courses();
+    return filter ? courses.filter((course) => this.dataSource.filterPredicate(course, filter)) : courses;
+  });
+  readonly mobileCourses = computed(() => this.visibleCourses().slice(0, this.mobileCount()));
+  readonly hasMoreMobileCourses = computed(() => this.mobileCount() < this.visibleCourses().length);
+  readonly mobileSkeletonCount = computed(() => Math.min(MOBILE_BATCH_SIZE, this.visibleCourses().length - this.mobileCount()));
 
   readonly mobileLoadingMore = signal(false);
   private mobileLoadTimer?: ReturnType<typeof setTimeout>;
   private mobileObserver?: IntersectionObserver;
   private mobileTriggerEl?: HTMLElement;
 
-  get mobileCourses(): Course[] {
-    return this.visibleCourses.slice(0, this.state.mobileCount);
-  }
-
-  get hasMoreMobileCourses(): boolean {
-    return this.state.mobileCount < this.visibleCourses.length;
-  }
-
-  get mobileSkeletonCount(): number {
-    return Math.min(MOBILE_BATCH_SIZE, this.visibleCourses.length - this.state.mobileCount);
-  }
-
   private readonly mobileLoadTrigger = viewChild<ElementRef<HTMLElement>>('mobileLoadTrigger');
 
   constructor() {
-    effect(() => this.observeMobileTrigger(this.mobileLoadTrigger()?.nativeElement));
+    afterRenderEffect(() => this.observeMobileTrigger(this.mobileLoadTrigger()?.nativeElement));
   }
 
   private observeMobileTrigger(trigger: HTMLElement | undefined): void {
@@ -105,11 +103,11 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     paginator.pageSize = this.state.pageSize;
     paginator.pageIndex = this.state.pageIndex;
 
-    sort.sortChange.pipe(takeUntil(this.destroy$)).subscribe(({ active, direction }) => {
+    sort.sortChange.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ active, direction }) => {
       this.state.sortActive = active;
       this.state.sortDirection = direction;
     });
-    paginator.page.pipe(takeUntil(this.destroy$)).subscribe(({ pageIndex, pageSize }) => {
+    paginator.page.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ pageIndex, pageSize }) => {
       this.state.pageIndex = pageIndex;
       this.state.pageSize = pageSize;
     });
@@ -124,8 +122,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     clearTimeout(this.mobileLoadTimer);
     this.mobileObserver?.disconnect();
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   showSnackbar() {
@@ -141,13 +137,13 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   loadMoreMobileCourses(): void {
-    if (this.mobileLoadingMore() || !this.hasMoreMobileCourses) {
+    if (this.mobileLoadingMore() || !this.hasMoreMobileCourses()) {
       return;
     }
     this.mobileLoadingMore.set(true);
 
     this.mobileLoadTimer = setTimeout(() => {
-      this.state.mobileCount += MOBILE_BATCH_SIZE;
+      this.setMobileCount(this.mobileCount() + MOBILE_BATCH_SIZE);
       this.mobileLoadingMore.set(false);
       // The observer reports on the next frame, after the new cards render, so it sees the trigger's new position.
       const trigger = this.mobileTriggerEl;
@@ -161,10 +157,11 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   loadData() {
     this.isLoading.set(true);
     this.loadError.set(false);
-    this.courseService.getCourses().pipe(takeUntil(this.destroy$)).subscribe({
+    this.courseService.getCourses().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: courses => {
         this.dataSource.data = courses;
-        this.dataSource.filter = this.state.filter.trim().toLowerCase();
+        this.courses.set(courses);
+        this.dataSource.filter = this.filter();
         this.dataSource.sort = this.sort();
         this.dataSource.paginator = this.paginator();
         this.isLoading.set(false);
@@ -179,11 +176,22 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.state.filter = filterValue;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    this.filter.set(normalizeFilter(filterValue));
+    this.dataSource.filter = this.filter();
     clearTimeout(this.mobileLoadTimer);
     this.mobileLoadingMore.set(false);
-    this.state.mobileCount = MOBILE_BATCH_SIZE;
+    this.setMobileCount(MOBILE_BATCH_SIZE);
     this.dataSource.paginator?.firstPage();
   }
 
+  private setMobileCount(count: number): void {
+    this.mobileCount.set(count);
+    this.state.mobileCount = count;
+  }
+
+}
+
+/** The table's filter text: what the data source compares against. */
+function normalizeFilter(value: string): string {
+  return value.trim().toLowerCase();
 }

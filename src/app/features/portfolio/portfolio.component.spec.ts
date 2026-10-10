@@ -1,7 +1,8 @@
+import { NgZone } from '@angular/core';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { fakeIntersectionObserver } from '../../testing/fake-intersection-observer';
 import { provideRouter } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Observable, Subject, of, throwError } from 'rxjs';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
 import { Project } from './project.model';
@@ -37,6 +38,8 @@ describe('PortfolioComponent', () => {
     fixture = TestBed.createComponent(PortfolioComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    // A full app tick, as the browser would run, so the after-render work (watching the end of the list) happens.
+    TestBed.tick();
   }
 
   const cards = () => fixture.nativeElement.querySelectorAll('.project-card').length;
@@ -135,13 +138,29 @@ describe('PortfolioComponent', () => {
       expect(component.pageSize()).toBe(2);
     });
 
+    it('recomputes the columns on resize, entering Angular only when they change', () => {
+      render(of(makeProjects(20)));
+      let width = 950;
+      spyOnProperty(component.pageRef().nativeElement, 'clientWidth').and.callFake(() => width);
+      component.toggleView();
+      const run = spyOn(TestBed.inject(NgZone), 'run').and.callThrough();
+
+      window.dispatchEvent(new Event('resize'));
+      expect(run).not.toHaveBeenCalled();
+
+      width = 320;
+      window.dispatchEvent(new Event('resize'));
+      expect(run).toHaveBeenCalled();
+      expect(component.columns()).toBe(1);
+    });
+
     it('completes the last row when switching from list to grid', () => {
       render(of(makeProjects(20)));
 
       useGridWith(950);
 
       expect(component.projects().length).toBe(4);
-      expect(component.loadingMoreCount).toBe(8);
+      expect(component.loadingMoreCount()).toBe(8);
     });
   });
 
@@ -325,5 +344,18 @@ describe('PortfolioComponent', () => {
     fixture.detectChanges();
 
     expect(toggle().getAttribute('aria-label')).toBe('Switch to List View');
+  });
+
+  it('shows each project description in the visitor\'s language, and follows a language switch', () => {
+    render(of(makeProjects(1)));
+    const translate = TestBed.inject(TranslateService);
+    const description = () => (fixture.nativeElement.querySelector('.project-card mat-card-content p') as HTMLElement).textContent?.trim();
+    expect(description()).toBe('Description 1');
+
+    translate.setTranslation('EN', { repo: { 'project-1': 'Translated description' } });
+    translate.use('EN');
+    fixture.detectChanges();
+
+    expect(description()).toBe('Translated description');
   });
 });

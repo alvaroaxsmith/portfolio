@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, AfterViewInit, OnDestroy, Renderer2, ChangeDetectionStrategy, Injector, afterNextRender, effect, inject, signal, untracked, viewChildren } from '@angular/core';
+import { Component, OnInit, ElementRef, AfterViewInit, OnDestroy, Renderer2, ChangeDetectionStrategy, Injector, afterNextRender, afterRenderEffect, inject, signal, untracked, viewChildren } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -40,7 +40,7 @@ interface TimelineDefinition {
     styleUrls: ['./professional-timeline.component.scss']
 })
 export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnDestroy {
-  translate = inject(TranslateService);
+  private readonly translate = inject(TranslateService);
   private readonly renderer = inject(Renderer2);
   private readonly injector = inject(Injector);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
@@ -48,14 +48,16 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
   readonly mermaidJourneyContainers = viewChildren<ElementRef<HTMLElement>>('mermaidJourneyContainer');
 
   constructor() {
-    // Draws the journey diagrams whenever their containers appear, i.e. when the journey opens.
-    effect(() => {
+    // Draws the journey diagrams after render, whenever their containers or their text change: when the journey
+    // opens, and when a language switch rewrites the text (the containers are tracked by id, so they stay).
+    afterRenderEffect(() => {
       this.mermaidJourneyContainers();
+      this.timelineDefinitions();
       untracked(() => this.renderAllMermaidDiagrams());
     });
 
-    // The diagram text is written once in the current language; rebuild it when the visitor switches language.
-    // New definitions recreate the containers, and the effect above draws them again.
+    // The diagram text is written once in the current language; rebuild it when the visitor switches language,
+    // and the effect above draws it again.
     this.translate.onLangChange.pipe(takeUntilDestroyed()).subscribe(() => {
       if (this.isJourneyVisible()) {
         this.generateAllMermaidTimelines();
@@ -270,7 +272,7 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
   };
 
   ngAfterViewInit(): void {
-    if (window.innerWidth <= 480) {
+    if (this.isMobile()) {
       this.cardContents().forEach((contentRef) => {
         this.setupDragScroll(contentRef.nativeElement);
       });
@@ -345,13 +347,20 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
     }));
   }
 
+  /** Counts the drawings started; a drawing stops as soon as a newer one starts (new text, e.g. a language switch). */
+  private drawing = 0;
+
   async renderAllMermaidDiagrams(): Promise<void> {
     if (!this.isJourneyVisible()) {
       return;
     }
 
+    const run = ++this.drawing;
     const containers = this.mermaidJourneyContainers();
     for (const mermaidContainer of containers) {
+      if (run !== this.drawing) {
+        return;
+      }
       const container = mermaidContainer.nativeElement;
       const experienceId = container.dataset['experienceId'];
       const timelineDef = this.timelineDefinitions().find(
@@ -366,6 +375,9 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
             uniqueId,
             timelineDef.definition
           );
+          if (run !== this.drawing) {
+            return;
+          }
           container.innerHTML = svg;
         } catch (e) {
           console.error(`Error rendering Mermaid for ID ${experienceId}:`, e);

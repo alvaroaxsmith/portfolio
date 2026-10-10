@@ -1,8 +1,9 @@
 import { DOCUMENT } from '@angular/common';
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, Injector, afterNextRender, inject, signal } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Injector, afterNextRender, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, ActivatedRoute, RouterOutlet } from '@angular/router';
 import { TranslateService, LangChangeEvent, TranslateModule } from '@ngx-translate/core';
-import { Subject, filter, takeUntil } from 'rxjs';
+import { filter } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SeoService } from './core/seo/seo.service';
 import { AnalyticsService } from './core/analytics/analytics.service';
 import { storeLang } from './core/i18n/language-storage';
@@ -17,17 +18,17 @@ import { ConsentBannerComponent } from './core/layout/consent-banner/consent-ban
     changeDetection: ChangeDetectionStrategy.OnPush,
     imports: [SplashScreenComponent, NavbarComponent, RouterOutlet, ConsentBannerComponent, TranslateModule]
 })
-export class AppComponent implements OnInit, OnDestroy {
-  private translate = inject(TranslateService);
-  private router = inject(Router);
-  private activatedRoute = inject(ActivatedRoute);
-  private seoService = inject(SeoService);
-  private analytics = inject(AnalyticsService);
-  private document = inject<Document>(DOCUMENT);
-  private injector = inject(Injector);
+export class AppComponent implements OnInit {
+  private readonly translate = inject(TranslateService);
+  private readonly router = inject(Router);
+  private readonly activatedRoute = inject(ActivatedRoute);
+  private readonly seoService = inject(SeoService);
+  private readonly analytics = inject(AnalyticsService);
+  private readonly document = inject<Document>(DOCUMENT);
+  private readonly injector = inject(Injector);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly showMainContent = signal(false);
-  private readonly destroy$ = new Subject<void>();
 
   onSplashAnimationFinished() {
     this.showMainContent.set(true);
@@ -51,7 +52,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.router.events
       .pipe(
         filter((event) => event instanceof NavigationEnd),
-        takeUntil(this.destroy$)
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe(() => {
         this.updateSeo();
@@ -63,7 +64,7 @@ export class AppComponent implements OnInit, OnDestroy {
       });
 
     this.translate.onLangChange
-      .pipe(takeUntil(this.destroy$))
+      .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe((event: LangChangeEvent) => {
         if (event.lang !== currentLang) {
           this.analytics.track('language_switch', { from: currentLang, to: event.lang });
@@ -73,11 +74,6 @@ export class AppComponent implements OnInit, OnDestroy {
         this.updateDocumentLanguage(event.lang);
         this.updateSeo();
       });
-  }
-
-  ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
   }
 
   /**

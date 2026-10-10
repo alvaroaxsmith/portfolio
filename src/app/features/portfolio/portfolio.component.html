@@ -9,7 +9,7 @@
         <div class="filter-group">
             <mat-form-field appearance="fill">
                 <mat-label>{{ "Filter by Technology" | translate }}</mat-label>
-                <mat-select (selectionChange)="filterByTech($event.value)" [(value)]="selectedTech">
+                <mat-select [value]="selectedTech()" (selectionChange)="filterByTech($event.value)">
                     <mat-option [value]="null">{{ "All Technologies" | translate }}</mat-option>
                     @for (tech of availableTechs(); track tech) {
                     <mat-option [value]="tech">
@@ -23,7 +23,7 @@
         <div class="filter-group">
             <mat-form-field appearance="fill">
                 <mat-label>{{ "Sort by Date" | translate }}</mat-label>
-                <mat-select (selectionChange)="sortByDate($event.value)" [(value)]="currentSortOrder">
+                <mat-select [value]="currentSortOrder()" (selectionChange)="sortByDate($event.value)">
                     <mat-option value="recent">{{ "Most Recent" | translate }}</mat-option>
                     <mat-option value="oldest">{{ "Oldest" | translate }}</mat-option>
                 </mat-select>
@@ -38,26 +38,24 @@
     </div>
 
     @if (!initialLoading()) { @if (projects().length > 0 || loadingMore()) {
-    <div class="portfolio-cards-area" [ngClass]="{
-          'list-view': currentView() === 'list',
-          'grid-view': currentView() === 'grid'
-        }">
-        @for (project of projects(); track project.id; let i = $index) {
-        <article class="project-wrapper" animate.enter="fade-in-left" [style.animation-delay.ms]="enterDelay(i)">
+    <div class="portfolio-cards-area" [class.list-view]="currentView() === 'list'" [class.grid-view]="currentView() === 'grid'">
+        @for (card of cards(); track card.project.id) {
+        @let project = card.project;
+        <article class="project-wrapper" animate.enter="fade-in-left" [style.animation-delay.ms]="card.enterDelay">
             <mat-card class="project-card">
                 <mat-card-title-group>
                     <mat-card-title>{{ project.name }}</mat-card-title>
                     @if (project.tech) {
                     <mat-card-subtitle class="project-tech">{{ project.tech }}</mat-card-subtitle>
                     }
-                    @if (validDate(project.date); as updated) {
+                    @if (card.updated; as updated) {
                     <mat-card-subtitle class="project-date">
                         {{ "Last updated" | translate }}: {{ updated | date : "dd/MM/yyyy" }}
                     </mat-card-subtitle>
                     }
                     <a mat-stroked-button href="{{ project.repo }}" target="_blank" rel="noopener noreferrer" (click)="trackRepo(project)">{{ "Repository" | translate }}</a>
                 </mat-card-title-group>
-                @if (descriptionFor(project); as description) {
+                @if (card.description; as description) {
                 <mat-card-content>
                     <p>{{ description }}</p>
                 </mat-card-content>
@@ -65,7 +63,7 @@
             </mat-card>
         </article>
         } @if (loadingMore()) {
-        @for (placeholder of loadingMoreSkeletons; track placeholder) {
+        @for (placeholder of loadingMoreSkeletons(); track placeholder) {
         <div class="project-wrapper">
             <app-project-card-skeleton [layout]="currentView()" />
         </div>
@@ -91,12 +89,9 @@
     } } @if (!allProjectsLoaded() && processedProjects().length > 0) {
     <div #loadMoreTrigger class="load-more-trigger" aria-hidden="true"></div>
     } } @else {
-    <div class="portfolio-cards-area" role="status" [ngClass]="{
-          'list-view': currentView() === 'list',
-          'grid-view': currentView() === 'grid'
-        }">
+    <div class="portfolio-cards-area" role="status" [class.list-view]="currentView() === 'list'" [class.grid-view]="currentView() === 'grid'">
         <span class="cdk-visually-hidden">{{ "loading.projects" | translate }}</span>
-        @for (placeholder of initialSkeletons; track placeholder) {
+        @for (placeholder of initialSkeletons(); track placeholder) {
         <div class="project-wrapper">
             <app-project-card-skeleton [layout]="currentView()" />
         </div>

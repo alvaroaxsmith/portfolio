@@ -13,8 +13,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
     imports: [MatIconButton, MatIcon, MatButton, RouterLink, RouterLinkActive, TranslateModule]
 })
 export class NavMenuSheetComponent {
-  translate = inject(TranslateService);
-  private bottomSheetRef = inject<MatBottomSheetRef<NavMenuSheetComponent>>(MatBottomSheetRef);
+  protected readonly translate = inject(TranslateService);
+  private readonly bottomSheetRef = inject<MatBottomSheetRef<NavMenuSheetComponent>>(MatBottomSheetRef);
 
 
   switchLang(lang: string) {
@@ -24,9 +24,5 @@ export class NavMenuSheetComponent {
 
   dismiss() {
     this.bottomSheetRef.dismiss();
-  }
-
-  trackByLang(index: number, lang: string): string {
-    return lang;
   }
 }

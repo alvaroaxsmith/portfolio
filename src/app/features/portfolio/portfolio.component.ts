@@ -1,15 +1,17 @@
-import { Component, OnInit, ElementRef, OnDestroy, ChangeDetectionStrategy, DestroyRef, effect, inject, untracked, viewChild, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, OnInit, ElementRef, OnDestroy, ChangeDetectionStrategy, DestroyRef, afterRenderEffect, computed, inject, untracked, viewChild, signal } from '@angular/core';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { map } from 'rxjs';
 import { ProjectsService } from './services/projects.service';
 import { Project } from './project.model';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
+import { onWindowEvent } from '../../core/window-events/window-events';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatSelect, MatOption } from '@angular/material/select';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatTooltip } from '@angular/material/tooltip';
 import { MatIcon } from '@angular/material/icon';
-import { NgClass, DatePipe } from '@angular/common';
+import { DatePipe } from '@angular/common';
 import { MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatCardContent } from '@angular/material/card';
 import { ProjectCardSkeletonComponent } from '../../shared/skeleton/project-card-skeleton/project-card-skeleton.component';
 
@@ -18,19 +20,26 @@ const GRID_ROWS_PER_PAGE = 2;
 const LIST_ITEMS_PER_PAGE = 4;
 const LOAD_MORE_DELAY_MS = 600;
 
+/** What a card shows, worked out once per project instead of on every change detection. */
+interface ProjectCard {
+  project: Project;
+  updated: Date | null;
+  description: string;
+  enterDelay: number;
+}
+
 @Component({
     selector: 'app-portfolio',
     templateUrl: './portfolio.component.html',
     styleUrls: ['./portfolio.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    host: { '(window:resize)': 'updatePageSize()' },
-    imports: [MatFormField, MatLabel, MatSelect, MatOption, MatIconButton, MatTooltip, MatIcon, NgClass, MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatButton, MatCardContent, ProjectCardSkeletonComponent, DatePipe, TranslateModule]
+    imports: [MatFormField, MatLabel, MatSelect, MatOption, MatIconButton, MatTooltip, MatIcon, MatCard, MatCardTitleGroup, MatCardTitle, MatCardSubtitle, MatButton, MatCardContent, ProjectCardSkeletonComponent, DatePipe, TranslateModule]
 })
 export class PortfolioComponent implements OnInit, OnDestroy {
-  private projectsService = inject(ProjectsService);
-  private translate = inject(TranslateService);
-  private analytics = inject(AnalyticsService);
-  private destroyRef = inject(DestroyRef);
+  private readonly projectsService = inject(ProjectsService);
+  private readonly translate = inject(TranslateService);
+  private readonly analytics = inject(AnalyticsService);
+  private readonly destroyRef = inject(DestroyRef);
 
   readonly allProjects = signal<Project[]>([]);
   readonly projects = signal<Project[]>([]);
@@ -42,37 +51,59 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   readonly allProjectsLoaded = signal(false);
   readonly pageSize = signal(6);
   readonly columns = signal(1);
-  private batchStart = 0;
+  /** Index of the first card of the batch being shown, where the entrance stagger starts again. */
+  private readonly batchStart = signal(0);
   private loadMoreTimer?: ReturnType<typeof setTimeout>;
 
   readonly currentView = signal<'list' | 'grid'>('list');
 
   readonly availableTechs = signal<string[]>([]);
-  readonly selectedTech = signal<string | null>(null);
-  readonly currentSortOrder = signal<'recent' | 'oldest'>('recent');
+  protected readonly selectedTech = signal<string | null>(null);
+  protected readonly currentSortOrder = signal<'recent' | 'oldest'>('recent');
 
-  readonly projectListAnimationState = signal<'initial' | 'viewToggle' | 'stable'>('initial');
+  /** Whether the cards on screen came from switching view, which staggers all of them again. */
+  private readonly viewToggled = signal(false);
 
   readonly pageRef = viewChild.required<ElementRef<HTMLElement>>('page');
-  readonly loadMoreTrigger = viewChild<ElementRef<HTMLElement>>('loadMoreTrigger');
+  private readonly loadMoreTrigger = viewChild<ElementRef<HTMLElement>>('loadMoreTrigger');
   private observer: IntersectionObserver | undefined;
+
+  /** The current language, so translated descriptions follow a language switch. */
+  private readonly lang = toSignal(this.translate.onLangChange.pipe(map((event) => event.lang)), {
+    initialValue: this.translate.currentLang
+  });
+
+  readonly loadingMoreCount = computed(() =>
+    Math.min(this.nextBatchSize(), this.processedProjects().length - this.projects().length)
+  );
+
+  protected readonly initialSkeletons = computed(() => Array.from({ length: this.pageSize() }, (_, i) => i));
+  protected readonly loadingMoreSkeletons = computed(() => Array.from({ length: this.loadingMoreCount() }, (_, i) => i));
+
+  protected readonly cards = computed<ProjectCard[]>(() => {
+    this.lang();
+    return this.projects().map((project, index) => ({
+      project,
+      updated: validDate(project.date),
+      description: this.descriptionFor(project),
+      enterDelay: this.enterDelay(index)
+    }));
+  });
 
   constructor() {
     // Watches the end of the list again after every batch. The observer reports on the next frame,
     // after the new cards have rendered, so it sees where the end of the list is now.
-    effect(() => {
+    afterRenderEffect(() => {
       const trigger = this.loadMoreTrigger()?.nativeElement;
       this.projects();
       untracked(() => this.observeLoadMoreTrigger(trigger));
     });
+
+    onWindowEvent('resize', () => this.updatePageSize());
   }
 
   trackRepo(project: Project): void {
     this.analytics.track('repo_click', { repo: project.name, tech: project.tech || 'none', view: this.currentView() });
-  }
-
-  get loadingMoreCount(): number {
-    return Math.min(this.nextBatchSize(), this.processedProjects().length - this.projects().length);
   }
 
   private nextBatchSize(): number {
@@ -83,18 +114,10 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     return this.pageSize() + missingInRow;
   }
 
-  get initialSkeletons(): number[] {
-    return Array.from({ length: this.pageSize() }, (_, i) => i);
-  }
-
-  get loadingMoreSkeletons(): number[] {
-    return Array.from({ length: this.loadingMoreCount }, (_, i) => i);
-  }
-
   ngOnInit(): void {
     this.updatePageSize();
     this.initialLoading.set(true);
-    this.projectListAnimationState.set('initial');
+    this.viewToggled.set(false);
     this.projectsService.getProjects().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
       next: (fetchedProjects) => {
         this.allProjects.set(fetchedProjects);
@@ -125,16 +148,20 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.observer?.disconnect();
   }
 
-  updatePageSize(): void {
+  /** Returns whether the layout changed, so a resize that changes nothing stays outside Angular. */
+  updatePageSize(): boolean {
+    let columns = 1;
+    let pageSize = LIST_ITEMS_PER_PAGE;
     if (this.currentView() === 'grid') {
       const width = this.pageRef()?.nativeElement.clientWidth || window.innerWidth;
       const gap = Math.min(16, Math.max(12, window.innerWidth * 0.015));
-      this.columns.set(Math.max(1, Math.floor((width + gap) / (GRID_MIN_CARD_WIDTH + gap))));
-      this.pageSize.set(this.columns() * GRID_ROWS_PER_PAGE);
-    } else {
-      this.columns.set(1);
-      this.pageSize.set(LIST_ITEMS_PER_PAGE);
+      columns = Math.max(1, Math.floor((width + gap) / (GRID_MIN_CARD_WIDTH + gap)));
+      pageSize = columns * GRID_ROWS_PER_PAGE;
     }
+    const changed = columns !== this.columns() || pageSize !== this.pageSize();
+    this.columns.set(columns);
+    this.pageSize.set(pageSize);
+    return changed;
   }
 
   private observeLoadMoreTrigger(trigger: HTMLElement | undefined): void {
@@ -154,7 +181,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   }
 
   applyFiltersAndSorting(): void {
-    this.projectListAnimationState.set('initial');
+    this.viewToggled.set(false);
     let result = [...this.allProjects()];
 
     if (this.selectedTech()) {
@@ -179,7 +206,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.loadingMore.set(false);
     this.processedProjects.set(result);
     this.projects.set([]);
-    this.batchStart = 0;
+    this.batchStart.set(0);
     this.allProjectsLoaded.set(result.length === 0);
 
     this.appendNextPage();
@@ -200,21 +227,12 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   private appendNextPage(): void {
     const next = this.processedProjects().slice(this.projects().length, this.projects().length + this.nextBatchSize());
 
-    this.batchStart = this.projects().length;
+    this.batchStart.set(this.projects().length);
     this.projects.set([...this.projects(), ...next]);
     this.allProjectsLoaded.set(this.projects().length >= this.processedProjects().length);
-    if (this.allProjectsLoaded() && this.projectListAnimationState() === 'initial') {
-      this.projectListAnimationState.set('stable');
-    }
   }
 
-  /** The date, or null when it cannot be parsed, so a bad value hides the line instead of breaking the list. */
-  validDate(value: string): Date | null {
-    const date = new Date(value);
-    return Number.isNaN(date.getTime()) ? null : date;
-  }
-
-  descriptionFor(project: Project): string {
+  private descriptionFor(project: Project): string {
     const key = `repo.${project.name}`;
     const translated = this.translate.instant(key);
     return translated !== key ? translated : project.description;
@@ -233,17 +251,24 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   }
 
   /** Milliseconds before a card slides in, so each batch enters one card after another. */
-  enterDelay(index: number): number {
-    if (this.projectListAnimationState() === 'viewToggle') {
+  private enterDelay(index: number): number {
+    if (this.viewToggled()) {
       return Math.min(index, 8) * 60;
     }
-    return index >= this.batchStart ? Math.min(index - this.batchStart, 8) * 70 : 0;
+    const batchStart = this.batchStart();
+    return index >= batchStart ? Math.min(index - batchStart, 8) * 70 : 0;
   }
 
   toggleView(): void {
     this.currentView.set(this.currentView() === 'list' ? 'grid' : 'list');
     this.analytics.track('projects_view_toggle', { view: this.currentView() });
-    this.projectListAnimationState.set('viewToggle');
+    this.viewToggled.set(true);
     this.updatePageSize();
   }
+}
+
+/** The date, or null when it cannot be parsed, so a bad value hides the line instead of breaking the list. */
+function validDate(value: string): Date | null {
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? null : date;
 }
