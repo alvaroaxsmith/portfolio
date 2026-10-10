@@ -16,9 +16,9 @@ interface SeoPayload {
   providedIn: 'root'
 })
 export class SeoService {
-  private title = inject(Title);
-  private meta = inject(Meta);
-  private document = inject<Document>(DOCUMENT);
+  private readonly title = inject(Title);
+  private readonly meta = inject(Meta);
+  private readonly document = inject<Document>(DOCUMENT);
 
 
   update({ title, description, path, noindex = false }: SeoPayload) {

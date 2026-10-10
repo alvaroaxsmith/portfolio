@@ -13,7 +13,7 @@ import { TranslateModule } from '@ngx-translate/core';
     imports: [MatTooltip, FontAwesomeModule, TranslateModule]
 })
 export class FooterComponent {
-  analytics = inject(AnalyticsService);
+  protected readonly analytics = inject(AnalyticsService);
 
 
   currentYear = new Date().getFullYear();

@@ -106,6 +106,14 @@ describe('CoursesComponent', () => {
     expect(input.value).toBe('java');
   });
 
+  it('remembers the sort the visitor picks, for when they come back to the page', async () => {
+    await render();
+
+    component.sort().sort({ id: 'time', start: 'desc', disableClear: false });
+
+    expect([state.sortActive, state.sortDirection]).toEqual(['time', 'desc']);
+  });
+
   it('clamps a saved page that no longer exists to the last one', async () => {
     state.pageIndex = 50;
     state.pageSize = 10;
@@ -169,6 +177,8 @@ describe('CoursesComponent behavior', () => {
     fixture = TestBed.createComponent(CoursesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
+    // A full app tick, as the browser would run, so the after-render work (watching the end of the list) happens.
+    TestBed.tick();
   }
 
   describe('certificates', () => {
@@ -216,7 +226,7 @@ describe('CoursesComponent behavior', () => {
       fixture.detectChanges();
       const list = fixture.nativeElement.querySelector('ul.mobile-course-items') as HTMLElement;
 
-      expect(list.querySelectorAll(':scope > li > button.course-card').length).toBe(component.mobileCourses.length);
+      expect(list.querySelectorAll(':scope > li > button.course-card').length).toBe(component.mobileCourses().length);
       expect(fixture.nativeElement.querySelector('.mobile-course-list [role="listitem"], .mobile-course-list [role="list"]')).toBeNull();
     });
 
@@ -268,14 +278,14 @@ describe('CoursesComponent behavior', () => {
       viewport.report(true);
       tick(600);
 
-      expect(component.mobileCourses.length).toBe(10);
+      expect(component.mobileCourses().length).toBe(10);
     }));
 
     it('starts with a first batch of 5 cards', () => {
       render();
 
-      expect(component.mobileCourses.length).toBe(5);
-      expect(component.hasMoreMobileCourses).toBeTrue();
+      expect(component.mobileCourses().length).toBe(5);
+      expect(component.hasMoreMobileCourses()).toBeTrue();
     });
 
     it('shows skeleton cards for the next batch, then the cards', fakeAsync(() => {
@@ -289,20 +299,20 @@ describe('CoursesComponent behavior', () => {
       tick(600);
       fixture.detectChanges();
       expect(component.mobileLoadingMore()).toBeFalse();
-      expect(component.mobileCourses.length).toBe(10);
+      expect(component.mobileCourses().length).toBe(10);
     }));
 
     it('loads every course and then says the list is over', fakeAsync(() => {
       render();
 
-      while (component.hasMoreMobileCourses) {
+      while (component.hasMoreMobileCourses()) {
         component.loadMoreMobileCourses();
         tick(600);
       }
       fixture.detectChanges();
 
-      expect(component.mobileCourses.length).toBe(23);
-      expect(component.mobileSkeletonCount).toBeLessThanOrEqual(0);
+      expect(component.mobileCourses().length).toBe(23);
+      expect(component.mobileSkeletonCount()).toBeLessThanOrEqual(0);
       expect(fixture.nativeElement.querySelector('.mobile-course-list .end-of-list')).not.toBeNull();
     }));
 
@@ -313,7 +323,7 @@ describe('CoursesComponent behavior', () => {
       component.loadMoreMobileCourses();
       fixture.detectChanges();
 
-      expect(component.mobileSkeletonCount).toBe(3);
+      expect(component.mobileSkeletonCount()).toBe(3);
       tick(600);
     }));
 
@@ -322,7 +332,7 @@ describe('CoursesComponent behavior', () => {
 
       render();
 
-      expect(component.mobileCourses.length).toBe(15);
+      expect(component.mobileCourses().length).toBe(15);
     });
 
     it('starts over from the first batch when the search changes', fakeAsync(() => {
@@ -336,7 +346,7 @@ describe('CoursesComponent behavior', () => {
       fixture.detectChanges();
 
       expect(state.mobileCount).toBe(5);
-      expect(component.mobileCourses.every((c) => c.field === 'Java')).toBeTrue();
+      expect(component.mobileCourses().every((c) => c.field === 'Java')).toBeTrue();
     }));
   });
 });

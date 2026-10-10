@@ -11,7 +11,7 @@ interface GitHubUserResponse {
   providedIn: 'root'
 })
 export class ImageService {
-  private http = inject(HttpClient);
+  private readonly http = inject(HttpClient);
 
 
   async getImage(): Promise<string> {

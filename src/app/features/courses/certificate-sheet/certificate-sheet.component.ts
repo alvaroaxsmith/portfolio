@@ -17,9 +17,9 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class CertificateSheetComponent implements OnInit {
   readonly rowData = signal(inject<Course>(MAT_BOTTOM_SHEET_DATA));
-  private bottomSheetRef = inject<MatBottomSheetRef<CertificateSheetComponent>>(MatBottomSheetRef);
-  private domSanitizer = inject(DomSanitizer);
-  private analytics = inject(AnalyticsService);
+  private readonly bottomSheetRef = inject<MatBottomSheetRef<CertificateSheetComponent>>(MatBottomSheetRef);
+  private readonly domSanitizer = inject(DomSanitizer);
+  private readonly analytics = inject(AnalyticsService);
 
   readonly safeUrl = signal<SafeResourceUrl | null>(null);
   readonly externalUrl = signal<string | null>(null);

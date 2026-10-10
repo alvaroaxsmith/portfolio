@@ -12,7 +12,7 @@ import { AnalyticsService } from '../../core/analytics/analytics.service';
     imports: [FontAwesomeModule, TranslateModule]
 })
 export class ContactComponent {
-  private analytics = inject(AnalyticsService);
+  private readonly analytics = inject(AnalyticsService);
 
 
   faGithub = faGithub;
