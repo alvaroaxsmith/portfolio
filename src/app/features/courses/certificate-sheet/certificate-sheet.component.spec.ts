@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { AnalyticsService } from '../../../core/analytics/analytics.service';
 import { Course } from '../course.model';
 import { CertificateSheetComponent } from './certificate-sheet.component';
@@ -23,8 +23,8 @@ describe('CertificateSheetComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), CertificateSheetComponent],
-    providers: [
+    imports: [CertificateSheetComponent],
+    providers: [provideTranslateService(), 
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: MAT_BOTTOM_SHEET_DATA, useValue: course },
@@ -82,8 +82,8 @@ describe('CertificateSheetComponent', () => {
     function openCertificate(link: string) {
       TestBed.resetTestingModule();
       TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), CertificateSheetComponent],
-    providers: [
+    imports: [CertificateSheetComponent],
+    providers: [provideTranslateService(), 
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: MAT_BOTTOM_SHEET_DATA, useValue: { ...course, link } },

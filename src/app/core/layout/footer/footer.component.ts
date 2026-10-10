@@ -3,14 +3,14 @@ import { faAngular, faNodeJs } from '@fortawesome/free-brands-svg-icons';
 import { AnalyticsService } from '../../analytics/analytics.service';
 import { MatTooltip } from '@angular/material/tooltip';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-footer',
     templateUrl: './footer.component.html',
     styleUrls: ['./footer.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatTooltip, FontAwesomeModule, TranslateModule]
+    imports: [MatTooltip, FontAwesomeModule, TranslatePipe]
 })
 export class FooterComponent {
   protected readonly analytics = inject(AnalyticsService);

@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { TextComponent } from './text.component';
 
 describe('TextComponent', () => {
@@ -8,7 +8,8 @@ describe('TextComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), TextComponent]
+    imports: [TextComponent],
+      providers: [provideTranslateService()]
 }).compileComponents();
 
     fixture = TestBed.createComponent(TextComponent);

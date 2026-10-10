@@ -1,6 +1,6 @@
 import { ApplicationInitStatus } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { DEFAULT_LANG, SUPPORTED_LANGS, getInitialLang, provideAppLanguage, storeLang } from './language-storage';
 
 describe('language storage', () => {
@@ -35,8 +35,8 @@ describe('provideAppLanguage', () => {
 
   async function boot(): Promise<TranslateService> {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot()],
-      providers: [provideAppLanguage()]
+      imports: [],
+      providers: [provideTranslateService(), provideAppLanguage()]
     });
     await TestBed.inject(ApplicationInitStatus).donePromise;
     return TestBed.inject(TranslateService);
@@ -45,8 +45,8 @@ describe('provideAppLanguage', () => {
   it('loads Portuguese before the app starts for first-time visitors', async () => {
     const translate = await boot();
 
-    expect(translate.currentLang).toBe('PT-BR');
-    expect(translate.defaultLang).toBe('PT-BR');
+    expect(translate.getCurrentLang()).toBe('PT-BR');
+    expect(translate.getFallbackLang()).toBe('PT-BR');
   });
 
   it('loads the language chosen on a previous visit before the app starts', async () => {
@@ -54,7 +54,7 @@ describe('provideAppLanguage', () => {
 
     const translate = await boot();
 
-    expect(translate.currentLang).toBe('EN');
+    expect(translate.getCurrentLang()).toBe('EN');
   });
 
   it('offers every supported language', async () => {

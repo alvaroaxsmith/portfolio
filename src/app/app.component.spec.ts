@@ -1,7 +1,7 @@
 import { Component, NO_ERRORS_SCHEMA, signal } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { Router, provideRouter } from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { AppComponent } from './app.component';
 import { AnalyticsService } from './core/analytics/analytics.service';
 import { SeoService } from './core/seo/seo.service';
@@ -20,8 +20,8 @@ describe('AppComponent', () => {
       consentBannerVisible: signal(false)
     });
     await TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), AppComponent],
-    providers: [
+    imports: [AppComponent],
+    providers: [provideTranslateService(), 
         provideRouter([{ path: '**', component: StubPageComponent }]),
         { provide: AnalyticsService, useValue: analytics },
         provideAppLanguage()
@@ -147,7 +147,7 @@ describe('AppComponent', () => {
   it('starts in Portuguese for first-time visitors', () => {
     render();
 
-    expect(TestBed.inject(TranslateService).currentLang).toBe('PT-BR');
+    expect(TestBed.inject(TranslateService).getCurrentLang()).toBe('PT-BR');
     expect(document.documentElement.lang).toBe('pt-BR');
   });
 
@@ -156,7 +156,7 @@ describe('AppComponent', () => {
 
     render();
 
-    expect(TestBed.inject(TranslateService).currentLang).toBe('EN');
+    expect(TestBed.inject(TranslateService).getCurrentLang()).toBe('EN');
   });
 
   it('remembers, tracks and applies a language switch', () => {

@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { MatSnackBarRef } from '@angular/material/snack-bar';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { CourseHintComponent } from './course-hint.component';
 
 describe('CourseHintComponent (course hint)', () => {
@@ -12,8 +12,8 @@ describe('CourseHintComponent (course hint)', () => {
   function render(insideLiveRegion: boolean) {
     ref = jasmine.createSpyObj<MatSnackBarRef<CourseHintComponent>>('MatSnackBarRef', ['dismiss']);
     TestBed.configureTestingModule({
-      imports: [CourseHintComponent, TranslateModule.forRoot()],
-      providers: [{ provide: MatSnackBarRef, useValue: ref }]
+      imports: [CourseHintComponent],
+      providers: [provideTranslateService(), { provide: MatSnackBarRef, useValue: ref }]
     });
     fixture = TestBed.createComponent(CourseHintComponent);
     host = fixture.nativeElement;

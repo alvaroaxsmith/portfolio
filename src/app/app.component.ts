@@ -1,12 +1,12 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, OnInit, ChangeDetectionStrategy, DestroyRef, Injector, afterNextRender, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, ActivatedRoute, RouterOutlet } from '@angular/router';
-import { TranslateService, LangChangeEvent, TranslateModule } from '@ngx-translate/core';
+import { TranslateService, LangChangeEvent, TranslatePipe } from '@ngx-translate/core';
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { SeoService } from './core/seo/seo.service';
 import { AnalyticsService } from './core/analytics/analytics.service';
-import { storeLang } from './core/i18n/language-storage';
+import { DEFAULT_LANG, storeLang } from './core/i18n/language-storage';
 import { SplashScreenComponent } from './core/layout/splash-screen/splash-screen.component';
 import { NavbarComponent } from './core/layout/navbar/navbar.component';
 import { ConsentBannerComponent } from './core/layout/consent-banner/consent-banner.component';
@@ -16,7 +16,7 @@ import { ConsentBannerComponent } from './core/layout/consent-banner/consent-ban
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SplashScreenComponent, NavbarComponent, RouterOutlet, ConsentBannerComponent, TranslateModule]
+    imports: [SplashScreenComponent, NavbarComponent, RouterOutlet, ConsentBannerComponent, TranslatePipe]
 })
 export class AppComponent implements OnInit {
   private readonly translate = inject(TranslateService);
@@ -44,9 +44,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.updateDocumentLanguage(this.translate.currentLang || this.translate.defaultLang);
+    this.updateDocumentLanguage(this.currentLang());
     this.updateSeo();
-    let currentLang = this.translate.currentLang || this.translate.defaultLang;
+    let currentLang = this.currentLang();
     let firstPage = true;
 
     this.router.events
@@ -56,7 +56,7 @@ export class AppComponent implements OnInit {
       )
       .subscribe(() => {
         this.updateSeo();
-        this.analytics.pageView(this.router.url.split(/[?#]/)[0], this.document.title, this.translate.currentLang);
+        this.analytics.pageView(this.router.url.split(/[?#]/)[0], this.document.title, this.currentLang());
         if (!firstPage) {
           this.focusPageHeading();
         }
@@ -89,6 +89,11 @@ export class AppComponent implements OnInit {
       heading.setAttribute('tabindex', '-1');
       heading.focus({ preventScroll: true });
     }, { injector: this.injector });
+  }
+
+  /** The language in use; provideAppLanguage sets it before the first render. */
+  private currentLang(): string {
+    return this.translate.getCurrentLang() ?? DEFAULT_LANG;
   }
 
   private updateSeo() {

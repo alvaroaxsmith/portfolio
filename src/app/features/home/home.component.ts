@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject, signal } from '@angular/core';
-import { TranslateService, TranslateModule } from '@ngx-translate/core';
+import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { ImageService } from './services/image.service';
+import { DEFAULT_LANG } from '../../core/i18n/language-storage';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
 import { environment } from '../../../environments/environment';
 import { TextComponent } from './text/text.component';
@@ -16,7 +17,7 @@ const FALLBACK_IMAGE_URL = `https://github.com/${environment.githubUser}.png`;
     templateUrl: './home.component.html',
     styleUrls: ['./home.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [TextComponent, MatButton, SkeletonComponent, FooterComponent, TranslateModule]
+    imports: [TextComponent, MatButton, SkeletonComponent, FooterComponent, TranslatePipe]
 })
 export class HomeComponent implements OnInit {
   private readonly translate = inject(TranslateService);
@@ -27,7 +28,7 @@ export class HomeComponent implements OnInit {
   readonly imageUrl = signal<string | undefined>(undefined);
 
   trackCvDownload(): void {
-    this.analytics.track('cv_download', { language: this.translate.currentLang });
+    this.analytics.track('cv_download', { language: this.translate.getCurrentLang() ?? DEFAULT_LANG });
   }
 
   trackLinkedin(): void {

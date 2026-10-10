@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, fakeAsync, flushMicrotasks, tick } from '@angular/core/testing';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService, TranslationObject } from '@ngx-translate/core';
 import { SplashScreenComponent } from './splash-screen.component';
 
 type SplashWindow = Window & { __splash?: { startedAt: number; finish: jasmine.Spy } };
@@ -9,9 +9,10 @@ describe('SplashScreenComponent', () => {
   let fixture: ComponentFixture<SplashScreenComponent>;
   let finished: jasmine.Spy;
 
-  function setup(translations: Record<string, unknown>, engineStartedMsAgo: number | null) {
+  function setup(translations: TranslationObject, engineStartedMsAgo: number | null) {
     TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), SplashScreenComponent]
+    imports: [SplashScreenComponent],
+      providers: [provideTranslateService()]
 });
     const translate = TestBed.inject(TranslateService);
     translate.setTranslation('PT-BR', translations);

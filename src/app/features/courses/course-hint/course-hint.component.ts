@@ -2,14 +2,14 @@ import { Component, ChangeDetectionStrategy, OnDestroy, AfterViewInit, ElementRe
 import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 export const COURSE_HINT_DURATION_MS = 5000;
 const LEAVE_ANIMATION_MS = 280;
 
 @Component({
     selector: 'app-course-hint',
-    imports: [MatButtonModule, MatIconModule, TranslateModule],
+    imports: [MatButtonModule, MatIconModule, TranslatePipe],
     template: `
     <div class="hint">
       <svg class="timer" viewBox="0 0 32 32" aria-hidden="true">

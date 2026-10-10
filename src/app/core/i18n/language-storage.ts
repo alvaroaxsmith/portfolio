@@ -30,7 +30,7 @@ export function provideAppLanguage(): EnvironmentProviders {
     provideAppInitializer(() => {
       const translate = inject(TranslateService);
       translate.addLangs(SUPPORTED_LANGS);
-      translate.setDefaultLang(DEFAULT_LANG);
+      translate.setFallbackLang(DEFAULT_LANG);
       return lastValueFrom(translate.use(getInitialLang()));
     })
   ]);

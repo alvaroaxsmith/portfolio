@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testin
 import { fakeIntersectionObserver } from '../../testing/fake-intersection-observer';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 
 import { CoursesComponent } from './courses.component';
@@ -28,8 +28,8 @@ describe('CoursesComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), CoursesComponent],
-    providers: [
+    imports: [CoursesComponent],
+    providers: [provideTranslateService(), 
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MatBottomSheet, useValue: { open: () => null } },
         { provide: MatSnackBar, useValue: { openFromComponent: () => null } },
@@ -162,8 +162,8 @@ describe('CoursesComponent behavior', () => {
   /** Configures a brand-new app: what a full page reload gives the visitor. */
   async function startApp() {
     await TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), CoursesComponent],
-    providers: [
+    imports: [CoursesComponent],
+    providers: [provideTranslateService(), 
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MatBottomSheet, useValue: bottomSheet },
         { provide: MatSnackBar, useValue: snackBar },

@@ -28,7 +28,7 @@
         <span>{{ "Language" | translate }}</span>
         <div class="language-buttons">
             @for (lang of translate.getLangs(); track lang) {
-            <button mat-stroked-button type="button" [attr.aria-pressed]="lang === translate.currentLang" (click)="switchLang(lang)">
+            <button mat-stroked-button type="button" [attr.aria-pressed]="lang === translate.currentLang()" (click)="switchLang(lang)">
           {{ lang }}
         </button> }
         </div>

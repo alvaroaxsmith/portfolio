@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { TranslateModule } from '@ngx-translate/core';
+import { provideTranslateService } from '@ngx-translate/core';
 import { AboutMeComponent } from './about-me.component';
 import { HighlightsComponent } from './components/highlights/highlights.component';
 
@@ -12,8 +12,8 @@ describe('AboutMeComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AboutMeComponent, TranslateModule.forRoot()],
-      providers: [provideRouter([])]
+      imports: [AboutMeComponent],
+      providers: [provideTranslateService(), provideRouter([])]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AboutMeComponent);

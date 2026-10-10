@@ -1,7 +1,7 @@
 import { NgZone } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, RouterModule } from '@angular/router';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { NavbarComponent } from './navbar.component';
 
 describe('NavbarComponent', () => {
@@ -10,7 +10,8 @@ describe('NavbarComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), RouterModule.forRoot([{ path: '**', children: [] }]), NavbarComponent]
+    imports: [RouterModule.forRoot([{ path: '**', children: [] }]), NavbarComponent],
+    providers: [provideTranslateService()]
 }).compileComponents();
 
     fixture = TestBed.createComponent(NavbarComponent);

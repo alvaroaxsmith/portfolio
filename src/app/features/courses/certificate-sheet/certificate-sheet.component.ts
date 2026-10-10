@@ -6,14 +6,14 @@ import { AnalyticsService } from '../../../core/analytics/analytics.service';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 import { SkeletonComponent } from '../../../shared/skeleton/skeleton.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-certificate-sheet',
     templateUrl: './certificate-sheet.component.html',
     styleUrls: ['./certificate-sheet.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatIconButton, MatIcon, SkeletonComponent, TranslateModule]
+    imports: [MatIconButton, MatIcon, SkeletonComponent, TranslatePipe]
 })
 export class CertificateSheetComponent implements OnInit {
   readonly rowData = signal(inject<Course>(MAT_BOTTOM_SHEET_DATA));
