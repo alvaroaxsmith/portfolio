@@ -4,7 +4,7 @@ Portfólio pessoal em produção na Vercel (a `main` é publicada a cada merge).
 
 ## Ao implementar uma issue
 
-1. Trabalhe numa branch própria a partir da `main` (ou da branch da fase anterior, se a issue disser que depende dela). Uma issue vira um PR.
+1. Trabalhe numa branch própria a partir da `main`. Uma issue vira um PR.
 2. TDD: escreva o teste que reproduz o problema, veja-o **vermelho**, corrija, veja-o verde.
 3. Rode `npm run verify` (lint, unit com piso de cobertura, build com budgets, E2E). O hook `.githooks/pre-push` roda o mesmo gate; o push só sai verde.
 4. Abra o PR com `Closes #N`, a lista do que mudou e as evidências (testes novos, métricas antes/depois, screenshots quando houver exceção visual aprovada).
@@ -14,14 +14,14 @@ Portfólio pessoal em produção na Vercel (a `main` é publicada a cada merge).
 
 - **Visual intocado.** O visual em repouso fica idêntico ao da `main`. Mudança visual só entra quando a issue a descreve como exceção aprovada, e o PR mostra antes e depois.
 - **Produção intocada.** Comportamento em produção muda só quando a issue pede; nesse caso, descreva no PR como validar no preview.
-- **Commits e PRs empilhados:** o merge é sempre merge commit (squash quebra o PR seguinte do stack).
+- **Squash merge:** cada PR vira um commit na `main` com o título do PR, que portanto segue o padrão de commits abaixo (`fix(a11y): foco no conteúdo (#101)`). Um PR por vez, sempre a partir da `main`.
 - **i18n:** o projeto usa o próprio texto em inglês como chave (`'Main Activities' | translate`) e chaves com ponto para textos novos (`'courses.title'`). Toda chave nova entra em `src/assets/i18n/EN.json` **e** `PT-BR.json` na mesma mudança, inclusive rótulos de leitor de tela.
 - **Acessibilidade:** alvo WCAG 2.2 AA. Todo controle tem nome acessível traduzido; elemento escondido sai da ordem de foco (`inert`).
 - **Angular:** standalone, `OnPush`, signals (`input()`, `computed`, `viewChild()`), `inject()`, `afterRenderEffect` para DOM, control flow (`@if`/`@for` com `track` por id).
 
 ## Commits e releases
 
-O prefixo do commit decide a próxima versão (release-please, em `release-please-config.json`). Escolha pelo efeito para quem visita o site:
+O prefixo do título do PR (o commit do squash) decide a próxima versão (release-please, em `release-please-config.json`). Escolha pelo efeito para quem visita o site:
 
 | Prefixo | Versão |
 |---|---|
