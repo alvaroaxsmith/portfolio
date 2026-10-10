@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.5.0](https://github.com/alvaroaxsmith/portfolio/compare/v2.4.0...v2.5.0) (2026-10-10)
+
+
+### Features
+
+* **a11y:** pause control for the rotating word, and keyboard focus fixes (phase 9) ([#107](https://github.com/alvaroaxsmith/portfolio/issues/107)) ([5767564](https://github.com/alvaroaxsmith/portfolio/commit/5767564f66edcb1e1f40a1258c87a4612e7fde15))
+
+
+### Build and dependencies
+
+* **deps:** bump the npm-minor-and-patch group across 1 directory with 6 updates ([#103](https://github.com/alvaroaxsmith/portfolio/issues/103)) ([44a0f5c](https://github.com/alvaroaxsmith/portfolio/commit/44a0f5c53fbe2a5f59c2a8aa4942e796451a472c))
+
 ## [2.4.0](https://github.com/alvaroaxsmith/portfolio/compare/v2.3.0...v2.4.0) (2026-10-10)
 
 
