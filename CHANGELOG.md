@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.5.1](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.0...v2.5.1) (2026-10-10)
+
+
+### Bug Fixes
+
+* **a11y:** names, roles and states for assistive technologies (phase 10) ([#108](https://github.com/alvaroaxsmith/portfolio/issues/108)) ([c10c252](https://github.com/alvaroaxsmith/portfolio/commit/c10c2521f5008a825aeebe2044186f5349a99fff))
+
+
+### Refactoring
+
+* modern Angular signals, after-render effects and zone-free window listeners (phase 11) ([#110](https://github.com/alvaroaxsmith/portfolio/issues/110)) ([48389b0](https://github.com/alvaroaxsmith/portfolio/commit/48389b06b3dd1944147906479a7dbbdd36f87d0b))
+
 ## [2.5.0](https://github.com/alvaroaxsmith/portfolio/compare/v2.4.0...v2.5.0) (2026-10-10)
 
 
