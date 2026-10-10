@@ -8,6 +8,8 @@ interface SeoPayload {
   title: string;
   description: string;
   path: string;
+  /** Keeps the page out of search results, e.g. the not-found page. */
+  noindex?: boolean;
 }
 
 @Injectable({
@@ -19,7 +21,7 @@ export class SeoService {
   private document = inject<Document>(DOCUMENT);
 
 
-  update({ title, description, path }: SeoPayload) {
+  update({ title, description, path, noindex = false }: SeoPayload) {
     const url = SITE_URL + (path === '/' ? '/' : path.replace(/\/$/, ''));
     this.title.setTitle(title);
     this.meta.updateTag({ name: 'description', content: description });
@@ -29,6 +31,11 @@ export class SeoService {
     this.meta.updateTag({ name: 'twitter:title', content: title });
     this.meta.updateTag({ name: 'twitter:description', content: description });
     this.setCanonical(url);
+    if (noindex) {
+      this.meta.updateTag({ name: 'robots', content: 'noindex' });
+    } else {
+      this.meta.removeTag('name="robots"');
+    }
   }
 
   private setCanonical(url: string) {

@@ -1,10 +1,12 @@
 <app-splash-screen (animationFinished)="onSplashAnimationFinished()" />
 
 @if (showMainContent()) {
-<a class="skip-link" href="#main-content">Pular para o conteúdo principal</a>
-<main id="main-content">
+<a class="skip-link" href="#main-content" (click)="skipToContent($event)">{{ 'a11y.skipToContent' | translate }}</a>
+<div class="shell">
     <app-navbar />
-    <router-outlet />
-</main>
+    <main id="main-content" tabindex="-1">
+        <router-outlet />
+    </main>
+</div>
 <app-consent-banner />
 }

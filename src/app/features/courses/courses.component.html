@@ -57,9 +57,15 @@
 
             <tr class="mat-row" *matNoDataRow>
                 @if (!isLoading()) {
+                @if (loadError()) {
+                <td class="mat-cell" [attr.colspan]="displayedColumns.length" role="alert">
+                    {{ 'courses.error' | translate }}
+                </td>
+                } @else {
                 <td class="mat-cell" [attr.colspan]="displayedColumns.length">
                     {{ 'courses.noData' | translate }} "{{ input.value }}"
                 </td>
+                }
                 }
             </tr>
         </table>
@@ -106,7 +112,9 @@
         } @else if (visibleCourses.length > 0) {
         <p class="end-of-list">{{ 'courses.allLoaded' | translate }}</p>
         }
-        @if (visibleCourses.length === 0) {
+        @if (loadError()) {
+        <p class="empty-state" role="alert">{{ 'courses.error' | translate }}</p>
+        } @else if (visibleCourses.length === 0) {
         <p class="empty-state">{{ 'courses.emptyState' | translate }}</p>
         }
         }

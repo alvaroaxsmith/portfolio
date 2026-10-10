@@ -30,7 +30,9 @@
   </header>
 
   <div class="frame" [class.is-loaded]="isFrameLoaded()">
-    @if (!isFrameLoaded()) {
+    @if (unavailable()) {
+      <p class="unavailable" role="alert">{{ 'certificate.unavailable' | translate }}</p>
+    } @else if (!isFrameLoaded()) {
       <app-skeleton class="frame-placeholder" radius="0" />
       <span class="sr-only" role="status">{{ 'certificate.loading' | translate }}</span>
     }

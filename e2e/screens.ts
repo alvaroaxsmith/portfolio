@@ -24,7 +24,8 @@ const pages = [
   { slug: 'about-me', path: '/about-me' },
   { slug: 'courses', path: '/courses' },
   { slug: 'portfolio', path: '/portfolio' },
-  { slug: 'contact', path: '/contact' }
+  { slug: 'contact', path: '/contact' },
+  { slug: 'not-found', path: '/this-page-does-not-exist' }
 ];
 
 /** Every page at both sizes, plus the states that only exist after an interaction. */

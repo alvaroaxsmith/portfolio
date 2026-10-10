@@ -107,7 +107,7 @@ test.describe('skip link', () => {
     await expect(skipLink).toBeInViewport();
   });
 
-  test.fixme('moves focus past the navigation on the current page, without reloading (#72)', async ({ page }) => {
+  test('moves focus past the navigation on the current page, without reloading (#72)', async ({ page }) => {
     await open(page, '/courses');
     await page.evaluate(() => ((window as unknown as { marker: boolean }).marker = true));
 
@@ -133,7 +133,7 @@ test.describe('changing page', () => {
     await expect(page.locator('h1')).toBeFocused();
   });
 
-  test.fixme('starts the new page at the top (#72)', async ({ page }) => {
+  test('starts the new page at the top (#72)', async ({ page }) => {
     // From the bottom of a page to a longer one, so a kept scroll position would show.
     await open(page, '/courses');
     await page.evaluate(() => window.scrollTo(0, document.documentElement.scrollHeight));
@@ -163,7 +163,7 @@ test.describe('changing page', () => {
   });
 });
 
-test.fixme('an unknown address shows a usable page instead of a blank screen (#72)', async ({ page }) => {
+test('an unknown address shows a usable page instead of a blank screen (#72)', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (error) => errors.push(error.message));
 

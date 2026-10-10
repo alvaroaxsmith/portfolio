@@ -26,7 +26,8 @@
     "certificate": {
         "close": "Close certificate",
         "openNewTab": "Open in a new tab",
-        "loading": "Loading certificate…"
+        "loading": "Loading certificate…",
+        "unavailable": "This certificate can't be displayed."
     },
     "Technologies Used": "Technologies Used",
     "Welcome to my website": "Welcome to my website",
@@ -123,7 +124,8 @@
         "intro": "Specializations and courses that strengthen my foundation in software engineering and emerging technologies.",
         "filterPlaceholder": "Ex.: Architecture, Java, GenAI",
         "noData": "No course matches the filter",
-        "emptyState": "No course matches the current filter."
+        "emptyState": "No course matches the current filter.",
+        "error": "Couldn't load the courses right now. Please try again later."
     },
     "Filter": "Filter",
     "FIELD": "FIELD",
@@ -257,6 +259,10 @@
         "contact": {
             "title": "Contact | Alvaro Ferreira",
             "description": "Get in touch to discuss technical innovation, engineering leadership, and scalability."
+        },
+        "notFound": {
+            "title": "Page not found | Alvaro Ferreira",
+            "description": "The address you opened doesn't exist or has moved."
         }
     },
     "chunkLoad": {
@@ -271,5 +277,13 @@
     "Dados Operacionais": "Operational Data",
     "Melhoria Contínua": "Continuous Improvement",
     "Microserviços": "Microservices",
-    "Revisão de código": "Code Review"
+    "Revisão de código": "Code Review",
+    "a11y": {
+        "skipToContent": "Skip to main content"
+    },
+    "notFound": {
+        "title": "Page not found",
+        "description": "The address you opened doesn't exist or has moved.",
+        "back": "Back to home"
+    }
 }

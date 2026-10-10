@@ -3,10 +3,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { MAT_BOTTOM_SHEET_DATA, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { TranslateModule } from '@ngx-translate/core';
-import { of } from 'rxjs';
 import { AnalyticsService } from '../../../core/analytics/analytics.service';
 import { Course } from '../course.model';
-import { CourseService } from '../services/courses.service';
 import { CertificateSheetComponent } from './certificate-sheet.component';
 
 const course: Course = {
@@ -110,6 +108,14 @@ describe('CertificateSheetComponent', () => {
         expect(fixture.nativeElement.querySelector('iframe')).toBeNull();
         expect(fixture.nativeElement.querySelector('a[href]')).toBeNull();
       });
+
+      it(`stops loading and says the certificate cannot be shown, for ${kind}`, () => {
+        openCertificate(link);
+
+        expect(fixture.nativeElement.querySelector('app-skeleton')).toBeNull();
+        expect(fixture.nativeElement.querySelector('[role="status"]')).toBeNull();
+        expect(fixture.nativeElement.querySelector('[role="alert"]')?.textContent).toContain('certificate.unavailable');
+      });
     }
   });
 
@@ -146,38 +152,5 @@ describe('CertificateSheetComponent', () => {
     component.trackOpenNewTab();
 
     expect(track).toHaveBeenCalledWith('certificate_open_new_tab', { course: 'Java Full Stack' });
-  });
-
-  describe('when opened with only the course name', () => {
-    const otherCourse: Course = { ...course, name: 'Angular Avançado', link: 'https://drive.google.com/file/d/xyz/preview' };
-
-    function openWith(data: Partial<Course>, courses: Course[]) {
-      TestBed.resetTestingModule();
-      TestBed.configureTestingModule({
-    imports: [TranslateModule.forRoot(), CertificateSheetComponent],
-    providers: [
-        { provide: CourseService, useValue: { getCourses: () => of(courses) } },
-        { provide: MAT_BOTTOM_SHEET_DATA, useValue: data },
-        { provide: MatBottomSheetRef, useValue: sheetRef }
-    ]
-});
-      fixture = TestBed.createComponent(CertificateSheetComponent);
-      component = fixture.componentInstance;
-      fixture.detectChanges();
-    }
-
-    it('looks the course up and shows its certificate', () => {
-      openWith({ name: '', link: 'Angular Avançado' }, [course, otherCourse]);
-
-      expect(component.rowData()).toEqual(otherCourse);
-      expect(component.externalUrl()).toBe('https://drive.google.com/file/d/xyz/view');
-    });
-
-    it('shows no certificate when the course is not found', () => {
-      openWith({ name: '', link: 'Curso inexistente' }, [course]);
-
-      expect(component.safeUrl()).toBeNull();
-      expect(fixture.nativeElement.querySelector('iframe')).toBeNull();
-    });
   });
 });

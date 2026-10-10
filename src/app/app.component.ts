@@ -1,7 +1,7 @@
 import { DOCUMENT } from '@angular/common';
 import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject, signal } from '@angular/core';
 import { NavigationEnd, Router, ActivatedRoute, RouterOutlet } from '@angular/router';
-import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
+import { TranslateService, LangChangeEvent, TranslateModule } from '@ngx-translate/core';
 import { Subject, filter, takeUntil } from 'rxjs';
 import { SeoService } from './core/seo/seo.service';
 import { AnalyticsService } from './core/analytics/analytics.service';
@@ -15,7 +15,7 @@ import { ConsentBannerComponent } from './core/layout/consent-banner/consent-ban
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [SplashScreenComponent, NavbarComponent, RouterOutlet, ConsentBannerComponent]
+    imports: [SplashScreenComponent, NavbarComponent, RouterOutlet, ConsentBannerComponent, TranslateModule]
 })
 export class AppComponent implements OnInit, OnDestroy {
   private translate = inject(TranslateService);
@@ -30,6 +30,15 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onSplashAnimationFinished() {
     this.showMainContent.set(true);
+  }
+
+  /**
+   * With <base href="/">, following "#main-content" would load "/#main-content" (the home page) from any other
+   * route, so the skip link moves focus itself.
+   */
+  skipToContent(event: Event) {
+    event.preventDefault();
+    this.document.getElementById('main-content')?.focus();
   }
 
   ngOnInit() {
@@ -74,7 +83,8 @@ export class AppComponent implements OnInit, OnDestroy {
     this.seoService.update({
       title: this.translate.instant(seo.titleKey),
       description: this.translate.instant(seo.descriptionKey),
-      path: this.router.url.split(/[?#]/)[0]
+      path: this.router.url.split(/[?#]/)[0],
+      noindex: !!seo.noindex
     });
   }
 
