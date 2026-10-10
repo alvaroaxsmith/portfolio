@@ -27,8 +27,10 @@ jobs:
           manifest-file: .release-please-manifest.json
       # A PR opened with the workflow token does not trigger other workflows, so the required checks would
       # never report on the release PR. Dispatching the gate on its branch is allowed and reports them.
+      # The PR is parsed in the shell: step env is evaluated even when `if` is false, and fromJSON of the
+      # empty `pr` output (no PR touched, e.g. right after a release) fails the job.
       - if: steps.release.outputs.prs_created == 'true'
         env:
           GH_TOKEN: ${{ github.token }}
-          BRANCH: ${{ fromJSON(steps.release.outputs.pr).headBranchName }}
-        run: gh workflow run quality-gate.yml --repo "$GITHUB_REPOSITORY" --ref "$BRANCH"
+          PR: ${{ steps.release.outputs.pr }}
+        run: gh workflow run quality-gate.yml --repo "$GITHUB_REPOSITORY" --ref "$(jq -r .headBranchName <<< "$PR")"
