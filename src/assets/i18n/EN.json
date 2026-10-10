@@ -240,7 +240,9 @@
             "description": "Support for maintenance engineering operations with a focus on data analysis and continuous process improvement at Metrô de São Paulo.",
             "activity1": "Created management dashboards and processed operational data with Power BI and Excel.",
             "activity2": "Provided analytical support for SAP ERP implementation and executed time-and-motion studies."
-        }
+        },
+        "openJourney": "Opens the career journey from this experience",
+        "closeJourney": "Back to the experience cards"
     },
     "seo": {
         "home": {
@@ -282,11 +284,25 @@
     "Microserviços": "Microservices",
     "Revisão de código": "Code Review",
     "a11y": {
-        "skipToContent": "Skip to main content"
+        "skipToContent": "Skip to main content",
+        "mainNavigation": "Main navigation",
+        "openMenu": "Open navigation menu",
+        "mobileMenu": "Navigation menu",
+        "closeMenu": "Close menu",
+        "highlights": "Professional highlights",
+        "coursesPaginator": "Select page of courses"
     },
     "notFound": {
         "title": "Page not found",
         "description": "The address you opened doesn't exist or has moved.",
         "back": "Back to home"
+    },
+    "paginator": {
+        "itemsPerPage": "Items per page:",
+        "nextPage": "Next page",
+        "previousPage": "Previous page",
+        "firstPage": "First page",
+        "lastPage": "Last page",
+        "of": "of"
     }
 }

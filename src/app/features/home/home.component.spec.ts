@@ -81,4 +81,8 @@ describe('HomeComponent', () => {
     expect(component.isLoadingImage()).toBeFalse();
     expect(fixture.nativeElement.querySelector('.hero-media img').getAttribute('src')).toBe('https://github.com/alvaroaxsmith.png');
   });
+
+  it('names the highlights list in the visitor\'s language', () => {
+    expect(fixture.nativeElement.querySelector('.hero-highlights').getAttribute('aria-label')).toBe('a11y.highlights');
+  });
 });

@@ -3,14 +3,14 @@ import { MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { TranslateService, TranslateModule } from '@ngx-translate/core';
 import { MatIconButton, MatButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { RouterLink } from '@angular/router';
+import { RouterLink, RouterLinkActive } from '@angular/router';
 
 @Component({
     selector: 'app-nav-menu-sheet',
     templateUrl: './nav-menu-sheet.component.html',
     styleUrls: ['./nav-menu-sheet.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatIconButton, MatIcon, MatButton, RouterLink, TranslateModule]
+    imports: [MatIconButton, MatIcon, MatButton, RouterLink, RouterLinkActive, TranslateModule]
 })
 export class NavMenuSheetComponent {
   translate = inject(TranslateService);

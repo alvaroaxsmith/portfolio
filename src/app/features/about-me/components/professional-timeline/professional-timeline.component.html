@@ -10,7 +10,7 @@
             @for (exp of experiences; track exp; let i = $index) {
             <button type="button" class="icon-wrapper" [class.active]="!isJourneyVisible() && i === currentIndex()" [class.selected-for-journey]="
           isJourneyVisible() && i === journeyCurrentIndex()
-          " (click)="isJourneyVisible() ? handleIconClickInJourneyView(exp) : goTo(i)" [matTooltip]="exp.tooltip || exp.company">
+          " (click)="isJourneyVisible() ? handleIconClickInJourneyView(exp) : goTo(i)" [matTooltip]="exp.tooltip || exp.company" [attr.aria-label]="i + 1 + '. ' + (exp.company | translate) + ', ' + (exp.role | translate)" [attr.aria-current]="i === (isJourneyVisible() ? journeyCurrentIndex() : currentIndex()) ? 'step' : null">
                 <div class="timeline-icon">
                     {{ i + 1 }}
                 </div>
@@ -18,15 +18,19 @@
         </div>
     </div>
 
+    <span id="journey-hint" class="cdk-visually-hidden">{{ "timeline.openJourney" | translate }}</span>
+
     <div class="views-container" [class.journey-view-active]="isJourneyVisible()">
         <div class="timeline-carousel-section" [inert]="isJourneyVisible()">
             <div class="carousel-wrapper">
                 <div class="carousel-track" [style.transform]="'translateX(-' + currentIndex() * 100 + '%)'">
                     @for (experience of experiences; track experience; let i = $index) {
                     <div class="carousel-item" [inert]="i !== currentIndex()">
-                        <mat-card #careerCard class="timeline-content" [class.is-interactive]="!isMobile()" (click)="openJourney(experience)" (keydown)="handleActionKey($event, () => openJourney(experience))" [attr.tabindex]="isMobile() || i !== currentIndex() ? null : 0">
+                        <mat-card class="timeline-content" [class.is-interactive]="!isMobile()" (click)="openJourney(experience)">
                             <mat-card-header>
-                                <mat-card-title>{{ experience.role | translate }}
+                                <!-- The title is the keyboard and screen reader way into the journey, so the card content stays
+                                     readable; the button's click reaches the card's handler. -->
+                                <mat-card-title>@if (isMobile()) { {{ experience.role | translate }} } @else {<button #careerCard type="button" class="text-button card-action" aria-describedby="journey-hint">{{ experience.role | translate }}</button>}
                                 </mat-card-title>
                                 <mat-card-subtitle>{{ experience.company | translate }} | {{ experience.period | translate }} @if (experience.duration) {
                                     <span>({{ experience.duration | translate }})</span
@@ -84,6 +88,8 @@
                         <mat-card
                           #journeyCard
                           class="mermaid-journey-card"
+                          role="button"
+                          [attr.aria-label]="'timeline.closeJourney' | translate"
                           (click)="closeJourney()"
                           (keydown)="handleActionKey($event, () => closeJourney())"
                           tabindex="0"

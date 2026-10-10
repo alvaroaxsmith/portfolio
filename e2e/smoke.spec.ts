@@ -39,7 +39,7 @@ test('switching to English translates the page and is remembered after a reload'
   await open(page, '/about-me');
 
   await page.getByRole('button', { name: 'TRADUÇÃO' }).click();
-  await page.getByRole('menuitem', { name: 'EN' }).click();
+  await page.getByRole('menuitemradio', { name: 'EN' }).click();
 
   await expect(page.getByRole('heading', { level: 1 })).toHaveText('Who am I?');
   await expect(page.locator('html')).toHaveAttribute('lang', 'en');
@@ -151,7 +151,7 @@ test.describe('consent banner on the production site', () => {
 
   test('asks for consent once and remembers the choice', async ({ page }) => {
     await open(page, '/');
-    const banner = page.getByRole('dialog');
+    const banner = page.getByRole('region', { name: 'Privacidade' });
     await expect(banner).toBeVisible();
 
     await banner.getByRole('button').first().click();
@@ -159,6 +159,6 @@ test.describe('consent banner on the production site', () => {
 
     await page.reload();
     await expect(page.locator('main#main-content')).toBeVisible({ timeout: 15_000 });
-    await expect(page.getByRole('dialog')).toBeHidden();
+    await expect(page.getByRole('region', { name: 'Privacidade' })).toBeHidden();
   });
 });

@@ -34,6 +34,9 @@ header p:last-child {
 .contact-list {
     display: grid;
     gap: 1rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
 }
 
 .contact-card {

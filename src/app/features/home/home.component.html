@@ -11,7 +11,7 @@
             <a mat-flat-button href="/assets/cv/alvaro-machado-ferreira-cv.txt" download="alvaro-machado-ferreira-cv.txt" (click)="trackCvDownload()">{{ 'home.cta.downloadCv' | translate }}</a>
             <a mat-stroked-button href="https://www.linkedin.com/in/alvaromachadoferreira/" target="_blank" rel="noopener noreferrer" (click)="trackLinkedin()">{{ 'home.cta.linkedin' | translate }}</a>
         </div>
-        <ul class="hero-highlights" aria-label="Destaques profissionais">
+        <ul class="hero-highlights" [attr.aria-label]="'a11y.highlights' | translate">
             <li>{{ 'home.highlight.one' | translate }}</li>
             <li>{{ 'home.highlight.two' | translate }}</li>
         </ul>

@@ -6,11 +6,16 @@ import { ConsentBannerComponent } from './consent-banner.component';
 
 describe('ConsentBannerComponent', () => {
   let fixture: ComponentFixture<ConsentBannerComponent>;
-  let analytics: { consentBannerVisible: ReturnType<typeof signal<boolean>>; setConsent: jasmine.Spy };
+  let analytics: {
+    consentBannerVisible: ReturnType<typeof signal<boolean>>;
+    consentBannerReopened: ReturnType<typeof signal<boolean>>;
+    setConsent: jasmine.Spy;
+  };
 
-  function render(visible: boolean) {
+  function render(visible: boolean, reopened = false) {
     analytics = {
       consentBannerVisible: signal(visible),
+      consentBannerReopened: signal(reopened),
       setConsent: jasmine.createSpy('setConsent').and.callFake(() => analytics.consentBannerVisible.set(false))
     };
     TestBed.configureTestingModule({
@@ -18,8 +23,12 @@ describe('ConsentBannerComponent', () => {
       providers: [{ provide: AnalyticsService, useValue: analytics }]
     });
     fixture = TestBed.createComponent(ConsentBannerComponent);
+    // In the page, as in the app: focus only moves to elements in the document.
+    document.body.appendChild(fixture.nativeElement);
     fixture.detectChanges();
   }
+
+  afterEach(() => fixture.nativeElement.remove());
 
   const banner = () => fixture.nativeElement.querySelector('.consent') as HTMLElement | null;
   const buttons = () => Array.from(fixture.nativeElement.querySelectorAll('button')) as HTMLButtonElement[];
@@ -29,10 +38,11 @@ describe('ConsentBannerComponent', () => {
     expect(banner()).toBeNull();
   });
 
-  it('shows an accessible dialog with decline and accept actions', () => {
+  it('shows a named region (not a dialog: it does not block the page) with decline and accept actions', () => {
     render(true);
 
-    expect(banner()?.getAttribute('role')).toBe('dialog');
+    expect(banner()?.getAttribute('role')).toBe('region');
+    expect(banner()?.getAttribute('aria-labelledby')).toBe('consent-title');
     expect(buttons().length).toBe(2);
   });
 
@@ -54,5 +64,36 @@ describe('ConsentBannerComponent', () => {
 
     expect(analytics.setConsent).toHaveBeenCalledOnceWith('granted');
     expect(banner()).toBeNull();
+  });
+
+  describe('focus', () => {
+    let opener: HTMLButtonElement;
+
+    beforeEach(() => {
+      opener = document.createElement('button');
+      document.body.appendChild(opener);
+      opener.focus();
+    });
+
+    afterEach(() => opener.remove());
+
+    it('takes focus when the visitor reopens it, and gives it back after the choice', async () => {
+      render(true, true);
+      await fixture.whenStable();
+
+      expect(document.activeElement).toBe(banner());
+
+      buttons()[0].click();
+      fixture.detectChanges();
+
+      expect(document.activeElement).toBe(opener);
+    });
+
+    it('leaves focus where it is when it shows by itself on the first visit', async () => {
+      render(true, false);
+      await fixture.whenStable();
+
+      expect(document.activeElement).toBe(opener);
+    });
   });
 });

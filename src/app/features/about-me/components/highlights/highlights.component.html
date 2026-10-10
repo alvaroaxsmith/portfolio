@@ -11,10 +11,10 @@
     @for (highlight of highlights; track highlight) {
     <div class="timeline-item" #timelineItem>
         <div class="timeline-content">
-            <h4>
+            <h3>
                 {{ highlight.date | translate }} @if (highlight.dateRange) {
                 <span> {{ highlight.dateRange | translate }}</span> }
-            </h4>
+            </h3>
             <p>{{ highlight.description | translate }}</p>
         </div>
     </div>

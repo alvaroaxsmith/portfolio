@@ -19,4 +19,13 @@ describe('FooterComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  it('names the technology icons for screen readers', () => {
+    const footer = fixture.nativeElement as HTMLElement;
+    const hidden = Array.from(footer.querySelectorAll('.flex-icons .cdk-visually-hidden')).map((el) => el.textContent?.trim());
+
+    expect(hidden).toEqual(['Angular', 'NodeJs']);
+    expect(Array.from(footer.querySelectorAll('fa-icon')).every((icon) => icon.getAttribute('aria-hidden') === 'true')).toBeTrue();
+    expect(footer.querySelector('fa-icon[alt]')).toBeNull();
+  });
 });

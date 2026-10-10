@@ -50,4 +50,13 @@ describe('ContactComponent', () => {
       ['contact_click', { channel: 'linkedin' }]
     ]);
   });
+
+  it('lists the contacts as a real list, each link or text inside its own item', () => {
+    const list = fixture.nativeElement.querySelector('ul.contact-list') as HTMLElement;
+
+    expect(list).not.toBeNull();
+    expect(Array.from(list.children).every((item) => item.tagName === 'LI')).toBeTrue();
+    expect(list.querySelectorAll('li > .contact-card').length).toBe(5);
+    expect(fixture.nativeElement.querySelector('[role="listitem"], [role="list"]')).toBeNull();
+  });
 });

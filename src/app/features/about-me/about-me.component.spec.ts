@@ -57,4 +57,11 @@ describe('AboutMeComponent', () => {
     expect(link.target).toBe('_blank');
     expect(link.rel).toContain('noopener');
   });
+
+  it('keeps the heading levels in order: hobbies are h3 under the page h1', () => {
+    const page = fixture.nativeElement as HTMLElement;
+
+    expect(page.querySelectorAll('h4').length).toBe(0);
+    expect(page.querySelectorAll('.hobbies h3').length).toBe(3);
+  });
 });

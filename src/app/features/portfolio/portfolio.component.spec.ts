@@ -314,4 +314,16 @@ describe('PortfolioComponent', () => {
       expect(component.loadError()).toBeFalse();
     });
   });
+
+  it('names the grid/list switch with the same text as its tooltip', () => {
+    render(of(makeProjects(2)));
+    const toggle = () => fixture.nativeElement.querySelector('.view-controls button') as HTMLButtonElement;
+
+    expect(toggle().getAttribute('aria-label')).toBe('Switch to Grid View');
+
+    toggle().click();
+    fixture.detectChanges();
+
+    expect(toggle().getAttribute('aria-label')).toBe('Switch to List View');
+  });
 });

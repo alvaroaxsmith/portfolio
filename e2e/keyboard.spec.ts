@@ -92,7 +92,8 @@ test.describe('tab order shows every stop', () => {
   test('about me lets only the visible career card take focus (#73)', async ({ page }) => {
     await open(page, '/about-me');
 
-    await expect(page.locator('.carousel-item mat-card[tabindex="0"]')).toHaveCount(1);
+    // Every card has a title button, but the cards out of view are inert.
+    await expect(page.locator('.carousel-item:not([inert]) button.card-action')).toHaveCount(1);
   });
 });
 
