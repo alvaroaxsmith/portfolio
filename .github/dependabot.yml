@@ -22,6 +22,8 @@ updates:
         update-types: ['version-update:semver-major']
       # Pinned on purpose: the visual references are rendered with this exact version (see CLAUDE.md).
       - dependency-name: '@playwright/test'
+      # 0.x "minor" releases can break and redraw the icons; the upgrade is planned with before/after in #77.
+      - dependency-name: '@fortawesome/*'
 
   - package-ecosystem: github-actions
     directory: /
