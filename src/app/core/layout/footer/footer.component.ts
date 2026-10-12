@@ -2,7 +2,7 @@ import { Component, ChangeDetectionStrategy, inject } from '@angular/core';
 import { faAngular, faNodeJs } from '@fortawesome/free-brands-svg-icons';
 import { AnalyticsService } from '../../analytics/analytics.service';
 import { MatTooltip } from '@angular/material/tooltip';
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -10,7 +10,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     templateUrl: './footer.component.html',
     styleUrls: ['./footer.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatTooltip, FontAwesomeModule, TranslatePipe]
+    imports: [MatTooltip, FaIconComponent, TranslatePipe]
 })
 export class FooterComponent {
   protected readonly analytics = inject(AnalyticsService);
