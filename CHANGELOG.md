@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.5.2](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.1...v2.5.2) (2026-10-12)
+
+
+### Build and dependencies
+
+* **deps:** Font Awesome 7 and angular-fontawesome 5 for Angular 22 (phase 12b) ([#113](https://github.com/alvaroaxsmith/portfolio/issues/113)) ([6a2f94d](https://github.com/alvaroaxsmith/portfolio/commit/6a2f94dd3bce923fbd2da380f12de04d7df21a43))
+* **deps:** ngx-translate 18 with standalone providers (phase 12a) ([#111](https://github.com/alvaroaxsmith/portfolio/issues/111)) ([a20084d](https://github.com/alvaroaxsmith/portfolio/commit/a20084dcf45854ca9a12f34ce6e9914cd1052d60))
+
 ## [2.5.1](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.0...v2.5.1) (2026-10-10)
 
 
