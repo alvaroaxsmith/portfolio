@@ -63,7 +63,10 @@ test.describe('missing files', () => {
 
 test('the CSP allows every inline script of the built page, by hash', () => {
   const html = readFileSync(join(browser, 'index.html'), 'utf-8');
-  const inline = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(([, body]) => body);
+  // Inline scripts only: the ones loaded with src are covered by 'self'.
+  const inline = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)]
+    .filter(([, attributes]) => !/\bsrc\s*=/i.test(attributes))
+    .map(([, , body]) => body);
 
   expect(inline.length).toBeGreaterThan(0);
   for (const body of inline) {
