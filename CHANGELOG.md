@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.5.3](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.2...v2.5.3) (2026-10-15)
+
+
+### Build and dependencies
+
+* **deps-dev:** bump @types/node from 26.6.4 to 26.6.5 in the npm-minor-and-patch group ([#114](https://github.com/alvaroaxsmith/portfolio/issues/114)) ([f439409](https://github.com/alvaroaxsmith/portfolio/commit/f4394093f9a29881b75a0e2089c47a0f8fec3fff))
+* **deps:** Mermaid 12, with the package's own types (phase 12c) ([#116](https://github.com/alvaroaxsmith/portfolio/issues/116)) ([b7e90d6](https://github.com/alvaroaxsmith/portfolio/commit/b7e90d658efee38a927daef64d2d7a9291814e87))
+
 ## [2.5.2](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.1...v2.5.2) (2026-10-12)
 
 
