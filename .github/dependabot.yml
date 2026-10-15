@@ -33,6 +33,10 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    # Workflow actions only change CI, so they ride along with the next release.
+    commit-message:
+      prefix: ci
+      include: scope
     groups:
       actions:
         patterns: ['*']
