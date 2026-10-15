@@ -27,7 +27,7 @@ O prefixo do título do PR (o commit do squash) decide a próxima versão (relea
 |---|---|
 | `feat:` algo novo e visível (uma página, um controle) | minor |
 | `fix:`, `perf:`, `refactor:` em código do site, `build(deps):` | patch |
-| `test:`, `ci:`, `docs:`, `chore:` | nenhuma; entra na próxima release |
+| `test:`, `ci:`, `docs:`, `chore:` (inclui `chore(deps-dev):`, dependências só de desenvolvimento) | nenhuma; entra na próxima release |
 | `feat!:` ou `fix!:` (redesenho) | major, só com aprovação do dono |
 
 A cada merge, o release-please atualiza um PR de release. Ao mergear esse PR, a tag e uma GitHub Release em **rascunho** são criadas; reescreva as notas em português, para visitantes, no estilo das releases anteriores, e o dono publica.
