@@ -61,12 +61,17 @@ test.describe('missing files', () => {
   });
 });
 
-test('the CSP allows every inline script of the built page, by hash', () => {
+test('the CSP allows every inline script of the built page, by hash', async ({ page }) => {
   const html = readFileSync(join(browser, 'index.html'), 'utf-8');
-  // Inline scripts only: the ones loaded with src are covered by 'self'.
-  const inline = [...html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)]
-    .filter(([, attributes]) => !/\bsrc\s*=/i.test(attributes))
-    .map(([, , body]) => body);
+  // Parsed by the browser (DOMParser runs no script), so the hashed text is exactly what the browser hashes.
+  // Scripts with src are covered by 'self'.
+  const inline = await page.evaluate(
+    (source) =>
+      Array.from(new DOMParser().parseFromString(source, 'text/html').querySelectorAll('script:not([src])')).map(
+        (script) => script.textContent ?? ''
+      ),
+    html
+  );
 
   expect(inline.length).toBeGreaterThan(0);
   for (const body of inline) {
