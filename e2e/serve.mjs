@@ -42,7 +42,8 @@ createServer((req, res) => {
   let file = join(root, path);
   if (!isFile(file)) {
     const rewrite = rewrites.find(({ match }) => match.test(urlPath));
-    file = rewrite ? join(root, rewrite.destination) : null;
+    // A rewrite to a path that is not a file (e.g. "/__missing__") answers 404, as on Vercel.
+    file = rewrite && isFile(join(root, rewrite.destination)) ? join(root, rewrite.destination) : null;
   }
   if (!file) {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
