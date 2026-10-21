@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.5.3](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.2...v2.5.3) (2026-10-21)
+
+
+### Bug Fixes
+
+* hosting rules for cache, security headers, missing files and social preview (phase 13) ([#120](https://github.com/alvaroaxsmith/portfolio/issues/120)) ([85b3100](https://github.com/alvaroaxsmith/portfolio/commit/85b3100e54ba8b9387513bc7c5c25c81c0fed297))
+
+
+### Build and dependencies
+
+* **deps-dev:** bump @types/node from 26.6.4 to 26.6.5 in the npm-minor-and-patch group ([#114](https://github.com/alvaroaxsmith/portfolio/issues/114)) ([f439409](https://github.com/alvaroaxsmith/portfolio/commit/f4394093f9a29881b75a0e2089c47a0f8fec3fff))
+* **deps:** bump the npm-minor-and-patch group across 1 directory with 15 updates ([#121](https://github.com/alvaroaxsmith/portfolio/issues/121)) ([f894acd](https://github.com/alvaroaxsmith/portfolio/commit/f894acd2796d7c27ddfdcdc77f4914eb6b47deb3))
+* **deps:** Mermaid 12, with the package's own types (phase 12c) ([#116](https://github.com/alvaroaxsmith/portfolio/issues/116)) ([b7e90d6](https://github.com/alvaroaxsmith/portfolio/commit/b7e90d658efee38a927daef64d2d7a9291814e87))
+
 ## [2.5.2](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.1...v2.5.2) (2026-10-12)
 
 
