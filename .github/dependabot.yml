@@ -8,6 +8,12 @@ updates:
       interval: weekly
       day: monday
     open-pull-requests-limit: 3
+    # The prefix decides the release (see CLAUDE.md): runtime dependencies change the site and ship a patch,
+    # development-only ones do not and ride along with the next release.
+    commit-message:
+      prefix: build
+      prefix-development: chore
+      include: scope
     groups:
       npm-security:
         applies-to: security-updates
@@ -27,6 +33,10 @@ updates:
     directory: /
     schedule:
       interval: monthly
+    # Workflow actions only change CI, so they ride along with the next release.
+    commit-message:
+      prefix: ci
+      include: scope
     groups:
       actions:
         patterns: ['*']
