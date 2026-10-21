@@ -1,5 +1,6 @@
-// Serves the production build like Vercel does: static files first, index.html for any other path.
-import { createReadStream, existsSync, statSync } from 'node:fs';
+// Serves the production build like Vercel does, with the rules of vercel.json: static files first, then its
+// rewrites (index.html for page addresses), a 404 for anything else, and its headers on every response.
+import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { extname, join, normalize } from 'node:path';
 
@@ -18,6 +19,12 @@ const types = {
   '.xml': 'application/xml'
 };
 
+const vercel = JSON.parse(readFileSync(join(import.meta.dirname, '..', 'vercel.json'), 'utf-8'));
+/** Vercel sources are path-to-regexp patterns; ours only use regex groups, named or not. */
+const pattern = (source) => new RegExp(`^${source.replace(/:\w+(?=\()/g, '')}$`);
+const rewrites = vercel.rewrites.map(({ source, destination }) => ({ match: pattern(source), destination }));
+const headerRules = vercel.headers.map(({ source, headers }) => ({ match: pattern(source), headers }));
+
 if (!existsSync(join(root, 'index.html'))) {
   console.error(`No build found in ${root}. Run "npx ng build" first.`);
   process.exit(1);
@@ -25,9 +32,22 @@ if (!existsSync(join(root, 'index.html'))) {
 
 createServer((req, res) => {
   const path = normalize(decodeURIComponent(new URL(req.url, 'http://localhost').pathname)).replace(/^(\.\.[/\\])+/, '');
+  const urlPath = path.replaceAll('\\', '/');
+  for (const rule of headerRules) {
+    if (rule.match.test(urlPath)) {
+      rule.headers.forEach(({ key, value }) => res.setHeader(key, value));
+    }
+  }
+  const isFile = (candidate) => existsSync(candidate) && !statSync(candidate).isDirectory();
   let file = join(root, path);
-  if (!existsSync(file) || statSync(file).isDirectory()) {
-    file = join(root, 'index.html');
+  if (!isFile(file)) {
+    const rewrite = rewrites.find(({ match }) => match.test(urlPath));
+    file = rewrite ? join(root, rewrite.destination) : null;
+  }
+  if (!file) {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not found');
+    return;
   }
   res.writeHead(200, { 'Content-Type': types[extname(file)] ?? 'application/octet-stream' });
   createReadStream(file).pipe(res);
