@@ -20,7 +20,6 @@
         "build": {
           "builder": "@angular/build:application",
           "options": {
-            "aot": true,
             "outputPath": {
               "base": "dist/portfolio_resume"
             },
@@ -79,27 +78,16 @@
           "defaultConfiguration": "production"
         },
         "serve": {
-          "options": {
-            "proxyConfig": "proxy.conf.json"
-          },
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "proxyConfig": "proxy.conf.json",
               "buildTarget": "portfolio_resume:build:production"
             },
             "development": {
-              "proxyConfig": "proxy.conf.json",
               "buildTarget": "portfolio_resume:build:development"
             }
           },
           "defaultConfiguration": "development"
-        },
-        "extract-i18n": {
-          "builder": "@angular/build:extract-i18n",
-          "options": {
-            "buildTarget": "portfolio_resume:build"
-          }
         },
         "test": {
           "builder": "@angular/build:karma",
