@@ -362,3 +362,38 @@ test.describe('loading placeholders', () => {
     expect(await animationOf(page)).toBe('none');
   });
 });
+
+test.describe('career cards on a touch screen', () => {
+  test.use({ viewport: { width: 390, height: 844 }, hasTouch: true, isMobile: true });
+
+  /** Drags a finger 100px up inside the visible career card and returns how far the card scrolled. */
+  async function swipe(page: Page, withoutPageHandlers: boolean): Promise<number> {
+    await open(page, '/about-me');
+    const card = page.locator('.carousel-item:not([inert]) mat-card-content').first();
+    await card.scrollIntoViewIfNeeded();
+    if (withoutPageHandlers) {
+      // A copy of the same element, without the listeners the page added: the browser's own touch scrolling.
+      await card.evaluate((el) => el.replaceWith(el.cloneNode(true)));
+    }
+    const box = (await card.boundingBox())!;
+    const cdp = await page.context().newCDPSession(page);
+    const x = box.x + box.width / 2;
+    const y = box.y + box.height * 0.7;
+    const touch = (type: 'touchStart' | 'touchMove' | 'touchEnd', at = y) =>
+      cdp.send('Input.dispatchTouchEvent', { type, touchPoints: type === 'touchEnd' ? [] : [{ x, y: at }] });
+    await touch('touchStart');
+    for (let step = 1; step <= 10; step++) {
+      await touch('touchMove', y - step * 10);
+    }
+    await touch('touchEnd');
+    await page.waitForTimeout(600);
+    return card.evaluate((el) => el.scrollTop);
+  }
+
+  test('scroll as far as the finger moves, like any scrolling box', async ({ page }) => {
+    const native = await swipe(page, true);
+    const actual = await swipe(page, false);
+
+    expect(Math.abs(actual - native), `scrolled ${actual}px, the browser alone ${native}px`).toBeLessThanOrEqual(10);
+  });
+});
