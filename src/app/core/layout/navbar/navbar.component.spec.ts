@@ -90,6 +90,44 @@ describe('NavbarComponent', () => {
     }
   };
 
+  describe('on a phone', () => {
+    interface WithLoader { loadMenu: () => Promise<unknown> }
+    async function idle() {
+      for (let i = 0; i < 50; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 10));
+      }
+    }
+
+    it('downloads the menu ahead of the tap, so the tap opens it at once', async () => {
+      spyOn(window, 'matchMedia').and.callFake((query: string) => ({ matches: query.includes('767px') }) as MediaQueryList);
+      const load = spyOn(NavbarComponent.prototype as unknown as WithLoader, 'loadMenu').and.returnValue(new Promise(() => undefined));
+      TestBed.createComponent(NavbarComponent).detectChanges();
+      TestBed.tick();
+
+      await idle();
+
+      expect(load).toHaveBeenCalled();
+    });
+
+    it('opens the menu from the download started ahead, without a second one', async () => {
+      spyOn(window, 'matchMedia').and.callFake((query: string) => ({ matches: query.includes('767px') }) as MediaQueryList);
+      const sheet = { MatBottomSheet: MatBottomSheet };
+      const load = spyOn(NavbarComponent.prototype as unknown as WithLoader, 'loadMenu').and.resolveTo([sheet, { NavMenuSheetComponent: class {} }]);
+      const open = spyOn(TestBed.inject(MatBottomSheet), 'open');
+      const phone = TestBed.createComponent(NavbarComponent);
+      phone.detectChanges();
+      TestBed.tick();
+      await idle();
+      const downloads = load.calls.count();
+      expect(downloads).toBeGreaterThan(0);
+
+      await phone.componentInstance.openDialog();
+
+      expect(load.calls.count()).withContext('the tap reuses the download').toBe(downloads);
+      expect(open).toHaveBeenCalledTimes(1);
+    });
+  });
+
   it('reloads the page when the menu cannot be downloaded, e.g. a tab left open across a deploy', async () => {
     spyOn(component as unknown as { loadMenu: () => Promise<unknown> }, 'loadMenu').and.rejectWith(
       new TypeError('Failed to fetch dynamically imported module')
