@@ -1,6 +1,6 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
-import { provideRouter, withInMemoryScrolling } from '@angular/router';
+import { PreloadAllModules, provideRouter, withInMemoryScrolling, withPreloading } from '@angular/router';
 import { provideTranslateService } from '@ngx-translate/core';
 import { provideTranslateHttpLoader } from '@ngx-translate/http-loader';
 import { routes } from './app.routes';
@@ -13,7 +13,13 @@ export const appConfig: ApplicationConfig = {
     // The app still relies on zone.js for change detection; going zoneless is a separate decision (Q-03).
     provideZoneChangeDetection(),
     // A new page starts at the top (and Back restores where the visitor was), instead of keeping the old scroll.
-    provideRouter(routes, withInMemoryScrolling({ scrollPositionRestoration: 'enabled' })),
+    // Once the first page is on screen, the other pages are downloaded in the background, so the first visit to each
+    // one waits for no code. Mermaid stays out: it is only downloaded when the career journey opens.
+    provideRouter(
+      routes,
+      withInMemoryScrolling({ scrollPositionRestoration: 'enabled' }),
+      withPreloading(PreloadAllModules)
+    ),
     provideHttpClient(),
     // Portuguese fills in any key missing from the visitor's language; the language itself is set by
     // provideAppLanguage, which waits for it before the first render.
