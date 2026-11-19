@@ -13,11 +13,14 @@
                         {{ "Bio" | translate }}
                     </mat-panel-title>
                 </mat-expansion-panel-header>
+                <!-- A closed section renders only when it opens. -->
+                <ng-template matExpansionPanelContent>
                 <mat-action-row class="bio">
                     <div class="bio-margin">
                         <div class="bio-margin" [innerHTML]="'bio.description' | translate"></div>
                     </div>
                 </mat-action-row>
+                </ng-template>
             </mat-expansion-panel>
 
             <mat-expansion-panel [expanded]="true">
@@ -30,15 +33,17 @@
                     <app-professional-timeline />
                 </mat-action-row>
             </mat-expansion-panel>
-            <mat-expansion-panel (afterExpand)="highlights.start()" (afterCollapse)="highlights.stop()">
+            <mat-expansion-panel>
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         {{ "Highlights" | translate }}
                     </mat-panel-title>
                 </mat-expansion-panel-header>
+                <ng-template matExpansionPanelContent>
                 <mat-action-row class="highlights">
-                    <app-highlights #highlights />
+                    <app-highlights />
                 </mat-action-row>
+                </ng-template>
             </mat-expansion-panel>
 
             <mat-expansion-panel>
@@ -47,6 +52,7 @@
                         {{ "Hobbies" | translate }}
                     </mat-panel-title>
                 </mat-expansion-panel-header>
+                <ng-template matExpansionPanelContent>
                 <mat-action-row class="hobbies">
                     <div class="hobbies">
                         <p>
@@ -71,6 +77,7 @@
             <p>{{ "hobbies.sports.description" | translate }}</p>
           </div>
         </mat-action-row>
+        </ng-template>
       </mat-expansion-panel>
     </mat-accordion>
   </section>

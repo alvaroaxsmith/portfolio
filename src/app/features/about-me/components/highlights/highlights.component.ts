@@ -1,6 +1,8 @@
 import { Component, ChangeDetectionStrategy, AfterViewInit, OnDestroy, ElementRef, NgZone, inject, viewChild, viewChildren } from '@angular/core';
 
 import { TranslatePipe } from '@ngx-translate/core';
+import { MatExpansionPanel } from '@angular/material/expansion';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { REDUCED_MOTION, mediaQuery } from '../../../../core/media/media-query';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -53,6 +55,13 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
   private intersection?: IntersectionObserver;
   private resize?: ResizeObserver;
   private readonly onScroll = () => this.scheduleUpdate();
+
+  constructor() {
+    // Rendered only once its section opens, it follows that section itself: the animation runs while it is open.
+    const panel = inject(MatExpansionPanel, { optional: true });
+    panel?.afterExpand.pipe(takeUntilDestroyed()).subscribe(() => this.start());
+    panel?.afterCollapse.pipe(takeUntilDestroyed()).subscribe(() => this.stop());
+  }
 
   ngAfterViewInit(): void {
     if (this.reducedMotion) {

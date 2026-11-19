@@ -38,8 +38,27 @@ describe('AboutMeComponent', () => {
     expect(panels.map((panel) => panel.classList.contains('mat-expanded'))).toEqual([false, true, false, false]);
   });
 
+  const panel = (index: number) => fixture.debugElement.queryAll(By.directive(MatExpansionPanel))[index].componentInstance as MatExpansionPanel;
+  function open(index: number) {
+    panel(index).open();
+    fixture.detectChanges();
+  }
+
+  it('renders a closed section only when it opens', () => {
+    const host: HTMLElement = fixture.nativeElement;
+    expect(host.querySelector('.bio-margin')).toBeNull();
+    expect(host.querySelector('app-highlights')).toBeNull();
+    expect(host.querySelector('a[href*="chess.com"]')).toBeNull();
+    expect(host.querySelector('app-professional-timeline')).not.toBeNull();
+
+    open(2);
+
+    expect(host.querySelector('app-highlights')).not.toBeNull();
+  });
+
   it('starts the highlights animation when that section opens and stops it when it closes', () => {
-    const highlightsPanel = fixture.debugElement.queryAll(By.directive(MatExpansionPanel))[2].componentInstance as MatExpansionPanel;
+    open(2);
+    const highlightsPanel = panel(2);
     const highlights = fixture.debugElement.query(By.directive(HighlightsComponent)).componentInstance as HighlightsComponent;
     const start = spyOn(highlights, 'start');
     const stop = spyOn(highlights, 'stop');
@@ -52,6 +71,7 @@ describe('AboutMeComponent', () => {
   });
 
   it('links to the chess.com profile in a new tab', () => {
+    open(3);
     const link = fixture.nativeElement.querySelector('a[href*="chess.com"]') as HTMLAnchorElement;
 
     expect(link.target).toBe('_blank');
@@ -59,6 +79,7 @@ describe('AboutMeComponent', () => {
   });
 
   it('keeps the heading levels in order: hobbies are h3 under the page h1', () => {
+    open(3);
     const page = fixture.nativeElement as HTMLElement;
 
     expect(page.querySelectorAll('h4').length).toBe(0);
