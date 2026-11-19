@@ -4,7 +4,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import mermaid from 'mermaid';
+import type { Mermaid } from 'mermaid';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
@@ -251,12 +251,6 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
   readonly isMobile = signal(this.mobileQuery.matches);
 
   ngOnInit(): void {
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: 'neutral',
-      securityLevel: 'strict',
-    });
-
     this.mobileQuery.addEventListener('change', this.onScreenChange);
   }
 
@@ -347,6 +341,30 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
     }));
   }
 
+  private mermaid?: Promise<Mermaid>;
+
+  /**
+   * Mermaid is large and only draws the journey, so it is downloaded the first time a journey opens, not with the
+   * page. A failed download is retried on the next drawing.
+   */
+  private loadMermaid(): Promise<Mermaid> {
+    this.mermaid ??= import('mermaid').then(
+      ({ default: mermaid }) => {
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'neutral',
+          securityLevel: 'strict',
+        });
+        return mermaid;
+      },
+      (error: unknown) => {
+        this.mermaid = undefined;
+        throw error;
+      }
+    );
+    return this.mermaid;
+  }
+
   /** Counts the drawings started; a drawing stops as soon as a newer one starts (new text, e.g. a language switch). */
   private drawing = 0;
 
@@ -371,6 +389,7 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
         try {
           container.innerHTML = '';
           const uniqueId = `mermaid-graph-${experienceId}-${Date.now()}`;
+          const mermaid = await this.loadMermaid();
           const { svg } = await mermaid.render(
             uniqueId,
             timelineDef.definition
