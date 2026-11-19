@@ -127,27 +127,35 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
     }
   }
 
+  /**
+   * Runs once per scroll frame. Every position is read first, then every style is written: reading after a write
+   * would make the browser lay the page out again for each item.
+   */
   private update(): void {
     const viewport = window.innerHeight;
     const center = viewport / 2;
     const timeline = this.timelineRef().nativeElement;
+
     const timelineRect = timeline.getBoundingClientRect();
-    const items = this.itemRefs().map(ref => ref.nativeElement);
+    const items = this.itemRefs().map(({ nativeElement: item }) => ({
+      item,
+      rect: item.getBoundingClientRect(),
+      offsetTop: item.offsetTop,
+      visible: item.classList.contains('is-visible')
+    }));
 
     let batch = 0;
     let lastVisible = -1;
-    items.forEach((item, index) => {
-      const rect = item.getBoundingClientRect();
-      const depth = this.clamp((rect.top + rect.height / 2 - center) / center, -1, 1);
-      item.style.setProperty('--depth', depth.toFixed(4));
-
-      if (this.active && !item.classList.contains('is-visible') && rect.top < viewport * 0.9) {
-        item.style.setProperty('--delay', `${batch++ * 90}ms`);
-        item.classList.add('is-visible');
+    const revealed: { item: HTMLElement; delay: number }[] = [];
+    const depths = items.map(({ item, rect, visible }, index) => {
+      if (this.active && !visible && rect.top < viewport * 0.9) {
+        revealed.push({ item, delay: batch++ * 90 });
+        visible = true;
       }
-      if (item.classList.contains('is-visible')) {
+      if (visible) {
         lastVisible = index;
       }
+      return this.clamp((rect.top + rect.height / 2 - center) / center, -1, 1);
     });
 
     const dotOffset = 25;
@@ -157,16 +165,18 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
     } else if (lastVisible >= 0) {
       track = items[lastVisible].offsetTop + dotOffset + 10;
     }
-    timeline.style.setProperty('--track', `${track}px`);
-
     const fillY = timelineRect.bottom <= viewport * 0.95
       ? track
       : this.clamp(viewport * 0.6 - timelineRect.top, 0, track);
-    timeline.style.setProperty('--fill', `${fillY}px`);
 
-    items.forEach(item => {
-      item.classList.toggle('is-reached', item.offsetTop + dotOffset <= fillY);
+    items.forEach(({ item }, index) => item.style.setProperty('--depth', depths[index].toFixed(4)));
+    revealed.forEach(({ item, delay }) => {
+      item.style.setProperty('--delay', `${delay}ms`);
+      item.classList.add('is-visible');
     });
+    timeline.style.setProperty('--track', `${track}px`);
+    timeline.style.setProperty('--fill', `${fillY}px`);
+    items.forEach(({ item, offsetTop }) => item.classList.toggle('is-reached', offsetTop + dotOffset <= fillY));
   }
 
   private reset(): void {

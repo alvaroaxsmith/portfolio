@@ -74,6 +74,43 @@ describe('HighlightsComponent', () => {
     expect(timeline().style.getPropertyValue('--track')).not.toBe('');
   });
 
+  it('reads every position before writing any style, so a scroll frame lays the page out only once', async () => {
+    const log: string[] = [];
+    const reading = <T>(read: () => T) => {
+      log.push('read');
+      return read();
+    };
+    const offsetTop = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetTop')!.get!;
+    const rect = Element.prototype.getBoundingClientRect;
+    const setProperty = CSSStyleDeclaration.prototype.setProperty;
+    const add = DOMTokenList.prototype.add;
+    const toggle = DOMTokenList.prototype.toggle;
+    spyOnProperty(HTMLElement.prototype, 'offsetTop', 'get').and.callFake(function (this: HTMLElement) {
+      return reading(() => offsetTop.call(this));
+    });
+    spyOn(Element.prototype, 'getBoundingClientRect').and.callFake(function (this: Element) {
+      return reading(() => rect.call(this));
+    });
+    spyOn(CSSStyleDeclaration.prototype, 'setProperty').and.callFake(function (this: CSSStyleDeclaration, ...args: Parameters<CSSStyleDeclaration['setProperty']>) {
+      log.push('write');
+      return setProperty.apply(this, args);
+    });
+    spyOn(DOMTokenList.prototype, 'add').and.callFake(function (this: DOMTokenList, ...tokens: string[]) {
+      log.push('write');
+      return add.apply(this, tokens);
+    });
+    spyOn(DOMTokenList.prototype, 'toggle').and.callFake(function (this: DOMTokenList, ...args: Parameters<DOMTokenList['toggle']>) {
+      log.push('write');
+      return toggle.apply(this, args);
+    });
+
+    component.start();
+    await nextFrame();
+
+    expect(log).toContain('write');
+    expect(log.lastIndexOf('read')).withContext(log.join(' ')).toBeLessThan(log.indexOf('write'));
+  });
+
   it('hides everything again and clears the track when stopped', async () => {
     component.start();
     await nextFrame();
