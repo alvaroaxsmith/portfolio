@@ -36,7 +36,7 @@ export interface ApiOptions {
 
 const AVATAR_URL = 'https://avatars.githubusercontent.com/u/0';
 
-/** Fakes every third-party call so the suite never depends on GitHub, json-server, Google or GTM being up. */
+/** Fakes every third-party call so the suite never depends on GitHub, Google or GTM being up, and fixes the course list. */
 export async function mockApis(page: Page, options: ApiOptions = {}): Promise<void> {
   await page.route(
     (url) => url.hostname !== 'localhost',
@@ -54,8 +54,8 @@ export async function mockApis(page: Page, options: ApiOptions = {}): Promise<vo
   await page.route('https://api.github.com/users/alvaroaxsmith/repos**', (route) =>
     options.githubFails ? route.fulfill({ status: 403, json: { message: 'rate limited' } }) : route.fulfill({ json: repos })
   );
-  await page.route('https://json-server-vercel-beta-six.vercel.app/courses', (route) =>
-    options.coursesFail ? route.fulfill({ status: 500, body: '' }) : route.fulfill({ json: { courses } })
+  await page.route('**/assets/data/courses.json', (route) =>
+    options.coursesFail ? route.fulfill({ status: 404, body: '' }) : route.fulfill({ json: { courses } })
   );
 }
 

@@ -23,7 +23,7 @@ export interface Screen {
 
 const GITHUB_PROFILE = /^https:\/\/api\.github\.com\/users\/alvaroaxsmith$/;
 const GITHUB_REPOS = /^https:\/\/api\.github\.com\/users\/alvaroaxsmith\/repos/;
-const COURSES = /^https:\/\/json-server-vercel-beta-six\.vercel\.app\/courses$/;
+const COURSES = /\/assets\/data\/courses\.json$/;
 const CERTIFICATE = /^https:\/\/drive\.google\.com\//;
 
 const pages = [

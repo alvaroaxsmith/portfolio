@@ -2,7 +2,6 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, catchError, map, shareReplay, throwError } from 'rxjs';
 import { Course, CourseList } from '../course.model';
-import { environment } from '../../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -10,12 +9,13 @@ import { environment } from '../../../../environments/environment';
 export class CourseService {
   private readonly http = inject(HttpClient);
 
-  private readonly apiUrl = environment.coursesApiUrl;
+  /** Ships with the site (relative, like the translations), so the list loads with the page, not from a remote API. */
+  private readonly url = 'assets/data/courses.json';
   private courses$?: Observable<Course[]>;
 
   getCourses(): Observable<Course[]> {
     if (!this.courses$) {
-      this.courses$ = this.http.get<Partial<CourseList> | null>(this.apiUrl).pipe(
+      this.courses$ = this.http.get<Partial<CourseList> | null>(this.url).pipe(
         map(res => (Array.isArray(res?.courses) ? res.courses.filter(isCourse) : [])),
         catchError((error) => {
           this.courses$ = undefined;
@@ -28,7 +28,7 @@ export class CourseService {
   }
 }
 
-/** The API is external, so its shape is checked at runtime instead of trusted. */
+/** The file is edited by hand, so its shape is checked at runtime instead of trusted. */
 function isCourse(value: unknown): value is Course {
   const course = value as Partial<Record<keyof Course, unknown>> | null;
   return (
