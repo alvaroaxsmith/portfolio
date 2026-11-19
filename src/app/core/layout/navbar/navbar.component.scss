@@ -17,10 +17,12 @@ ul {
     align-items: center;
     justify-content: space-between;
     gap: 0.75rem;
-    width: min(1120px, calc(100vw - 2rem));
+    // The links span the page's own width, so the first and last controls line up with the page margins.
+    --menu-width: min(1120px, calc(100vw - 2rem));
+    width: var(--menu-width);
     min-height: var(--navbar-height);
     margin: 0 auto;
-    padding: 0.75rem 2rem;
+    padding: 0.75rem 0;
     list-style: none;
 }
 
@@ -29,6 +31,20 @@ li {
     align-items: center;
     justify-content: center;
     position: relative;
+}
+
+// The first link's text starts at the margin: without the button's minimum width it is not centred, and the
+// margin takes back the button's 8px padding.
+li:first-child {
+    margin-left: -8px;
+    a {
+        min-width: 0;
+    }
+}
+
+// The icon sits at the margin, not the 48px button around it.
+li.language {
+    margin-right: -12px;
 }
 
 a,
@@ -69,7 +85,10 @@ li.active::after {
     top: 0;
     left: 0;
     right: 0;
-    width: min(1120px, calc(100vw - 2rem));
+    // The floating bar grows outward by its padding, so the links stay exactly where they were at the top; the
+    // padding shrinks on narrow screens, where the page margin leaves less room.
+    --pill-padding: min(2rem, calc((100vw - var(--menu-width)) / 2 - 0.25rem));
+    width: calc(var(--menu-width) + 2 * var(--pill-padding));
     height: var(--navbar-height);
     background: rgba(255, 255, 255, 0.78);
     border: 1px solid rgba(15, 23, 42, 0.08);
@@ -77,6 +96,8 @@ li.active::after {
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     box-shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+    // Less the 1px border, which sits inside that padding.
+    padding: 0.75rem calc(var(--pill-padding) - 1px);
     transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out, top 0.3s ease-in-out;
 }
 
@@ -92,11 +113,12 @@ li.active::after {
 }
 
 @media (max-width: 767px) {
-    ul,
-     :host(.navbar-fixed) ul {
-        width: calc(100vw - 1.25rem);
-        min-height: var(--navbar-height);
-        padding: 0.5rem 0.75rem;
+    ul {
+        --menu-width: calc(100vw - 1.25rem);
+        padding: 0.5rem 0;
+    }
+    :host(.navbar-fixed) ul {
+        padding: 0.5rem calc(var(--pill-padding) - 1px);
     }
     li:not(:first-child):not(.mobile-menu-trigger) {
         display: none;
