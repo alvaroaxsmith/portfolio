@@ -15,7 +15,7 @@ Portfólio pessoal bilíngue (PT-BR/EN) em Angular: apresentação, trajetória 
 | Diagramas | Mermaid 12 (jornada da trajetória profissional), em modo `strict` |
 | Testes | Karma + Jasmine (unitários, com piso de cobertura) e Playwright (E2E, axe, teclado e regressão visual) |
 | CI | GitHub Actions: Quality gate, CodeQL, revisão do Claude e release-please |
-| Hospedagem | Vercel, com `vercel.json` (cache, cabeçalhos de segurança, CSP em modo de relatório) e preview por PR |
+| Hospedagem | Vercel, com `vercel.json` (cache, cabeçalhos de segurança, CSP em modo de relatório) e preview por PR. O build é entregue como Build Output API (`npm run build:vercel`), então arquivo inexistente responde 404 |
 
 **Node.js 24** (`engines` e `.nvmrc`). Com o nvm: `nvm use`.
 
@@ -48,7 +48,8 @@ src/
 │   ├── i18n/        # PT-BR.json e EN.json
 │   └── cv/          # currículo baixado pelo botão da home
 └── styles.scss      # tokens globais de design
-e2e/                 # specs do Playwright, servidor que aplica o vercel.json e referências visuais
+e2e/                 # specs do Playwright, servidor que serve o build como a Vercel e referências visuais
+scripts/             # vercel-output.mjs: build no formato Build Output API, com as rotas do vercel.json
 ```
 
 ## Arquitetura

@@ -45,6 +45,21 @@ test('sends the security headers with every response', async ({ request }) => {
 });
 
 test.describe('missing files', () => {
+  test('Vercel receives the build output with only our routes, so no framework fallback can answer for a missing file', () => {
+    const vercel = JSON.parse(readFileSync(join(__dirname, '..', 'vercel.json'), 'utf-8')) as { buildCommand?: string };
+    const output = JSON.parse(readFileSync(join(__dirname, '..', '.vercel', 'output', 'config.json'), 'utf-8')) as {
+      version: number;
+      routes: { src?: string; handle?: string }[];
+    };
+    const afterFiles = output.routes.slice(output.routes.findIndex((route) => route.handle === 'filesystem') + 1);
+    const answering = (path: string) => afterFiles.filter((route) => route.src && new RegExp(route.src).test(path));
+
+    expect(vercel.buildCommand).toBe('npm run build:vercel');
+    expect(output.version).toBe(3);
+    expect(answering('/chunk-DOESNOTX.js')).toEqual([]);
+    expect(answering('/about-me').length).toBe(1);
+  });
+
   test('a missing file answers 404 instead of the site HTML', async ({ request }) => {
     const missing = await request.get('/chunk-DOESNOTX.js');
 
