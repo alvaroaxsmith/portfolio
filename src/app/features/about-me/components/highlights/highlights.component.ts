@@ -5,19 +5,11 @@ import { MatExpansionPanel } from '@angular/material/expansion';
 import { HIGHLIGHTS } from '../../data/highlights';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { REDUCED_MOTION, mediaQuery } from '../../../../core/media/media-query';
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
 
 
 @Component({
     selector: 'app-highlights',
-    imports: [
-    TranslatePipe,
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule
-],
+    imports: [TranslatePipe],
     templateUrl: './highlights.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['./highlights.component.scss']

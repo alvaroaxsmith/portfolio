@@ -1,4 +1,5 @@
 import { Injectable, signal } from '@angular/core';
+import { readStorage, writeStorage } from '../storage/safe-storage';
 
 export type AnalyticsParams = Record<string, string | number | boolean | undefined>;
 
@@ -38,19 +39,12 @@ export class AnalyticsService {
   }
 
   get consent(): ConsentChoice | null {
-    try {
-      const stored = localStorage.getItem(CONSENT_KEY);
-      return stored === 'granted' || stored === 'denied' ? stored : null;
-    } catch {
-      return null;
-    }
+    const stored = readStorage(CONSENT_KEY);
+    return stored === 'granted' || stored === 'denied' ? stored : null;
   }
 
   setConsent(choice: ConsentChoice): void {
-    try {
-      localStorage.setItem(CONSENT_KEY, choice);
-    } catch {
-    }
+    writeStorage(CONSENT_KEY, choice);
     this.consentBannerVisible.set(false);
     this.consentBannerReopened.set(false);
     this.win.gtag?.('consent', 'update', { analytics_storage: choice });
