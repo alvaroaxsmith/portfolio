@@ -14,7 +14,7 @@
         { "key": "Content-Security-Policy", "value": "frame-ancestors 'none'" },
         {
           "key": "Content-Security-Policy-Report-Only",
-          "value": "default-src 'self'; script-src 'self' 'sha256-fC5HKqEH66gY5x3/QTZWA0fETZR3tLAUoSwH8KOxB4s=' 'sha256-XQJy3P0qYQnTCtb9MA2hw/gGTfQ01N1AbsEluujlxOE=' 'sha256-LMY6wYoFV9I4wWzxaq1N/dTpl4iurQktw706UCHK3vM=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://avatars.githubusercontent.com https://github.com https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://api.github.com https://json-server-vercel-beta-six.vercel.app https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://drive.google.com; object-src 'none'; base-uri 'self'; form-action 'self'"
+          "value": "default-src 'self'; script-src 'self' 'sha256-fC5HKqEH66gY5x3/QTZWA0fETZR3tLAUoSwH8KOxB4s=' 'sha256-XQJy3P0qYQnTCtb9MA2hw/gGTfQ01N1AbsEluujlxOE=' 'sha256-LMY6wYoFV9I4wWzxaq1N/dTpl4iurQktw706UCHK3vM=' https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://avatars.githubusercontent.com https://github.com https://www.googletagmanager.com https://*.google-analytics.com; connect-src 'self' https://api.github.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com; frame-src https://drive.google.com; object-src 'none'; base-uri 'self'; form-action 'self'"
         }
       ]
     },

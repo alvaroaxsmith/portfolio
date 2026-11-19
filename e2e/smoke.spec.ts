@@ -130,7 +130,7 @@ test.describe('courses', () => {
     await expect(sheet.locator('iframe')).toHaveAttribute('src', courses[1].link);
   });
 
-  test.describe('when the courses API is down', () => {
+  test.describe('when the course list cannot be loaded (for example a 404 right after a deploy)', () => {
     test.use({ api: { coursesFail: true } });
 
     test('the page still opens', async ({ page }) => {

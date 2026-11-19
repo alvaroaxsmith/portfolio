@@ -3,7 +3,8 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { CourseService } from './courses.service';
 
-const API = 'https://json-server-vercel-beta-six.vercel.app/courses';
+/** The course list ships with the site, next to the translations. */
+const API = 'assets/data/courses.json';
 const course = { field: 'TI', name: 'Java Full Stack', link: 'https://drive/x', time: 640, school: 'Soul Code', date: '2022/05' };
 
 describe('CourseService', () => {
@@ -20,7 +21,7 @@ describe('CourseService', () => {
 
   afterEach(() => http.verify());
 
-  it('returns the list of courses from the API', () => {
+  it('returns the list of courses from the file that ships with the site', () => {
     let names: string[] = [];
     service.getCourses().subscribe((courses) => (names = courses.map((c) => c.name)));
 

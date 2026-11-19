@@ -68,7 +68,7 @@ e2e/                 # specs do Playwright, servidor que aplica o vercel.json e 
 | Página | Origem | Observação |
 | --- | --- | --- |
 | Projetos | API pública do GitHub (`/users/alvaroaxsmith/repos`) | Só aparecem repositórios com o topic `portfolio-project`, ordenados por `pushed_at`. A resposta fica em `localStorage` por 1 hora. |
-| Cursos | JSON Server hospedado na Vercel | Lista servida por API externa. |
+| Cursos | `src/assets/data/courses.json` | Arquivo estático servido com o site; um curso novo é uma edição nesse arquivo e um deploy. |
 | Demais textos | `src/assets/i18n/*.json` | Todo o conteúdo textual do site. |
 
 ## Analytics e SEO técnico
