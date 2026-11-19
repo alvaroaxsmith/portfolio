@@ -1,3 +1,5 @@
+import { fakeMatchMedia } from '../../../testing/fake-match-media';
+import { REDUCED_MOTION } from '../../../core/media/media-query';
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { provideTranslateService } from '@ngx-translate/core';
 import { TextComponent } from './text.component';
@@ -186,7 +188,7 @@ describe('TextComponent', () => {
     }));
 
     it('starts paused, with the first word on screen, when the visitor asks for less motion', fakeAsync(() => {
-      spyOn(window, 'matchMedia').and.callFake((query: string) => ({ matches: query.includes('reduce') }) as MediaQueryList);
+      spyOn(window, 'matchMedia').and.callFake(fakeMatchMedia({ [REDUCED_MOTION]: true }).matchMedia);
       fixture = TestBed.createComponent(TextComponent);
       component = fixture.componentInstance;
       fixture.detectChanges();

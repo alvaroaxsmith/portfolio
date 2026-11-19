@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, computed, signal } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { TranslatePipe } from '@ngx-translate/core';
+import { REDUCED_MOTION, mediaQuery } from '../../../core/media/media-query';
 
 @Component({
     selector: 'app-text',
@@ -79,7 +80,7 @@ export class TextComponent implements OnInit, OnDestroy {
   readonly animationState = signal<'hidden' | 'shown'>('hidden');
   readonly currentIndex = signal(0);
 
-  private readonly reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  private readonly reducedMotion = mediaQuery(REDUCED_MOTION)();
   /** Paused with the button; stays paused until pressed again. Visitors who ask for less motion start paused. */
   readonly pinned = signal(this.reducedMotion);
   private readonly hovered = signal(false);
