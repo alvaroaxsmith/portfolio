@@ -12,10 +12,11 @@
   border-radius: 0.25rem;
 }
 
+// Centred with auto margins, never a transform, which would detach the shimmer from the page's one wave.
 app-skeleton {
   position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  inset-inline: 0;
+  margin-inline: auto;
 }
 
 .title {
@@ -48,11 +49,12 @@ app-skeleton {
   bottom: 18%;
   width: 20%;
   height: 2%;
-  transform: none;
+  margin-inline: 0;
 }
 
 .signature.left {
   left: 14%;
+  right: auto;
 }
 
 .signature.right {
