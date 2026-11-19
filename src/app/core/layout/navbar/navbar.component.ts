@@ -1,4 +1,6 @@
 import { Component, ChangeDetectionStrategy, Injector, inject, signal } from '@angular/core';
+import { Router } from '@angular/router';
+import { PAGE_RELOAD } from '../../chunk-load/chunk-load-recovery.service';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { onWindowEvent } from '../../window-events/window-events';
 import { RouterLinkActive, RouterLink } from '@angular/router';
@@ -20,6 +22,8 @@ import { MatIcon } from '@angular/material/icon';
 })
 export class NavbarComponent {
   private readonly injector = inject(Injector);
+  private readonly router = inject(Router);
+  private readonly reload = inject(PAGE_RELOAD);
   protected readonly translate = inject(TranslateService);
 
   private lastScrollY = 0;
@@ -53,13 +57,23 @@ export class NavbarComponent {
 
   /** The bottom sheet and the menu inside it only exist on phones, on demand, so they are downloaded on the first tap. */
   async openDialog(): Promise<void> {
-    const [{ MatBottomSheet }, { NavMenuSheetComponent }] = await Promise.all([
-      import('@angular/material/bottom-sheet'),
-      import('./nav-menu-sheet/nav-menu-sheet.component')
-    ]);
+    let menu: Awaited<ReturnType<NavbarComponent['loadMenu']>>;
+    try {
+      menu = await this.loadMenu();
+    } catch (error) {
+      // Typically a tab left open across a deploy: its files are gone. A reload brings the current ones.
+      console.error('Could not load the mobile menu.', error);
+      this.reload(this.router.url);
+      return;
+    }
+    const [{ MatBottomSheet }, { NavMenuSheetComponent }] = menu;
     this.injector.get(MatBottomSheet).open(NavMenuSheetComponent, {
       panelClass: 'mobile-nav-sheet',
       ariaLabel: this.translate.instant('a11y.mobileMenu')
     });
+  }
+
+  protected loadMenu() {
+    return Promise.all([import('@angular/material/bottom-sheet'), import('./nav-menu-sheet/nav-menu-sheet.component')]);
   }
 }
