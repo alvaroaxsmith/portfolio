@@ -1,7 +1,7 @@
-import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, computed, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, ChangeDetectionStrategy, computed, signal, inject } from '@angular/core';
 import { MatIcon } from '@angular/material/icon';
 import { TranslatePipe } from '@ngx-translate/core';
-import { REDUCED_MOTION, mediaQuery } from '../../../core/media/media-query';
+import { MATCH_MEDIA, REDUCED_MOTION } from '../../../core/media/media-query';
 
 @Component({
     selector: 'app-text',
@@ -80,7 +80,8 @@ export class TextComponent implements OnInit, OnDestroy {
   readonly animationState = signal<'hidden' | 'shown'>('hidden');
   readonly currentIndex = signal(0);
 
-  private readonly reducedMotion = mediaQuery(REDUCED_MOTION)();
+  /** Read once when the component starts, so no listener is needed. */
+  private readonly reducedMotion = inject(MATCH_MEDIA)(REDUCED_MOTION).matches;
   /** Paused with the button; stays paused until pressed again. Visitors who ask for less motion start paused. */
   readonly pinned = signal(this.reducedMotion);
   private readonly hovered = signal(false);

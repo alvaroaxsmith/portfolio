@@ -4,7 +4,7 @@ import { TranslatePipe } from '@ngx-translate/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
 import { HIGHLIGHTS } from '../../data/highlights';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { REDUCED_MOTION, mediaQuery } from '../../../../core/media/media-query';
+import { MATCH_MEDIA, REDUCED_MOTION } from '../../../../core/media/media-query';
 
 
 @Component({
@@ -30,7 +30,8 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
     this.active = true;
     this.scheduleUpdate();
   };
-  private readonly reducedMotion = mediaQuery(REDUCED_MOTION)();
+  /** Read once when the component starts, so no listener is needed. */
+  private readonly reducedMotion = inject(MATCH_MEDIA)(REDUCED_MOTION).matches;
   private intersection?: IntersectionObserver;
   private resize?: ResizeObserver;
   private readonly onScroll = () => this.scheduleUpdate();
