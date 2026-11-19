@@ -50,6 +50,7 @@ src/
 └── styles.scss      # tokens globais de design
 e2e/                 # specs do Playwright, servidor que serve o build como a Vercel e referências visuais
 scripts/             # vercel-output.mjs: build no formato Build Output API, com as rotas do vercel.json
+                     # vercel-ignore.sh: pula previews sem mudança para quem visita (testes, CI, docs, branch de release)
 ```
 
 ## Arquitetura
