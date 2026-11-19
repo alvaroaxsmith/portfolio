@@ -48,12 +48,13 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
   readonly mermaidJourneyContainers = viewChildren<ElementRef<HTMLElement>>('mermaidJourneyContainer');
 
   constructor() {
-    // Draws the journey diagrams after render, whenever their containers or their text change: when the journey
-    // opens, and when a language switch rewrites the text (the containers are tracked by id, so they stay).
+    // Draws the diagram on screen after render: when the journey opens, when the visitor moves to another one, and
+    // when a language switch rewrites the text (the containers are tracked by id, so they stay).
     afterRenderEffect(() => {
       this.mermaidJourneyContainers();
       this.timelineDefinitions();
-      untracked(() => this.renderAllMermaidDiagrams());
+      this.journeyCurrentIndex();
+      untracked(() => this.renderVisibleDiagram());
     });
 
     // The diagram text is written once in the current language; rebuild it when the visitor switches language,
@@ -367,44 +368,35 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
 
   /** Counts the drawings started; a drawing stops as soon as a newer one starts (new text, e.g. a language switch). */
   private drawing = 0;
+  /** The text each diagram was last drawn from, so a diagram already on screen is not drawn again. */
+  private readonly drawn = new Map<number, string>();
 
-  async renderAllMermaidDiagrams(): Promise<void> {
+  /** Draws only the diagram on screen: the others are drawn when the visitor moves to them. */
+  async renderVisibleDiagram(): Promise<void> {
     if (!this.isJourneyVisible()) {
+      return;
+    }
+    const timelineDef = this.timelineDefinitions()[this.journeyCurrentIndex()];
+    const container = this.mermaidJourneyContainers()
+      .map((ref) => ref.nativeElement)
+      .find((element) => element.dataset['experienceId'] === String(timelineDef?.id));
+    if (!timelineDef || !container || this.drawn.get(timelineDef.id) === timelineDef.definition) {
       return;
     }
 
     const run = ++this.drawing;
-    const containers = this.mermaidJourneyContainers();
-    for (const mermaidContainer of containers) {
+    try {
+      container.innerHTML = '';
+      const mermaid = await this.loadMermaid();
+      const { svg } = await mermaid.render(`mermaid-graph-${timelineDef.id}-${Date.now()}`, timelineDef.definition);
       if (run !== this.drawing) {
         return;
       }
-      const container = mermaidContainer.nativeElement;
-      const experienceId = container.dataset['experienceId'];
-      const timelineDef = this.timelineDefinitions().find(
-        (def) => def.id.toString() === experienceId
-      );
-
-      if (timelineDef && container) {
-        try {
-          container.innerHTML = '';
-          const uniqueId = `mermaid-graph-${experienceId}-${Date.now()}`;
-          const mermaid = await this.loadMermaid();
-          const { svg } = await mermaid.render(
-            uniqueId,
-            timelineDef.definition
-          );
-          if (run !== this.drawing) {
-            return;
-          }
-          container.innerHTML = svg;
-        } catch (e) {
-          console.error(`Error rendering Mermaid for ID ${experienceId}:`, e);
-          container.innerHTML = `<p>${this.translate.instant(
-            'timeline.mermaid.error'
-          )}</p>`;
-        }
-      }
+      container.innerHTML = svg;
+      this.drawn.set(timelineDef.id, timelineDef.definition);
+    } catch (e) {
+      console.error(`Error rendering Mermaid for ID ${timelineDef.id}:`, e);
+      container.innerHTML = `<p>${this.translate.instant('timeline.mermaid.error')}</p>`;
     }
   }
 

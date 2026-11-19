@@ -15,7 +15,7 @@ describe('ProfessionalTimelineComponent', () => {
     fixture = TestBed.createComponent(ProfessionalTimelineComponent);
     component = fixture.componentInstance;
     component.isMobile.set(mobile);
-    spyOn(component, 'renderAllMermaidDiagrams').and.resolveTo();
+    spyOn(component, 'renderVisibleDiagram').and.resolveTo();
     fixture.detectChanges();
   }
 
@@ -378,22 +378,48 @@ describe('ProfessionalTimelineComponent', () => {
       renderJourney();
       const render = spyOn(mermaid, 'render');
 
-      await component.renderAllMermaidDiagrams();
+      await component.renderVisibleDiagram();
 
       expect(render).not.toHaveBeenCalled();
     });
 
-    it('draws one diagram per experience as soon as the journey opens', async () => {
+    it('draws only the diagram on screen when the journey opens', async () => {
       renderJourney();
-      const render = spyOn(mermaid, 'render').and.callFake(async (id: string) =>
-        ({ svg: `<svg data-test="${id}"></svg>` }) as Awaited<ReturnType<typeof mermaid.render>>
-      );
+      const render = spyOnDraw();
 
       component.openJourney(component.experiences[0]);
       await settle();
 
-      expect(render).toHaveBeenCalledTimes(component.experiences.length);
+      expect(render).toHaveBeenCalledTimes(1);
       expect(diagram(1).querySelector('svg')).not.toBeNull();
+      expect(diagram(2).querySelector('svg')).toBeNull();
+    });
+
+    it('draws the next diagram when the visitor moves to it', async () => {
+      renderJourney();
+      const render = spyOnDraw();
+      component.openJourney(component.experiences[0]);
+      await settle();
+
+      component.handleIconClickInJourneyView(component.experiences[1]);
+      await settle();
+
+      expect(render).toHaveBeenCalledTimes(2);
+      expect(diagram(2).querySelector('svg')).not.toBeNull();
+    });
+
+    it('does not redraw a diagram already drawn in this language', async () => {
+      renderJourney();
+      const render = spyOnDraw();
+      component.openJourney(component.experiences[0]);
+      await settle();
+      component.handleIconClickInJourneyView(component.experiences[1]);
+      await settle();
+
+      component.handleIconClickInJourneyView(component.experiences[0]);
+      await settle();
+
+      expect(render).toHaveBeenCalledTimes(2);
     });
 
     it('shows an error message in place of a diagram that fails to draw', async () => {
@@ -435,8 +461,8 @@ describe('ProfessionalTimelineComponent', () => {
       component.openJourney(component.experiences[0]);
       fixture.detectChanges();
 
-      const first = component.renderAllMermaidDiagrams();
-      const second = component.renderAllMermaidDiagrams();
+      const first = component.renderVisibleDiagram();
+      const second = component.renderVisibleDiagram();
       // Mermaid is downloaded on demand, so the drawings may ask some rounds later: keep answering until both end.
       let done = false;
       const both = Promise.all([first, second]).then(() => (done = true));
@@ -450,7 +476,7 @@ describe('ProfessionalTimelineComponent', () => {
       await both;
 
       expect(fixture.nativeElement.querySelector('[data-call="0"]')).withContext('the first, outdated drawing').toBeNull();
-      expect(fixture.nativeElement.querySelectorAll('.mermaid-journey-container svg').length).toBe(component.experiences.length);
+      expect(fixture.nativeElement.querySelectorAll('.mermaid-journey-container svg').length).toBe(1);
     });
 
     it('redraws the open journey in the new language', async () => {
@@ -462,7 +488,7 @@ describe('ProfessionalTimelineComponent', () => {
 
       await switchToEnglish();
 
-      expect(draw).toHaveBeenCalledTimes(component.experiences.length);
+      expect(draw).toHaveBeenCalledTimes(1);
       expect(draw.calls.allArgs().some(([, definition]) => String(definition).includes('Apr 2019 - Apr 2021'))).toBeTrue();
     });
 
