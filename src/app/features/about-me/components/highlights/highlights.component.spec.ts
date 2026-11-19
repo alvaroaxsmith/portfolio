@@ -1,3 +1,5 @@
+import { fakeMatchMedia } from '../../../../testing/fake-match-media';
+import { REDUCED_MOTION } from '../../../../core/media/media-query';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { fakeIntersectionObserver } from '../../../../testing/fake-intersection-observer';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
@@ -47,6 +49,15 @@ describe('HighlightsComponent', () => {
       viewport.report(false);
       expect(removed).toHaveBeenCalledWith('scroll', jasmine.any(Function), jasmine.objectContaining({ capture: true }));
     });
+  });
+
+  it('reads the motion preference once, without leaving a listener behind', () => {
+    const media = fakeMatchMedia();
+    spyOn(window, 'matchMedia').and.callFake(media.matchMedia);
+
+    TestBed.createComponent(HighlightsComponent).detectChanges();
+
+    expect(media.listening(REDUCED_MOTION)).toBe(0);
   });
 
   it('lists every highlight in chronological order', () => {
