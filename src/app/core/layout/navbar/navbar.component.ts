@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, Injector, inject, signal } from '@angular/core';
+import { Component, ChangeDetectionStrategy, Injector, afterNextRender, inject, signal } from '@angular/core';
 import { Router } from '@angular/router';
 import { PAGE_RELOAD } from '../../chunk-load/chunk-load-recovery.service';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
@@ -32,6 +32,14 @@ export class NavbarComponent {
   readonly navbarHidden = signal(false);
 
   constructor() {
+    // On phones the menu button is the way around the site. Its sheet is downloaded once the page is idle, so a tap
+    // opens it at once, exactly as if it were part of the page (and focus lands as it always did).
+    afterNextRender(() => {
+      if (window.matchMedia('(max-width: 767px)').matches) {
+        const whenIdle = window.requestIdleCallback ?? ((callback: () => void) => setTimeout(callback, 200));
+        whenIdle(() => void this.menu().catch(() => undefined));
+      }
+    });
     onWindowEvent('scroll', () => this.onWindowScroll());
   }
 
@@ -59,7 +67,7 @@ export class NavbarComponent {
   async openDialog(): Promise<void> {
     let menu: Awaited<ReturnType<NavbarComponent['loadMenu']>>;
     try {
-      menu = await this.loadMenu();
+      menu = await this.menu();
     } catch (error) {
       // Typically a tab left open across a deploy: its files are gone. A reload brings the current ones.
       console.error('Could not load the mobile menu.', error);
@@ -75,5 +83,16 @@ export class NavbarComponent {
 
   protected loadMenu() {
     return Promise.all([import('@angular/material/bottom-sheet'), import('./nav-menu-sheet/nav-menu-sheet.component')]);
+  }
+
+  private pendingMenu?: ReturnType<NavbarComponent['loadMenu']>;
+
+  /** The sheet's download, shared by the idle preload and the tap; a failed one is tried again next time. */
+  private menu(): ReturnType<NavbarComponent['loadMenu']> {
+    this.pendingMenu ??= this.loadMenu().catch((error: unknown) => {
+      this.pendingMenu = undefined;
+      throw error;
+    });
+    return this.pendingMenu;
   }
 }
