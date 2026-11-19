@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, AfterViewInit, OnDestroy, Renderer2, ChangeDetectionStrategy, Injector, afterNextRender, afterRenderEffect, inject, signal, untracked, viewChildren } from '@angular/core';
+import { Component, OnInit, ElementRef, OnDestroy, Renderer2, ChangeDetectionStrategy, Injector, afterNextRender, afterRenderEffect, inject, signal, untracked, viewChildren } from '@angular/core';
 
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -40,7 +40,7 @@ interface TimelineDefinition {
     changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['./professional-timeline.component.scss']
 })
-export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnDestroy {
+export class ProfessionalTimelineComponent implements OnInit, OnDestroy {
   private readonly translate = inject(TranslateService);
   private readonly renderer = inject(Renderer2);
   private readonly injector = inject(Injector);
@@ -56,6 +56,15 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
       this.timelineDefinitions();
       this.journeyCurrentIndex();
       untracked(() => this.renderVisibleDiagram());
+    });
+
+    // On small screens the card contents scroll inside the card; a mouse can drag them too (touch scrolls natively).
+    // Runs again when the screen becomes small, not only when the page opens.
+    afterRenderEffect(() => {
+      const contents = this.cardContents();
+      if (this.isMobile()) {
+        untracked(() => contents.forEach(({ nativeElement }) => this.setupDragScroll(nativeElement)));
+      }
     });
 
     // The diagram text is written once in the current language; rebuild it when the visitor switches language,
@@ -267,14 +276,6 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
     }
   };
 
-  ngAfterViewInit(): void {
-    if (this.isMobile()) {
-      this.cardContents().forEach((contentRef) => {
-        this.setupDragScroll(contentRef.nativeElement);
-      });
-    }
-  }
-
   goTo(index: number): void {
     this.currentIndex.set(index);
   }
@@ -401,18 +402,28 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
     }
   }
 
-  private setupDragScroll(element: HTMLElement): void {
-    let isDown = false;
-    let startY: number;
-    let scrollTop: number;
+  /** Elements that already follow a mouse drag, so a second pass does not stack their listeners. */
+  private readonly draggable = new WeakSet<HTMLElement>();
 
-    const start = (e: MouseEvent | TouchEvent) => {
+  /**
+   * Lets a mouse drag scroll a card's content. Touch is left to the browser: adding the finger's movement on top of
+   * its own scrolling made the card jump about twice as far as the finger.
+   */
+  private setupDragScroll(element: HTMLElement): void {
+    if (this.draggable.has(element)) {
+      return;
+    }
+    this.draggable.add(element);
+    let isDown = false;
+    let startY = 0;
+    let scrollTop = 0;
+
+    const start = (e: MouseEvent) => {
       isDown = true;
       this.renderer.addClass(element, 'grabbing');
-      const pageY = e instanceof MouseEvent ? e.pageY : e.touches[0].pageY;
-      startY = pageY - element.offsetTop;
+      startY = e.pageY - element.offsetTop;
       scrollTop = element.scrollTop;
-      if (e instanceof MouseEvent) e.preventDefault();
+      e.preventDefault();
     };
 
     const end = () => {
@@ -420,12 +431,10 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
       this.renderer.removeClass(element, 'grabbing');
     };
 
-    const move = (e: MouseEvent | TouchEvent) => {
+    const move = (e: MouseEvent) => {
       if (!isDown) return;
-      if (e instanceof MouseEvent) e.preventDefault();
-      const pageY = e instanceof MouseEvent ? e.pageY : e.touches[0].pageY;
-      const y = pageY - element.offsetTop;
-      const walk = (y - startY) * 2;
+      e.preventDefault();
+      const walk = (e.pageY - element.offsetTop - startY) * 2;
       element.scrollTop = scrollTop - walk;
     };
 
@@ -433,9 +442,5 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
     this.renderer.listen(element, 'mouseleave', end);
     this.renderer.listen(element, 'mouseup', end);
     this.renderer.listen(element, 'mousemove', move);
-
-    this.renderer.listen(element, 'touchstart', start);
-    this.renderer.listen(element, 'touchend', end);
-    this.renderer.listen(element, 'touchmove', move);
   }
 }

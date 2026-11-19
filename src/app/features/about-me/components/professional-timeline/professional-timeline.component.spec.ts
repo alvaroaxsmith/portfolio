@@ -315,6 +315,18 @@ describe('ProfessionalTimelineComponent', () => {
       expect(el.classList).not.toContain('grabbing');
     });
 
+    it('lets the content be dragged once the screen becomes small, not only when the page opens that way', () => {
+      render(false);
+      component.isMobile.set(true);
+      fixture.detectChanges();
+      TestBed.tick();
+      const el = content();
+
+      el.dispatchEvent(mouse('mousedown', 100));
+
+      expect(el.classList).toContain('grabbing');
+    });
+
     it('ignores mouse moves when nothing is being dragged', () => {
       render(true);
       const el = content();
