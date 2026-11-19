@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 import { fakeIntersectionObserver } from '../../testing/fake-intersection-observer';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
@@ -281,16 +281,15 @@ describe('CoursesComponent behavior', () => {
   });
 
   describe('mobile infinite loading', () => {
-    it('loads the next 5 cards when the end of the list comes into view', fakeAsync(() => {
+    it('appends the next 5 cards as soon as the end of the list comes into view', () => {
       const viewport = fakeIntersectionObserver();
       render();
       fixture.detectChanges();
 
       viewport.report(true);
-      tick(600);
 
       expect(component.mobileCourses().length).toBe(10);
-    }));
+    });
 
     it('starts with a first batch of 5 cards', () => {
       render();
@@ -299,44 +298,36 @@ describe('CoursesComponent behavior', () => {
       expect(component.hasMoreMobileCourses()).toBeTrue();
     });
 
-    it('shows skeleton cards for the next batch, then the cards', fakeAsync(() => {
+    it('shows the next cards right away, with no placeholder in between: the courses are already in memory', () => {
       render();
 
       component.loadMoreMobileCourses();
       fixture.detectChanges();
-      expect(component.mobileLoadingMore()).toBeTrue();
-      expect(fixture.nativeElement.querySelectorAll('.mobile-course-list app-courses-skeleton .course-card').length).toBe(5);
 
-      tick(600);
-      fixture.detectChanges();
-      expect(component.mobileLoadingMore()).toBeFalse();
       expect(component.mobileCourses().length).toBe(10);
-    }));
+      expect(fixture.nativeElement.querySelectorAll('.mobile-course-list app-courses-skeleton').length).toBe(0);
+    });
 
-    it('loads every course and then says the list is over', fakeAsync(() => {
+    it('loads every course and then says the list is over', () => {
       render();
 
       while (component.hasMoreMobileCourses()) {
         component.loadMoreMobileCourses();
-        tick(600);
       }
       fixture.detectChanges();
 
       expect(component.mobileCourses().length).toBe(23);
-      expect(component.mobileSkeletonCount()).toBeLessThanOrEqual(0);
       expect(fixture.nativeElement.querySelector('.mobile-course-list .end-of-list')).not.toBeNull();
-    }));
+    });
 
-    it('only shows skeletons for the courses that are left', fakeAsync(() => {
+    it('shows only the courses that are left in the last batch', () => {
       state.mobileCount = 20;
       render();
 
       component.loadMoreMobileCourses();
-      fixture.detectChanges();
 
-      expect(component.mobileSkeletonCount()).toBe(3);
-      tick(600);
-    }));
+      expect(component.mobileCourses().length).toBe(23);
+    });
 
     it('keeps the loaded cards when coming back to the page', () => {
       state.mobileCount = 15;
@@ -349,7 +340,6 @@ describe('CoursesComponent behavior', () => {
     it('starts over from the first batch when the search changes', fakeAsync(() => {
       render();
       component.loadMoreMobileCourses();
-      tick(600);
 
       const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
       input.value = 'java';

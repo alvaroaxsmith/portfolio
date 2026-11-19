@@ -104,14 +104,6 @@
             </li>
             }
         </ul>
-        @if (mobileLoadingMore()) {
-        <app-courses-skeleton layout="cards" [count]="mobileSkeletonCount()" />
-        }
-        <span class="cdk-visually-hidden" role="status">
-            @if (mobileLoadingMore()) {
-            {{ 'loading.moreCourses' | translate }}
-            }
-        </span>
         @if (hasMoreMobileCourses()) {
         <div #mobileLoadTrigger class="mobile-load-trigger" aria-hidden="true"></div>
         } @else if (visibleCourses().length > 0) {

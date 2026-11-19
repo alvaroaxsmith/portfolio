@@ -120,9 +120,7 @@
     "loading": {
         "photo": "Loading photo",
         "courses": "Loading courses",
-        "projects": "Loading projects",
-        "moreProjects": "Loading more projects",
-        "moreCourses": "Loading more courses"
+        "projects": "Loading projects"
     },
     "portfolio": {
         "allLoaded": "You've seen all projects",
