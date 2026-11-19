@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.6.2](https://github.com/alvaroaxsmith/portfolio/compare/v2.6.1...v2.6.2) (2026-11-19)
+
+
+### Bug Fixes
+
+* **hosting:** answer 404 for missing files by handing Vercel the build output ([#184](https://github.com/alvaroaxsmith/portfolio/issues/184)) ([d8d04b2](https://github.com/alvaroaxsmith/portfolio/commit/d8d04b2541fec64f4a096f44d2ca9970d44143c6))
+
 ## [2.6.1](https://github.com/alvaroaxsmith/portfolio/compare/v2.6.0...v2.6.1) (2026-11-19)
 
 
