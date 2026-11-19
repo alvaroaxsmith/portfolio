@@ -1,5 +1,39 @@
 # Changelog
 
+## [2.6.0](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.5...v2.6.0) (2026-11-19)
+
+
+### Features
+
+* **skeleton:** loading placeholders that read as loading, shaped like the content ([#145](https://github.com/alvaroaxsmith/portfolio/issues/145)) ([7ab997c](https://github.com/alvaroaxsmith/portfolio/commit/7ab997c380b720287d9bc3316a747875d848ddcb))
+
+
+### Bug Fixes
+
+* **about-me:** let touch scroll the career cards natively ([#163](https://github.com/alvaroaxsmith/portfolio/issues/163)) ([3a4d88b](https://github.com/alvaroaxsmith/portfolio/commit/3a4d88b73ad86d2142edd303cbd4fc732930a5b5))
+* **navbar:** line the menu links up with the page margins ([#143](https://github.com/alvaroaxsmith/portfolio/issues/143)) ([fc8b6a1](https://github.com/alvaroaxsmith/portfolio/commit/fc8b6a1519ea3bb3e5802d29d8d42bae367f85b8))
+
+
+### Performance
+
+* **about-me:** draw only the journey diagram on screen ([#155](https://github.com/alvaroaxsmith/portfolio/issues/155)) ([1fe4631](https://github.com/alvaroaxsmith/portfolio/commit/1fe4631f3f9db6fbe645a0f13c757936825bc766))
+* **about-me:** measure the highlights once per frame before restyling them ([#157](https://github.com/alvaroaxsmith/portfolio/issues/157)) ([255033e](https://github.com/alvaroaxsmith/portfolio/commit/255033e4a203f116957d2133a44d3155951d5722))
+* **about-me:** render a closed panel only when it opens ([#161](https://github.com/alvaroaxsmith/portfolio/issues/161)) ([f8e43f9](https://github.com/alvaroaxsmith/portfolio/commit/f8e43f9773c8673a544dc0d2a54221bd93e679ba))
+* **courses:** render only the table or the list, whichever fits the screen ([#159](https://github.com/alvaroaxsmith/portfolio/issues/159)) ([f848de3](https://github.com/alvaroaxsmith/portfolio/commit/f848de37f9c2d462165c181332d497204a7e1fc4))
+* **courses:** serve the course list as a static file instead of a remote API ([#147](https://github.com/alvaroaxsmith/portfolio/issues/147)) ([b536984](https://github.com/alvaroaxsmith/portfolio/commit/b53698445867efafe0cd34c6ebb96e16f692d0dd))
+* download the snack bar and the mobile menu sheet only when they open ([#153](https://github.com/alvaroaxsmith/portfolio/issues/153)) ([4a5e099](https://github.com/alvaroaxsmith/portfolio/commit/4a5e099b5000742d215f8f70fdc3b3b17c3e2d3e))
+* **home:** load the photo straight from its fixed URL ([#149](https://github.com/alvaroaxsmith/portfolio/issues/149)) ([8dda0a3](https://github.com/alvaroaxsmith/portfolio/commit/8dda0a3dbcc5d97cbdb3a7ebc9c0dfe72c81d4ac))
+* **lists:** show the next items right away instead of after a fake delay ([#151](https://github.com/alvaroaxsmith/portfolio/issues/151)) ([d577824](https://github.com/alvaroaxsmith/portfolio/commit/d577824a745897f8bc711c26db7b8cd28ff6645b))
+* run without zone.js (zoneless change detection) ([#165](https://github.com/alvaroaxsmith/portfolio/issues/165)) ([3cda3ef](https://github.com/alvaroaxsmith/portfolio/commit/3cda3eff95efc850148d413a99163cdff859379d))
+
+
+### Refactoring
+
+* **about-me:** keep the career and highlights as typed data with semantic text keys ([#171](https://github.com/alvaroaxsmith/portfolio/issues/171)) ([04aa7e5](https://github.com/alvaroaxsmith/portfolio/commit/04aa7e5366c919846a05eb351f76649f8646c3da))
+* load courses and projects with resources and derive the lists ([#167](https://github.com/alvaroaxsmith/portfolio/issues/167)) ([5bfcb76](https://github.com/alvaroaxsmith/portfolio/commit/5bfcb765b4ed9950e2f9f641075a18d62b9719e0))
+* move SEO, page views, focus and language out of the app shell ([#169](https://github.com/alvaroaxsmith/portfolio/issues/169)) ([8fdfef8](https://github.com/alvaroaxsmith/portfolio/commit/8fdfef89606aafdeb4474fd9523f9f945c23b754))
+* one safe storage helper and standalone Material imports ([#173](https://github.com/alvaroaxsmith/portfolio/issues/173)) ([9199cec](https://github.com/alvaroaxsmith/portfolio/commit/9199cece2439509b3502422e40e60d959508a757))
+
 ## [2.5.5](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.4...v2.5.5) (2026-11-19)
 
 
