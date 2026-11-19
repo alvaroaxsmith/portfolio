@@ -131,10 +131,10 @@ test.describe('the home photo', () => {
 
   test('shows the fallback picture when the photo fails', async ({ page }) => {
     await page.route(PHOTO, (route) => route.fulfill({ status: 500, body: '' }));
-    await page.route('https://github.com/alvaroaxsmith.png', (route) => route.fulfill({ path: 'e2e/assets/avatar.png' }));
     await open(page, '/');
 
-    await expect(page.locator('.hero-media img')).toHaveAttribute('src', 'https://github.com/alvaroaxsmith.png');
+    // The site's own copy: the GitHub host that failed cannot serve the fallback too.
+    await expect(page.locator('.hero-media img')).toHaveAttribute('src', 'assets/img/alvaro.jpg');
     await expect(page.locator('.hero-media img')).toBeVisible();
     await expect(page.locator('app-photo-skeleton')).toHaveCount(0);
   });

@@ -83,10 +83,10 @@ describe('HomeComponent', () => {
     expect(placeholder()).toBeNull();
   });
 
-  it('falls back to the public GitHub profile picture when the photo fails, instead of loading forever', () => {
+  it('falls back to the copy served by the site when the photo fails, instead of loading forever', () => {
     photoEvent('error');
 
-    expect(photo().getAttribute('src')).toBe('https://github.com/alvaroaxsmith.png');
+    expect(photo().getAttribute('src')).toBe('assets/img/alvaro.jpg');
     expect(placeholder()).not.toBeNull();
 
     photoEvent('load');
