@@ -10,7 +10,7 @@
             @for (exp of experiences; track exp.id; let i = $index) {
             <button type="button" class="icon-wrapper" [class.active]="!isJourneyVisible() && i === currentIndex()" [class.selected-for-journey]="
           isJourneyVisible() && i === journeyCurrentIndex()
-          " (click)="isJourneyVisible() ? handleIconClickInJourneyView(exp) : goTo(i)" [matTooltip]="exp.tooltip || exp.company" [attr.aria-label]="i + 1 + '. ' + (exp.company | translate) + ', ' + (exp.role | translate)" [attr.aria-current]="i === (isJourneyVisible() ? journeyCurrentIndex() : currentIndex()) ? 'step' : null">
+          " (click)="isJourneyVisible() ? handleIconClickInJourneyView(exp) : goTo(i)" [matTooltip]="(exp.tooltip || exp.company) | translate" [attr.aria-label]="i + 1 + '. ' + (exp.company | translate) + ', ' + (exp.role | translate)" [attr.aria-current]="i === (isJourneyVisible() ? journeyCurrentIndex() : currentIndex()) ? 'step' : null">
                 <div class="timeline-icon">
                     {{ i + 1 }}
                 </div>

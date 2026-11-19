@@ -453,7 +453,7 @@ describe('ProfessionalTimelineComponent', () => {
 
     async function switchToEnglish() {
       const translate = TestBed.inject(TranslateService);
-      translate.setTranslation('EN', { 'abr de 2019 - abr de 2021': 'Apr 2019 - Apr 2021' });
+      translate.setTranslation('EN', { timeline: { metro: { period: 'Apr 2019 - Apr 2021' } } });
       translate.use('EN');
       await settle();
     }

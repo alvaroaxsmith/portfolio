@@ -59,33 +59,19 @@
         "sports": {
             "title": "Sports ⚽",
             "description": "Sports keep me active: I play soccer and, whenever I can, go hiking out in nature."
+        },
+        "intro": "I have quite a knack for picking up hobbies, so I will only mention a few of the main ones. 😅",
+        "chess": {
+            "title": "Amateur Chess ♟️",
+            "description": "I learned to play chess at the age of 7, but I started practicing frequently during the pandemic, and today I have accumulated over a thousand games on "
+        },
+        "guitar": {
+            "title": "Guitar Player 🎶",
+            "description": "I've been playing guitar since I was 10. I like to explore new musical arrangements, from pop to MPB—even venturing into classics like 'Lilás' by Djavan—and I plan to post some on SoundCloud soon."
         }
     },
     "Highlights": "Highlights",
-    "April 2019 to": "April 2019 to",
-    "April 2021": "April 2021",
-    "Internship at Metro de São Paulo": "Internship at Metro de São Paulo",
-    "July 2021 to": "July 2021 to",
-    "October 2021": "October 2021",
-    "Bootcamp at Gama Academy": "Bootcamp at Gama Academy",
-    "January 2022 to": "January 2022 to",
-    "June 2022": "June 2022",
-    "Bootcamp at SoulCode Academy": "Bootcamp at SoulCode Academy",
-    "August 2018 to": "August 2018 to",
-    "June 2023": "June 2023",
-    "Univesp Oficial - Bachelor's degree, Production Engineering": "Univesp Oficial - Bachelor's degree, Production Engineering",
-    "March 2024 to": "March 2024 to",
-    "December 2024": "December 2024",
-    "Instituto Federal do Sul de Minas Gerais - Postgraduate, Web Development": "Instituto Federal do Sul de Minas Gerais - Postgraduate, Web Development",
-    "May 2025 to": "May 2025 to",
-    "May 2027": "May 2027",
-    "Universidade Federal do ABC (UFABC) - Postgraduate, Information Technologies and Systems": "Universidade Federal do ABC (UFABC) - Postgraduate, Information Technologies and Systems",
     "Professional": "Professional Timeline",
-    "I have a certain facility for developing hobbies, I will only mention the main ones because I have many. 😅": "I have quite a knack for picking up hobbies, so I will only mention a few of the main ones. 😅",
-    "Amateur Chess ♟️": "Amateur Chess ♟️",
-    "I learned to play chess at the age of 7, but I started to practice constantly in the pandemic and today I have more than a thousand games on ": "I learned to play chess at the age of 7, but I started practicing frequently during the pandemic, and today I have accumulated over a thousand games on ",
-    "Guitar Player 🎶": "Guitar Player 🎶",
-    "I play guitar since I was 12 years old, I like to listen to all kinds of music and I like to create musical arrangements, soon I will post it on soundcloud.": "I've been playing guitar since I was 10. I like to explore new musical arrangements, from pop to MPB—even venturing into classics like 'Lilás' by Djavan—and I plan to post some on SoundCloud soon.",
     "contact": {
         "title": "Let’s talk",
         "description": "If you are looking for a profile with strong architectural vision, full-cycle development experience, and a focus on digital innovation, these are the fastest channels to reach me.",
@@ -131,11 +117,44 @@
     "repo": {
         "referral_system": "API that generates unique referral codes for e-commerce loyalty programs."
     },
-    "2014 to": "2014 to",
-    "UNESP - Energy Engineering (incomplete)": "UNESP - Energy Engineering (incomplete)",
     "highlights": {
         "eyebrow": "education and milestones",
-        "intro": "A quick view of the main academic cycles that complement my holistic view of engineering and business."
+        "intro": "A quick view of the main academic cycles that complement my holistic view of engineering and business.",
+        "unesp": {
+            "date": "2014 to",
+            "range": "2018",
+            "description": "UNESP - Energy Engineering (incomplete)"
+        },
+        "univesp": {
+            "date": "August 2018 to",
+            "range": "June 2023",
+            "description": "Univesp Oficial - Bachelor's degree, Production Engineering"
+        },
+        "metro": {
+            "date": "April 2019 to",
+            "range": "April 2021",
+            "description": "Internship at Metro de São Paulo"
+        },
+        "gama": {
+            "date": "July 2021 to",
+            "range": "October 2021",
+            "description": "Bootcamp at Gama Academy"
+        },
+        "soulcode": {
+            "date": "January 2022 to",
+            "range": "June 2022",
+            "description": "Bootcamp at SoulCode Academy"
+        },
+        "ifsuldeminas": {
+            "date": "March 2024 to",
+            "range": "December 2024",
+            "description": "Instituto Federal do Sul de Minas Gerais - Postgraduate, Web Development"
+        },
+        "ufabc": {
+            "date": "May 2025 to",
+            "range": "May 2027",
+            "description": "Universidade Federal do ABC (UFABC) - Postgraduate, Information Technologies and Systems"
+        }
     },
     "Repository": "Repository",
     "Last updated": "Last updated",
@@ -148,24 +167,6 @@
     "Oldest": "Oldest",
     "No projects found.": "No projects found.",
     "Main Activities": "Main Activities",
-    "1 ano e 5 meses": "1 year 5 months",
-    "4 meses": "4 months",
-    "1 ano e 1 mês": "1 year 1 month",
-    "2 meses": "2 months",
-    "2 anos e 1 mês": "2 years 1 month",
-    "out de 2025 - o momento": "Oct 2025 - Present",
-    "jun de 2024 - out de 2025": "Jun 2024 - Oct 2025",
-    "mai de 2024 - jun de 2024": "May 2024 - Jun 2024",
-    "jan de 2024 - abr de 2024": "Jan 2024 - Apr 2024",
-    "out de 2022 - out de 2023": "Oct 2022 - Oct 2023",
-    "ago de 2022 - set de 2022": "Aug 2022 - Sep 2022",
-    "abr de 2019 - abr de 2021": "Apr 2019 - Apr 2021",
-    "Mutant (Alocado na Telefônica Vivo)": "Mutant (Allocated to Telefônica Vivo)",
-    "Tech Lead Cross": "Cross Tech Lead",
-    "Desenvolvedor Full Stack": "Full Stack Developer",
-    "Desenvolvedor Front-end": "Front-end Developer",
-    "Desenvolvedor Back-end": "Back-end Developer",
-    "Estagiário em Engenharia de Produção": "Production Engineering Intern",
     "timeline": {
         "eyebrow": "professional experience",
         "intro": "Timeline highlighting my technical evolution: from frontend development to leading full stack architectures with AI.",
@@ -179,40 +180,67 @@
             "activity1": "Technical leadership in critical financial journeys, such as Automatic Invoice Payment, Automatic PIX, and Automatic Debit.",
             "activity2": "Design of scalable architectures in microservices, BFFs, and MFEs using Java, Spring Boot, Node.js, and React.",
             "activity3": "Dissemination of technical culture (Clean Code, TDD) through constructive code reviews and internal mentoring.",
-            "activity4": "Integration of AI-assisted development and DevSecOps best practices into the team's routine."
+            "activity4": "Integration of AI-assisted development and DevSecOps best practices into the team's routine.",
+            "role": "Cross Tech Lead",
+            "company": "Mutant (Allocated to Telefônica Vivo)",
+            "period": "Oct 2025 - Present"
         },
         "mutantFs": {
             "description": "Development and improvement of journeys in the Vivo App, delivering solutions for millions of customers with a focus on performance and stability.",
             "activity1": "Built complex workflows in journeys such as Smart Home, Technical Support, Vivo Travel, and e-SIM.",
-            "activity2": "Worked with microservices architecture and integration of legacy systems in cloud environments (Azure/Kubernetes)."
+            "activity2": "Worked with microservices architecture and integration of legacy systems in cloud environments (Azure/Kubernetes).",
+            "role": "Full Stack Developer",
+            "company": "Mutant",
+            "period": "Jun 2024 - Oct 2025",
+            "duration": "1 year 5 months"
         },
         "marttech": {
             "description": "Development of the Curar Saúde platform, an education and engagement solution focused on usability and interactivity.",
             "activity1": "Created responsive interfaces with TypeScript, React, and Material UI based on Figma prototypes.",
             "activity2": "Planned, distributed technical tasks, and assisted in leveling up junior developers.",
-            "activity3": "Configured CI/CD pipelines and continuous deployment workflows in Azure DevOps."
+            "activity3": "Configured CI/CD pipelines and continuous deployment workflows in Azure DevOps.",
+            "role": "Front-end Developer",
+            "company": "Marttech Desenvolvimento de Software",
+            "period": "May 2024 - Jun 2024",
+            "duration": "2 months"
         },
         "xmart": {
             "description": "Full Stack development of the xGuardian security application, prioritizing clean architecture and high performance.",
             "activity1": "Implemented the backend via Python and FastAPI in the BFF pattern, integrating MySQL/MariaDB databases.",
             "activity2": "Created frontend interfaces using React, Tailwind, and Shadcn/ui components.",
-            "activity3": "Refactored code and structured projects under Clean Architecture principles and security testing (Dast/Sast)."
+            "activity3": "Refactored code and structured projects under Clean Architecture principles and security testing (Dast/Sast).",
+            "role": "Full Stack Developer",
+            "company": "Xmart Solutions",
+            "period": "Jan 2024 - Apr 2024",
+            "duration": "4 months"
         },
         "vtal": {
             "description": "Maintenance, innovation, and modernization of strategic telecommunication portals and systems.",
             "activity1": "Developed the Access Management module (React/NestJS) and Technical Support for carriers (React/Spring Boot).",
             "activity2": "Structured a static Developer Portal for API documentation, integrating a focus on Developer Experience (DX).",
-            "activity3": "Fixed bugs and sustained mission-critical legacy systems connected to OracleDB."
+            "activity3": "Fixed bugs and sustained mission-critical legacy systems connected to OracleDB.",
+            "role": "Full Stack Developer",
+            "company": "V.tal",
+            "period": "Oct 2022 - Oct 2023",
+            "duration": "1 year 1 month"
         },
         "gama": {
             "description": "Intensive agile immersion program. I worked for 45 days developing a digital product that won 1st place in the Gama-lab hackathon.",
             "activity1": "Built the API for a robust Learning Management System (LMS) using NestJS, TypeORM, and PostgreSQL.",
-            "activity2": "Applied Scrum methodology, Gitflow versioning, and standardization with Conventional Commits."
+            "activity2": "Applied Scrum methodology, Gitflow versioning, and standardization with Conventional Commits.",
+            "role": "Back-end Developer",
+            "company": "Gama Academy",
+            "period": "Aug 2022 - Sep 2022",
+            "duration": "2 months"
         },
         "metro": {
             "description": "Support for maintenance engineering operations with a focus on data analysis and continuous process improvement at Metrô de São Paulo.",
             "activity1": "Created management dashboards and processed operational data with Power BI and Excel.",
-            "activity2": "Provided analytical support for SAP ERP implementation and executed time-and-motion studies."
+            "activity2": "Provided analytical support for SAP ERP implementation and executed time-and-motion studies.",
+            "role": "Production Engineering Intern",
+            "company": "Metrô de São Paulo",
+            "period": "Apr 2019 - Apr 2021",
+            "duration": "2 years 1 month"
         },
         "openJourney": "Opens the career journey from this experience",
         "closeJourney": "Back to the experience cards"
