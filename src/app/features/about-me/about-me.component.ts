@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy } from '@angular/core';
-import { MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelActionRow } from '@angular/material/expansion';
+import { MatAccordion, MatExpansionPanel, MatExpansionPanelContent, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelActionRow } from '@angular/material/expansion';
 import { ProfessionalTimelineComponent } from './components/professional-timeline/professional-timeline.component';
 import { HighlightsComponent } from './components/highlights/highlights.component';
 import { TranslatePipe } from '@ngx-translate/core';
@@ -9,6 +9,6 @@ import { TranslatePipe } from '@ngx-translate/core';
     templateUrl: './about-me.component.html',
     styleUrls: ['./about-me.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelActionRow, ProfessionalTimelineComponent, HighlightsComponent, TranslatePipe]
+    imports: [MatAccordion, MatExpansionPanel, MatExpansionPanelContent, MatExpansionPanelHeader, MatExpansionPanelTitle, MatExpansionPanelActionRow, ProfessionalTimelineComponent, HighlightsComponent, TranslatePipe]
 })
 export class AboutMeComponent {}
