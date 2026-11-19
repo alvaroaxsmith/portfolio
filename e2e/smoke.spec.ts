@@ -248,3 +248,35 @@ test.describe('the course hint', () => {
     await expect(hint(page)).toHaveCount(0, prompt);
   });
 });
+
+test.describe('the menu lines up with the page margins', () => {
+  /** Left of the first link's text and right of the last control, against the left and right of the page heading block. */
+  async function edges(page: Page, lastControl: string) {
+    return page.evaluate((last) => {
+      const box = (selector: string) => document.querySelector(selector)!.getBoundingClientRect();
+      return {
+        menuLeft: box('nav li:first-child .mdc-button__label').left,
+        menuRight: box(last).right,
+        pageLeft: box('main h1').left,
+        pageRight: box('.container').right
+      };
+    }, lastControl);
+  }
+
+  test('on a desktop screen', async ({ page }) => {
+    await open(page, '/about-me');
+    const { menuLeft, menuRight, pageLeft, pageRight } = await edges(page, '.language-form mat-icon');
+
+    expect(Math.abs(menuLeft - pageLeft), `menu starts at ${menuLeft}, page at ${pageLeft}`).toBeLessThanOrEqual(1);
+    expect(Math.abs(menuRight - pageRight), `menu ends at ${menuRight}, page at ${pageRight}`).toBeLessThanOrEqual(1);
+  });
+
+  test('on a phone', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 844 });
+    await open(page, '/about-me');
+    const { menuLeft, menuRight, pageLeft, pageRight } = await edges(page, '.menu-button');
+
+    expect(Math.abs(menuLeft - pageLeft), `menu starts at ${menuLeft}, page at ${pageLeft}`).toBeLessThanOrEqual(1);
+    expect(Math.abs(menuRight - pageRight), `menu ends at ${menuRight}, page at ${pageRight}`).toBeLessThanOrEqual(1);
+  });
+});

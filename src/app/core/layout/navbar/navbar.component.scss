@@ -20,7 +20,9 @@ ul {
     width: min(1120px, calc(100vw - 2rem));
     min-height: var(--navbar-height);
     margin: 0 auto;
-    padding: 0.75rem 2rem;
+    // At the top of the page the menu spans the page's own width, so its first and last controls line up with the
+    // page margins; the floating bar below keeps its inner padding.
+    padding: 0.75rem 0;
     list-style: none;
 }
 
@@ -29,6 +31,20 @@ li {
     align-items: center;
     justify-content: center;
     position: relative;
+}
+
+// The first link's text starts at the margin: without the button's minimum width it is not centred, and the
+// margin takes back the button's 8px padding.
+li:first-child {
+    margin-left: -8px;
+    a {
+        min-width: 0;
+    }
+}
+
+// The icon sits at the margin, not the 48px button around it.
+li.language {
+    margin-right: -12px;
 }
 
 a,
@@ -77,6 +93,7 @@ li.active::after {
     backdrop-filter: blur(18px);
     -webkit-backdrop-filter: blur(18px);
     box-shadow: 0 14px 36px rgba(15, 23, 42, 0.08);
+    padding: 0.75rem 2rem;
     transition: height 0.3s ease-in-out, background-color 0.3s ease-in-out, top 0.3s ease-in-out;
 }
 
@@ -96,6 +113,11 @@ li.active::after {
      :host(.navbar-fixed) ul {
         width: calc(100vw - 1.25rem);
         min-height: var(--navbar-height);
+    }
+    ul {
+        padding: 0.5rem 0;
+    }
+    :host(.navbar-fixed) ul {
         padding: 0.5rem 0.75rem;
     }
     li:not(:first-child):not(.mobile-menu-trigger) {
