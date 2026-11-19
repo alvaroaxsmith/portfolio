@@ -59,33 +59,19 @@
         "sports": {
             "title": "Esportes ⚽",
             "description": "Pratico esportes para manter o corpo em movimento: jogo futebol e, sempre que posso, faço trilhas em meio à natureza."
+        },
+        "intro": "Tenho bastante facilidade para desenvolver hobbies, então vou mencionar apenas alguns dos principais. 😅",
+        "chess": {
+            "title": "Xadrez Amador ♟️",
+            "description": "Aprendi a jogar xadrez aos 7 anos, mas comecei a praticar com frequência durante a pandemia e hoje acumulo mais de mil partidas no "
+        },
+        "guitar": {
+            "title": "Toco Violão 🎶",
+            "description": "Toco violão desde os 10 anos. Gosto de explorar novos arranjos musicais, do pop à MPB — arriscando clássicos como 'Lilás' do Djavan —, e em breve pretendo postar alguns no SoundCloud."
         }
     },
     "Highlights": "Destaques",
-    "April 2019 to": "Abril de 2019 até",
-    "April 2021": "Abril de 2021",
-    "Internship at Metro de São Paulo": "Estágio no Metrô de São Paulo",
-    "July 2021 to": "Julho de 2021 até",
-    "October 2021": "Outubro de 2021",
-    "Bootcamp at Gama Academy": "Bootcamp na Gama Academy",
-    "January 2022 to": "Janeiro de 2022 até",
-    "June 2022": "Junho de 2022",
-    "Bootcamp at SoulCode Academy": "Bootcamp na SoulCode Academy",
-    "August 2018 to": "Agosto de 2018 até",
-    "June 2023": "Junho de 2023",
-    "Univesp Oficial - Bachelor's degree, Production Engineering": "Univesp Oficial - Bacharelado, Engenharia de Produção",
-    "March 2024 to": "Março de 2024 até",
-    "December 2024": "Dezembro de 2024",
-    "Instituto Federal do Sul de Minas Gerais - Postgraduate, Web Development": "Instituto Federal do Sul de Minas Gerais - Pós-graduação, Desenvolvimento Web",
-    "May 2025 to": "Maio de 2025 até",
-    "May 2027": "Maio de 2027",
-    "Universidade Federal do ABC (UFABC) - Postgraduate, Information Technologies and Systems": "Universidade Federal do ABC (UFABC) - Pós-graduação, Tecnologias e Sistemas de Informação",
     "Professional": "Trajetória Profissional",
-    "I have a certain facility for developing hobbies, I will only mention the main ones because I have many. 😅": "Tenho bastante facilidade para desenvolver hobbies, então vou mencionar apenas alguns dos principais. 😅",
-    "Amateur Chess ♟️": "Xadrez Amador ♟️",
-    "I learned to play chess at the age of 7, but I started to practice constantly in the pandemic and today I have more than a thousand games on ": "Aprendi a jogar xadrez aos 7 anos, mas comecei a praticar com frequência durante a pandemia e hoje acumulo mais de mil partidas no ",
-    "Guitar Player 🎶": "Toco Violão 🎶",
-    "I play guitar since I was 12 years old, I like to listen to all kinds of music and I like to create musical arrangements, soon I will post it on soundcloud.": "Toco violão desde os 10 anos. Gosto de explorar novos arranjos musicais, do pop à MPB — arriscando clássicos como 'Lilás' do Djavan —, e em breve pretendo postar alguns no SoundCloud.",
     "contact": {
         "title": "Vamos conversar",
         "description": "Se você procura um perfil com forte visão arquitetural, experiência no ciclo completo de desenvolvimento e foco em inovação digital, estes são os canais mais rápidos para falar comigo.",
@@ -131,11 +117,44 @@
     "repo": {
         "referral_system": "API focada na geração dinâmica de códigos de referência exclusivos para programas de fidelização em e-commerces."
     },
-    "2014 to": "2014 até",
-    "UNESP - Energy Engineering (incomplete)": "UNESP - Engenharia de Energia (incompleto)",
     "highlights": {
         "eyebrow": "formação e marcos",
-        "intro": "Uma visão rápida dos principais ciclos acadêmicos que complementam minha visão holística de engenharia e negócios."
+        "intro": "Uma visão rápida dos principais ciclos acadêmicos que complementam minha visão holística de engenharia e negócios.",
+        "unesp": {
+            "date": "2014 até",
+            "range": "2018",
+            "description": "UNESP - Engenharia de Energia (incompleto)"
+        },
+        "univesp": {
+            "date": "Agosto de 2018 até",
+            "range": "Junho de 2023",
+            "description": "Univesp Oficial - Bacharelado, Engenharia de Produção"
+        },
+        "metro": {
+            "date": "Abril de 2019 até",
+            "range": "Abril de 2021",
+            "description": "Estágio no Metrô de São Paulo"
+        },
+        "gama": {
+            "date": "Julho de 2021 até",
+            "range": "Outubro de 2021",
+            "description": "Bootcamp na Gama Academy"
+        },
+        "soulcode": {
+            "date": "Janeiro de 2022 até",
+            "range": "Junho de 2022",
+            "description": "Bootcamp na SoulCode Academy"
+        },
+        "ifsuldeminas": {
+            "date": "Março de 2024 até",
+            "range": "Dezembro de 2024",
+            "description": "Instituto Federal do Sul de Minas Gerais - Pós-graduação, Desenvolvimento Web"
+        },
+        "ufabc": {
+            "date": "Maio de 2025 até",
+            "range": "Maio de 2027",
+            "description": "Universidade Federal do ABC (UFABC) - Pós-graduação, Tecnologias e Sistemas de Informação"
+        }
     },
     "Repository": "Repositório",
     "Last updated": "Última atualização",
@@ -148,24 +167,6 @@
     "Oldest": "Mais Antigos",
     "No projects found.": "Nenhum projeto encontrado.",
     "Main Activities": "Principais Atividades",
-    "1 ano e 5 meses": "1 ano e 5 meses",
-    "4 meses": "4 meses",
-    "1 ano e 1 mês": "1 ano e 1 mês",
-    "2 meses": "2 meses",
-    "2 anos e 1 mês": "2 anos e 1 mês",
-    "out de 2025 - o momento": "out de 2025 - o momento",
-    "jun de 2024 - out de 2025": "jun de 2024 - out de 2025",
-    "mai de 2024 - jun de 2024": "mai de 2024 - jun de 2024",
-    "jan de 2024 - abr de 2024": "jan de 2024 - abr de 2024",
-    "out de 2022 - out de 2023": "out de 2022 - out de 2023",
-    "ago de 2022 - set de 2022": "ago de 2022 - set de 2022",
-    "abr de 2019 - abr de 2021": "abr de 2019 - abr de 2021",
-    "Mutant (Alocado na Telefônica Vivo)": "Mutant (Alocado na Telefônica Vivo)",
-    "Tech Lead Cross": "Tech Lead Cross",
-    "Desenvolvedor Full Stack": "Desenvolvedor Full Stack",
-    "Desenvolvedor Front-end": "Desenvolvedor Front-end",
-    "Desenvolvedor Back-end": "Desenvolvedor Back-end",
-    "Estagiário em Engenharia de Produção": "Estagiário em Engenharia de Produção",
     "timeline": {
         "eyebrow": "experiência profissional",
         "intro": "Linha do tempo destacando minha evolução técnica: do desenvolvimento front-end à liderança de arquiteturas full stack com IA.",
@@ -179,40 +180,67 @@
             "activity1": "Liderança técnica em jornadas críticas financeiras, como Pagamento Automático de Faturas, PIX Automático e Débito Automático.",
             "activity2": "Desenho de arquiteturas escaláveis em microsserviços, BFFs e MFEs utilizando Java, Spring Boot, Node.js e React.",
             "activity3": "Disseminação de cultura técnica (Clean Code, TDD) através de code reviews construtivos e mentorias internas.",
-            "activity4": "Integração do desenvolvimento assistido por IA e melhores práticas DevSecOps na rotina do time."
+            "activity4": "Integração do desenvolvimento assistido por IA e melhores práticas DevSecOps na rotina do time.",
+            "role": "Tech Lead Cross",
+            "company": "Mutant (Alocado na Telefônica Vivo)",
+            "period": "out de 2025 - o momento"
         },
         "mutantFs": {
             "description": "Desenvolvimento e aprimoramento das jornadas no App Vivo, entregando soluções para milhões de clientes com foco em performance e estabilidade.",
             "activity1": "Construção de fluxos complexos em jornadas como Casa Inteligente, Suporte Técnico, Vivo Travel e e-SIM.",
-            "activity2": "Atuação com arquitetura de microsserviços e integração de sistemas legados em ambientes de nuvem (Azure/Kubernetes)."
+            "activity2": "Atuação com arquitetura de microsserviços e integração de sistemas legados em ambientes de nuvem (Azure/Kubernetes).",
+            "role": "Desenvolvedor Full Stack",
+            "company": "Mutant",
+            "period": "jun de 2024 - out de 2025",
+            "duration": "1 ano e 5 meses"
         },
         "marttech": {
             "description": "Desenvolvimento da plataforma Curar Saúde, uma solução de educação e engajamento focada em usabilidade e interatividade.",
             "activity1": "Criação de interfaces responsivas com TypeScript, React e Material UI baseadas em protótipos do Figma.",
             "activity2": "Planejamento, distribuição de tarefas técnicas e auxílio no nivelamento de desenvolvedores juniores.",
-            "activity3": "Configuração de pipelines CI/CD e esteiras de deploy contínuo no Azure DevOps."
+            "activity3": "Configuração de pipelines CI/CD e esteiras de deploy contínuo no Azure DevOps.",
+            "role": "Desenvolvedor Front-end",
+            "company": "Marttech Desenvolvimento de Software",
+            "period": "mai de 2024 - jun de 2024",
+            "duration": "2 meses"
         },
         "xmart": {
             "description": "Desenvolvimento Full Stack do aplicativo de segurança xGuardian, priorizando arquitetura limpa e alta performance.",
             "activity1": "Implementação do backend via Python e FastAPI no padrão BFF, integrando bancos MySQL/MariaDB.",
             "activity2": "Criação de interfaces no frontend utilizando React, Tailwind e componentes Shadcn/ui.",
-            "activity3": "Refatoração de código e estruturação de projetos sob os preceitos de Clean Architecture e testes de segurança (Dast/Sast)."
+            "activity3": "Refatoração de código e estruturação de projetos sob os preceitos de Clean Architecture e testes de segurança (Dast/Sast).",
+            "role": "Desenvolvedor Full Stack",
+            "company": "Xmart Solutions",
+            "period": "jan de 2024 - abr de 2024",
+            "duration": "4 meses"
         },
         "vtal": {
             "description": "Manutenção, inovação e modernização de portais e sistemas estratégicos de telecomunicação.",
             "activity1": "Desenvolvimento do módulo de Gestão de Acesso (React/NestJS) e de Suporte Técnico para operadoras (React/Spring Boot).",
             "activity2": "Estruturação de um Portal de Desenvolvedores estático para documentação de APIs, integrando foco em Developer Experience (DX).",
-            "activity3": "Correção de bugs e sustentação de sistemas legados de missão crítica ligados ao OracleDB."
+            "activity3": "Correção de bugs e sustentação de sistemas legados de missão crítica ligados ao OracleDB.",
+            "role": "Desenvolvedor Full Stack",
+            "company": "V.tal",
+            "period": "out de 2022 - out de 2023",
+            "duration": "1 ano e 1 mês"
         },
         "gama": {
             "description": "Programa intensivo de imersão ágil. Trabalhei 45 dias no desenvolvimento de um produto digital que rendeu o 1º lugar no hackathon Gama-lab.",
             "activity1": "Construção da API para um Learning Management System (LMS) robusto usando NestJS, TypeORM e PostgreSQL.",
-            "activity2": "Aplicação de Scrum, versionamento com Gitflow e padronização com Conventional Commits."
+            "activity2": "Aplicação de Scrum, versionamento com Gitflow e padronização com Conventional Commits.",
+            "role": "Desenvolvedor Back-end",
+            "company": "Gama Academy",
+            "period": "ago de 2022 - set de 2022",
+            "duration": "2 meses"
         },
         "metro": {
             "description": "Apoio a operações de engenharia de manutenção com foco em análise de dados e melhoria contínua de processos no Metrô de São Paulo.",
             "activity1": "Criação de dashboards gerenciais e tratamento de dados operacionais com Power BI e Excel.",
-            "activity2": "Apoio analítico à implantação do ERP SAP e execução de estudos de cronoanálise."
+            "activity2": "Apoio analítico à implantação do ERP SAP e execução de estudos de cronoanálise.",
+            "role": "Estagiário em Engenharia de Produção",
+            "company": "Metrô de São Paulo",
+            "period": "abr de 2019 - abr de 2021",
+            "duration": "2 anos e 1 mês"
         },
         "openJourney": "Abre a jornada profissional a partir desta experiência",
         "closeJourney": "Voltar aos cards de experiência"

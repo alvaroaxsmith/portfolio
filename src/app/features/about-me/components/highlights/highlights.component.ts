@@ -2,17 +2,13 @@ import { Component, ChangeDetectionStrategy, AfterViewInit, OnDestroy, ElementRe
 
 import { TranslatePipe } from '@ngx-translate/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
+import { HIGHLIGHTS } from '../../data/highlights';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { REDUCED_MOTION, mediaQuery } from '../../../../core/media/media-query';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 
-interface Highlight {
-  date: string;
-  dateRange?: string;
-  description: string;
-}
 
 @Component({
     selector: 'app-highlights',
@@ -29,15 +25,7 @@ interface Highlight {
 export class HighlightsComponent implements AfterViewInit, OnDestroy {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  highlights: Highlight[] = [
-    { date: '2014 to', dateRange: '2018', description: 'UNESP - Energy Engineering (incomplete)' },
-    { date: 'August 2018 to', dateRange: 'June 2023', description: 'Univesp Oficial - Bachelor\'s degree, Production Engineering' },
-    { date: 'April 2019 to', dateRange: 'April 2021', description: 'Internship at Metro de São Paulo' },
-    { date: 'July 2021 to', dateRange: 'October 2021', description: 'Bootcamp at Gama Academy' },
-    { date: 'January 2022 to', dateRange: 'June 2022', description: 'Bootcamp at SoulCode Academy' },
-    { date: 'March 2024 to', dateRange: 'December 2024', description: 'Instituto Federal do Sul de Minas Gerais - Postgraduate, Web Development' },
-    { date: 'May 2025 to', dateRange: 'May 2027', description: 'Universidade Federal do ABC (UFABC) - Postgraduate, Information Technologies and Systems' }
-  ];
+  readonly highlights = HIGHLIGHTS;
 
   readonly timelineRef = viewChild.required<ElementRef<HTMLElement>>('timeline');
   readonly itemRefs = viewChildren<ElementRef<HTMLElement>>('timelineItem');

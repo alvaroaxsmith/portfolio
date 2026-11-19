@@ -8,19 +8,9 @@ import type { Mermaid } from 'mermaid';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { MATCH_MEDIA } from '../../../../core/media/media-query';
+import { EXPERIENCES, Experience } from '../../data/experiences';
 
-export interface Experience {
-  id: number;
-  role: string;
-  company: string;
-  tooltip?: string;
-  period: string;
-  duration?: string;
-  description: string;
-  activities: string[];
-  technologies: string[];
-  skills: string[];
-}
+export type { Experience } from '../../data/experiences';
 
 interface TimelineDefinition {
   id: number;
@@ -80,178 +70,7 @@ export class ProfessionalTimelineComponent implements OnInit, OnDestroy {
   private readonly careerCards = viewChildren('careerCard', { read: ElementRef<HTMLElement> });
   private readonly journeyCards = viewChildren('journeyCard', { read: ElementRef<HTMLElement> });
 
-  experiences: Experience[] = [
-    {
-      id: 1,
-      role: 'Estagiário em Engenharia de Produção',
-      company: 'Metrô de São Paulo',
-      period: 'abr de 2019 - abr de 2021',
-      duration: '2 anos e 1 mês',
-      description: 'timeline.metro.description',
-      activities: ['timeline.metro.activity1', 'timeline.metro.activity2'],
-      technologies: [
-        'Power BI',
-        'Excel',
-        'SAP ERP',
-        'Análise de Dados',
-        'Cronoanálise',
-      ],
-      skills: ['Análise de Processos', 'Dados Operacionais', 'Melhoria Contínua'],
-    },
-    {
-      id: 2,
-      role: 'Desenvolvedor Back-end',
-      company: 'Gama Academy',
-      period: 'ago de 2022 - set de 2022',
-      duration: '2 meses',
-      description: 'timeline.gama.description',
-      activities: ['timeline.gama.activity1', 'timeline.gama.activity2'],
-      technologies: [
-        'NestJS',
-        'REST',
-        'TypeScript',
-        'PostgreSQL',
-        'Docker Compose',
-        'Swagger',
-        'TypeORM',
-        'GitHub',
-        'CI/CD',
-      ],
-      skills: ['Spec Driven Development', 'API Design', 'Clean Code', 'Scrum'],
-    },
-    {
-      id: 3,
-      role: 'Desenvolvedor Full Stack',
-      company: 'V.tal',
-      period: 'out de 2022 - out de 2023',
-      duration: '1 ano e 1 mês',
-      description: 'timeline.vtal.description',
-      activities: [
-        'timeline.vtal.activity1',
-        'timeline.vtal.activity2',
-        'timeline.vtal.activity3',
-      ],
-      technologies: [
-        'Vue2',
-        'Vuex',
-        'React',
-        'TypeScript',
-        'NestJS',
-        'Java Spring Boot',
-        'OracleDB',
-        'Redis',
-        'MongoDB',
-        'Azure DevOps',
-      ],
-      skills: ['CI/CD', 'TDD', 'Clean Architecture', 'SOLID', 'Jest'],
-    },
-    {
-      id: 4,
-      role: 'Desenvolvedor Full Stack',
-      company: 'Xmart Solutions',
-      period: 'jan de 2024 - abr de 2024',
-      duration: '4 meses',
-      description: 'timeline.xmart.description',
-      activities: [
-        'timeline.xmart.activity1',
-        'timeline.xmart.activity2',
-        'timeline.xmart.activity3',
-      ],
-      technologies: [
-        'React',
-        'Shadcn/ui',
-        'Tailwind',
-        'Context API',
-        'Python',
-        'FastAPI',
-        'MySQL',
-        'MariaDB',
-        'Jenkins',
-        'Docker',
-        'AWS Cloud',
-        'Lambda',
-      ],
-      skills: [
-        'Clean Architecture',
-        'TDD',
-        'BFF',
-        'Microserviços',
-        'DevSecOps',
-        'AppSec',
-      ],
-    },
-    {
-      id: 5,
-      role: 'Desenvolvedor Front-end',
-      company: 'Marttech Desenvolvimento de Software',
-      period: 'mai de 2024 - jun de 2024',
-      duration: '2 meses',
-      description: 'timeline.marttech.description',
-      activities: [
-        'timeline.marttech.activity1',
-        'timeline.marttech.activity2',
-        'timeline.marttech.activity3',
-      ],
-      technologies: [
-        'TypeScript',
-        'React',
-        'Material UI',
-        'React Hooks',
-        'Context API',
-        'Azure DevOps',
-      ],
-      skills: ['TDD', 'Clean Architecture', 'Revisão de código'],
-    },
-    {
-      id: 6,
-      role: 'Desenvolvedor Full Stack',
-      company: 'Mutant',
-      period: 'jun de 2024 - out de 2025',
-      duration: '1 ano e 5 meses',
-      description: 'timeline.mutantFs.description',
-      activities: ['timeline.mutantFs.activity1', 'timeline.mutantFs.activity2'],
-      technologies: [
-        'Java',
-        'Spring Boot',
-        'Node.js',
-        'NestJS',
-        'React',
-        'Micro Front-Ends',
-        'BFF',
-        'Azure DevOps',
-        'Docker',
-        'Redis',
-        'MongoDB',
-      ],
-      skills: ['TDD', 'Jest', 'Cypress', 'Clean Code', 'Arquitetura de Software'],
-    },
-    {
-      id: 7,
-      role: 'Tech Lead Cross',
-      company: 'Mutant (Alocado na Telefônica Vivo)',
-      tooltip: 'Mutant',
-      period: 'out de 2025 - o momento',
-      description: 'timeline.mutantLead.description',
-      activities: [
-        'timeline.mutantLead.activity1',
-        'timeline.mutantLead.activity2',
-        'timeline.mutantLead.activity3',
-        'timeline.mutantLead.activity4',
-      ],
-      technologies: [
-        'Node.js',
-        'React',
-        'Java',
-        'Spring Boot',
-        'Micro Front-Ends',
-        'BFFs',
-        'Agentic AI',
-        'Prompt Engineering',
-        'Azure DevOps',
-      ],
-      skills: ['Spec Driven Development', 'Arquitetura de Software', 'Boas Práticas', 'Code Review'],
-    },
-  ];
+  readonly experiences = EXPERIENCES;
 
   readonly timelineDefinitions = signal<TimelineDefinition[]>([]);
   readonly currentIndex = signal(0);
@@ -337,7 +156,8 @@ export class ProfessionalTimelineComponent implements OnInit, OnDestroy {
       journeyExperiences.forEach((exp) => {
         const period = this.translate.instant(exp.period) || exp.period;
         const role = this.translate.instant(exp.role) || exp.role;
-        mermaidText += `  ${period} : ${role} @ ${exp.company}\n`;
+        const company = this.translate.instant(exp.company) || exp.company;
+        mermaidText += `  ${period} : ${role} @ ${company}\n`;
       });
 
       return { id: startExp.id, definition: mermaidText };

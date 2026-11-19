@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { fakeIntersectionObserver } from '../../../../testing/fake-intersection-observer';
-import { provideTranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
+import EN from '../../../../../assets/i18n/EN.json';
 import { HighlightsComponent } from './highlights.component';
 
 const nextFrame = () => new Promise<void>((resolve) => requestAnimationFrame(() => resolve()));
@@ -57,6 +58,10 @@ describe('HighlightsComponent', () => {
   });
 
   it('shows the end of the date range next to the start', () => {
+    const translate = TestBed.inject(TranslateService);
+    translate.setTranslation('EN', EN);
+    translate.use('EN');
+    fixture.detectChanges();
     const firstHeading = items()[0].querySelector('h3')?.textContent?.replace(/\s+/g, ' ').trim();
 
     expect(firstHeading).toBe('2014 to 2018');
