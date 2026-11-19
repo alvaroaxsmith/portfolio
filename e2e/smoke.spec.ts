@@ -170,9 +170,15 @@ test.describe('the course hint', () => {
   // The hint stays up for five seconds; a click the hint swallows would only land after it leaves.
   const prompt = { timeout: 1_000 };
 
-  test('leaves the menu links clickable while it is open', async ({ page }) => {
+  /** Waits for the site's entrance (the menu slides in), but not for the hint's own five-second clock. */
+  async function openCoursesWithHint(page: Page) {
     await open(page, '/courses');
+    await page.locator('.shell').evaluate((shell) => Promise.all(shell.getAnimations().map((animation) => animation.finished)));
     await expect(hint(page)).toBeVisible();
+  }
+
+  test('leaves the menu links clickable while it is open', async ({ page }) => {
+    await openCoursesWithHint(page);
 
     await page.getByRole('navigation', { name: 'Navegação principal' }).locator('a[href="/contact"]').click(prompt);
 
@@ -181,8 +187,7 @@ test.describe('the course hint', () => {
 
   test('leaves the mobile menu button clickable while it is open', async ({ page }) => {
     await page.setViewportSize({ width: 390, height: 800 });
-    await open(page, '/courses');
-    await expect(hint(page)).toBeVisible();
+    await openCoursesWithHint(page);
 
     await page.getByRole('button', { name: 'Abrir menu de navegação' }).click(prompt);
 
