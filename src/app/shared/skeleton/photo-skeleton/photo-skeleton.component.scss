@@ -1,3 +1,5 @@
+// Pieces are centred with auto margins, never a transform: a transformed element would detach its shimmer from the
+// one wave the rest of the page shows.
 // Same card as the loaded photo (home's .sleeve), so the photo lands in place. The size comes from the page.
 :host {
   position: relative;
@@ -20,18 +22,18 @@
 .head {
   position: absolute;
   top: 26%;
-  left: 50%;
+  inset-inline: 0;
+  margin-inline: auto;
   width: 30%;
   height: auto;
   aspect-ratio: 1;
-  transform: translateX(-50%);
 }
 
 .shoulders {
   position: absolute;
   bottom: -4%;
-  left: 50%;
+  inset-inline: 0;
+  margin-inline: auto;
   width: 70%;
   height: 34%;
-  transform: translateX(-50%);
 }

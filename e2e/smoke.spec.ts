@@ -354,6 +354,24 @@ test.describe('loading placeholders', () => {
     expect(await animationOf(page)).not.toBe('none');
   });
 
+  test('shimmer in step on the photo and the certificate: no piece is transformed, which would detach its highlight', async ({ page }) => {
+    await page.route('https://avatars.githubusercontent.com/**', () => undefined);
+    await open(page, '/');
+    const transformed = () =>
+      page.evaluate(() =>
+        [...document.querySelectorAll('app-photo-skeleton, app-photo-skeleton app-skeleton, app-certificate-skeleton app-skeleton')]
+          .filter((el) => getComputedStyle(el).transform !== 'none')
+          .map((el) => el.className)
+      );
+    expect(await transformed()).toEqual([]);
+
+    await page.route('https://drive.google.com/**', () => undefined);
+    await page.getByRole('navigation', { name: 'Navegação principal' }).locator('a[href="/courses"]').click();
+    await page.locator('tr.course-row').first().click();
+    await expect(page.locator('app-certificate-skeleton')).toBeVisible();
+    expect(await transformed()).toEqual([]);
+  });
+
   test('stay still for visitors who ask for less motion', async ({ page }) => {
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await projectsOnHold(page);
