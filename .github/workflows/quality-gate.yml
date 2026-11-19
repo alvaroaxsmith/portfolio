@@ -7,7 +7,7 @@ on:
   pull_request:
     branches: [main]
     types: [opened, synchronize, reopened, ready_for_review]
-  # Dispatched by the release workflow on its release PR, which the workflow token cannot trigger otherwise.
+  # For a run by hand on any branch (e.g. checking main after a Google Fonts change).
   workflow_dispatch:
 
 permissions:
@@ -21,30 +21,65 @@ env:
   NODE_VERSION: 24
 
 jobs:
+  # Decides whether the gate has anything to check. A PR that only touches documentation skips every job below,
+  # and a skipped job counts as passed for the required checks. Drafts skip too, until marked ready.
+  changes:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: read
+    outputs:
+      code: ${{ steps.files.outputs.code }}
+    steps:
+      - id: files
+        env:
+          GH_TOKEN: ${{ github.token }}
+          EVENT: ${{ github.event_name }}
+          DRAFT: ${{ github.event.pull_request.draft }}
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          if [ "$EVENT" != "pull_request" ]; then echo "code=true" >> "$GITHUB_OUTPUT"; exit 0; fi
+          if [ "$DRAFT" = "true" ]; then echo "code=false" >> "$GITHUB_OUTPUT"; exit 0; fi
+          files=$(gh api "repos/$GITHUB_REPOSITORY/pulls/$PR/files" --paginate --jq '.[].filename')
+          echo "$files"
+          # Markdown and the license change nothing that is built, tested or deployed.
+          if echo "$files" | grep -qvE '(\.md$|^LICENSE$)'; then code=true; else code=false; fi
+          echo "code=$code" >> "$GITHUB_OUTPUT"
+
   lint:
-    # Drafts are work in progress; the gate runs when the PR is marked ready. A skipped job counts as passed,
-    # and a draft cannot be merged anyway.
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-      - run: npm ci
+      # node_modules is restored as a whole while the lockfile is unchanged, instead of installed in every job.
+      - id: deps
+        uses: actions/cache@v6
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.deps.outputs.cache-hit != 'true'
+        run: npm ci
       - run: npx ng lint
 
   unit:
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-      - run: npm ci
+      - id: deps
+        uses: actions/cache@v6
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.deps.outputs.cache-hit != 'true'
+        run: npm ci
       # Fails if any spec fails or coverage drops below the floor in karma.conf.js.
       - run: npx ng test --watch=false --code-coverage --browsers=ChromeHeadlessCI
       - uses: actions/upload-artifact@v7
@@ -55,15 +90,21 @@ jobs:
           retention-days: 14
 
   build:
-    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.draft == false
+    needs: changes
+    if: needs.changes.outputs.code == 'true'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-      - run: npm ci
+      - id: deps
+        uses: actions/cache@v6
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.deps.outputs.cache-hit != 'true'
+        run: npm ci
       - run: npx ng build
       - uses: actions/upload-artifact@v7
         with:
@@ -79,14 +120,19 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-      - run: npm ci
+      - id: deps
+        uses: actions/cache@v6
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.deps.outputs.cache-hit != 'true'
+        run: npm ci
       - uses: actions/download-artifact@v8
         with:
           name: dist
           path: dist/
       - run: npx playwright install --with-deps chromium
-      # Smoke, accessibility (axe) and keyboard specs.
+      # Smoke, accessibility (axe), keyboard and hosting specs.
       - run: npx playwright test --project=chromium
       - uses: actions/upload-artifact@v7
         if: failure()
@@ -109,8 +155,13 @@ jobs:
       - uses: actions/setup-node@v7
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: npm
-      - run: npm ci
+      - id: deps
+        uses: actions/cache@v6
+        with:
+          path: node_modules
+          key: node-modules-${{ runner.os }}-node${{ env.NODE_VERSION }}-${{ hashFiles('package-lock.json') }}
+      - if: steps.deps.outputs.cache-hit != 'true'
+        run: npm ci
       - uses: actions/download-artifact@v8
         with:
           name: dist

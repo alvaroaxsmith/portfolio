@@ -6,7 +6,7 @@ Portfólio pessoal em produção na Vercel (a `main` é publicada a cada merge).
 
 1. Trabalhe numa branch própria a partir da `main`. Uma issue vira um PR.
 2. TDD: escreva o teste que reproduz o problema, veja-o **vermelho**, corrija, veja-o verde.
-3. Rode `npm run verify` (lint, unit com piso de cobertura, build com budgets, E2E). O hook `.githooks/pre-push` roda o mesmo gate; o push só sai verde.
+3. Rode `npm run verify` (lint, unit com piso de cobertura, build com budgets, E2E e visual) quando a mudança afeta o que o navegador mostra. O hook `.githooks/pre-push` roda só as checagens rápidas (`npm run verify:fast`: lint, unit e build); E2E e visual são checks obrigatórios do CI. Rode um gate local por vez: dois ao mesmo tempo disputam a porta 4300 do servidor de E2E.
 4. Abra o PR com `Closes #N`, a lista do que mudou e as evidências (testes novos, métricas antes/depois, screenshots quando houver exceção visual aprovada).
 5. Pronto é: todos os itens do checklist e todos os critérios de aceite da issue cumpridos, gate verde. O merge é feito por uma pessoa depois de validar o preview da Vercel; o agente entrega o PR e para.
 
