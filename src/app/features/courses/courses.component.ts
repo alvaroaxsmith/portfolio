@@ -1,5 +1,5 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectionStrategy, DestroyRef, ElementRef, afterRenderEffect, computed, effect, inject, viewChild, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, AfterViewInit, OnDestroy, ChangeDetectionStrategy, ElementRef, afterRenderEffect, computed, effect, inject, viewChild, signal } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { PHONE_LAYOUT, mediaQuery } from '../../core/media/media-query';
 import { providePaginatorIntl } from '../../core/i18n/paginator-intl';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
@@ -29,23 +29,24 @@ const MOBILE_BATCH_SIZE = 5;
     // Translated paginator texts, provided here so the paginator stays out of the initial bundle.
     providers: [providePaginatorIntl()]
 })
-export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CoursesComponent implements AfterViewInit, OnDestroy {
   private readonly courseService = inject(CourseService);
   private readonly bottomSheet = inject(MatBottomSheet);
   private readonly snackBar = inject(MatSnackBar);
   private readonly analytics = inject(AnalyticsService);
-  private readonly destroyRef = inject(DestroyRef);
   protected readonly state = inject(CoursesStateService);
   /** Phones get the card list and desktops the table: only the one on screen is rendered. */
   protected readonly phone = mediaQuery(PHONE_LAYOUT);
 
   protected readonly displayedColumns = ['field', 'name', 'time', 'school', 'date'];
   readonly dataSource = new MatTableDataSource<Course>();
-  readonly isLoading = signal(true);
-  readonly loadError = signal(false);
+  /** The course list; loading and failure are part of the resource, and leaving the page cancels it. */
+  private readonly source = rxResource({ stream: () => this.courseService.getCourses() });
+  readonly isLoading = computed(() => this.source.isLoading());
+  readonly loadError = computed(() => !!this.source.error());
 
   /** The table filters through the data source; the mobile list reads the same courses and filter as signals. */
-  private readonly courses = signal<Course[]>([]);
+  private readonly courses = computed(() => (this.source.hasValue() ? this.source.value() : []));
   private readonly filter = signal(normalizeFilter(this.state.filter));
   /** How many cards the mobile list shows; kept in the state service too, so it survives leaving the page. */
   private readonly mobileCount = signal(this.state.mobileCount);
@@ -68,6 +69,11 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     afterRenderEffect(() => this.observeMobileTrigger(this.mobileLoadTrigger()?.nativeElement));
     // The sort and the paginator exist only while the table is on screen; the data source follows them as they come
     // and go. Their saved state reaches them through the template bindings.
+    // The table filters and pages through the data source, which follows the loaded courses and the filter.
+    effect(() => {
+      this.dataSource.data = this.courses();
+      this.dataSource.filter = this.filter();
+    });
     effect(() => {
       this.dataSource.sort = this.sort() ?? null;
       this.dataSource.paginator = this.paginator() ?? null;
@@ -99,10 +105,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
       panelClass: 'certificate-sheet',
       ariaLabel: rowData.name
     });
-  }
-
-  ngOnInit() {
-    this.loadData();
   }
 
   onSort({ active, direction }: Sort): void {
@@ -148,23 +150,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
       this.mobileObserver.unobserve(trigger);
       this.mobileObserver.observe(trigger);
     }
-  }
-
-  loadData() {
-    this.isLoading.set(true);
-    this.loadError.set(false);
-    this.courseService.getCourses().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: courses => {
-        this.dataSource.data = courses;
-        this.courses.set(courses);
-        this.dataSource.filter = this.filter();
-        this.isLoading.set(false);
-      },
-      error: () => {
-        this.loadError.set(true);
-        this.isLoading.set(false);
-      }
-    });
   }
 
   applyFilter(event: Event) {
