@@ -17,7 +17,6 @@ import { ProjectCardSkeletonComponent } from '../../shared/skeleton/project-card
 const GRID_MIN_CARD_WIDTH = 300;
 const GRID_ROWS_PER_PAGE = 2;
 const LIST_ITEMS_PER_PAGE = 4;
-const LOAD_MORE_DELAY_MS = 600;
 
 /** What a card shows, worked out once per project instead of on every change detection. */
 interface ProjectCard {
@@ -46,13 +45,11 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   readonly initialLoading = signal(true);
   readonly loadError = signal(false);
-  readonly loadingMore = signal(false);
   readonly allProjectsLoaded = signal(false);
   readonly pageSize = signal(6);
   readonly columns = signal(1);
   /** Index of the first card of the batch being shown, where the entrance stagger starts again. */
   private readonly batchStart = signal(0);
-  private loadMoreTimer?: ReturnType<typeof setTimeout>;
 
   readonly currentView = signal<'list' | 'grid'>('list');
 
@@ -70,12 +67,7 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   /** The current language, so translated descriptions follow a language switch. */
   private readonly lang = this.translate.currentLang;
 
-  readonly loadingMoreCount = computed(() =>
-    Math.min(this.nextBatchSize(), this.processedProjects().length - this.projects().length)
-  );
-
   protected readonly initialSkeletons = computed(() => Array.from({ length: this.pageSize() }, (_, i) => i));
-  protected readonly loadingMoreSkeletons = computed(() => Array.from({ length: this.loadingMoreCount() }, (_, i) => i));
 
   protected readonly cards = computed<ProjectCard[]>(() => {
     this.lang();
@@ -141,7 +133,6 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    clearTimeout(this.loadMoreTimer);
     this.observer?.disconnect();
   }
 
@@ -199,8 +190,6 @@ export class PortfolioComponent implements OnInit, OnDestroy {
       return this.currentSortOrder() === 'recent' ? timeB - timeA : timeA - timeB;
     });
 
-    clearTimeout(this.loadMoreTimer);
-    this.loadingMore.set(false);
     this.processedProjects.set(result);
     this.projects.set([]);
     this.batchStart.set(0);
@@ -209,16 +198,12 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.appendNextPage();
   }
 
+  /** The projects are already in memory, so the next batch shows right away. */
   loadMore(): void {
-    if (this.loadingMore() || this.allProjectsLoaded()) {
+    if (this.allProjectsLoaded()) {
       return;
     }
-    this.loadingMore.set(true);
-
-    this.loadMoreTimer = setTimeout(() => {
-      this.loadingMore.set(false);
-      this.appendNextPage();
-    }, LOAD_MORE_DELAY_MS);
+    this.appendNextPage();
   }
 
   private appendNextPage(): void {

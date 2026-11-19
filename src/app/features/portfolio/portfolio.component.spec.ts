@@ -1,5 +1,5 @@
 import { NgZone } from '@angular/core';
-import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { fakeIntersectionObserver } from '../../testing/fake-intersection-observer';
 import { provideRouter } from '@angular/router';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
@@ -61,56 +61,37 @@ describe('PortfolioComponent', () => {
       expect(cardNames()).toEqual(['project-3', 'project-2', 'project-1']);
     });
 
-    it('shows skeletons for exactly the next batch while it loads, then the projects', fakeAsync(() => {
+    it('appends the next batch right away: the projects are already in memory, so there is nothing to wait for', () => {
       render(of(makeProjects(10)));
 
       component.loadMore();
       fixture.detectChanges();
-      expect(component.loadingMore()).toBeTrue();
-      expect(skeletons()).toBe(4);
-      expect(cards()).toBe(4);
 
-      tick(600);
-      fixture.detectChanges();
-      expect(skeletons()).toBe(0);
       expect(cards()).toBe(8);
-    }));
+      expect(skeletons()).toBe(0);
+    });
 
-    it('only shows as many skeletons as projects that are left', fakeAsync(() => {
+    it('shows only the projects that are left in the last batch', () => {
       render(of(makeProjects(10)));
-      component.loadMore();
-      tick(600);
 
+      component.loadMore();
       component.loadMore();
       fixture.detectChanges();
 
-      expect(skeletons()).toBe(2);
-      tick(600);
-    }));
+      expect(cards()).toBe(10);
+    });
 
-    it('announces the end of the list once every project is shown', fakeAsync(() => {
+    it('announces the end of the list once every project is shown', () => {
       render(of(makeProjects(6)));
       expect(fixture.nativeElement.querySelector('.end-of-list')).toBeNull();
 
       component.loadMore();
-      tick(600);
       fixture.detectChanges();
 
       expect(component.allProjectsLoaded()).toBeTrue();
       expect(fixture.nativeElement.querySelector('.end-of-list')).not.toBeNull();
       expect(fixture.nativeElement.querySelector('.load-more-trigger')).toBeNull();
-    }));
-
-    it('does not start a second load while one is in progress', fakeAsync(() => {
-      render(of(makeProjects(20)));
-
-      component.loadMore();
-      component.loadMore();
-      tick(600);
-      fixture.detectChanges();
-
-      expect(cards()).toBe(8);
-    }));
+    });
   });
 
   describe('grid view', () => {
@@ -160,7 +141,8 @@ describe('PortfolioComponent', () => {
       useGridWith(950);
 
       expect(component.projects().length).toBe(4);
-      expect(component.loadingMoreCount()).toBe(8);
+      component.loadMore();
+      expect(component.projects().length).toBe(12);
     });
   });
 
@@ -211,29 +193,25 @@ describe('PortfolioComponent', () => {
   });
 
   describe('loading more on scroll', () => {
-    it('loads the next batch when the end of the list comes into view', fakeAsync(() => {
+    it('appends the next batch as soon as the end of the list comes into view', () => {
       const viewport = fakeIntersectionObserver();
       render(of(makeProjects(10)));
 
       viewport.report(true);
       fixture.detectChanges();
-      expect(skeletons()).toBe(4);
 
-      tick(600);
-      fixture.detectChanges();
       expect(cards()).toBe(8);
-    }));
+    });
 
-    it('does nothing while the end of the list is out of view', fakeAsync(() => {
+    it('does nothing while the end of the list is out of view', () => {
       const viewport = fakeIntersectionObserver();
       render(of(makeProjects(10)));
 
       viewport.report(false);
-      tick(600);
       fixture.detectChanges();
 
       expect(cards()).toBe(4);
-    }));
+    });
 
     it('stops watching once every project is shown', () => {
       const viewport = fakeIntersectionObserver();
@@ -253,15 +231,14 @@ describe('PortfolioComponent', () => {
       expect(delays()).toEqual(['0ms', '70ms', '140ms', '210ms']);
     });
 
-    it('starts the stagger again for the cards of the next batch', fakeAsync(() => {
+    it('starts the stagger again for the cards of the next batch', () => {
       render(of(makeProjects(10)));
 
       component.loadMore();
-      tick(600);
       fixture.detectChanges();
 
       expect(delays().slice(4)).toEqual(['0ms', '70ms', '140ms', '210ms']);
-    }));
+    });
 
     it('staggers every card a little faster when switching view', () => {
       render(of(makeProjects(3)));

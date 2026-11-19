@@ -37,7 +37,7 @@
     </button>
     </div>
 
-    @if (!initialLoading()) { @if (projects().length > 0 || loadingMore()) {
+    @if (!initialLoading()) { @if (projects().length > 0) {
     <div class="portfolio-cards-area" [class.list-view]="currentView() === 'list'" [class.grid-view]="currentView() === 'grid'">
         @for (card of cards(); track card.project.id) {
         @let project = card.project;
@@ -62,22 +62,12 @@
                 }
             </mat-card>
         </article>
-        } @if (loadingMore()) {
-        @for (placeholder of loadingMoreSkeletons(); track placeholder) {
-        <div class="project-wrapper">
-            <app-project-card-skeleton [layout]="currentView()" />
-        </div>
-        } }
-    </div>
-    <span class="cdk-visually-hidden" role="status">
-        @if (loadingMore()) {
-        {{ "loading.moreProjects" | translate }}
         }
-    </span>
+    </div>
     @if (allProjectsLoaded() && projects().length > 0) {
     <p class="end-of-list">{{ "portfolio.allLoaded" | translate }}</p>
     }
-    } @else { @if (!initialLoading() && !loadingMore() && projects().length === 0) {
+    } @else { @if (projects().length === 0) {
     <p class="no-projects-message">
         @if (loadError()) {
         {{ "portfolio.error" | translate }}

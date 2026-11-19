@@ -19,7 +19,6 @@ import { CoursesSkeletonComponent } from '../../shared/skeleton/courses-skeleton
 import { TranslatePipe } from '@ngx-translate/core';
 
 const MOBILE_BATCH_SIZE = 5;
-const MOBILE_LOAD_DELAY_MS = 600;
 @Component({
     selector: 'app-courses',
     templateUrl: './courses.component.html',
@@ -55,10 +54,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   });
   readonly mobileCourses = computed(() => this.visibleCourses().slice(0, this.mobileCount()));
   readonly hasMoreMobileCourses = computed(() => this.mobileCount() < this.visibleCourses().length);
-  readonly mobileSkeletonCount = computed(() => Math.min(MOBILE_BATCH_SIZE, this.visibleCourses().length - this.mobileCount()));
-
-  readonly mobileLoadingMore = signal(false);
-  private mobileLoadTimer?: ReturnType<typeof setTimeout>;
   /** The hint on screen, closed when the visitor leaves: it speaks about this page only. */
   private hintRef?: MatSnackBarRef<CourseHintComponent>;
   private mobileObserver?: IntersectionObserver;
@@ -122,7 +117,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    clearTimeout(this.mobileLoadTimer);
     this.mobileObserver?.disconnect();
     this.hintRef?.dismiss();
   }
@@ -139,22 +133,18 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
+  /** The courses are already in memory, so the next cards show right away. */
   loadMoreMobileCourses(): void {
-    if (this.mobileLoadingMore() || !this.hasMoreMobileCourses()) {
+    if (!this.hasMoreMobileCourses()) {
       return;
     }
-    this.mobileLoadingMore.set(true);
-
-    this.mobileLoadTimer = setTimeout(() => {
-      this.setMobileCount(this.mobileCount() + MOBILE_BATCH_SIZE);
-      this.mobileLoadingMore.set(false);
-      // The observer reports on the next frame, after the new cards render, so it sees the trigger's new position.
-      const trigger = this.mobileTriggerEl;
-      if (trigger && this.mobileObserver) {
-        this.mobileObserver.unobserve(trigger);
-        this.mobileObserver.observe(trigger);
-      }
-    }, MOBILE_LOAD_DELAY_MS);
+    this.setMobileCount(this.mobileCount() + MOBILE_BATCH_SIZE);
+    // The observer reports on the next frame, after the new cards render, so it sees the trigger's new position.
+    const trigger = this.mobileTriggerEl;
+    if (trigger && this.mobileObserver) {
+      this.mobileObserver.unobserve(trigger);
+      this.mobileObserver.observe(trigger);
+    }
   }
 
   loadData() {
@@ -181,8 +171,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.state.filter = filterValue;
     this.filter.set(normalizeFilter(filterValue));
     this.dataSource.filter = this.filter();
-    clearTimeout(this.mobileLoadTimer);
-    this.mobileLoadingMore.set(false);
     this.setMobileCount(MOBILE_BATCH_SIZE);
     this.dataSource.paginator?.firstPage();
   }
