@@ -1,17 +1,22 @@
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NgZone } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
+import { PAGE_RELOAD } from '../../chunk-load/chunk-load-recovery.service';
 import { NavbarComponent } from './navbar.component';
 
 describe('NavbarComponent', () => {
+  const reload = jasmine.createSpy('reload');
+  beforeEach(() => reload.calls.reset());
+
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
     imports: [RouterModule.forRoot([{ path: '**', children: [] }]), NavbarComponent],
-    providers: [provideTranslateService()]
+    providers: [provideTranslateService(), { provide: PAGE_RELOAD, useValue: reload }]
 }).compileComponents();
 
     fixture = TestBed.createComponent(NavbarComponent);
@@ -98,10 +103,67 @@ describe('NavbarComponent', () => {
     });
   });
 
-  it('opens the mobile menu as a bottom sheet', () => {
-    const open = spyOn(component.bottomSheet, 'open');
+  /** The bottom sheet and the menu are downloaded on demand, so the sheet opens a few tasks after the click. */
+  const downloaded = async (open: jasmine.Spy) => {
+    for (let i = 0; i < 20 && !open.calls.count(); i++) {
+      await new Promise((resolve) => setTimeout(resolve));
+    }
+  };
+
+  describe('on a phone', () => {
+    interface WithLoader { loadMenu: () => Promise<unknown> }
+    async function idle() {
+      for (let i = 0; i < 50; i++) {
+        await new Promise((resolve) => setTimeout(resolve, 10));
+      }
+    }
+
+    it('downloads the menu ahead of the tap, so the tap opens it at once', async () => {
+      spyOn(window, 'matchMedia').and.callFake((query: string) => ({ matches: query.includes('767px') }) as MediaQueryList);
+      const load = spyOn(NavbarComponent.prototype as unknown as WithLoader, 'loadMenu').and.returnValue(new Promise(() => undefined));
+      TestBed.createComponent(NavbarComponent).detectChanges();
+      TestBed.tick();
+
+      await idle();
+
+      expect(load).toHaveBeenCalled();
+    });
+
+    it('opens the menu from the download started ahead, without a second one', async () => {
+      spyOn(window, 'matchMedia').and.callFake((query: string) => ({ matches: query.includes('767px') }) as MediaQueryList);
+      const sheet = { MatBottomSheet: MatBottomSheet };
+      const load = spyOn(NavbarComponent.prototype as unknown as WithLoader, 'loadMenu').and.resolveTo([sheet, { NavMenuSheetComponent: class {} }]);
+      const open = spyOn(TestBed.inject(MatBottomSheet), 'open');
+      const phone = TestBed.createComponent(NavbarComponent);
+      phone.detectChanges();
+      TestBed.tick();
+      await idle();
+      const downloads = load.calls.count();
+      expect(downloads).toBeGreaterThan(0);
+
+      await phone.componentInstance.openDialog();
+
+      expect(load.calls.count()).withContext('the tap reuses the download').toBe(downloads);
+      expect(open).toHaveBeenCalledTimes(1);
+    });
+  });
+
+  it('reloads the page when the menu cannot be downloaded, e.g. a tab left open across a deploy', async () => {
+    spyOn(component as unknown as { loadMenu: () => Promise<unknown> }, 'loadMenu').and.rejectWith(
+      new TypeError('Failed to fetch dynamically imported module')
+    );
+    spyOn(console, 'error');
+
+    await component.openDialog();
+
+    expect(reload).toHaveBeenCalledOnceWith(TestBed.inject(Router).url);
+  });
+
+  it('opens the mobile menu as a bottom sheet', async () => {
+    const open = spyOn(TestBed.inject(MatBottomSheet), 'open');
 
     fixture.nativeElement.querySelector('.menu-button').click();
+    await downloaded(open);
 
     expect(open).toHaveBeenCalledWith(jasmine.any(Function), jasmine.objectContaining({ panelClass: 'mobile-nav-sheet' }));
   });
@@ -124,10 +186,10 @@ describe('NavbarComponent', () => {
       expect(current.map((a) => a.getAttribute('href'))).toEqual(['/courses']);
     });
 
-    it('opens the mobile menu with a translated name', () => {
-      const open = spyOn(component.bottomSheet, 'open');
+    it('opens the mobile menu with a translated name', async () => {
+      const open = spyOn(TestBed.inject(MatBottomSheet), 'open');
 
-      component.openDialog();
+      await component.openDialog();
 
       expect(open.calls.mostRecent().args[1]?.ariaLabel).toBe('a11y.mobileMenu');
     });
