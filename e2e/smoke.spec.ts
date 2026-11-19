@@ -36,6 +36,29 @@ test('the menu loads every lazy page without a full reload', async ({ page }) =>
   expect(await page.evaluate(() => (window as unknown as { marker?: boolean }).marker)).toBe(true);
 });
 
+test('the pages are downloaded in the background, so a first visit waits for no code', async ({ page }) => {
+  const mermaidMarker = 'Syntax error in text';
+  const scripts: { url: string; mermaid: Promise<boolean> }[] = [];
+  page.on('response', (response) => {
+    if (response.url().endsWith('.js')) {
+      scripts.push({ url: response.url(), mermaid: response.text().then((body) => body.includes(mermaidMarker), () => false) });
+    }
+  });
+  await open(page, '/');
+  await page.waitForLoadState('networkidle');
+  const preloaded = scripts.length;
+  const nav = page.getByRole('navigation', { name: 'Navegação principal' });
+
+  for (const { path, heading } of pages.slice(1)) {
+    await nav.locator(`a[href="${path}"]`).dispatchEvent('click');
+    await expect(page.getByRole('heading', { level: 1 })).toHaveText(heading);
+  }
+
+  expect(scripts.slice(preloaded).map(({ url }) => url), 'scripts downloaded on a click').toEqual([]);
+  // Mermaid only draws the career journey, so it stays out of the preloading.
+  expect((await Promise.all(scripts.map(({ mermaid }) => mermaid))).some(Boolean)).toBe(false);
+});
+
 test('switching to English translates the page and is remembered after a reload', async ({ page }) => {
   await open(page, '/about-me');
 
