@@ -9,7 +9,7 @@ import { Course } from './course.model';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { CertificateSheetComponent } from './certificate-sheet/certificate-sheet.component';
 import { CourseHintComponent } from './course-hint/course-hint.component';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { CoursesStateService } from './services/courses-state.service';
 import { AnalyticsService } from '../../core/analytics/analytics.service';
 import { MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
@@ -59,6 +59,8 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   readonly mobileLoadingMore = signal(false);
   private mobileLoadTimer?: ReturnType<typeof setTimeout>;
+  /** The hint on screen, closed when the visitor leaves: it speaks about this page only. */
+  private hintRef?: MatSnackBarRef<CourseHintComponent>;
   private mobileObserver?: IntersectionObserver;
   private mobileTriggerEl?: HTMLElement;
 
@@ -122,6 +124,7 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy() {
     clearTimeout(this.mobileLoadTimer);
     this.mobileObserver?.disconnect();
+    this.hintRef?.dismiss();
   }
 
   showSnackbar() {
@@ -129,7 +132,7 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
       return;
     }
     this.state.hintShown = true;
-    this.snackBar.openFromComponent(CourseHintComponent, {
+    this.hintRef = this.snackBar.openFromComponent(CourseHintComponent, {
       horizontalPosition: 'end',
       verticalPosition: 'top',
       panelClass: 'course-hint',

@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 import { fakeIntersectionObserver } from '../../testing/fake-intersection-observer';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBar, MatSnackBarRef } from '@angular/material/snack-bar';
 import { provideTranslateService } from '@ngx-translate/core';
 import { of, throwError } from 'rxjs';
 
@@ -246,6 +246,17 @@ describe('CoursesComponent behavior', () => {
         verticalPosition: 'top',
         panelClass: 'course-hint'
       });
+    });
+
+    it('closes the hint when the visitor leaves the page, since it only speaks about this page', () => {
+      const hintRef = jasmine.createSpyObj<MatSnackBarRef<CourseHintComponent>>('MatSnackBarRef', ['dismiss']);
+      snackBar.openFromComponent.and.returnValue(hintRef);
+      render();
+      expect(hintRef.dismiss).not.toHaveBeenCalled();
+
+      fixture.destroy();
+
+      expect(hintRef.dismiss).toHaveBeenCalledTimes(1);
     });
 
     it('does not show the hint again when coming back to the page in the same visit', () => {
