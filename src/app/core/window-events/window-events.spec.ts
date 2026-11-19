@@ -1,33 +1,28 @@
-import { Component, NgZone } from '@angular/core';
+import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { onWindowEvent } from './window-events';
 
 @Component({ template: '' })
 class ListenerComponent {
-  changed = false;
-  readonly calls: boolean[] = [];
+  calls = 0;
 
   constructor() {
     onWindowEvent('resize', () => {
-      this.calls.push(NgZone.isInAngularZone());
-      return this.changed;
+      this.calls++;
     });
   }
 }
 
 describe('onWindowEvent', () => {
-  it('runs the update outside Angular and enters Angular only when it reports a change', () => {
+  it('runs the update on every event, through a passive listener that never blocks scrolling', () => {
+    const added = spyOn(window, 'addEventListener').and.callThrough();
     const fixture = TestBed.createComponent(ListenerComponent);
-    const run = spyOn(TestBed.inject(NgZone), 'run').and.callThrough();
 
     window.dispatchEvent(new Event('resize'));
-    expect(fixture.componentInstance.calls).toEqual([false]);
-    expect(run).not.toHaveBeenCalled();
-
-    fixture.componentInstance.changed = true;
     window.dispatchEvent(new Event('resize'));
-    // Entering Angular lets it render; it may also schedule its own tick through the zone.
-    expect(run).toHaveBeenCalled();
+
+    expect(fixture.componentInstance.calls).toBe(2);
+    expect(added).toHaveBeenCalledWith('resize', jasmine.any(Function), { passive: true });
   });
 
   it('stops listening when its owner is destroyed', () => {
@@ -36,6 +31,6 @@ describe('onWindowEvent', () => {
 
     window.dispatchEvent(new Event('resize'));
 
-    expect(fixture.componentInstance.calls).toEqual([]);
+    expect(fixture.componentInstance.calls).toBe(0);
   });
 });

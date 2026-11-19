@@ -397,3 +397,17 @@ test.describe('career cards on a touch screen', () => {
     expect(Math.abs(actual - native), `scrolled ${actual}px, the browser alone ${native}px`).toBeLessThanOrEqual(10);
   });
 });
+
+test('the app runs without zone.js: signals schedule the rendering', async ({ page }) => {
+  await open(page, '/');
+
+  expect(await page.evaluate(() => typeof (window as unknown as { Zone?: unknown }).Zone)).toBe('undefined');
+  // And it still renders what changes: the navbar reacts to scrolling, the menu navigates.
+  await page.mouse.wheel(0, 300);
+  await expect(page.locator('app-navbar')).toHaveClass(/navbar-hidden/);
+  await page.mouse.wheel(0, -100);
+  await expect(page.locator('app-navbar')).not.toHaveClass(/navbar-hidden/);
+  await expect(page.locator('app-navbar')).toHaveClass(/navbar-fixed/);
+  await page.getByRole('navigation', { name: 'Navegação principal' }).locator('a[href="/contact"]').click();
+  await expect(page.getByRole('heading', { level: 1 })).toHaveText('Vamos conversar');
+});

@@ -1,18 +1,11 @@
-import { DestroyRef, NgZone, inject } from '@angular/core';
+import { DestroyRef, inject } from '@angular/core';
 
 /**
- * Listens to a frequent window event (scroll, resize) with a passive listener outside Angular, so the events
- * themselves never run change detection for the whole app. `update` writes its signals and returns whether
- * anything changed; only then is Angular entered, once, to render it. Call it in an injection context: the
- * listener goes away with the caller.
+ * Listens to a frequent window event (scroll, resize) with a passive listener. `update` writes the signals the
+ * event changes; without zone.js, only a signal that really changed schedules a render, so the events themselves
+ * never re-render the app. Call it in an injection context: the listener goes away with the caller.
  */
-export function onWindowEvent(type: 'scroll' | 'resize', update: () => boolean): void {
-  const zone = inject(NgZone);
-  const listener = () => {
-    if (update()) {
-      zone.run(() => undefined);
-    }
-  };
-  zone.runOutsideAngular(() => window.addEventListener(type, listener, { passive: true }));
-  inject(DestroyRef).onDestroy(() => window.removeEventListener(type, listener));
+export function onWindowEvent(type: 'scroll' | 'resize', update: () => void): void {
+  window.addEventListener(type, update, { passive: true });
+  inject(DestroyRef).onDestroy(() => window.removeEventListener(type, update));
 }
