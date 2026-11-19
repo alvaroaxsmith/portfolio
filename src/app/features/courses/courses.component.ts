@@ -1,8 +1,9 @@
-import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectionStrategy, DestroyRef, ElementRef, afterRenderEffect, computed, inject, viewChild, signal } from '@angular/core';
+import { Component, OnInit, AfterViewInit, OnDestroy, ChangeDetectionStrategy, DestroyRef, ElementRef, afterRenderEffect, computed, effect, inject, viewChild, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { PHONE_LAYOUT, mediaQuery } from '../../core/media/media-query';
 import { providePaginatorIntl } from '../../core/i18n/paginator-intl';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort, MatSortHeader } from '@angular/material/sort';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { MatSort, MatSortHeader, Sort } from '@angular/material/sort';
 import { MatTableDataSource, MatTable, MatColumnDef, MatHeaderCellDef, MatHeaderCell, MatCellDef, MatCell, MatHeaderRowDef, MatHeaderRow, MatRowDef, MatRow, MatNoDataRow } from '@angular/material/table';
 import { CourseService } from './services/courses.service';
 import { Course } from './course.model';
@@ -35,6 +36,8 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   private readonly analytics = inject(AnalyticsService);
   private readonly destroyRef = inject(DestroyRef);
   protected readonly state = inject(CoursesStateService);
+  /** Phones get the card list and desktops the table: only the one on screen is rendered. */
+  protected readonly phone = mediaQuery(PHONE_LAYOUT);
 
   protected readonly displayedColumns = ['field', 'name', 'time', 'school', 'date'];
   readonly dataSource = new MatTableDataSource<Course>();
@@ -63,6 +66,12 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor() {
     afterRenderEffect(() => this.observeMobileTrigger(this.mobileLoadTrigger()?.nativeElement));
+    // The sort and the paginator exist only while the table is on screen; the data source follows them as they come
+    // and go. Their saved state reaches them through the template bindings.
+    effect(() => {
+      this.dataSource.sort = this.sort() ?? null;
+      this.dataSource.paginator = this.paginator() ?? null;
+    });
   }
 
   private observeMobileTrigger(trigger: HTMLElement | undefined): void {
@@ -80,8 +89,8 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  readonly paginator = viewChild.required(MatPaginator);
-  readonly sort = viewChild.required(MatSort);
+  readonly paginator = viewChild(MatPaginator);
+  readonly sort = viewChild(MatSort);
 
   openDialog = (rowData: Course): void => {
     this.analytics.track('certificate_open', { course: rowData.name, school: rowData.school });
@@ -93,23 +102,17 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit() {
-    const sort = this.sort();
-    const paginator = this.paginator();
-    sort.active = this.state.sortActive;
-    sort.direction = this.state.sortDirection;
-    paginator.pageSize = this.state.pageSize;
-    paginator.pageIndex = this.state.pageIndex;
-
-    sort.sortChange.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ active, direction }) => {
-      this.state.sortActive = active;
-      this.state.sortDirection = direction;
-    });
-    paginator.page.pipe(takeUntilDestroyed(this.destroyRef)).subscribe(({ pageIndex, pageSize }) => {
-      this.state.pageIndex = pageIndex;
-      this.state.pageSize = pageSize;
-    });
-
     this.loadData();
+  }
+
+  onSort({ active, direction }: Sort): void {
+    this.state.sortActive = active;
+    this.state.sortDirection = direction;
+  }
+
+  onPage({ pageIndex, pageSize }: PageEvent): void {
+    this.state.pageIndex = pageIndex;
+    this.state.pageSize = pageSize;
   }
 
   ngAfterViewInit() {
@@ -155,8 +158,6 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
         this.dataSource.data = courses;
         this.courses.set(courses);
         this.dataSource.filter = this.filter();
-        this.dataSource.sort = this.sort();
-        this.dataSource.paginator = this.paginator();
         this.isLoading.set(false);
       },
       error: () => {

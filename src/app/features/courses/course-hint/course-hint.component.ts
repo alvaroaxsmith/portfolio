@@ -3,6 +3,7 @@ import { MatSnackBarRef } from '@angular/material/snack-bar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslatePipe } from '@ngx-translate/core';
+import { REDUCED_MOTION, mediaQuery } from '../../../core/media/media-query';
 
 export const COURSE_HINT_DURATION_MS = 5000;
 const LEAVE_ANIMATION_MS = 280;
@@ -45,6 +46,7 @@ const LEAVE_ANIMATION_MS = 280;
 export class CourseHintComponent implements AfterViewInit, OnDestroy {
   private readonly snackBarRef = inject<MatSnackBarRef<CourseHintComponent>>(MatSnackBarRef);
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+  private readonly reducedMotion = mediaQuery(REDUCED_MOTION);
 
   protected readonly ready = signal(false);
   protected readonly leaving = signal(false);
@@ -67,7 +69,7 @@ export class CourseHintComponent implements AfterViewInit, OnDestroy {
 
   private start(): void {
     this.ready.set(true);
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    if (this.reducedMotion()) {
       this.fallbackTimer = setTimeout(() => this.dismiss(), COURSE_HINT_DURATION_MS);
     }
   }

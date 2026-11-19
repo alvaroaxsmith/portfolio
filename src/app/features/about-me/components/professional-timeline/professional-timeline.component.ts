@@ -7,6 +7,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import type { Mermaid } from 'mermaid';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MATCH_MEDIA } from '../../../../core/media/media-query';
 
 export interface Experience {
   id: number;
@@ -248,7 +249,7 @@ export class ProfessionalTimelineComponent implements OnInit, AfterViewInit, OnD
   readonly journeyCurrentIndex = signal(0);
   readonly isJourneyVisible = signal(false);
 
-  private readonly mobileQuery = window.matchMedia('(max-width: 480px)');
+  private readonly mobileQuery = inject(MATCH_MEDIA)('(max-width: 480px)');
   readonly isMobile = signal(this.mobileQuery.matches);
 
   ngOnInit(): void {

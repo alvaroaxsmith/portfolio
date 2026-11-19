@@ -1,6 +1,7 @@
 import { Component, ChangeDetectionStrategy, AfterViewInit, OnDestroy, ElementRef, NgZone, inject, viewChild, viewChildren } from '@angular/core';
 
 import { TranslatePipe } from '@ngx-translate/core';
+import { REDUCED_MOTION, mediaQuery } from '../../../../core/media/media-query';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -48,7 +49,7 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
     this.active = true;
     this.scheduleUpdate();
   };
-  private readonly reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  private readonly reducedMotion = mediaQuery(REDUCED_MOTION)();
   private intersection?: IntersectionObserver;
   private resize?: ResizeObserver;
   private readonly onScroll = () => this.scheduleUpdate();

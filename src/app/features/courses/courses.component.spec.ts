@@ -1,3 +1,5 @@
+import { fakeMatchMedia } from '../../testing/fake-match-media';
+import { MATCH_MEDIA, PHONE_LAYOUT } from '../../core/media/media-query';
 import { ComponentFixture, TestBed, fakeAsync } from '@angular/core/testing';
 import { fakeIntersectionObserver } from '../../testing/fake-intersection-observer';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
@@ -22,6 +24,9 @@ const courses = Array.from({ length: 23 }, (_, i) => ({
 })) as unknown as Course[];
 
 describe('CoursesComponent', () => {
+  // A desktop screen unless a test says otherwise.
+  let media: ReturnType<typeof fakeMatchMedia>;
+  beforeEach(() => (media = fakeMatchMedia()));
   let fixture: ComponentFixture<CoursesComponent>;
   let component: CoursesComponent;
   let state: CoursesStateService;
@@ -30,6 +35,7 @@ describe('CoursesComponent', () => {
     await TestBed.configureTestingModule({
     imports: [CoursesComponent],
     providers: [provideTranslateService(), 
+        { provide: MATCH_MEDIA, useValue: media.matchMedia },
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MatBottomSheet, useValue: { open: () => null } },
         { provide: MatSnackBar, useValue: { openFromComponent: () => null } },
@@ -66,10 +72,14 @@ describe('CoursesComponent', () => {
 
     it('tells the visitor, in the table and in the mobile list', async () => {
       await render();
+      const alerts = () => Array.from(fixture.nativeElement.querySelectorAll('[role="alert"]') as NodeListOf<HTMLElement>);
+      expect(alerts().map((alert) => alert.closest('table') !== null)).toEqual([true]);
 
-      const alerts = Array.from(fixture.nativeElement.querySelectorAll('[role="alert"]') as NodeListOf<HTMLElement>);
-      expect(alerts.length).toBe(2);
-      for (const alert of alerts) {
+      media.set(PHONE_LAYOUT, true);
+      fixture.detectChanges();
+
+      expect(alerts().map((alert) => alert.closest('.mobile-course-list') !== null)).toEqual([true]);
+      for (const alert of alerts()) {
         expect(alert.textContent).toContain('courses.error');
       }
       expect(fixture.nativeElement.textContent).not.toContain('courses.noData');
@@ -83,7 +93,7 @@ describe('CoursesComponent', () => {
 
     await render();
 
-    expect(component.paginator().pageIndex).toBe(2);
+    expect(component.paginator()!.pageIndex).toBe(2);
     expect(component.dataSource.filteredData.length).toBe(23);
     const firstName = fixture.nativeElement.querySelector('td.mat-column-name').textContent.trim();
     expect(firstName).toBe('Course 10');
@@ -99,9 +109,9 @@ describe('CoursesComponent', () => {
     await render();
 
     expect(component.dataSource.filteredData.length).toBe(11);
-    expect(component.paginator().pageIndex).toBe(1);
-    expect(component.sort().active).toBe('name');
-    expect(component.sort().direction).toBe('desc');
+    expect(component.paginator()!.pageIndex).toBe(1);
+    expect(component.sort()!.active).toBe('name');
+    expect(component.sort()!.direction).toBe('desc');
     const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
     expect(input.value).toBe('java');
   });
@@ -109,7 +119,7 @@ describe('CoursesComponent', () => {
   it('remembers the sort the visitor picks, for when they come back to the page', async () => {
     await render();
 
-    component.sort().sort({ id: 'time', start: 'desc', disableClear: false });
+    component.sort()!.sort({ id: 'time', start: 'desc', disableClear: false });
 
     expect([state.sortActive, state.sortDirection]).toEqual(['time', 'desc']);
   });
@@ -120,7 +130,7 @@ describe('CoursesComponent', () => {
 
     await render();
 
-    expect(component.paginator().pageIndex).toBe(2);
+    expect(component.paginator()!.pageIndex).toBe(2);
   });
 
   it('tells the user when the search matches no course', async () => {
@@ -131,14 +141,14 @@ describe('CoursesComponent', () => {
     input.dispatchEvent(new Event('input'));
     fixture.detectChanges();
 
-    const noData = fixture.nativeElement.querySelector('.desktop-table tr.mat-row:not(.course-row)') as HTMLElement;
+    const noData = fixture.nativeElement.querySelector('.table-container tr.mat-row:not(.course-row)') as HTMLElement;
     expect(noData.textContent?.replace(/\s+/g, ' ').trim()).toBe('courses.noData "quantum"');
   });
 
   it('saves page changes into the state service', async () => {
     await render();
 
-    component.paginator().nextPage();
+    component.paginator()!.nextPage();
 
     expect(state.pageIndex).toBe(1);
   });
@@ -152,7 +162,10 @@ describe('CoursesComponent behavior', () => {
   let snackBar: jasmine.SpyObj<MatSnackBar>;
   let analytics: jasmine.SpyObj<AnalyticsService>;
 
+  let media: ReturnType<typeof fakeMatchMedia>;
+
   beforeEach(async () => {
+    media = fakeMatchMedia();
     bottomSheet = jasmine.createSpyObj<MatBottomSheet>('MatBottomSheet', ['open']);
     snackBar = jasmine.createSpyObj<MatSnackBar>('MatSnackBar', ['openFromComponent']);
     analytics = jasmine.createSpyObj<AnalyticsService>('AnalyticsService', ['track']);
@@ -164,6 +177,7 @@ describe('CoursesComponent behavior', () => {
     await TestBed.configureTestingModule({
     imports: [CoursesComponent],
     providers: [provideTranslateService(), 
+        { provide: MATCH_MEDIA, useValue: media.matchMedia },
         { provide: CourseService, useValue: { getCourses: () => of(courses) } },
         { provide: MatBottomSheet, useValue: bottomSheet },
         { provide: MatSnackBar, useValue: snackBar },
@@ -221,6 +235,7 @@ describe('CoursesComponent behavior', () => {
     });
 
     it('lists the mobile cards as a real list', async () => {
+      media.set(PHONE_LAYOUT, true);
       render();
       await fixture.whenStable();
       fixture.detectChanges();
@@ -280,7 +295,51 @@ describe('CoursesComponent behavior', () => {
     });
   });
 
+  describe('layout', () => {
+    const table = () => fixture.nativeElement.querySelector('table[mat-table]');
+    const mobileList = () => fixture.nativeElement.querySelector('.mobile-course-list');
+
+    it('renders only the table on a desktop screen', () => {
+      render();
+
+      expect(table()).not.toBeNull();
+      expect(mobileList()).toBeNull();
+    });
+
+    it('renders only the card list on a phone', () => {
+      media.set(PHONE_LAYOUT, true);
+      render();
+
+      expect(table()).toBeNull();
+      expect(mobileList()).not.toBeNull();
+    });
+
+    it('keeps the filter, sort and page when the screen switches between the two', () => {
+      render();
+      const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
+      input.value = 'java';
+      input.dispatchEvent(new Event('input'));
+      component.sort()!.sort({ id: 'name', start: 'desc', disableClear: false });
+      fixture.detectChanges();
+
+      media.set(PHONE_LAYOUT, true);
+      fixture.detectChanges();
+      TestBed.tick();
+      expect(component.mobileCourses().every((course) => course.field === 'Java')).toBeTrue();
+
+      media.set(PHONE_LAYOUT, false);
+      fixture.detectChanges();
+      TestBed.tick();
+      expect((fixture.nativeElement.querySelector('input') as HTMLInputElement).value).toBe('java');
+      expect(component.sort()!.active).toBe('name');
+      expect(component.sort()!.direction).toBe('desc');
+      expect(component.dataSource.filteredData.every((course) => course.field === 'Java')).toBeTrue();
+    });
+  });
+
   describe('mobile infinite loading', () => {
+    beforeEach(() => media.set(PHONE_LAYOUT, true));
+
     it('appends the next 5 cards as soon as the end of the list comes into view', () => {
       const viewport = fakeIntersectionObserver();
       render();
