@@ -114,6 +114,32 @@ test('about me downloads Mermaid only when the journey is opened', async ({ page
   expect(await mermaidLoaded()).toBe(true);
 });
 
+test.describe('the home photo', () => {
+  const PHOTO = 'https://avatars.githubusercontent.com/u/69737979?v=4';
+
+  test('does not wait for the GitHub API', async ({ page }) => {
+    const apiCalls: string[] = [];
+    page.on('request', (request) => {
+      if (request.url() === 'https://api.github.com/users/alvaroaxsmith') apiCalls.push(request.url());
+    });
+    await open(page, '/');
+
+    await expect(page.locator('.hero-media img')).toBeVisible();
+    await expect(page.locator('.hero-media img')).toHaveAttribute('src', PHOTO);
+    expect(apiCalls).toEqual([]);
+  });
+
+  test('shows the fallback picture when the photo fails', async ({ page }) => {
+    await page.route(PHOTO, (route) => route.fulfill({ status: 500, body: '' }));
+    await page.route('https://github.com/alvaroaxsmith.png', (route) => route.fulfill({ path: 'e2e/assets/avatar.png' }));
+    await open(page, '/');
+
+    await expect(page.locator('.hero-media img')).toHaveAttribute('src', 'https://github.com/alvaroaxsmith.png');
+    await expect(page.locator('.hero-media img')).toBeVisible();
+    await expect(page.locator('app-photo-skeleton')).toHaveCount(0);
+  });
+});
+
 test.describe('courses', () => {
   test('lists, filters and opens a certificate', async ({ page }) => {
     await open(page, '/courses');

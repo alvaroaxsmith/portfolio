@@ -21,7 +21,7 @@ export interface Screen {
   hold?: RegExp;
 }
 
-const GITHUB_PROFILE = /^https:\/\/api\.github\.com\/users\/alvaroaxsmith$/;
+const PHOTO = /^https:\/\/avatars\.githubusercontent\.com\/u\/69737979/;
 const GITHUB_REPOS = /^https:\/\/api\.github\.com\/users\/alvaroaxsmith\/repos/;
 const COURSES = /\/assets\/data\/courses\.json$/;
 const CERTIFICATE = /^https:\/\/drive\.google\.com\//;
@@ -75,7 +75,7 @@ export const screens: Screen[] = [
       await expect(page.locator('app-nav-menu-sheet')).toBeVisible();
     }
   },
-  { name: 'desktop-home-loading', capture: 'window', viewport: DESKTOP, path: '/', hold: GITHUB_PROFILE },
+  { name: 'desktop-home-loading', capture: 'window', viewport: DESKTOP, path: '/', hold: PHOTO },
   { name: 'desktop-courses-loading', capture: 'window', viewport: DESKTOP, path: '/courses', hold: COURSES },
   { name: 'mobile-courses-loading', capture: 'window', viewport: MOBILE, path: '/courses', hold: COURSES },
   { name: 'desktop-portfolio-loading', capture: 'window', viewport: DESKTOP, path: '/portfolio', hold: GITHUB_REPOS },
