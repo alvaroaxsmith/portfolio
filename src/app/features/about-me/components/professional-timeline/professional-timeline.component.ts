@@ -1,11 +1,11 @@
-import { Component, OnInit, ElementRef, OnDestroy, Renderer2, ChangeDetectionStrategy, Injector, afterNextRender, afterRenderEffect, inject, signal, untracked, viewChildren } from '@angular/core';
+import { Component, ElementRef, Renderer2, ChangeDetectionStrategy, Injector, afterNextRender, afterRenderEffect, effect, inject, signal, untracked, viewChildren } from '@angular/core';
 
 import { MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
 import { MatTooltip } from '@angular/material/tooltip';
 import type { Mermaid } from 'mermaid';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { MATCH_MEDIA } from '../../../../core/media/media-query';
+import { mediaQuery } from '../../../../core/media/media-query';
 import { EXPERIENCES, Experience } from '../../data/experiences';
 
 export type { Experience } from '../../data/experiences';
@@ -22,7 +22,7 @@ interface TimelineDefinition {
     changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['./professional-timeline.component.scss']
 })
-export class ProfessionalTimelineComponent implements OnInit, OnDestroy {
+export class ProfessionalTimelineComponent {
   private readonly translate = inject(TranslateService);
   private readonly renderer = inject(Renderer2);
   private readonly injector = inject(Injector);
@@ -38,6 +38,13 @@ export class ProfessionalTimelineComponent implements OnInit, OnDestroy {
       this.timelineDefinitions();
       this.journeyCurrentIndex();
       untracked(() => this.renderVisibleDiagram());
+    });
+
+    // A screen that becomes a phone closes the journey, which only exists on larger screens.
+    effect(() => {
+      if (this.isMobile()) {
+        untracked(() => this.isJourneyVisible.set(false));
+      }
     });
 
     // On small screens the card contents scroll inside the card; a mouse can drag them too (touch scrolls natively).
@@ -69,23 +76,9 @@ export class ProfessionalTimelineComponent implements OnInit, OnDestroy {
   readonly journeyCurrentIndex = signal(0);
   readonly isJourneyVisible = signal(false);
 
-  private readonly mobileQuery = inject(MATCH_MEDIA)('(max-width: 480px)');
-  readonly isMobile = signal(this.mobileQuery.matches);
+  /** The timeline's own breakpoint: below it the cards scroll inside themselves and the journey stays closed. */
+  readonly isMobile = mediaQuery('(max-width: 480px)');
 
-  ngOnInit(): void {
-    this.mobileQuery.addEventListener('change', this.onScreenChange);
-  }
-
-  ngOnDestroy(): void {
-    this.mobileQuery.removeEventListener('change', this.onScreenChange);
-  }
-
-  private readonly onScreenChange = (event: MediaQueryListEvent): void => {
-    this.isMobile.set(event.matches);
-    if (this.isMobile()) {
-      this.isJourneyVisible.set(false);
-    }
-  };
 
   goTo(index: number): void {
     this.currentIndex.set(index);
@@ -198,9 +191,9 @@ export class ProfessionalTimelineComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // The diagram on screen stays until the new one is ready, so a language switch never flashes a blank card.
     const run = ++this.drawing;
     try {
-      container.innerHTML = '';
       const mermaid = await this.loadMermaid();
       const { svg } = await mermaid.render(`mermaid-graph-${timelineDef.id}-${Date.now()}`, timelineDef.definition);
       if (run !== this.drawing) {
@@ -210,6 +203,9 @@ export class ProfessionalTimelineComponent implements OnInit, OnDestroy {
       this.drawn.set(timelineDef.id, timelineDef.definition);
     } catch (e) {
       console.error(`Error rendering Mermaid for ID ${timelineDef.id}:`, e);
+      if (run !== this.drawing) {
+        return;
+      }
       container.innerHTML = `<p>${this.translate.instant('timeline.mermaid.error')}</p>`;
     }
   }
