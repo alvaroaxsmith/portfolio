@@ -8,8 +8,8 @@ import { MatButton } from '@angular/material/button';
 import { PhotoSkeletonComponent } from '../../shared/skeleton/photo-skeleton/photo-skeleton.component';
 import { FooterComponent } from '../../core/layout/footer/footer.component';
 
-/** Served by github.com rather than the API, so it keeps working when the API is rate limited. */
-const FALLBACK_IMAGE_URL = `https://github.com/${environment.githubUser}.png`;
+/** The same photo served by the site itself, so it still shows when the GitHub host that serves the avatar is down or blocked. */
+const FALLBACK_IMAGE_URL = 'assets/img/alvaro.jpg';
 
 @Component({
     selector: 'app-home',
