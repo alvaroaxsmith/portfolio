@@ -187,6 +187,15 @@ describe('TextComponent', () => {
       expect(component.animationState()).toBe('hidden');
     }));
 
+    it('reads the motion preference once, without leaving a listener behind', () => {
+      const media = fakeMatchMedia();
+      spyOn(window, 'matchMedia').and.callFake(media.matchMedia);
+
+      TestBed.createComponent(TextComponent).detectChanges();
+
+      expect(media.listening(REDUCED_MOTION)).toBe(0);
+    });
+
     it('starts paused, with the first word on screen, when the visitor asks for less motion', fakeAsync(() => {
       spyOn(window, 'matchMedia').and.callFake(fakeMatchMedia({ [REDUCED_MOTION]: true }).matchMedia);
       fixture = TestBed.createComponent(TextComponent);

@@ -1,8 +1,10 @@
+import EN from '../../../assets/i18n/EN.json';
+import PT_BR from '../../../assets/i18n/PT-BR.json';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { By } from '@angular/platform-browser';
 import { MatExpansionPanel } from '@angular/material/expansion';
-import { provideTranslateService } from '@ngx-translate/core';
+import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import { AboutMeComponent } from './about-me.component';
 import { HighlightsComponent } from './components/highlights/highlights.component';
 
@@ -69,6 +71,20 @@ describe('AboutMeComponent', () => {
     expect(start).toHaveBeenCalledTimes(1);
     expect(stop).toHaveBeenCalledTimes(1);
   });
+
+  for (const [lang, translations] of [['PT-BR', PT_BR], ['EN', EN]] as const) {
+    it(`shows no raw translation key with every section open, in ${lang}`, () => {
+      const translate = TestBed.inject(TranslateService);
+      translate.setTranslation(lang, translations);
+      translate.use(lang);
+      [0, 2, 3].forEach((index) => panel(index).open());
+      fixture.detectChanges();
+
+      const keys = (fixture.nativeElement as HTMLElement).textContent!.match(/\b(?:hobbies|timeline|highlights|about|bio)\.[A-Za-z0-9.]+/g);
+
+      expect(keys).toBeNull();
+    });
+  }
 
   it('links to the chess.com profile in a new tab', () => {
     open(3);
