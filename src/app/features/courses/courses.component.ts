@@ -173,6 +173,8 @@ export class CoursesComponent implements OnInit, AfterViewInit, OnDestroy {
     this.filter.set(normalizeFilter(filterValue));
     this.dataSource.filter = this.filter();
     this.setMobileCount(MOBILE_BATCH_SIZE);
+    // A new search starts on the first page, also when it is typed on a phone, where the paginator does not exist.
+    this.state.pageIndex = 0;
     this.dataSource.paginator?.firstPage();
   }
 
