@@ -28,7 +28,7 @@ export default defineConfig({
     }
   ],
   webServer: {
-    command: 'node e2e/serve.mjs',
+    command: 'node scripts/vercel-output.mjs && node e2e/serve.mjs',
     url: `http://localhost:${PORT}`,
     env: { PORT: String(PORT) },
     reuseExistingServer: !process.env['CI']

@@ -1,10 +1,11 @@
-// Serves the production build like Vercel does, with the rules of vercel.json: static files first, then its
-// rewrites (index.html for page addresses), a 404 for anything else, and its headers on every response.
+// Serves the Vercel build output (.vercel/output, written by scripts/vercel-output.mjs) the way Vercel does:
+// the header routes on every response, then the static files, then the rewrite routes, and a 404 for anything else.
 import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
 import { createServer } from 'node:http';
 import { extname, join, normalize } from 'node:path';
 
-const root = join(import.meta.dirname, '..', 'dist', 'portfolio_resume', 'browser');
+const output = join(import.meta.dirname, '..', '.vercel', 'output');
+const root = join(output, 'static');
 const port = Number(process.env.PORT ?? 4300);
 const types = {
   '.html': 'text/html; charset=utf-8',
@@ -14,35 +15,36 @@ const types = {
   '.svg': 'image/svg+xml',
   '.ico': 'image/x-icon',
   '.png': 'image/png',
+  '.jpg': 'image/jpeg',
   '.txt': 'text/plain',
   '.pdf': 'application/pdf',
   '.xml': 'application/xml'
 };
 
-const vercel = JSON.parse(readFileSync(join(import.meta.dirname, '..', 'vercel.json'), 'utf-8'));
-/** Vercel sources are path-to-regexp patterns; ours only use regex groups, named or not. */
-const pattern = (source) => new RegExp(`^${source.replace(/:\w+(?=\()/g, '')}$`);
-const rewrites = vercel.rewrites.map(({ source, destination }) => ({ match: pattern(source), destination }));
-const headerRules = vercel.headers.map(({ source, headers }) => ({ match: pattern(source), headers }));
-
-if (!existsSync(join(root, 'index.html'))) {
-  console.error(`No build found in ${root}. Run "npx ng build" first.`);
+if (!existsSync(join(output, 'config.json'))) {
+  console.error(`No build output found in ${output}. Run "npx ng build && node scripts/vercel-output.mjs" first.`);
   process.exit(1);
 }
+
+const { routes } = JSON.parse(readFileSync(join(output, 'config.json'), 'utf-8'));
+const filesystem = routes.findIndex((route) => route.handle === 'filesystem');
+const compile = (route) => ({ ...route, match: new RegExp(route.src) });
+const headerRoutes = routes.slice(0, filesystem).map(compile);
+const rewriteRoutes = routes.slice(filesystem + 1).map(compile);
 
 createServer((req, res) => {
   const path = normalize(decodeURIComponent(new URL(req.url, 'http://localhost').pathname)).replace(/^(\.\.[/\\])+/, '');
   const urlPath = path.replaceAll('\\', '/');
-  for (const rule of headerRules) {
-    if (rule.match.test(urlPath)) {
-      rule.headers.forEach(({ key, value }) => res.setHeader(key, value));
+  for (const route of headerRoutes) {
+    if (route.match.test(urlPath)) {
+      Object.entries(route.headers).forEach(([key, value]) => res.setHeader(key, value));
     }
   }
   const isFile = (candidate) => existsSync(candidate) && !statSync(candidate).isDirectory();
   let file = join(root, path);
   if (!isFile(file)) {
-    const rewrite = rewrites.find(({ match }) => match.test(urlPath));
-    file = rewrite ? join(root, rewrite.destination) : null;
+    const rewrite = rewriteRoutes.find(({ match }) => match.test(urlPath));
+    file = rewrite ? join(root, rewrite.dest) : null;
   }
   if (!file) {
     res.writeHead(404, { 'Content-Type': 'text/plain' });
