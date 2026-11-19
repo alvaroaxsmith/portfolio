@@ -115,6 +115,10 @@ jobs:
   e2e:
     needs: build
     runs-on: ubuntu-latest
+    # The Playwright image already has Chromium and its system libraries, so nothing is installed per run.
+    container:
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
+      options: --ipc=host
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-node@v7
@@ -131,9 +135,8 @@ jobs:
         with:
           name: dist
           path: dist/
-      - run: npx playwright install --with-deps chromium
-      # Smoke, accessibility (axe), keyboard and hosting specs.
-      - run: npx playwright test --project=chromium
+      # Smoke, accessibility (axe), keyboard and hosting specs, one worker per runner core.
+      - run: npx playwright test --project=chromium --workers=4
       - uses: actions/upload-artifact@v7
         if: failure()
         with:
