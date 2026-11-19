@@ -1,5 +1,5 @@
 import { expect, test } from './fixtures';
-import { openScreen, screens } from './screens';
+import { Screen, openScreen, screens } from './screens';
 
 /**
  * Visual regression with zero tolerance: any pixel that differs from the reference fails. References are
@@ -22,10 +22,13 @@ const screenshot = {
   maxDiffPixels: 0
 };
 
-/** Parts that change on their own: the rotating word and the certificate frame (a live iframe). */
-const moving = (page: import('@playwright/test').Page) => [
+/**
+ * Parts that change on their own: the rotating word and the certificate frame (a live iframe). While the
+ * certificate is held, the frame shows its loading placeholder, which is what that screen is about.
+ */
+const moving = (page: import('@playwright/test').Page, screen: Screen) => [
   page.locator('app-text .rotating-word'),
-  page.locator('app-certificate-sheet .frame')
+  ...(screen.hold ? [] : [page.locator('app-certificate-sheet .frame')])
 ];
 
 for (const lang of ['PT-BR', 'EN'] as const) {
@@ -38,7 +41,7 @@ for (const lang of ['PT-BR', 'EN'] as const) {
         await expect(page).toHaveScreenshot(`${screen.name}-${lang}.png`, {
           ...screenshot,
           fullPage: (screen.capture ?? 'page') === 'page',
-          mask: moving(page)
+          mask: moving(page, screen)
         });
       });
     }

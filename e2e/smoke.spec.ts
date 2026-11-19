@@ -315,3 +315,24 @@ test.describe('the floating menu keeps the links where they were at the top', ()
     });
   }
 });
+
+test.describe('loading placeholders', () => {
+  const projectsOnHold = (page: Page) => page.route('https://api.github.com/users/alvaroaxsmith/repos**', () => undefined);
+  const animationOf = (page: Page) =>
+    page.locator('app-project-card-skeleton app-skeleton').first().evaluate((el) => getComputedStyle(el).animationName);
+
+  test('shimmer while the content loads', async ({ page }) => {
+    await projectsOnHold(page);
+    await open(page, '/portfolio');
+
+    expect(await animationOf(page)).not.toBe('none');
+  });
+
+  test('stay still for visitors who ask for less motion', async ({ page }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    await projectsOnHold(page);
+    await open(page, '/portfolio');
+
+    expect(await animationOf(page)).toBe('none');
+  });
+});

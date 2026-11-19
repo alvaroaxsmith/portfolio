@@ -36,9 +36,4 @@ describe('SkeletonComponent', () => {
     expect(render()('default').getAttribute('aria-hidden')).toBe('true');
   });
 
-  it('makes the shared shimmer texture available to the page', () => {
-    render();
-
-    expect(document.documentElement.style.getPropertyValue('--skeleton-noise')).toContain('data:image/svg+xml');
-  });
 });

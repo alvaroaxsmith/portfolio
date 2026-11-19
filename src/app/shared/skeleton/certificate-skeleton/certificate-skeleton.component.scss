@@ -1,0 +1,68 @@
+// Fills the frame it is placed in; the frame keeps the certificate's landscape proportion.
+:host {
+  position: relative;
+  display: block;
+  background: #fff;
+}
+
+.border {
+  position: absolute;
+  inset: 4%;
+  border: 1px dashed rgba(100, 116, 139, 0.25);
+  border-radius: 0.25rem;
+}
+
+app-skeleton {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.title {
+  top: 14%;
+  width: 34%;
+  height: 4.5%;
+}
+
+.name {
+  top: 24%;
+  width: 52%;
+  height: 7.5%;
+}
+
+.line {
+  height: 2.6%;
+}
+
+.line.first {
+  top: 39%;
+  width: 60%;
+}
+
+.line.second {
+  top: 45%;
+  width: 46%;
+}
+
+.signature {
+  bottom: 18%;
+  width: 20%;
+  height: 2%;
+  transform: none;
+}
+
+.signature.left {
+  left: 14%;
+}
+
+.signature.right {
+  left: auto;
+  right: 14%;
+}
+
+.seal {
+  bottom: 12%;
+  width: 10%;
+  height: auto;
+  aspect-ratio: 1;
+}

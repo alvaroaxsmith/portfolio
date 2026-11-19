@@ -1,5 +1,4 @@
 import { Component, ChangeDetectionStrategy, input } from '@angular/core';
-import { applySkeletonNoise } from './skeleton-noise';
 
 @Component({
     selector: 'app-skeleton',
@@ -17,8 +16,4 @@ export class SkeletonComponent {
   readonly width = input<string | null>(null);
   readonly height = input<string | null>(null);
   readonly radius = input<string | null>(null);
-
-  constructor() {
-    applySkeletonNoise();
-  }
 }
