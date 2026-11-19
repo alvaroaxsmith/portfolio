@@ -337,6 +337,23 @@ describe('CoursesComponent behavior', () => {
     });
   });
 
+  it('starts the table again from the first page after a search typed on a phone', () => {
+    render();
+    component.paginator()!.lastPage();
+    expect(state.pageIndex).toBeGreaterThan(0);
+
+    media.set(PHONE_LAYOUT, true);
+    fixture.detectChanges();
+    const input: HTMLInputElement = fixture.nativeElement.querySelector('input');
+    input.value = 'a';
+    input.dispatchEvent(new Event('input'));
+    media.set(PHONE_LAYOUT, false);
+    fixture.detectChanges();
+    TestBed.tick();
+
+    expect(component.paginator()!.pageIndex).toBe(0);
+  });
+
   describe('mobile infinite loading', () => {
     beforeEach(() => media.set(PHONE_LAYOUT, true));
 
