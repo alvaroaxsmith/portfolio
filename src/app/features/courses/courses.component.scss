@@ -110,6 +110,11 @@ table {
     color: var(--color-text-muted);
 }
 
+// The placeholder rows carry their own padding and borders.
+.loading-cell {
+    padding: 0;
+}
+
 .mat-column-time,
 .mat-column-date {
     font-variant-numeric: tabular-nums;

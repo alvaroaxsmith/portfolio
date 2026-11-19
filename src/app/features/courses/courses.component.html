@@ -57,7 +57,15 @@
             <tr mat-row class="course-row" *matRowDef="let row; columns: displayedColumns" (click)="openDialog(row)"></tr>
 
             <tr class="mat-row" *matNoDataRow>
-                @if (!isLoading()) {
+                @if (isLoading()) {
+                <!-- The placeholder rows sit inside the table, so the row always has a cell and the header stays on top. -->
+                <td class="mat-cell loading-cell" [attr.colspan]="displayedColumns.length">
+                    <div role="status">
+                        <span class="cdk-visually-hidden">{{ 'loading.courses' | translate }}</span>
+                        <app-courses-skeleton layout="table" />
+                    </div>
+                </td>
+                } @else {
                 @if (loadError()) {
                 <td class="mat-cell" [attr.colspan]="displayedColumns.length" role="alert">
                     {{ 'courses.error' | translate }}
@@ -70,12 +78,6 @@
                 }
             </tr>
         </table>
-        @if (isLoading()) {
-        <div role="status">
-            <span class="cdk-visually-hidden">{{ 'loading.courses' | translate }}</span>
-            <app-courses-skeleton layout="table" />
-        </div>
-        }
     </div>
 
     @if (isLoading()) {

@@ -1,0 +1,37 @@
+// Same card as the loaded photo (home's .sleeve), so the photo lands in place. The size comes from the page.
+:host {
+  position: relative;
+  display: block;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.94), rgba(241, 245, 249, 0.92));
+  box-shadow: var(--color-shadow);
+}
+
+.chip {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  width: min(12rem, 60%);
+  height: 1.6rem;
+}
+
+.head {
+  position: absolute;
+  top: 26%;
+  left: 50%;
+  width: 30%;
+  height: auto;
+  aspect-ratio: 1;
+  transform: translateX(-50%);
+}
+
+.shoulders {
+  position: absolute;
+  bottom: -4%;
+  left: 50%;
+  width: 70%;
+  height: 34%;
+  transform: translateX(-50%);
+}

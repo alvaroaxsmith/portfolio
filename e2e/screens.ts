@@ -17,7 +17,14 @@ export interface Screen {
    * that responsive code would reset (a full-page capture briefly resizes the window).
    */
   capture?: 'page' | 'window';
+  /** Requests left unanswered, so the screen shows what the visitor sees while they load. */
+  hold?: RegExp;
 }
+
+const GITHUB_PROFILE = /^https:\/\/api\.github\.com\/users\/alvaroaxsmith$/;
+const GITHUB_REPOS = /^https:\/\/api\.github\.com\/users\/alvaroaxsmith\/repos/;
+const COURSES = /^https:\/\/json-server-vercel-beta-six\.vercel\.app\/courses$/;
+const CERTIFICATE = /^https:\/\/drive\.google\.com\//;
 
 const pages = [
   { slug: 'home', path: '/' },
@@ -68,6 +75,21 @@ export const screens: Screen[] = [
       await expect(page.locator('app-nav-menu-sheet')).toBeVisible();
     }
   },
+  { name: 'desktop-home-loading', capture: 'window', viewport: DESKTOP, path: '/', hold: GITHUB_PROFILE },
+  { name: 'desktop-courses-loading', capture: 'window', viewport: DESKTOP, path: '/courses', hold: COURSES },
+  { name: 'mobile-courses-loading', capture: 'window', viewport: MOBILE, path: '/courses', hold: COURSES },
+  { name: 'desktop-portfolio-loading', capture: 'window', viewport: DESKTOP, path: '/portfolio', hold: GITHUB_REPOS },
+  {
+    name: 'desktop-courses-certificate-loading',
+    capture: 'window',
+    viewport: DESKTOP,
+    path: '/courses',
+    hold: CERTIFICATE,
+    setup: async (page) => {
+      await page.locator('tr.course-row').first().click();
+      await expect(page.locator('.certificate-sheet h2')).toBeVisible();
+    }
+  },
   {
     name: 'desktop-home-consent',
     capture: 'window',
@@ -83,6 +105,10 @@ export const screens: Screen[] = [
 /** Opens a screen in the given language and waits until nothing is still settling. */
 export async function openScreen(page: Page, screen: Screen, lang: 'PT-BR' | 'EN' = 'PT-BR'): Promise<void> {
   await page.setViewportSize(screen.viewport);
+  if (screen.hold) {
+    // Registered last, so it wins over the fixture's answers.
+    await page.route(screen.hold, () => undefined);
+  }
   await page.addInitScript(
     ({ lang, production }) => {
       localStorage.setItem('portfolio:lang', lang);
@@ -103,7 +129,10 @@ export async function openScreen(page: Page, screen: Screen, lang: 'PT-BR' | 'EN
     await expect(hint).toHaveCount(0, { timeout: 10_000 });
   }
   await screen.setup?.(page);
-  // Lets lazy content and entrance animations finish before anything is measured.
-  await page.waitForLoadState('networkidle');
+  // Lets lazy content and entrance animations finish before anything is measured. A held request keeps the
+  // network busy for good, so those screens wait for the page to settle instead.
+  if (!screen.hold) {
+    await page.waitForLoadState('networkidle');
+  }
   await settled(page);
 }

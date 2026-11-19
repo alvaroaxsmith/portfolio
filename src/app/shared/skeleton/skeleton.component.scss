@@ -6,10 +6,25 @@
   border-radius: 0.5rem;
   overflow: hidden;
   background-color: var(--skeleton-base);
-  background-image:
-    linear-gradient(var(--skeleton-line) 1px, transparent 1px),
-    linear-gradient(90deg, var(--skeleton-line) 1px, transparent 1px),
-    var(--skeleton-noise, none);
-  background-size: 12px 12px, 12px 12px, var(--skeleton-noise-size, auto);
+  // One highlight for the whole page: the gradient is fixed to the window, so every placeholder on screen shows
+  // the same sweep and they shimmer in step, as one wave.
+  background-image: linear-gradient(100deg, transparent 40%, var(--skeleton-highlight) 50%, transparent 60%);
+  background-size: 200vw 100%;
   background-attachment: fixed;
+  animation: skeleton-sweep 1.6s linear infinite;
+}
+
+@keyframes skeleton-sweep {
+  from {
+    background-position: 100vw 0;
+  }
+  to {
+    background-position: -100vw 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :host {
+    animation: none;
+  }
 }

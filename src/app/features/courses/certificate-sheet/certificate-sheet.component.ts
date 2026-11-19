@@ -5,7 +5,7 @@ import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { AnalyticsService } from '../../../core/analytics/analytics.service';
 import { MatIconButton } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
-import { SkeletonComponent } from '../../../shared/skeleton/skeleton.component';
+import { CertificateSkeletonComponent } from '../../../shared/skeleton/certificate-skeleton/certificate-skeleton.component';
 import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
@@ -13,7 +13,7 @@ import { TranslatePipe } from '@ngx-translate/core';
     templateUrl: './certificate-sheet.component.html',
     styleUrls: ['./certificate-sheet.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    imports: [MatIconButton, MatIcon, SkeletonComponent, TranslatePipe]
+    imports: [MatIconButton, MatIcon, CertificateSkeletonComponent, TranslatePipe]
 })
 export class CertificateSheetComponent implements OnInit {
   readonly rowData = signal(inject<Course>(MAT_BOTTOM_SHEET_DATA));
