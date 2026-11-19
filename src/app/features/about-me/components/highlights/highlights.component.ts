@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, AfterViewInit, OnDestroy, ElementRef, NgZone, inject, viewChild, viewChildren } from '@angular/core';
+import { Component, ChangeDetectionStrategy, AfterViewInit, OnDestroy, ElementRef, inject, viewChild, viewChildren } from '@angular/core';
 
 import { TranslatePipe } from '@ngx-translate/core';
 import { MatExpansionPanel } from '@angular/material/expansion';
@@ -28,7 +28,6 @@ interface Highlight {
 })
 export class HighlightsComponent implements AfterViewInit, OnDestroy {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
-  private readonly zone = inject(NgZone);
 
   highlights: Highlight[] = [
     { date: '2014 to', dateRange: '2018', description: 'UNESP - Energy Engineering (incomplete)' },
@@ -68,23 +67,22 @@ export class HighlightsComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    this.zone.runOutsideAngular(() => {
-      this.timelineRef().nativeElement.classList.add('is-parallax');
+    // Plain DOM work, outside any rendering: the listeners and observers change no signal.
+    this.timelineRef().nativeElement.classList.add('is-parallax');
 
-      this.intersection = new IntersectionObserver(([entry]) => {
-        if (entry.isIntersecting) {
-          window.addEventListener('scroll', this.onScroll, { passive: true, capture: true });
-          window.addEventListener('resize', this.onScroll, { passive: true });
-          this.scheduleUpdate();
-        } else {
-          this.detachScroll();
-        }
-      });
-      this.intersection.observe(this.host.nativeElement);
-
-      this.resize = new ResizeObserver(() => this.scheduleUpdate());
-      this.resize.observe(this.host.nativeElement);
+    this.intersection = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        window.addEventListener('scroll', this.onScroll, { passive: true, capture: true });
+        window.addEventListener('resize', this.onScroll, { passive: true });
+        this.scheduleUpdate();
+      } else {
+        this.detachScroll();
+      }
     });
+    this.intersection.observe(this.host.nativeElement);
+
+    this.resize = new ResizeObserver(() => this.scheduleUpdate());
+    this.resize.observe(this.host.nativeElement);
   }
 
   start(): void {

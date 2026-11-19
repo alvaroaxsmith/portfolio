@@ -1,4 +1,3 @@
-import { NgZone } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { fakeIntersectionObserver } from '../../testing/fake-intersection-observer';
 import { provideRouter } from '@angular/router';
@@ -119,19 +118,15 @@ describe('PortfolioComponent', () => {
       expect(component.pageSize()).toBe(2);
     });
 
-    it('recomputes the columns on resize, entering Angular only when they change', () => {
+    it('recomputes the columns on resize', () => {
       render(of(makeProjects(20)));
       let width = 950;
       spyOnProperty(component.pageRef().nativeElement, 'clientWidth').and.callFake(() => width);
       component.toggleView();
-      const run = spyOn(TestBed.inject(NgZone), 'run').and.callThrough();
-
-      window.dispatchEvent(new Event('resize'));
-      expect(run).not.toHaveBeenCalled();
 
       width = 320;
       window.dispatchEvent(new Event('resize'));
-      expect(run).toHaveBeenCalled();
+
       expect(component.columns()).toBe(1);
     });
 

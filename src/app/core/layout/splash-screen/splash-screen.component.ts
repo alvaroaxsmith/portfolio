@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, NgZone, inject, output, signal } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject, output, signal } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 
 interface SplashEngine {
@@ -22,7 +22,6 @@ const FALLBACK_TEXT = 'Carregando';
 })
 export class SplashScreenComponent implements OnInit, OnDestroy {
   private readonly translate = inject(TranslateService);
-  private readonly zone = inject(NgZone);
 
   readonly animationFinished = output<void>();
 
@@ -52,9 +51,9 @@ export class SplashScreenComponent implements OnInit, OnDestroy {
     this.leaving.set(true);
 
     const finished = engine ? engine.finish() : Promise.resolve();
-    void finished.then(() => this.zone.run(() => {
+    void finished.then(() => {
       this.done.set(true);
       this.animationFinished.emit();
-    }));
+    });
   }
 }
