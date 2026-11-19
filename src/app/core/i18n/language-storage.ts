@@ -1,27 +1,19 @@
 import { EnvironmentProviders, inject, makeEnvironmentProviders, provideAppInitializer } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
 import { lastValueFrom } from 'rxjs';
+import { readStorage, writeStorage } from '../storage/safe-storage';
 
 export const SUPPORTED_LANGS = ['EN', 'PT-BR'];
 export const DEFAULT_LANG = 'PT-BR';
 const STORAGE_KEY = 'portfolio:lang';
 
 export function getInitialLang(): string {
-  try {
-    const stored = localStorage.getItem(STORAGE_KEY);
-    if (stored && SUPPORTED_LANGS.includes(stored)) {
-      return stored;
-    }
-  } catch {
-  }
-  return DEFAULT_LANG;
+  const stored = readStorage(STORAGE_KEY);
+  return stored && SUPPORTED_LANGS.includes(stored) ? stored : DEFAULT_LANG;
 }
 
 export function storeLang(lang: string): void {
-  try {
-    localStorage.setItem(STORAGE_KEY, lang);
-  } catch {
-  }
+  writeStorage(STORAGE_KEY, lang);
 }
 
 /** Loads the visitor's language before the app renders, so the first paint is already translated. */

@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map, of, tap } from 'rxjs';
 import { Project } from '../project.model';
 import { environment } from '../../../../environments/environment';
+import { readStorage, writeStorage } from '../../../core/storage/safe-storage';
 
 interface GithubRepo {
   id: number;
@@ -55,24 +56,22 @@ export class ProjectsService {
   }
 
   private readCache(): Project[] | null {
+    const raw = readStorage(this.cacheKey);
+    if (!raw) {
+      return null;
+    }
     try {
-      const raw = localStorage.getItem(this.cacheKey);
-      if (!raw) {
-        return null;
-      }
       const cached: CachedProjects = JSON.parse(raw);
       return Date.now() - cached.savedAt < this.cacheTtlMs ? cached.projects : null;
     } catch {
+      // A damaged entry counts as no cache.
       return null;
     }
   }
 
   private writeCache(projects: Project[]): void {
-    try {
-      const entry: CachedProjects = { savedAt: Date.now(), projects };
-      localStorage.setItem(this.cacheKey, JSON.stringify(entry));
-    } catch {
-    }
+    const entry: CachedProjects = { savedAt: Date.now(), projects };
+    writeStorage(this.cacheKey, JSON.stringify(entry));
   }
 }
 

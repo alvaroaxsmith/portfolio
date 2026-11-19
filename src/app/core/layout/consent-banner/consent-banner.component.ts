@@ -1,11 +1,11 @@
 import { Component, ChangeDetectionStrategy, ElementRef, afterRenderEffect, inject, viewChild } from '@angular/core';
-import { MatButtonModule } from '@angular/material/button';
+import { MatButton } from '@angular/material/button';
 import { TranslatePipe } from '@ngx-translate/core';
 import { AnalyticsService, ConsentChoice } from '../../analytics/analytics.service';
 
 @Component({
     selector: 'app-consent-banner',
-    imports: [MatButtonModule, TranslatePipe],
+    imports: [MatButton, TranslatePipe],
     templateUrl: './consent-banner.component.html',
     styleUrls: ['./consent-banner.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush

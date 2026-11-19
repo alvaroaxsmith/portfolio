@@ -1,9 +1,7 @@
 import { Component, OnInit, ElementRef, OnDestroy, Renderer2, ChangeDetectionStrategy, Injector, afterNextRender, afterRenderEffect, inject, signal, untracked, viewChildren } from '@angular/core';
 
-import { MatCardModule } from '@angular/material/card';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle } from '@angular/material/card';
+import { MatTooltip } from '@angular/material/tooltip';
 import type { Mermaid } from 'mermaid';
 import { TranslatePipe, TranslateService } from '@ngx-translate/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
@@ -19,13 +17,7 @@ interface TimelineDefinition {
 
 @Component({
     selector: 'app-professional-timeline',
-    imports: [
-    MatCardModule,
-    MatButtonModule,
-    MatIconModule,
-    TranslatePipe,
-    MatTooltipModule
-],
+    imports: [MatCard, MatCardHeader, MatCardTitle, MatCardSubtitle, MatCardContent, MatTooltip, TranslatePipe],
     templateUrl: './professional-timeline.component.html',
     changeDetection: ChangeDetectionStrategy.OnPush,
     styleUrls: ['./professional-timeline.component.scss']
