@@ -44,7 +44,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      # Same toolchain as the quality gate, so the pre-push hook (npm run verify) can run before every push.
+      # Same toolchain as the quality gate: the pre-push hook runs lint, unit and build, and the agent can run the E2E.
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - uses: anthropics/claude-code-action@v1

@@ -11,6 +11,7 @@
     "lint": "ng lint",
     "test:ci": "ng test --watch=false --code-coverage --browsers=ChromeHeadlessCI",
     "e2e": "playwright test",
+    "verify:fast": "ng lint && npm run test:ci && ng build",
     "verify": "ng lint && npm run test:ci && ng build && playwright test && node e2e/run-visual.mjs",
     "test:visual": "docker run --rm --platform linux/amd64 --ipc=host -v \"$PWD\":/work -w /work -e VISUAL=1 mcr.microsoft.com/playwright:v1.63.0-noble npx playwright test --project=visual",
     "test:visual:update": "npm run test:visual -- --update-snapshots",

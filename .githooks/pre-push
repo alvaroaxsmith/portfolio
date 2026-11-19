@@ -1,6 +1,7 @@
 #!/bin/sh
-# Local quality gate: the same checks as .github/workflows/quality-gate.yml.
-# Runs before every push; a failure aborts the push.
+# Fast local checks before every push: lint, unit tests with the coverage floor, and the production build.
+# E2E, accessibility, keyboard and visual run in CI (the required checks block the merge); run them locally with
+# `npm run verify` when a change touches what the browser shows.
 set -e
-echo "pre-push: running the quality gate (lint, unit, build, e2e)..."
-npm run -s verify
+echo "pre-push: lint, unit and build (E2E and visual run in CI)..."
+npm run -s verify:fast
