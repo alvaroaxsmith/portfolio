@@ -6,6 +6,10 @@ import { AppComponent } from './app.component';
 import { AnalyticsService } from './core/analytics/analytics.service';
 import { SeoService } from './core/seo/seo.service';
 import { provideAppLanguage } from './core/i18n/language-storage';
+import { provideDocumentLanguage } from './core/i18n/document-language';
+import { provideSeo } from './core/seo/seo-title-strategy';
+import { providePageViews } from './core/analytics/page-views';
+import { provideFocusOnNavigation } from './core/a11y/focus-on-navigation';
 
 @Component({ template: '', standalone: true })
 class StubPageComponent {}
@@ -24,7 +28,12 @@ describe('AppComponent', () => {
     providers: [provideTranslateService(), 
         provideRouter([{ path: '**', component: StubPageComponent }]),
         { provide: AnalyticsService, useValue: analytics },
-        provideAppLanguage()
+        // What app.config adds around the shell on every navigation.
+        provideAppLanguage(),
+        provideDocumentLanguage(),
+        provideSeo(),
+        providePageViews(),
+        provideFocusOnNavigation()
     ],
     schemas: [NO_ERRORS_SCHEMA]
 }).compileComponents();
@@ -167,6 +176,18 @@ describe('AppComponent', () => {
     expect(localStorage.getItem('portfolio:lang')).toBe('EN');
     expect(analytics.track).toHaveBeenCalledWith('language_switch', { from: 'PT-BR', to: 'EN' });
     expect(document.documentElement.lang).toBe('en');
+  });
+
+  it('sends the page view with the title of the page it lands on, not the one it left', async () => {
+    TestBed.inject(TranslateService).setTranslation('PT-BR', { 'contact.title': 'Contato | Alvaro' }, true);
+    TestBed.inject(Router).resetConfig([
+      { path: 'contact', component: StubPageComponent, data: { seo: { titleKey: 'contact.title', descriptionKey: 'd' } } }
+    ]);
+    render();
+
+    await TestBed.inject(Router).navigateByUrl('/contact');
+
+    expect(analytics.pageView).toHaveBeenCalledWith('/contact', 'Contato | Alvaro', 'PT-BR');
   });
 
   it('sends a page view for every navigation, without the query string in the path', async () => {

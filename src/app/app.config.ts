@@ -7,6 +7,10 @@ import { routes } from './app.routes';
 import { DEFAULT_LANG, provideAppLanguage } from './core/i18n/language-storage';
 import { provideChunkLoadRecovery } from './core/chunk-load/chunk-load-recovery.service';
 import { provideAppVersion } from './core/version/app-version';
+import { provideSeo } from './core/seo/seo-title-strategy';
+import { providePageViews } from './core/analytics/page-views';
+import { provideFocusOnNavigation } from './core/a11y/focus-on-navigation';
+import { provideDocumentLanguage } from './core/i18n/document-language';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -26,6 +30,10 @@ export const appConfig: ApplicationConfig = {
     provideTranslateService({ fallbackLang: DEFAULT_LANG }),
     provideTranslateHttpLoader({ prefix: './assets/i18n/', suffix: '.json' }),
     provideAppLanguage(),
+    provideDocumentLanguage(),
+    provideSeo(),
+    providePageViews(),
+    provideFocusOnNavigation(),
     provideChunkLoadRecovery(),
     provideAppVersion()
   ]
