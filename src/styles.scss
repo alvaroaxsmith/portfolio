@@ -194,7 +194,14 @@ h6 {
     }
 }
 
+// The hint's top margin keeps it below the navbar, but its overlay pane still starts at the top of the screen.
+// Only the hint itself takes clicks, so the transparent area over the navbar leaves the menu usable.
+.cdk-overlay-pane:has(> .course-hint) {
+    pointer-events: none;
+}
+
 .mat-mdc-snack-bar-container.course-hint {
+    pointer-events: auto;
     width: min(380px, calc(100vw - 2rem));
     margin: calc(var(--navbar-height) + 0.75rem) 1rem 0 0;
     .mat-mdc-snackbar-surface {
