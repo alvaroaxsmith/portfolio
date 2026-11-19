@@ -1,3 +1,4 @@
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { NgZone } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, RouterModule } from '@angular/router';
@@ -98,10 +99,18 @@ describe('NavbarComponent', () => {
     });
   });
 
-  it('opens the mobile menu as a bottom sheet', () => {
-    const open = spyOn(component.bottomSheet, 'open');
+  /** The bottom sheet and the menu are downloaded on demand, so the sheet opens a few tasks after the click. */
+  const downloaded = async (open: jasmine.Spy) => {
+    for (let i = 0; i < 20 && !open.calls.count(); i++) {
+      await new Promise((resolve) => setTimeout(resolve));
+    }
+  };
+
+  it('opens the mobile menu as a bottom sheet', async () => {
+    const open = spyOn(TestBed.inject(MatBottomSheet), 'open');
 
     fixture.nativeElement.querySelector('.menu-button').click();
+    await downloaded(open);
 
     expect(open).toHaveBeenCalledWith(jasmine.any(Function), jasmine.objectContaining({ panelClass: 'mobile-nav-sheet' }));
   });
@@ -124,10 +133,10 @@ describe('NavbarComponent', () => {
       expect(current.map((a) => a.getAttribute('href'))).toEqual(['/courses']);
     });
 
-    it('opens the mobile menu with a translated name', () => {
-      const open = spyOn(component.bottomSheet, 'open');
+    it('opens the mobile menu with a translated name', async () => {
+      const open = spyOn(TestBed.inject(MatBottomSheet), 'open');
 
-      component.openDialog();
+      await component.openDialog();
 
       expect(open.calls.mostRecent().args[1]?.ariaLabel).toBe('a11y.mobileMenu');
     });

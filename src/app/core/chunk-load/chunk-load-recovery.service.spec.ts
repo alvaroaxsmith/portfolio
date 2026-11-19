@@ -59,7 +59,13 @@ describe('ChunkLoadRecoveryService', () => {
   }
 
   beforeEach(() => sessionStorage.removeItem('portfolio:chunk-reload'));
-  afterEach(() => sessionStorage.removeItem('portfolio:chunk-reload'));
+  afterEach(async () => {
+    sessionStorage.removeItem('portfolio:chunk-reload');
+    // A test that ends in giveUp() leaves the snack bar's download running; let it land before the app is torn down.
+    for (let i = 0; i < 20; i++) {
+      await new Promise((resolve) => setTimeout(resolve));
+    }
+  });
 
   it('reloads the destination page when a lazy route chunk fails to load', async () => {
     const service = setup([
@@ -123,8 +129,16 @@ describe('ChunkLoadRecoveryService', () => {
       reload.calls.reset();
     }
 
-    it('tells the user the page could not be loaded and offers to reload it', () => {
+    /** The snack bar is downloaded on demand, so it opens a few tasks later. */
+    const downloaded = async () => {
+      for (let i = 0; i < 20 && !snackBar.open.calls.count(); i++) {
+        await new Promise((resolve) => setTimeout(resolve));
+      }
+    };
+
+    it('tells the user the page could not be loaded and offers to reload it', async () => {
       giveUp();
+      await downloaded();
 
       expect(snackBar.open).toHaveBeenCalledOnceWith('chunkLoad.failed', 'chunkLoad.reload');
       expect(reload).not.toHaveBeenCalled();
@@ -134,8 +148,9 @@ describe('ChunkLoadRecoveryService', () => {
       expect(reload).toHaveBeenCalledOnceWith('/courses');
     });
 
-    it('logs the failure', () => {
+    it('logs the failure', async () => {
       giveUp();
+      await downloaded();
 
       expect(console.error).toHaveBeenCalled();
     });

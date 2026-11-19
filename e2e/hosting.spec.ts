@@ -114,3 +114,15 @@ test.describe('page metadata before any JavaScript runs', () => {
     expect(head()).toContain('<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>');
   });
 });
+
+test('the initial bundle leaves out the snack bar and the bottom sheet, which only load when they open', async ({ request }) => {
+  const html = await (await request.get('/')).text();
+  const initial = [...html.matchAll(/<(?:script[^>]*\ssrc|link[^>]*rel="modulepreload"[^>]*\shref)="([^"]+\.js)"/g)].map((match) => match[1]);
+  expect(initial.length).toBeGreaterThan(0);
+
+  const bodies = await Promise.all(initial.map(async (path) => (await request.get(`/${path.replace(/^\//, '')}`)).text()));
+  const found = (marker: string) => initial.filter((_, i) => bodies[i].includes(marker));
+
+  expect(found('mat-mdc-snack-bar-container'), 'snack bar in the initial bundle').toEqual([]);
+  expect(found('mat-bottom-sheet-container'), 'bottom sheet in the initial bundle').toEqual([]);
+});

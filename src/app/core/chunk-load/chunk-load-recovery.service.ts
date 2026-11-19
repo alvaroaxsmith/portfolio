@@ -1,5 +1,4 @@
-import { EnvironmentProviders, Injectable, InjectionToken, inject, makeEnvironmentProviders, provideAppInitializer } from '@angular/core';
-import { MatSnackBar } from '@angular/material/snack-bar';
+import { EnvironmentProviders, Injectable, InjectionToken, Injector, inject, makeEnvironmentProviders, provideAppInitializer } from '@angular/core';
 import { NavigationError, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { Subscription, filter } from 'rxjs';
@@ -27,7 +26,7 @@ export function isChunkLoadError(error: unknown): boolean {
 })
 export class ChunkLoadRecoveryService {
   private readonly router = inject(Router);
-  private readonly snackBar = inject(MatSnackBar);
+  private readonly injector = inject(Injector);
   private readonly translate = inject(TranslateService);
   private readonly reload = inject(PAGE_RELOAD);
 
@@ -61,12 +60,16 @@ export class ChunkLoadRecoveryService {
     return false;
   }
 
+  /** The snack bar is only needed here, which almost never happens, so it is downloaded now, not with the app. */
   private giveUp(url: string): void {
     console.error(`Could not load the page for ${url} after reloading.`);
-    this.snackBar
-      .open(this.translate.instant('chunkLoad.failed'), this.translate.instant('chunkLoad.reload'))
-      .onAction()
-      .subscribe(() => this.reload(url));
+    void import('@angular/material/snack-bar').then(({ MatSnackBar }) =>
+      this.injector
+        .get(MatSnackBar)
+        .open(this.translate.instant('chunkLoad.failed'), this.translate.instant('chunkLoad.reload'))
+        .onAction()
+        .subscribe(() => this.reload(url))
+    );
   }
 }
 

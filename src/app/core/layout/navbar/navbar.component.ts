@@ -1,6 +1,4 @@
-import { NavMenuSheetComponent } from './nav-menu-sheet/nav-menu-sheet.component';
-import { Component, ChangeDetectionStrategy, inject, signal } from '@angular/core';
-import { MatBottomSheet } from '@angular/material/bottom-sheet';
+import { Component, ChangeDetectionStrategy, Injector, inject, signal } from '@angular/core';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { onWindowEvent } from '../../window-events/window-events';
 import { RouterLinkActive, RouterLink } from '@angular/router';
@@ -21,7 +19,7 @@ import { MatIcon } from '@angular/material/icon';
     imports: [RouterLinkActive, MatButton, RouterLink, MatMenu, MatMenuItem, MatIconButton, MatTooltip, MatMenuTrigger, MatIcon, TranslatePipe]
 })
 export class NavbarComponent {
-  readonly bottomSheet = inject(MatBottomSheet);
+  private readonly injector = inject(Injector);
   protected readonly translate = inject(TranslateService);
 
   private lastScrollY = 0;
@@ -53,8 +51,13 @@ export class NavbarComponent {
     return this.navbarFixed() !== wasFixed || this.navbarHidden() !== wasHidden;
   }
 
-  openDialog() {
-    this.bottomSheet.open(NavMenuSheetComponent, {
+  /** The bottom sheet and the menu inside it only exist on phones, on demand, so they are downloaded on the first tap. */
+  async openDialog(): Promise<void> {
+    const [{ MatBottomSheet }, { NavMenuSheetComponent }] = await Promise.all([
+      import('@angular/material/bottom-sheet'),
+      import('./nav-menu-sheet/nav-menu-sheet.component')
+    ]);
+    this.injector.get(MatBottomSheet).open(NavMenuSheetComponent, {
       panelClass: 'mobile-nav-sheet',
       ariaLabel: this.translate.instant('a11y.mobileMenu')
     });
