@@ -1,3 +1,4 @@
+import type { Page } from '@playwright/test';
 import { courses, expect, open, repos, test } from './fixtures';
 
 const pages = [
@@ -160,5 +161,47 @@ test.describe('consent banner on the production site', () => {
     await page.reload();
     await expect(page.locator('main#main-content')).toBeVisible({ timeout: 15_000 });
     await expect(page.getByRole('region', { name: 'Privacidade' })).toBeHidden();
+  });
+});
+
+test.describe('the course hint', () => {
+  const hint = (page: Page) => page.locator('mat-snack-bar-container.course-hint');
+
+  // The hint stays up for five seconds; a click the hint swallows would only land after it leaves.
+  const prompt = { timeout: 1_000 };
+
+  /** Waits for the site's entrance (the menu slides in), but not for the hint's own five-second clock. */
+  async function openCoursesWithHint(page: Page) {
+    await open(page, '/courses');
+    await page.locator('.shell').evaluate((shell) => Promise.all(shell.getAnimations().map((animation) => animation.finished)));
+    await expect(hint(page)).toBeVisible();
+  }
+
+  test('leaves the menu links clickable while it is open', async ({ page }) => {
+    await openCoursesWithHint(page);
+
+    await page.getByRole('navigation', { name: 'Navegação principal' }).locator('a[href="/contact"]').click(prompt);
+
+    await expect(page).toHaveURL('/contact');
+  });
+
+  test('leaves the mobile menu button clickable while it is open', async ({ page }) => {
+    await page.setViewportSize({ width: 390, height: 800 });
+    await openCoursesWithHint(page);
+
+    await page.getByRole('button', { name: 'Abrir menu de navegação' }).click(prompt);
+
+    await expect(page.getByRole('dialog')).toBeVisible();
+  });
+
+  test('closes when the visitor leaves the courses page', async ({ page }) => {
+    await open(page, '/courses');
+    await expect(hint(page)).toBeVisible();
+
+    // Dispatched straight to the link, so this checks the closing on its own, apart from what covers the menu.
+    await page.getByRole('navigation', { name: 'Navegação principal' }).locator('a[href="/portfolio"]').dispatchEvent('click');
+
+    await expect(page).toHaveURL('/portfolio');
+    await expect(hint(page)).toHaveCount(0, prompt);
   });
 });
