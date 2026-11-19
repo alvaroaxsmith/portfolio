@@ -3,16 +3,20 @@ import { NgZone } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router, RouterModule } from '@angular/router';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
+import { PAGE_RELOAD } from '../../chunk-load/chunk-load-recovery.service';
 import { NavbarComponent } from './navbar.component';
 
 describe('NavbarComponent', () => {
+  const reload = jasmine.createSpy('reload');
+  beforeEach(() => reload.calls.reset());
+
   let component: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
     imports: [RouterModule.forRoot([{ path: '**', children: [] }]), NavbarComponent],
-    providers: [provideTranslateService()]
+    providers: [provideTranslateService(), { provide: PAGE_RELOAD, useValue: reload }]
 }).compileComponents();
 
     fixture = TestBed.createComponent(NavbarComponent);
@@ -105,6 +109,17 @@ describe('NavbarComponent', () => {
       await new Promise((resolve) => setTimeout(resolve));
     }
   };
+
+  it('reloads the page when the menu cannot be downloaded, e.g. a tab left open across a deploy', async () => {
+    spyOn(component as unknown as { loadMenu: () => Promise<unknown> }, 'loadMenu').and.rejectWith(
+      new TypeError('Failed to fetch dynamically imported module')
+    );
+    spyOn(console, 'error');
+
+    await component.openDialog();
+
+    expect(reload).toHaveBeenCalledOnceWith(TestBed.inject(Router).url);
+  });
 
   it('opens the mobile menu as a bottom sheet', async () => {
     const open = spyOn(TestBed.inject(MatBottomSheet), 'open');

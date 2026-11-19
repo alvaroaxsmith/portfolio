@@ -148,6 +148,25 @@ describe('ChunkLoadRecoveryService', () => {
       expect(reload).toHaveBeenCalledOnceWith('/courses');
     });
 
+    it('still offers the reload when the message itself cannot be downloaded', async () => {
+      const service = setup();
+      spyOn(console, 'error');
+      spyOn(service as unknown as { loadSnackBar: () => Promise<unknown> }, 'loadSnackBar').and.rejectWith(
+        new TypeError('Failed to fetch dynamically imported module')
+      );
+      const confirm = spyOn(window, 'confirm').and.returnValue(true);
+      service.recover('/courses');
+      service.recover('/courses');
+      reload.calls.reset();
+
+      for (let i = 0; i < 20 && !confirm.calls.count(); i++) {
+        await new Promise((resolve) => setTimeout(resolve));
+      }
+
+      expect(confirm).toHaveBeenCalledOnceWith('chunkLoad.failed');
+      expect(reload).toHaveBeenCalledOnceWith('/courses');
+    });
+
     it('logs the failure', async () => {
       giveUp();
       await downloaded();

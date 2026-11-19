@@ -63,13 +63,25 @@ export class ChunkLoadRecoveryService {
   /** The snack bar is only needed here, which almost never happens, so it is downloaded now, not with the app. */
   private giveUp(url: string): void {
     console.error(`Could not load the page for ${url} after reloading.`);
-    void import('@angular/material/snack-bar').then(({ MatSnackBar }) =>
-      this.injector
-        .get(MatSnackBar)
-        .open(this.translate.instant('chunkLoad.failed'), this.translate.instant('chunkLoad.reload'))
-        .onAction()
-        .subscribe(() => this.reload(url))
+    const message = this.translate.instant('chunkLoad.failed');
+    this.loadSnackBar().then(
+      ({ MatSnackBar }) =>
+        this.injector
+          .get(MatSnackBar)
+          .open(message, this.translate.instant('chunkLoad.reload'))
+          .onAction()
+          .subscribe(() => this.reload(url)),
+      // Files are failing to load, so the snack bar may fail too: the browser's own dialog still offers the reload.
+      () => {
+        if (window.confirm(message)) {
+          this.reload(url);
+        }
+      }
     );
+  }
+
+  protected loadSnackBar() {
+    return import('@angular/material/snack-bar');
   }
 }
 
