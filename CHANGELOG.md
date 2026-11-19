@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.6.1](https://github.com/alvaroaxsmith/portfolio/compare/v2.6.0...v2.6.1) (2026-11-19)
+
+
+### Bug Fixes
+
+* **about-me:** keep the journey diagram on screen while it is redrawn ([#176](https://github.com/alvaroaxsmith/portfolio/issues/176)) ([48b5184](https://github.com/alvaroaxsmith/portfolio/commit/48b5184259c9006b764af2cbb7c5b72682e72bb6))
+* **home:** fall back to a copy of the photo served by the site ([#182](https://github.com/alvaroaxsmith/portfolio/issues/182)) ([777ec20](https://github.com/alvaroaxsmith/portfolio/commit/777ec20fe05e2b8e581b685fe50fe0878398bd5a))
+* **skeleton:** keep the photo and certificate shimmer in step with the page ([#180](https://github.com/alvaroaxsmith/portfolio/issues/180)) ([e713bc8](https://github.com/alvaroaxsmith/portfolio/commit/e713bc814cf536619b0afb55ee8440876d43ce39))
+
 ## [2.6.0](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.5...v2.6.0) (2026-11-19)
 
 
