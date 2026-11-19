@@ -70,6 +70,26 @@ test('about me draws the career journey diagram when an experience is opened', a
   expect(errors).toEqual([]);
 });
 
+test('about me downloads Mermaid only when the journey is opened', async ({ page }) => {
+  // A string only Mermaid's own code carries, to tell its files apart from the app's.
+  const mermaidMarker = 'Syntax error in text';
+  const scripts: Promise<boolean>[] = [];
+  page.on('response', (response) => {
+    if (response.url().endsWith('.js')) {
+      scripts.push(response.text().then((body) => body.includes(mermaidMarker), () => false));
+    }
+  });
+  const mermaidLoaded = async () => (await Promise.all(scripts)).some(Boolean);
+
+  await open(page, '/about-me');
+  await page.waitForLoadState('networkidle');
+  expect(await mermaidLoaded()).toBe(false);
+
+  await page.locator('mat-card.timeline-content').first().click();
+  await expect(page.locator('[data-experience-id="1"] svg')).toBeVisible();
+  expect(await mermaidLoaded()).toBe(true);
+});
+
 test.describe('courses', () => {
   test('lists, filters and opens a certificate', async ({ page }) => {
     await open(page, '/courses');

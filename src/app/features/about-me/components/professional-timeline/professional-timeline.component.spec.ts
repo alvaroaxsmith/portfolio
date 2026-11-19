@@ -353,12 +353,25 @@ describe('ProfessionalTimelineComponent', () => {
     const diagram = (id: number) =>
       fixture.nativeElement.querySelector(`[data-experience-id="${id}"]`) as HTMLElement;
 
-    it('renders diagrams in strict mode, so diagram text can never run scripts', () => {
+    it('leaves Mermaid alone until the journey opens, since it is only downloaded then', async () => {
       const initialize = spyOn(mermaid, 'initialize');
 
       renderJourney();
+      await settle();
 
-      expect(initialize).toHaveBeenCalledWith(jasmine.objectContaining({ securityLevel: 'strict' }));
+      expect(initialize).not.toHaveBeenCalled();
+    });
+
+    it('renders diagrams in strict mode, so diagram text can never run scripts', async () => {
+      const initialize = spyOn(mermaid, 'initialize');
+      renderJourney();
+      const render = spyOnDraw();
+
+      component.openJourney(component.experiences[0]);
+      await settle();
+
+      expect(initialize).toHaveBeenCalledOnceWith(jasmine.objectContaining({ securityLevel: 'strict' }));
+      expect(initialize).toHaveBeenCalledBefore(render);
     });
 
     it('does nothing while the journey is closed', async () => {
@@ -424,14 +437,17 @@ describe('ProfessionalTimelineComponent', () => {
 
       const first = component.renderAllMermaidDiagrams();
       const second = component.renderAllMermaidDiagrams();
-      for (let round = 0; round < 50 && (pending.length > 0 || round < 2); round++) {
+      // Mermaid is downloaded on demand, so the drawings may ask some rounds later: keep answering until both end.
+      let done = false;
+      const both = Promise.all([first, second]).then(() => (done = true));
+      for (let round = 0; round < 500 && !done; round++) {
         while (pending.length > 0) {
           pending.pop()!.answer();
           answered++;
         }
         await new Promise((resolve) => setTimeout(resolve));
       }
-      await Promise.all([first, second]);
+      await both;
 
       expect(fixture.nativeElement.querySelector('[data-call="0"]')).withContext('the first, outdated drawing').toBeNull();
       expect(fixture.nativeElement.querySelectorAll('.mermaid-journey-container svg').length).toBe(component.experiences.length);
