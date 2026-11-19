@@ -76,9 +76,22 @@ describe('HighlightsComponent', () => {
 
   it('reads every position before writing any style, so a scroll frame lays the page out only once', async () => {
     const log: string[] = [];
-    const reading = <T>(read: () => T) => {
-      log.push('read');
+    // Only this component's DOM work counts: other views may render in the same task and are not under test.
+    const host = fixture.nativeElement as HTMLElement;
+    const mine = (el: Element | null) => !!el && (el === host || host.contains(el));
+    const elements = () => [host, ...Array.from(host.querySelectorAll<HTMLElement>('*'))];
+    const styles = new Set(elements().map((el) => el.style));
+    const classLists = new Set(elements().map((el) => el.classList));
+    const reading = <T>(el: Element, read: () => T) => {
+      if (mine(el)) {
+        log.push('read');
+      }
       return read();
+    };
+    const writing = (target: object, set: Set<object>) => {
+      if (set.has(target)) {
+        log.push('write');
+      }
     };
     const offsetTop = Object.getOwnPropertyDescriptor(HTMLElement.prototype, 'offsetTop')!.get!;
     const rect = Element.prototype.getBoundingClientRect;
@@ -86,21 +99,21 @@ describe('HighlightsComponent', () => {
     const add = DOMTokenList.prototype.add;
     const toggle = DOMTokenList.prototype.toggle;
     spyOnProperty(HTMLElement.prototype, 'offsetTop', 'get').and.callFake(function (this: HTMLElement) {
-      return reading(() => offsetTop.call(this));
+      return reading(this, () => offsetTop.call(this));
     });
     spyOn(Element.prototype, 'getBoundingClientRect').and.callFake(function (this: Element) {
-      return reading(() => rect.call(this));
+      return reading(this, () => rect.call(this));
     });
     spyOn(CSSStyleDeclaration.prototype, 'setProperty').and.callFake(function (this: CSSStyleDeclaration, ...args: Parameters<CSSStyleDeclaration['setProperty']>) {
-      log.push('write');
+      writing(this, styles);
       return setProperty.apply(this, args);
     });
     spyOn(DOMTokenList.prototype, 'add').and.callFake(function (this: DOMTokenList, ...tokens: string[]) {
-      log.push('write');
+      writing(this, classLists);
       return add.apply(this, tokens);
     });
     spyOn(DOMTokenList.prototype, 'toggle').and.callFake(function (this: DOMTokenList, ...args: Parameters<DOMTokenList['toggle']>) {
-      log.push('write');
+      writing(this, classLists);
       return toggle.apply(this, args);
     });
 
