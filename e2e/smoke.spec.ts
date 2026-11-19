@@ -1,5 +1,5 @@
 import type { Page } from '@playwright/test';
-import { courses, expect, open, repos, test } from './fixtures';
+import { courses, expect, open, repos, settled, test } from './fixtures';
 
 const pages = [
   { path: '/', heading: 'Engenheiro de Software | GenAI | Full Cycle' },
@@ -279,4 +279,39 @@ test.describe('the menu lines up with the page margins', () => {
     expect(Math.abs(menuLeft - pageLeft), `menu starts at ${menuLeft}, page at ${pageLeft}`).toBeLessThanOrEqual(1);
     expect(Math.abs(menuRight - pageRight), `menu ends at ${menuRight}, page at ${pageRight}`).toBeLessThanOrEqual(1);
   });
+});
+
+test.describe('the floating menu keeps the links where they were at the top', () => {
+  /** Horizontal edges of every visible menu control, as the visitor sees them. */
+  const edges = (page: Page) =>
+    page.evaluate(() =>
+      [...document.querySelectorAll<HTMLElement>('nav li a .mdc-button__label, .language-form mat-icon, .menu-button')]
+        .filter((el) => el.getClientRects().length > 0)
+        .map((el) => {
+          const { left, right } = el.getBoundingClientRect();
+          return [Math.round(left), Math.round(right)];
+        })
+    );
+
+  async function float(page: Page) {
+    // Scrolling down hides the menu and scrolling back up brings it back as the floating bar.
+    await page.mouse.wheel(0, 600);
+    await expect(page.locator('app-navbar')).toHaveClass(/navbar-fixed/);
+    await page.mouse.wheel(0, -150);
+    await expect(page.locator('app-navbar')).not.toHaveClass(/navbar-hidden/);
+    await settled(page);
+  }
+
+  for (const [device, viewport] of [['desktop', { width: 1280, height: 800 }], ['phone', { width: 390, height: 844 }]] as const) {
+    test(`on a ${device}`, async ({ page }) => {
+      await page.setViewportSize(viewport);
+      await open(page, '/about-me');
+      await settled(page);
+      const atTop = await edges(page);
+
+      await float(page);
+
+      expect(await edges(page)).toEqual(atTop);
+    });
+  }
 });
