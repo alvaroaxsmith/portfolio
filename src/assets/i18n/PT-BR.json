@@ -3,7 +3,6 @@
     "Navigation": "Navegação",
     "Language": "Idioma",
     "ABOUT ME": "SOBRE MIM",
-    "Certifications": "Cursos",
     "CONTACT": "CONTATO",
     "TRANSLATE": "TRADUÇÃO",
     "PROJECTS": "PROJETOS",
@@ -30,8 +29,6 @@
         "unavailable": "Não foi possível exibir este certificado."
     },
     "Technologies Used": "Tecnologias Utilizadas",
-    "Welcome to my website": "Seja bem-vindo",
-    "Hi, I’m": "Olá, eu me chamo",
     "home": {
         "eyebrow": "Bem-vindo!",
         "title": "Engenheiro de Software | GenAI | Full Cycle",
@@ -51,11 +48,8 @@
         }
     },
     "Full Cycle Development": "Desenvolvimento de Ponta a Ponta",
-    "Full-stack Developer": "Desenvolvedor Full-stack",
-    "About me": "Sobre mim",
     "about": {
-        "summary": "Hoje atuo como Tech Lead Cross na Mutant, alocado na Telefônica Vivo, onde apoio múltiplas squads em jornadas financeiras e serviços digitais, garantindo excelência técnica, resiliência e evolução arquitetural.",
-        "summary2": "Minha prática de engenharia é guiada por Clean Code, TDD e cultura ágil. Busco constantemente otimizar o ciclo de desenvolvimento integrado a ferramentas modernas de IA, como Codeium, promovendo entregas eficientes e arquiteturas sustentáveis."
+        "summary": "Hoje atuo como Tech Lead Cross na Mutant, alocado na Telefônica Vivo, onde apoio múltiplas squads em jornadas financeiras e serviços digitais, garantindo excelência técnica, resiliência e evolução arquitetural."
     },
     "Who am I?": "Quem sou eu?",
     "bio": {
@@ -67,10 +61,7 @@
             "description": "Pratico esportes para manter o corpo em movimento: jogo futebol e, sempre que posso, faço trilhas em meio à natureza."
         }
     },
-    "Skills": "Habilidades",
     "Highlights": "Destaques",
-    "August 2018": "Agosto de 2018",
-    "Admission to UNIVESP": "Ingresso na UNIVESP",
     "April 2019 to": "Abril de 2019 até",
     "April 2021": "Abril de 2021",
     "Internship at Metro de São Paulo": "Estágio no Metrô de São Paulo",
@@ -80,11 +71,6 @@
     "January 2022 to": "Janeiro de 2022 até",
     "June 2022": "Junho de 2022",
     "Bootcamp at SoulCode Academy": "Bootcamp na SoulCode Academy",
-    "August 2022 to": "Agosto de 2022 até",
-    "September 2022": "Setembro de 2022",
-    "1st place in the Gama-lab Tech Experience": "1º lugar no Gama-lab Tech Experience",
-    "October 2022": "Outubro de 2022 até",
-    "Software Developer at V.tal": "Desenvolvedor de Software na V.tal",
     "August 2018 to": "Agosto de 2018 até",
     "June 2023": "Junho de 2023",
     "Univesp Oficial - Bachelor's degree, Production Engineering": "Univesp Oficial - Bacharelado, Engenharia de Produção",
@@ -100,8 +86,6 @@
     "I learned to play chess at the age of 7, but I started to practice constantly in the pandemic and today I have more than a thousand games on ": "Aprendi a jogar xadrez aos 7 anos, mas comecei a praticar com frequência durante a pandemia e hoje acumulo mais de mil partidas no ",
     "Guitar Player 🎶": "Toco Violão 🎶",
     "I play guitar since I was 12 years old, I like to listen to all kinds of music and I like to create musical arrangements, soon I will post it on soundcloud.": "Toco violão desde os 10 anos. Gosto de explorar novos arranjos musicais, do pop à MPB — arriscando clássicos como 'Lilás' do Djavan —, e em breve pretendo postar alguns no SoundCloud.",
-    "Reach out to me!": "Entre em contato!",
-    "Send me a message": "Envie-me uma mensagem",
     "contact": {
         "title": "Vamos conversar",
         "description": "Se você procura um perfil com forte visão arquitetural, experiência no ciclo completo de desenvolvimento e foco em inovação digital, estes são os canais mais rápidos para falar comigo.",
@@ -109,7 +93,6 @@
         "location": "Ribeirão Pires, SP, Brasil",
         "github": "Código, experimentos open-source e histórico técnico.",
         "linkedin": "Perfil profissional detalhado e networking.",
-        "email": "Contato direto para oportunidades e projetos.",
         "labels": {
             "phone": "Telefone",
             "email": "Email",
@@ -118,9 +101,7 @@
             "linkedin": "LinkedIn"
         }
     },
-    "Ribeirão Pires - SP, Brazil": "Ribeirão Pires - SP, Brasil",
     "COURSES": "CURSOS",
-    "Courses": "Cursos",
     "courses": {
         "allLoaded": "Você viu todos os cursos",
         "title": "Aprendizado contínuo",
@@ -136,8 +117,6 @@
     "SCHOOL": "ESCOLA",
     "HOURS": "HORAS",
     "DATE": "DATA",
-    "Select page of courses": "Selecione a página de cursos",
-    "Projects": "Projetos",
     "loading": {
         "photo": "Carregando foto",
         "courses": "Carregando cursos",
@@ -195,9 +174,6 @@
         "technologies": "Tecnologias e Ferramentas",
         "skills": "Competências",
         "mermaid": {
-            "header": "Visualização da Jornada",
-            "placeholder": "Selecione uma experiência na linha do tempo para expandir os detalhes.",
-            "title": "Linha do Tempo",
             "error": "Erro ao renderizar o diagrama Mermaid."
         },
         "mutantLead": {
@@ -210,8 +186,7 @@
         "mutantFs": {
             "description": "Desenvolvimento e aprimoramento das jornadas no App Vivo, entregando soluções para milhões de clientes com foco em performance e estabilidade.",
             "activity1": "Construção de fluxos complexos em jornadas como Casa Inteligente, Suporte Técnico, Vivo Travel e e-SIM.",
-            "activity2": "Atuação com arquitetura de microsserviços e integração de sistemas legados em ambientes de nuvem (Azure/Kubernetes).",
-            "activity3": "Aplicação intensa de testes unitários (Jest), de mutação (Stryker) e E2E (Cypress) para assegurar a resiliência do código."
+            "activity2": "Atuação com arquitetura de microsserviços e integração de sistemas legados em ambientes de nuvem (Azure/Kubernetes)."
         },
         "marttech": {
             "description": "Desenvolvimento da plataforma Curar Saúde, uma solução de educação e engajamento focada em usabilidade e interatividade.",
