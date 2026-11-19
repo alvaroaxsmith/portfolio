@@ -1,3 +1,5 @@
+import { fakeMatchMedia } from '../../../../testing/fake-match-media';
+import { MATCH_MEDIA } from '../../../../core/media/media-query';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { TranslateService, provideTranslateService } from '@ngx-translate/core';
 import mermaid from 'mermaid';
@@ -7,14 +9,24 @@ describe('ProfessionalTimelineComponent', () => {
   let fixture: ComponentFixture<ProfessionalTimelineComponent>;
   let component: ProfessionalTimelineComponent;
 
+  /** The timeline's own phone breakpoint, answered by a fake screen the tests control. */
+  const PHONE = '(max-width: 480px)';
+  let media: ReturnType<typeof fakeMatchMedia>;
+  /** Makes the screen a phone or not, and lets the timeline react. */
+  function screenIsPhone(phone: boolean) {
+    media.set(PHONE, phone);
+    fixture.detectChanges();
+    TestBed.tick();
+  }
+
   function render(mobile: boolean) {
+    media = fakeMatchMedia({ [PHONE]: mobile });
     TestBed.configureTestingModule({
       imports: [ProfessionalTimelineComponent],
-      providers: [provideTranslateService()]
+      providers: [provideTranslateService(), { provide: MATCH_MEDIA, useValue: media.matchMedia }]
     });
     fixture = TestBed.createComponent(ProfessionalTimelineComponent);
     component = fixture.componentInstance;
-    component.isMobile.set(mobile);
     spyOn(component, 'renderVisibleDiagram').and.resolveTo();
     fixture.detectChanges();
   }
@@ -229,34 +241,11 @@ describe('ProfessionalTimelineComponent', () => {
   });
 
   describe('when the screen changes size', () => {
-    type Listener = (event: { matches: boolean }) => void;
-    let listeners: Set<Listener>;
-    const notifyChange = (event: { matches: boolean }) => listeners.forEach((listener) => listener(event));
-
-    beforeEach(() => {
-      listeners = new Set();
-      const realMatchMedia = window.matchMedia.bind(window);
-      spyOn(window, 'matchMedia').and.callFake((query: string) => {
-        if (query !== '(max-width: 480px)') {
-          return realMatchMedia(query);
-        }
-        const phoneQuery = realMatchMedia(query);
-        spyOnProperty(phoneQuery, 'matches', 'get').and.returnValue(false);
-        spyOn(phoneQuery, 'addEventListener').and.callFake(((_type: string, listener: Listener) => {
-          listeners.add(listener);
-        }) as MediaQueryList['addEventListener']);
-        spyOn(phoneQuery, 'removeEventListener').and.callFake(((_type: string, listener: Listener) => {
-          listeners.delete(listener);
-        }) as MediaQueryList['removeEventListener']);
-        return phoneQuery;
-      });
-    });
-
     it('stops reacting to screen size changes once removed from the page', () => {
       render(false);
 
       fixture.destroy();
-      notifyChange({ matches: true });
+      media.set(PHONE, true);
 
       expect(component.isMobile()).toBeFalse();
     });
@@ -265,7 +254,7 @@ describe('ProfessionalTimelineComponent', () => {
       render(false);
       component.openJourney(component.experiences[0]);
 
-      notifyChange({ matches: true });
+      screenIsPhone(true);
 
       expect(component.isMobile()).toBeTrue();
       expect(component.isJourneyVisible()).toBeFalse();
@@ -275,7 +264,7 @@ describe('ProfessionalTimelineComponent', () => {
       render(false);
       component.openJourney(component.experiences[0]);
 
-      notifyChange({ matches: false });
+      screenIsPhone(false);
 
       expect(component.isMobile()).toBeFalse();
       expect(component.isJourneyVisible()).toBeTrue();
@@ -317,9 +306,7 @@ describe('ProfessionalTimelineComponent', () => {
 
     it('lets the content be dragged once the screen becomes small, not only when the page opens that way', () => {
       render(false);
-      component.isMobile.set(true);
-      fixture.detectChanges();
-      TestBed.tick();
+      screenIsPhone(true);
       const el = content();
 
       el.dispatchEvent(mouse('mousedown', 100));
@@ -342,13 +329,13 @@ describe('ProfessionalTimelineComponent', () => {
 
   describe('rendering the journey diagrams', () => {
     function renderJourney() {
+      media = fakeMatchMedia();
       TestBed.configureTestingModule({
         imports: [ProfessionalTimelineComponent],
-      providers: [provideTranslateService()]
+        providers: [provideTranslateService(), { provide: MATCH_MEDIA, useValue: media.matchMedia }]
       });
       fixture = TestBed.createComponent(ProfessionalTimelineComponent);
       component = fixture.componentInstance;
-      component.isMobile.set(false);
       fixture.detectChanges();
     }
 
@@ -502,6 +489,68 @@ describe('ProfessionalTimelineComponent', () => {
 
       expect(draw).toHaveBeenCalledTimes(1);
       expect(draw.calls.allArgs().some(([, definition]) => String(definition).includes('Apr 2019 - Apr 2021'))).toBeTrue();
+    });
+
+    it('keeps the diagram on screen until the redrawn one is ready, instead of a blank card', async () => {
+      renderJourney();
+      const draw = spyOnDraw();
+      component.openJourney(component.experiences[0]);
+      await settle();
+      let answer: (value: Awaited<ReturnType<typeof mermaid.render>>) => void = () => undefined;
+      draw.and.callFake(() => new Promise((resolve) => (answer = resolve)));
+
+      await switchToEnglish();
+
+      expect(diagram(1).querySelector('svg')).withContext('while the new one is drawn').not.toBeNull();
+      answer({ svg: '<svg data-redrawn="yes"></svg>' } as Awaited<ReturnType<typeof mermaid.render>>);
+      await settle();
+      expect(diagram(1).querySelector('svg[data-redrawn]')).not.toBeNull();
+    });
+
+    it('does not let an outdated drawing that fails cover a newer one', async () => {
+      renderJourney();
+      spyOn(console, 'error');
+      const pending: { resolve: (svg: string) => void; reject: () => void }[] = [];
+      spyOn(mermaid, 'render').and.callFake(
+        () =>
+          new Promise((resolve, reject) =>
+            pending.push({ resolve: (svg) => resolve({ svg } as Awaited<ReturnType<typeof mermaid.render>>), reject: () => reject(new Error('parse error')) })
+          )
+      );
+      component.openJourney(component.experiences[0]);
+      fixture.detectChanges();
+
+      const older = component.renderVisibleDiagram();
+      const newer = component.renderVisibleDiagram();
+      // Wait until every drawing has asked (the render effect may start one too), then answer the newest first and
+      // fail all the older ones after it.
+      for (let round = 0; round < 50; round++) {
+        await new Promise((resolve) => setTimeout(resolve));
+      }
+      pending[pending.length - 1].resolve('<svg data-newer="yes"></svg>');
+      pending.slice(0, -1).forEach((drawing) => drawing.reject());
+      await Promise.all([older, newer]);
+
+      expect(diagram(1).querySelector('svg[data-newer]')).not.toBeNull();
+      expect(diagram(1).querySelector('p')).toBeNull();
+    });
+
+    it('draws the next diagram in the new language after a switch', async () => {
+      renderJourney();
+      const draw = spyOnDraw();
+      component.openJourney(component.experiences[0]);
+      await settle();
+      const translate = TestBed.inject(TranslateService);
+      translate.setTranslation('EN', { timeline: { gama: { period: 'Aug 2022 - Sep 2022' } } });
+      translate.use('EN');
+      await settle();
+      draw.calls.reset();
+
+      component.handleIconClickInJourneyView(component.experiences[1]);
+      await settle();
+
+      expect(draw).toHaveBeenCalledTimes(1);
+      expect(String(draw.calls.mostRecent().args[1])).toContain('Aug 2022 - Sep 2022');
     });
 
     it('draws nothing when the language changes with the journey closed', async () => {
