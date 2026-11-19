@@ -1,5 +1,5 @@
-import { Component, OnInit, ElementRef, OnDestroy, ChangeDetectionStrategy, DestroyRef, afterRenderEffect, computed, inject, untracked, viewChild, signal } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { Component, OnInit, ElementRef, OnDestroy, ChangeDetectionStrategy, afterRenderEffect, computed, inject, linkedSignal, untracked, viewChild, signal } from '@angular/core';
+import { rxResource } from '@angular/core/rxjs-interop';
 import { ProjectsService } from './services/projects.service';
 import { Project } from './project.model';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
@@ -37,28 +37,53 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   private readonly projectsService = inject(ProjectsService);
   private readonly translate = inject(TranslateService);
   private readonly analytics = inject(AnalyticsService);
-  private readonly destroyRef = inject(DestroyRef);
 
-  readonly allProjects = signal<Project[]>([]);
-  readonly projects = signal<Project[]>([]);
-  readonly processedProjects = signal<Project[]>([]);
+  /** The projects from GitHub; loading and failure are part of the resource, and leaving the page cancels it. */
+  private readonly source = rxResource({ stream: () => this.projectsService.getProjects() });
 
-  readonly initialLoading = signal(true);
-  readonly loadError = signal(false);
-  readonly allProjectsLoaded = signal(false);
+  readonly allProjects = computed(() => (this.source.hasValue() ? this.source.value() : []));
+  readonly initialLoading = computed(() => this.source.isLoading());
+  readonly loadError = computed(() => !!this.source.error());
+
   readonly pageSize = signal(6);
   readonly columns = signal(1);
-  /** Index of the first card of the batch being shown, where the entrance stagger starts again. */
-  private readonly batchStart = signal(0);
-
   readonly currentView = signal<'list' | 'grid'>('list');
 
-  readonly availableTechs = signal<string[]>([]);
-  protected readonly selectedTech = signal<string | null>(null);
+  readonly availableTechs = computed(() => [...new Set(this.allProjects().map((p) => p.tech).filter((t) => t))].sort());
+  private readonly pickedTech = signal<string | null>(null);
+  /** The technology filter, or none when the picked one is not among the projects. */
+  protected readonly selectedTech = computed(() => {
+    const picked = this.pickedTech();
+    return picked && this.availableTechs().includes(picked) ? picked : null;
+  });
   protected readonly currentSortOrder = signal<'recent' | 'oldest'>('recent');
 
+  /** Every project that matches the filter, in the chosen order. */
+  readonly processedProjects = computed(() => {
+    const tech = this.selectedTech();
+    const recentFirst = this.currentSortOrder() === 'recent';
+    return this.allProjects()
+      .filter((p) => !tech || p.tech === tech)
+      .map((project) => ({ project, time: new Date(project.date).getTime() }))
+      .sort((a, b) => {
+        const validA = !Number.isNaN(a.time);
+        const validB = !Number.isNaN(b.time);
+        if (validA !== validB) return validA ? -1 : 1;
+        if (!validA) return 0;
+        return recentFirst ? b.time - a.time : a.time - b.time;
+      })
+      .map(({ project }) => project);
+  });
+
+  /** How many of them are on screen; a new filter or order starts again from the first batch. */
+  private readonly shownCount = linkedSignal({ source: this.processedProjects, computation: () => untracked(this.pageSize) });
+  readonly projects = computed(() => this.processedProjects().slice(0, this.shownCount()));
+  readonly allProjectsLoaded = computed(() => this.projects().length >= this.processedProjects().length);
+
+  /** Index of the first card of the batch being shown, where the entrance stagger starts again. */
+  private readonly batchStart = linkedSignal({ source: this.processedProjects, computation: () => 0 });
   /** Whether the cards on screen came from switching view, which staggers all of them again. */
-  private readonly viewToggled = signal(false);
+  private readonly viewToggled = linkedSignal({ source: this.processedProjects, computation: () => false });
 
   readonly pageRef = viewChild.required<ElementRef<HTMLElement>>('page');
   private readonly loadMoreTrigger = viewChild<ElementRef<HTMLElement>>('loadMoreTrigger');
@@ -105,31 +130,6 @@ export class PortfolioComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.updatePageSize();
-    this.initialLoading.set(true);
-    this.viewToggled.set(false);
-    this.projectsService.getProjects().pipe(takeUntilDestroyed(this.destroyRef)).subscribe({
-      next: (fetchedProjects) => {
-        this.allProjects.set(fetchedProjects);
-        this.availableTechs.set([...new Set(this.allProjects().map(p => p.tech).filter(t => t))].sort());
-
-        const selected = this.selectedTech();
-        if (selected && !this.availableTechs().includes(selected)) {
-          this.selectedTech.set(null);
-        }
-
-        this.initialLoading.set(false);
-        this.applyFiltersAndSorting();
-      },
-      error: () => {
-        this.loadError.set(true);
-        this.allProjects.set([]);
-        this.availableTechs.set([]);
-        this.initialLoading.set(false);
-        this.projects.set([]);
-        this.processedProjects.set([]);
-        this.allProjectsLoaded.set(true);
-      }
-    });
   }
 
   ngOnDestroy(): void {
@@ -168,36 +168,6 @@ export class PortfolioComponent implements OnInit, OnDestroy {
     this.observer.observe(trigger);
   }
 
-  applyFiltersAndSorting(): void {
-    this.viewToggled.set(false);
-    let result = [...this.allProjects()];
-
-    if (this.selectedTech()) {
-      result = result.filter(p => p.tech === this.selectedTech());
-    }
-
-    result.sort((a, b) => {
-      const timeA = new Date(a.date).getTime();
-      const timeB = new Date(b.date).getTime();
-
-      const validA = !isNaN(timeA);
-      const validB = !isNaN(timeB);
-
-      if (validA && !validB) return -1;
-      if (!validA && validB) return 1;
-      if (!validA && !validB) return 0;
-
-      return this.currentSortOrder() === 'recent' ? timeB - timeA : timeA - timeB;
-    });
-
-    this.processedProjects.set(result);
-    this.projects.set([]);
-    this.batchStart.set(0);
-    this.allProjectsLoaded.set(result.length === 0);
-
-    this.appendNextPage();
-  }
-
   /** The projects are already in memory, so the next batch shows right away. */
   loadMore(): void {
     if (this.allProjectsLoaded()) {
@@ -207,11 +177,9 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   }
 
   private appendNextPage(): void {
-    const next = this.processedProjects().slice(this.projects().length, this.projects().length + this.nextBatchSize());
-
-    this.batchStart.set(this.projects().length);
-    this.projects.set([...this.projects(), ...next]);
-    this.allProjectsLoaded.set(this.projects().length >= this.processedProjects().length);
+    const shown = this.projects().length;
+    this.batchStart.set(shown);
+    this.shownCount.set(shown + this.nextBatchSize());
   }
 
   private descriptionFor(project: Project): string {
@@ -221,15 +189,13 @@ export class PortfolioComponent implements OnInit, OnDestroy {
   }
 
   filterByTech(tech: string | null): void {
-    this.selectedTech.set(tech);
+    this.pickedTech.set(tech);
     this.analytics.track('projects_filter', { tech: tech ?? 'all' });
-    this.applyFiltersAndSorting();
   }
 
   sortByDate(order: 'recent' | 'oldest'): void {
     this.currentSortOrder.set(order);
     this.analytics.track('projects_sort', { sort: order });
-    this.applyFiltersAndSorting();
   }
 
   /** Milliseconds before a card slides in, so each batch enters one card after another. */
