@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.5.4](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.3...v2.5.4) (2026-11-19)
+
+
+### Build and dependencies
+
+* **deps:** bump dompurify from 3.4.16 to 3.4.18 in the npm-security group across 1 directory ([#124](https://github.com/alvaroaxsmith/portfolio/issues/124)) ([07f105a](https://github.com/alvaroaxsmith/portfolio/commit/07f105abf15ac3c51e9c896a939655e481cbef1c))
+* **deps:** bump the npm-minor-and-patch group across 1 directory with 17 updates ([#134](https://github.com/alvaroaxsmith/portfolio/issues/134)) ([2b0d2d5](https://github.com/alvaroaxsmith/portfolio/commit/2b0d2d50511161d0bc093c77667e21f4d09a3e4d))
+* **deps:** bump the npm-security group across 1 directory with 3 updates ([#133](https://github.com/alvaroaxsmith/portfolio/issues/133)) ([c3f21aa](https://github.com/alvaroaxsmith/portfolio/commit/c3f21aa890802a121241d76c1326786927c0081d))
+
 ## [2.5.3](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.2...v2.5.3) (2026-10-21)
 
 

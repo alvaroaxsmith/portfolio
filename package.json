@@ -1,6 +1,6 @@
 {
   "name": "portfolio-resume",
-  "version": "2.5.3",
+  "version": "2.5.4",
   "license": "SEE LICENSE IN LICENSE",
   "scripts": {
     "ng": "ng",
