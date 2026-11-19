@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.5.5](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.4...v2.5.5) (2026-11-19)
+
+
+### Bug Fixes
+
+* **courses:** the course hint no longer blocks the menu and closes when leaving the page ([#138](https://github.com/alvaroaxsmith/portfolio/issues/138)) ([8bc8196](https://github.com/alvaroaxsmith/portfolio/commit/8bc8196f286e7d66e0c75eddd2e076f9822620f2))
+
+
+### Performance
+
+* **about-me:** download Mermaid only when the career journey opens ([#139](https://github.com/alvaroaxsmith/portfolio/issues/139)) ([e61ed91](https://github.com/alvaroaxsmith/portfolio/commit/e61ed91af5784710c3c3f383b4b1afd36bbe1c0d))
+* **router:** preload the pages once the first one is on screen ([#140](https://github.com/alvaroaxsmith/portfolio/issues/140)) ([0bd1617](https://github.com/alvaroaxsmith/portfolio/commit/0bd1617613edccbb0bdb1ac8ffd08d0db7aa7831))
+
 ## [2.5.4](https://github.com/alvaroaxsmith/portfolio/compare/v2.5.3...v2.5.4) (2026-11-19)
 
 
