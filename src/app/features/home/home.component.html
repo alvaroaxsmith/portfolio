@@ -17,20 +17,18 @@
         </ul>
     </div>
 
-    @if (isLoadingImage()) {
-    <figure class="hero-media" role="status">
+    <figure class="hero-media" [attr.role]="photoLoaded() ? null : 'status'">
+        @if (!photoLoaded()) {
         <span class="cdk-visually-hidden">{{ 'loading.photo' | translate }}</span>
         <app-photo-skeleton class="sleeve-skeleton" />
-    </figure>
-    } @else {
-    <figure class="hero-media">
-        <div class="sleeve">
+        }
+        <!-- The photo loads while the placeholder shows, and takes its place once it is in. -->
+        <div class="sleeve" [class.is-loading]="!photoLoaded()">
             <div class="metrics" aria-hidden="true">
                 <span>Alvaro Machado Ferreira</span>
             </div>
-            <img [src]="imageUrl()" [alt]="'home.photoAlt' | translate" fetchpriority="high">
+            <img [src]="photoUrl()" [alt]="'home.photoAlt' | translate" width="350" height="350" fetchpriority="high" (load)="photoLoaded.set(true)" (error)="onPhotoError()">
         </div>
     </figure>
-    }
 </section>
 <app-footer />

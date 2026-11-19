@@ -62,35 +62,50 @@ describe('HomeComponent', () => {
     expect(analytics.track).toHaveBeenCalledWith('linkedin_click', { location: 'home' });
   });
 
-  it('shows the GitHub avatar once it loads', async () => {
-    const http = TestBed.inject(HttpTestingController);
-    http.expectOne('https://api.github.com/users/alvaroaxsmith').flush({ avatar_url: 'https://avatars/me.png' });
-    await new Promise((resolve) => setTimeout(resolve));
+  const photo = () => fixture.nativeElement.querySelector('.hero-media img') as HTMLImageElement;
+  const placeholder = () => fixture.nativeElement.querySelector('app-photo-skeleton');
+  function photoEvent(type: 'load' | 'error') {
+    photo().dispatchEvent(new Event(type));
+    fixture.detectChanges();
+  }
 
-    expect(component.isLoadingImage()).toBeFalse();
-    expect(component.imageUrl()).toBe('https://avatars/me.png');
+  it('shows the photo from its fixed address, without asking the GitHub API first', () => {
+    TestBed.inject(HttpTestingController).expectNone(() => true);
+
+    expect(photo().getAttribute('src')).toBe('https://avatars.githubusercontent.com/u/69737979?v=4');
   });
 
-  it('falls back to the public GitHub profile picture when the API fails, instead of loading forever', async () => {
-    spyOn(console, 'error');
-    const http = TestBed.inject(HttpTestingController);
-    http.expectOne('https://api.github.com/users/alvaroaxsmith').flush({ message: 'rate limited' }, { status: 403, statusText: 'Forbidden' });
-    await new Promise((resolve) => setTimeout(resolve));
-    fixture.detectChanges();
+  it('keeps the photo placeholder until the photo itself has loaded', () => {
+    expect(placeholder()).not.toBeNull();
 
-    expect(component.isLoadingImage()).toBeFalse();
-    expect(fixture.nativeElement.querySelector('.hero-media img').getAttribute('src')).toBe('https://github.com/alvaroaxsmith.png');
+    photoEvent('load');
+
+    expect(placeholder()).toBeNull();
   });
 
-  it('loads the hero photo first: it is the largest thing on screen (LCP), so it is never lazy', async () => {
-    spyOn(console, 'error');
-    TestBed.inject(HttpTestingController).expectOne('https://api.github.com/users/alvaroaxsmith').flush({}, { status: 500, statusText: 'Error' });
-    await new Promise((resolve) => setTimeout(resolve));
-    fixture.detectChanges();
+  it('falls back to the public GitHub profile picture when the photo fails, instead of loading forever', () => {
+    photoEvent('error');
 
-    const photo = fixture.nativeElement.querySelector('.hero-media img') as HTMLImageElement;
-    expect(photo.getAttribute('loading')).not.toBe('lazy');
-    expect(photo.getAttribute('fetchpriority')).toBe('high');
+    expect(photo().getAttribute('src')).toBe('https://github.com/alvaroaxsmith.png');
+    expect(placeholder()).not.toBeNull();
+
+    photoEvent('load');
+
+    expect(placeholder()).toBeNull();
+  });
+
+  it('stops waiting when the fallback picture fails too', () => {
+    photoEvent('error');
+    photoEvent('error');
+
+    expect(placeholder()).toBeNull();
+  });
+
+  it('loads the hero photo first: it is the largest thing on screen (LCP), so it is never lazy', () => {
+    expect(photo().getAttribute('loading')).not.toBe('lazy');
+    expect(photo().getAttribute('fetchpriority')).toBe('high');
+    expect(photo().getAttribute('width')).toBe('350');
+    expect(photo().getAttribute('height')).toBe('350');
   });
 
   it('names the highlights list in the visitor\'s language', () => {

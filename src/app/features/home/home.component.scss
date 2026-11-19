@@ -136,8 +136,15 @@ img {
     position: relative;
     z-index: 1;
     width: min(100%, 350px);
+    // The width and height attributes reserve the space; the photo keeps its own proportions.
+    height: auto;
     border-radius: 0.4rem;
     object-fit: cover;
+}
+
+// Still loading: the placeholder shows in its place, while the photo downloads out of sight.
+.sleeve.is-loading {
+    display: none;
 }
 
 .sleeve-skeleton {

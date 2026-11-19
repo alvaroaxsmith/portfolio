@@ -34,7 +34,8 @@ export interface ApiOptions {
   realFonts?: boolean;
 }
 
-const AVATAR_URL = 'https://avatars.githubusercontent.com/u/0';
+/** The home photo's fixed address (environment.avatarUrl). */
+const AVATAR_URL = 'https://avatars.githubusercontent.com/u/69737979?v=4';
 
 /** Fakes every third-party call so the suite never depends on GitHub, Google or GTM being up, and fixes the course list. */
 export async function mockApis(page: Page, options: ApiOptions = {}): Promise<void> {
@@ -45,12 +46,7 @@ export async function mockApis(page: Page, options: ApiOptions = {}): Promise<vo
   if (options.realFonts) {
     await page.route(/^https:\/\/fonts\.(googleapis|gstatic)\.com\//, (route) => route.continue());
   }
-  await page.route(AVATAR_URL, (route) => route.fulfill({ path: join(__dirname, 'assets', 'avatar.png') }));
-  await page.route('https://api.github.com/users/alvaroaxsmith', (route) =>
-    options.githubFails
-      ? route.fulfill({ status: 403, json: { message: 'rate limited' } })
-      : route.fulfill({ json: { avatar_url: AVATAR_URL } })
-  );
+  await page.route((url) => url.href === AVATAR_URL, (route) => route.fulfill({ path: join(__dirname, 'assets', 'avatar.png') }));
   await page.route('https://api.github.com/users/alvaroaxsmith/repos**', (route) =>
     options.githubFails ? route.fulfill({ status: 403, json: { message: 'rate limited' } }) : route.fulfill({ json: repos })
   );
