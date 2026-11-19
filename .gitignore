@@ -61,3 +61,7 @@ Thumbs.db
 /test-results/
 /playwright-report/
 /blob-report/
+
+# Local agent tooling (installed per machine, not part of the site)
+/.agents/
+/skills-lock.json
